@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IHandicapBO;
 import com.ogc.standard.bo.ISimuOrderBO;
+import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.dao.IHandicapDAO;
@@ -113,8 +114,8 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
     }
 
     @Override
-    public List<HandicapGrade> queryHandicapList(String symbol, String toSymbol,
-            String direction) {
+    public List<HandicapGrade> queryHandicapGradeList(String symbol,
+            String toSymbol, String direction) {
 
         // 根据条件查找
         Handicap condition = new Handicap();
@@ -177,4 +178,21 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
         return handicapDAO.selectList(condition);
     }
 
+    @Override
+    public List<Handicap> queryHandicapList(String symbol, String toSymbol,
+            String direction, int start, int limit) {
+        Handicap condition = new Handicap();
+        if (ESimuOrderDirection.BUY.getCode().equals(direction)) {
+            direction = ESimuOrderDirection.SELL.getCode();
+        } else {
+            direction = ESimuOrderDirection.BUY.getCode();
+        }
+        condition.setDirection(direction);
+        condition.setSymbol(symbol);
+        condition.setToSymbol(toSymbol);
+        condition.setOrder(ESimuOrderDirection.BUY.getCode().equals(direction)
+                ? "price desc,id desc" : "price asc,id desc");
+        Paginable<Handicap> page = getPaginable(start, limit, condition);
+        return page.getList();
+    }
 }

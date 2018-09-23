@@ -42,7 +42,7 @@ public class HandicapAOImpl implements IHandicapAO {
 
         List<HandicapItem> handicapItems = new ArrayList<>();
 
-        List<HandicapGrade> asksGrades = handicapBO.queryHandicapList(symbol,
+        List<HandicapGrade> asksGrades = handicapBO.queryHandicapGradeList(symbol,
             toSymbol, direction);
 
         for (HandicapGrade handicapGrade : asksGrades) {

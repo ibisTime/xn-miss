@@ -67,7 +67,7 @@ public class SimuOrderMatch2 {
         }
 
         // 获取对方盘口档位
-        List<HandicapGrade> handicapGrades = handicapBO.queryHandicapList(
+        List<HandicapGrade> handicapGrades = handicapBO.queryHandicapGradeList(
             simuOrder.getSymbol(), simuOrder.getToSymbol(), direction);
 
         // 直接与可盘口档位匹配，成交
@@ -90,7 +90,7 @@ public class SimuOrderMatch2 {
     private void doMatchLimitBids(SimuOrder simuOrder) {
 
         // 获取卖盘盘口档位
-        List<HandicapGrade> handicapGrades = handicapBO.queryHandicapList(
+        List<HandicapGrade> handicapGrades = handicapBO.queryHandicapGradeList(
             simuOrder.getSymbol(), simuOrder.getToSymbol(),
             ESimuOrderDirection.SELL.getCode());
 
@@ -125,7 +125,7 @@ public class SimuOrderMatch2 {
     private void doMatchLimitAsds(SimuOrder simuOrder) {
 
         // 获取买盘盘口档位
-        List<HandicapGrade> handicapGrades = handicapBO.queryHandicapList(
+        List<HandicapGrade> handicapGrades = handicapBO.queryHandicapGradeList(
             simuOrder.getSymbol(), simuOrder.getToSymbol(),
             ESimuOrderDirection.BUY.getCode());
 

@@ -42,11 +42,14 @@ public class SimuMatchResultHistory extends ABaseDO {
     // 卖方用户编号
     private String sellUserId;
 
-    // 交易数量
-    private BigDecimal buyAmount;
+    // 兑换比例(toSymbol)
+    private BigDecimal exchangeRate;
 
-    // 计价数量
-    private BigDecimal sellAmount;
+    // 交易币种数量(symbol)
+    private BigDecimal symbolCount;
+
+    // 计价币种数量(toSymbol)
+    private BigDecimal toSymbolCount;
 
     // 买方手续费
     private BigDecimal buyFee;
@@ -129,20 +132,28 @@ public class SimuMatchResultHistory extends ABaseDO {
         this.sellUserId = sellUserId;
     }
 
-    public BigDecimal getBuyAmount() {
-        return buyAmount;
+    public BigDecimal getExchangeRate() {
+        return exchangeRate;
     }
 
-    public void setBuyAmount(BigDecimal buyAmount) {
-        this.buyAmount = buyAmount;
+    public void setExchangeRate(BigDecimal exchangeRate) {
+        this.exchangeRate = exchangeRate;
     }
 
-    public BigDecimal getSellAmount() {
-        return sellAmount;
+    public BigDecimal getSymbolCount() {
+        return symbolCount;
     }
 
-    public void setSellAmount(BigDecimal sellAmount) {
-        this.sellAmount = sellAmount;
+    public void setSymbolCount(BigDecimal symbolCount) {
+        this.symbolCount = symbolCount;
+    }
+
+    public BigDecimal getToSymbolCount() {
+        return toSymbolCount;
+    }
+
+    public void setToSymbolCount(BigDecimal toSymbolCount) {
+        this.toSymbolCount = toSymbolCount;
     }
 
     public BigDecimal getBuyFee() {

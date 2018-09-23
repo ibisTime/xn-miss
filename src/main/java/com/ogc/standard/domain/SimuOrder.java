@@ -34,26 +34,26 @@ public class SimuOrder extends ABaseDO {
     // 买卖方向（买入/卖出）
     private String direction;
 
-    // 委托价格
+    // 委托价格(toSymbol)
     private BigDecimal price;
 
-    // 委托总数量
+    // 委托总数量(symbol)
     private BigDecimal totalCount;
 
-    // 委托金额
+    // 委托金额(toSymbol)
     private BigDecimal totalAmount;
 
-    // 已成交数量
+    // 已成交数量(symbol)
     private BigDecimal tradedCount;
 
-    // 已成交总金额
+    // 已成交总金额(toSymbol)
     private BigDecimal tradedAmount;
+
+    // 已成交均价(toSymbol)
+    private BigDecimal avgPrice;
 
     // 已成交总手续费
     private BigDecimal tradedFee;
-
-    // 已成交总手续费
-    private BigDecimal avgPrice;
 
     // 最后成交时间
     private Date lastTradedDatetime;
@@ -66,6 +66,9 @@ public class SimuOrder extends ABaseDO {
 
     // 状态（已提交，部分成交，部分成交撤销，完全成交，已撤销）
     private String status;
+
+    // 是否扫描
+    private String isScan;
 
     // **** 查询条件 *****
     private List<String> statusList;
@@ -204,6 +207,14 @@ public class SimuOrder extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getIsScan() {
+        return isScan;
+    }
+
+    public void setIsScan(String isScan) {
+        this.isScan = isScan;
     }
 
     public List<String> getStatusList() {

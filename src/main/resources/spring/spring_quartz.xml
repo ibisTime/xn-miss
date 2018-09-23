@@ -23,9 +23,8 @@
        		    <!-- <ref bean="marketTrigger"/> -->
        		    
        		    <!-- 币币交易 -->
-       		    <!-- <ref bean="doScanPairTrigger"/> -->
-       		    <!-- <ref bean="doSaveKLineTrigger"/> -->
-       		    <!-- <ref bean="doScanMatchResultTrigger"/> -->
+       		   <!--  <ref bean="doScanSimuOrderTrigger"/> 
+       		    <ref bean="doSaveKLineTrigger"/>-->
        		    
 				<!-- <ref bean="doERC20CollectTrigger"/>
 				<ref bean="doERC20CheckGetFeeTxTrigger"/>
@@ -53,16 +52,16 @@
 	</bean>	
 
 	<!-- 扫描交易对 -->
-	<bean id="doScanPairTrigger"
+	<bean id="doScanSimuOrderTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doScanPair" />
+		<property name="jobDetail" ref="doScanSimuOrder" />
 		<property name="cronExpression" value="0/1 * * * * ?" />
 	</bean>
 	
-	<bean id="doScanPair"
+	<bean id="doScanSimuOrder"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="exchangePairAOImpl" />
-		<property name="targetMethod" value="scanPair" />
+		<property name="targetObject" ref="simuOrderAOImpl" />
+		<property name="targetMethod" value="scanSimuOrder" />
 		<property name="concurrent" value="false" />
 		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
 	</bean>	
@@ -82,7 +81,7 @@
 		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
 	</bean>	
 	
-	<!-- 扫描存活撮合结果 -->
+	<!-- 扫描存活撮合结果 --><!-- 
 	<bean id="doScanMatchResultTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="doScanMatchResult" />
@@ -94,8 +93,8 @@
 		<property name="targetObject" ref="simuMatchResultAOImpl" />
 		<property name="targetMethod" value="doCheckMatchResult" />
 		<property name="concurrent" value="false" />
-		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
-	</bean>	
+		是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程
+	</bean>	 -->
 
 	<!-- 定时扫描待归集的ERC20订单 -->
 	<bean id="doERC20CollectTrigger"

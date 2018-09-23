@@ -46,4 +46,6 @@ public interface ISimuOrderBO extends IPaginableBO<SimuOrder> {
 
     public SimuOrder getSimuOrder(String code);
 
+    public List<SimuOrder> queryToScanSimuOrderList(int start, int limit);
+
 }
