@@ -339,7 +339,8 @@ public class AdsAOImpl implements IAdsAO {
         ads.setTradeType(data.getTradeType());
         ads.setTruePrice(data.getTruePrice());
         if (ECoinType.BTC.getCode().equals(coin.getType())
-                || ECoinType.ETH.getCode().equals(coin.getType())) {// 获取市场价格
+                || ECoinType.ETH.getCode().equals(coin.getType())
+                || ECoinType.X.getCode().equals(coin.getType())) {// 获取市场价格
             // Market market = this.marketBO
             // .standardMarket(ECoin.getCoin(data.getTradeCoin()));
             // if (market == null) {

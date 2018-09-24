@@ -191,15 +191,15 @@ public interface IUserAO {
     //
     // public XN625000Res getTencentSign(String userId);
     //
-    // // 查询推荐信息
+    // 查询推荐信息
     // public XN805123Res getInviteInfo(String userId);
-    //
-    // // 查询推荐信息
+
+    // 查询推荐信息
     // public Object getInviteInfoList(String userId);
-    //
-    // // 更新最后一次登录时间
-    // public void lastLogin(String userId);
-    //
+
+    // 更新最后一次登录时间
+    public void lastLogin(String userId);
+
     // 开启/修改谷歌认证
     public void openGoogleAuth(String userId, String secret, String smsCaptcha,
             String googleCaptcha);

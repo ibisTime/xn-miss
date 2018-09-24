@@ -113,9 +113,12 @@ public class AccountAOImpl implements IAccountAO {
         if (null != page) {
             List<Account> list = page.getList();
             for (Account account : list) {
-                User user = userBO.getUser(account.getUserId());
-                account.setRealName(user.getRealName());
-                account.setMobile(user.getMobile());
+                User user = userBO.getUserUnCheck(account.getUserId());
+                if (null != user) {
+                    account.setRealName(user.getRealName());
+                    account.setMobile(user.getMobile());
+                }
+
             }
         }
 

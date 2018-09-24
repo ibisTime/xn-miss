@@ -74,6 +74,9 @@
             <if test="userId != null and userId != '' ">
                 AND `user_id` = #{userId}
             </if>
+            <if test="tradeCurrency != null and tradeCurrency != ''">
+                And `trade_currency` = #{tradeCurrency}
+            </if>
             <if test="tradeCoin != null and tradeCoin != ''">
                 And `trade_coin` = #{tradeCoin}
             </if>

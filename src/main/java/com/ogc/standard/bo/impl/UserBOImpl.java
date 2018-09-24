@@ -463,6 +463,16 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
+    public void refreshLastLogin(String userId) {
+        if (StringUtils.isNotBlank(userId)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setLastLogin(new Date());
+            userDAO.updateLastLogin(data);
+        }
+    }
+
+    @Override
     public void refreshGoogleSecret(String userId, String secret) {
         User data = new User();
         data.setUserId(userId);

@@ -65,8 +65,8 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
 
             data.setBuyUserId(matchResult.getBuyUserId());
             data.setSellUserId(matchResult.getSellUserId());
-            data.setBuyAmount(matchResult.getBuyAmount());
-            data.setSellAmount(matchResult.getSellAmount());
+            data.setSymbolCount(matchResult.getSymbolCount());
+            data.setToSymbolCount(matchResult.getToSymbolCount());
             data.setBuyFee(matchResult.getBuyFee());
             data.setSellFee(matchResult.getSellFee());
 
@@ -83,7 +83,7 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
             Account buyAccount = accountBO.getAccountByUser(data.getBuyUserId(),
                 data.getToSymbol());
             buyAccount = accountBO.unfrozenAmount(buyAccount,
-                data.getSellAmount(),
+                data.getToSymbolCount(),
                 EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE.getValue(),
                 data.getId().toString());
@@ -92,14 +92,14 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
             Account sellAccount = accountBO
                 .getAccountByUser(data.getSellUserId(), data.getSymbol());
             sellAccount = accountBO.unfrozenAmount(sellAccount,
-                data.getBuyAmount(),
+                data.getSymbolCount(),
                 EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE.getValue(),
                 data.getId().toString());
 
             // 划转交易币种，从 卖方 划给 买方
             accountBO.transAmount(data.getSellUserId(), data.getSymbol(),
-                data.getBuyUserId(), data.getSymbol(), data.getSellAmount(),
+                data.getBuyUserId(), data.getSymbol(), data.getSymbolCount(),
                 EJourBizTypeUser.AJ_BBORDER_SELL.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_BUY.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_SELL.getValue(),
@@ -117,7 +117,8 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
 
             // 划转计价币种，从 买方 划给 卖方
             accountBO.transAmount(data.getBuyUserId(), data.getToSymbol(),
-                data.getSellUserId(), data.getToSymbol(), data.getSellAmount(),
+                data.getSellUserId(), data.getToSymbol(),
+                data.getToSymbolCount(),
                 EJourBizTypeUser.AJ_BBORDER_SELL.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_BUY.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_SELL.getValue(),
@@ -151,6 +152,7 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
         if (refereeUser == null) {
             return;
         }
+
         // 只有X币有分成
         if (!ECoin.X.getCode().equals(data.getSymbol())) {
             return;
@@ -169,9 +171,10 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
                 return;
             }
         }
+
         // 分成
         awardBO.saveTradeAward(refereeUser.getUserId(), refereeUser.getKind(),
-            data.getId().toString(), "币币交易推荐人分成", data.getBuyAmount());
+            data.getId().toString(), "币币交易推荐人分成", data.getSymbolCount());
     }
 
 }

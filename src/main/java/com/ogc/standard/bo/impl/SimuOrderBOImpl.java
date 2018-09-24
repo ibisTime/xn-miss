@@ -1,6 +1,7 @@
 package com.ogc.standard.bo.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISimuOrderDAO;
 import com.ogc.standard.domain.SimuOrder;
 import com.ogc.standard.dto.req.XN650050Req;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.ESimuOrderDirection;
@@ -164,6 +166,21 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
             data = simuOrderDAO.select(condition);
         }
         return data;
+    }
+
+    @Override
+    public List<SimuOrder> queryToScanSimuOrderList(int start, int limit) {
+        SimuOrder condition = new SimuOrder();
+        condition.setIsScan(EBoolean.NO.getCode());
+
+        List<String> statusList = new ArrayList<>();
+        statusList.add(ESimuOrderStatus.SUBMIT.getCode());
+        condition.setStatusList(statusList);
+        condition.setOrder("create_datetime asc");
+
+        Paginable<SimuOrder> pages = getPaginable(start, limit, condition);
+
+        return pages.getList();
     }
 
 }

@@ -20,7 +20,9 @@ public interface IHandicapBO extends IPaginableBO<Handicap> {
 
     public List<Handicap> queryHandicapList(Handicap condition);
 
-    public List<HandicapGrade> queryHandicapList(String symbol, String toSymbol,
-            String direction);
+    public List<HandicapGrade> queryHandicapGradeList(String symbol,
+            String toSymbol, String direction);
 
+    public List<Handicap> queryHandicapList(String symbol, String toSymbol,
+            String direction, int start, int limit);
 }

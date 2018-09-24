@@ -1,11 +1,3 @@
-/**
- * @Title GoogleAuthAOImpl.java 
- * @Package com.ogc.standard.ao.impl 
- * @Description 
- * @author leo(haiqing)  
- * @date 2017年12月6日 下午4:42:29 
- * @version V1.0   
- */
 package com.ogc.standard.ao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +7,9 @@ import com.ogc.standard.ao.IGoogleAuthAO;
 import com.ogc.standard.bo.IGoogleAuthBO;
 
 /** 
- * @author: haiqingzheng 
- * @since: 2017年12月6日 下午4:42:29 
+ * 
+ * @author: lei 
+ * @since: 2018年9月21日 下午8:16:03 
  * @history:
  */
 @Service

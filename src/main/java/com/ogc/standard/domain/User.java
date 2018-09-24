@@ -121,6 +121,10 @@ public class User extends ABaseDO {
 
     // 备注
     private String remark;
+
+    // 最后一次登录时间
+    private Date lastLogin;
+
     // ***********db properties***********
 
     // 登录名模糊查询
@@ -223,6 +227,15 @@ public class User extends ABaseDO {
     // 是否设置交易密码
     private boolean tradepwdFlag;
 
+    // 是否设置谷歌验证密码
+    private boolean googleAuthFlag;
+
+    // 是否绑定邮箱
+    private boolean emailBindFlag;
+
+    // 是否已证件认证
+    private UserIdAuth userIdAuth;
+
     // 用户推荐人
     private User refereeUser;
 
@@ -252,86 +265,6 @@ public class User extends ABaseDO {
 
     private UserStatistics userStatistics;
 
-    public UserStatistics getUserStatistics() {
-        return userStatistics;
-    }
-
-    public void setUserStatistics(UserStatistics userStatistics) {
-        this.userStatistics = userStatistics;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getDiploma() {
-        return diploma;
-    }
-
-    public void setDiploma(String diploma) {
-        this.diploma = diploma;
-    }
-
-    public String getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(String occupation) {
-        this.occupation = occupation;
-    }
-
-    public Date getGradDatetime() {
-        return gradDatetime;
-    }
-
-    public void setGradDatetime(Date gradDatetime) {
-        this.gradDatetime = gradDatetime;
-    }
-
-    public String getWorkTime() {
-        return workTime;
-    }
-
-    public void setWorkTime(String workTime) {
-        this.workTime = workTime;
-    }
-
-    public String getPdf() {
-        return pdf;
-    }
-
-    public void setPdf(String pdf) {
-        this.pdf = pdf;
-    }
-
-    public String getIntroduce() {
-        return introduce;
-    }
-
-    public void setIntroduce(String introduce) {
-        this.introduce = introduce;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -354,6 +287,22 @@ public class User extends ABaseDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
     public String getPhoto() {
@@ -404,6 +353,22 @@ public class User extends ABaseDO {
         this.userReferee = userReferee;
     }
 
+    public Double getDivRate1() {
+        return divRate1;
+    }
+
+    public void setDivRate1(Double divRate1) {
+        this.divRate1 = divRate1;
+    }
+
+    public Double getDivRate2() {
+        return divRate2;
+    }
+
+    public void setDivRate2(Double divRate2) {
+        this.divRate2 = divRate2;
+    }
+
     public String getIdKind() {
         return idKind;
     }
@@ -428,6 +393,30 @@ public class User extends ABaseDO {
         this.realName = realName;
     }
 
+    public String getIdFace() {
+        return idFace;
+    }
+
+    public void setIdFace(String idFace) {
+        this.idFace = idFace;
+    }
+
+    public String getIdOppo() {
+        return idOppo;
+    }
+
+    public void setIdOppo(String idOppo) {
+        this.idOppo = idOppo;
+    }
+
+    public String getIdHold() {
+        return idHold;
+    }
+
+    public void setIdHold(String idHold) {
+        this.idHold = idHold;
+    }
+
     public String getTradePwd() {
         return tradePwd;
     }
@@ -442,6 +431,14 @@ public class User extends ABaseDO {
 
     public void setTradePwdStrength(String tradePwdStrength) {
         this.tradePwdStrength = tradePwdStrength;
+    }
+
+    public String getGoogleSecret() {
+        return googleSecret;
+    }
+
+    public void setGoogleSecret(String googleSecret) {
+        this.googleSecret = googleSecret;
     }
 
     public String getStatus() {
@@ -500,6 +497,14 @@ public class User extends ABaseDO {
         this.latitude = latitude;
     }
 
+    public String getRespArea() {
+        return respArea;
+    }
+
+    public void setRespArea(String respArea) {
+        this.respArea = respArea;
+    }
+
     public Date getCreateDatetime() {
         return createDatetime;
     }
@@ -530,6 +535,14 @@ public class User extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
     public String getLoginNameForQuery() {
@@ -628,6 +641,30 @@ public class User extends ABaseDO {
         this.tradepwdFlag = tradepwdFlag;
     }
 
+    public boolean isGoogleAuthFlag() {
+        return googleAuthFlag;
+    }
+
+    public void setGoogleAuthFlag(boolean googleAuthFlag) {
+        this.googleAuthFlag = googleAuthFlag;
+    }
+
+    public boolean isEmailBindFlag() {
+        return emailBindFlag;
+    }
+
+    public void setEmailBindFlag(boolean emailBindFlag) {
+        this.emailBindFlag = emailBindFlag;
+    }
+
+    public UserIdAuth getUserIdAuth() {
+        return userIdAuth;
+    }
+
+    public void setUserIdAuth(UserIdAuth userIdAuth) {
+        this.userIdAuth = userIdAuth;
+    }
+
     public User getRefereeUser() {
         return refereeUser;
     }
@@ -636,67 +673,76 @@ public class User extends ABaseDO {
         this.refereeUser = refereeUser;
     }
 
-    public Double getDivRate1() {
-        return divRate1;
+    public String getGender() {
+        return gender;
     }
 
-    public void setDivRate1(Double divRate1) {
-        this.divRate1 = divRate1;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public Double getDivRate2() {
-        return divRate2;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setDivRate2(Double divRate2) {
-        this.divRate2 = divRate2;
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
-    public String getKind() {
-        return kind;
+    public String getDiploma() {
+        return diploma;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setDiploma(String diploma) {
+        this.diploma = diploma;
     }
 
-    public String getIdFace() {
-        return idFace;
+    public String getOccupation() {
+        return occupation;
     }
 
-    public void setIdFace(String idFace) {
-        this.idFace = idFace;
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
     }
 
-    public String getIdOppo() {
-        return idOppo;
+    public Date getGradDatetime() {
+        return gradDatetime;
     }
 
-    public void setIdOppo(String idOppo) {
-        this.idOppo = idOppo;
+    public void setGradDatetime(Date gradDatetime) {
+        this.gradDatetime = gradDatetime;
     }
 
-    public String getIdHold() {
-        return idHold;
+    public String getWorkTime() {
+        return workTime;
     }
 
-    public void setIdHold(String idHold) {
-        this.idHold = idHold;
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime;
     }
 
-    public String getGoogleSecret() {
-        return googleSecret;
+    public String getPdf() {
+        return pdf;
     }
 
-    public void setGoogleSecret(String googleSecret) {
-        this.googleSecret = googleSecret;
+    public void setPdf(String pdf) {
+        this.pdf = pdf;
     }
 
-    public String getRespArea() {
-        return respArea;
+    public String getIntroduce() {
+        return introduce;
     }
 
-    public void setRespArea(String respArea) {
-        this.respArea = respArea;
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
     }
+
+    public UserStatistics getUserStatistics() {
+        return userStatistics;
+    }
+
+    public void setUserStatistics(UserStatistics userStatistics) {
+        this.userStatistics = userStatistics;
+    }
+
 }

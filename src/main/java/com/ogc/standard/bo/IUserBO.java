@@ -95,6 +95,8 @@ public interface IUserBO extends IPaginableBO<User> {
     public List<User> queryUserList(String mobile, String kind,
             String systemCode);
 
+    public void refreshLastLogin(String userId);
+
     public Long totalUser(User condition);
 
     // 修改定位信息
@@ -111,7 +113,5 @@ public interface IUserBO extends IPaginableBO<User> {
     // 修改推荐人
     public void refreshReferee(String userId, String userReferee,
             String updater);
-
-    // 邮箱注册
 
 }

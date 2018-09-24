@@ -1,11 +1,3 @@
-/**
- * @Title XN805130.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author taojian  
- * @date 2018年9月13日 下午2:54:34 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IUserFieldApproveAO;

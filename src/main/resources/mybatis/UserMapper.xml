@@ -41,6 +41,7 @@
 		<result column="update_datetime" property="updateDatetime" />
 		
 		<result column="remark" property="remark" />
+		<result column="last_login" property="lastLogin" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">			
@@ -453,8 +454,6 @@
 		user_id = #{userId}		
 	</update>
 	
-
-	
 	<update id="update_userReferee" parameterType="user">
 		UPDATE tstd_user
 		SET
@@ -470,6 +469,14 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
+		WHERE
+		user_id = #{userId}		
+	</update>
+	
+	<update id="update_lastLogin" parameterType="user">
+		UPDATE tstd_user
+		SET
+		last_login = #{lastLogin}
 		WHERE
 		user_id = #{userId}		
 	</update>

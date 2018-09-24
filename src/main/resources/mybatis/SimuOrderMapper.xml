@@ -23,6 +23,7 @@
 		
 		<result column="cancel_datetime" property="cancelDatetime" />
 		<result column="status" property="status" />
+		<result column="is_scan" property="isScan" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
@@ -79,6 +80,7 @@
 		
 		,t.cancel_datetime
 		,t.status
+		,t.is_scan
 		FROM
 		tsimu_order t
 		<include refid="where_condition" />
@@ -118,6 +120,7 @@
 		
 		,cancel_datetime
 		,status 
+		,is_scan
 		)
 		VALUES(
 		#{code}
@@ -140,6 +143,7 @@
 		
 		,#{cancelDatetime}
 		,#{status}
+		,#{isScan}
 		)
 	</insert>
 

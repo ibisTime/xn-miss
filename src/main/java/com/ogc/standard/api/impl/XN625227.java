@@ -26,6 +26,7 @@ public class XN625227 extends AProcessor {
     public Object doBusiness() throws BizException {
 
         Ads condition = new Ads();
+        condition.setTradeCurrency(req.getTradeCurrency());
         condition.setTradeCoin(req.getCoin());
         condition.setTradeType(req.getTradeType());
         condition.setPayType(req.getPayType());

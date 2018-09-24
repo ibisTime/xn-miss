@@ -11,16 +11,12 @@ import com.ogc.standard.bo.ISimuKLineBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.ExchangePair;
 import com.ogc.standard.enums.ESimuKLinePeriod;
-import com.ogc.standard.match.SimuOrderMatch;
 
 @Service
 public class ExchangePairAOImpl implements IExchangePairAO {
 
     @Autowired
     private IExchangePairBO exchangePairBO;
-
-    @Autowired
-    private SimuOrderMatch simuOrderMatch;
 
     @Autowired
     private ISimuKLineBO simuKLineBO;
@@ -30,26 +26,6 @@ public class ExchangePairAOImpl implements IExchangePairAO {
             ExchangePair condition) {
         return exchangePairBO.queryExchangePairShowPage(start, limit,
             condition);
-    }
-
-    // 扫描平台支持的交易对
-    public void scanPair() {
-
-        // 获取平台内的所有交易对
-        List<ExchangePair> pairs = exchangePairBO
-            .queryExchangePairList(new ExchangePair());
-
-        for (ExchangePair pair : pairs) {
-            //
-            // // new Thread() {
-            // // public void run() {
-            simuOrderMatch.doMatchTrade(pair.getSymbol().toUpperCase(),
-                pair.getToSymbol().toUpperCase());
-            // // }
-            // // }.start();
-            //
-        }
-
     }
 
     // 扫描平台支持的交易对

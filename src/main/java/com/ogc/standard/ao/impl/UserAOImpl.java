@@ -33,6 +33,8 @@ import com.ogc.standard.bo.ITencentBO;
 import com.ogc.standard.bo.ITradeOrderBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserExtBO;
+import com.ogc.standard.bo.IUserIdAuthBO;
+import com.ogc.standard.bo.IUserRelationBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
@@ -44,6 +46,7 @@ import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.TradeOrder;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
+import com.ogc.standard.domain.UserStatistics;
 import com.ogc.standard.dto.req.XN802399Req;
 import com.ogc.standard.dto.req.XN802400Req;
 import com.ogc.standard.dto.req.XN805041Req;
@@ -63,6 +66,7 @@ import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserPwd;
+import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -114,6 +118,12 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     private IIdentifyBO identifyBO;
+
+    @Autowired
+    private IUserRelationBO userRelationBO;
+
+    @Autowired
+    private IUserIdAuthBO userIdAuthBO;
 
     @Override
     public void doCheckMobile(String mobile, String language) {
@@ -240,6 +250,11 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
+    public void lastLogin(String userId) {
+        userBO.refreshLastLogin(userId);
+    }
+
+    @Override
     public void openGoogleAuth(String userId, String secret, String smsCaptcha,
             String googleCaptcha) {
         User user = this.doGetUser(userId);
@@ -308,35 +323,37 @@ public class UserAOImpl implements IUserAO {
         data.setLocation(location);
         signLogBO.saveSignLog(data);
 
+        userBO.refreshLastLogin(userId);
+
         return userId;
-//        User condition = new User();
-//
-//        condition.setLoginName(loginName);
-//
-//        List<User> userList1 = userBO.queryUserList(condition);
-//        if (CollectionUtils.isEmpty(userList1)) {
-//            throw new BizException("xn805050", "登录名不存在");
-//        }
-//        condition.setLoginPwd(MD5Util.md5(loginPwd));
-//        List<User> userList2 = userBO.queryUserList(condition);
-//        if (CollectionUtils.isEmpty(userList2)) {
-//            throw new BizException("xn805050", "登录密码错误");
-//        }
-//        User user = userList2.get(0);
-//        if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-//            throw new BizException("xn805050",
-//                "该账号" + EUserStatus.getMap().get(user.getStatus()).getValue()
-//                        + "，请联系工作人员");
-//        }
-//        // 增加登陆日志
-//        SignLog data = new SignLog();
-//        data.setUserId(user.getUserId());
-//        data.setType(ESignLogType.LOGIN.getCode());
-//        data.setClient(client);
-//        data.setLocation(location);
-//        signLogBO.saveSignLog(data);
-//
-//        return user.getUserId();
+        // User condition = new User();
+        //
+        // condition.setLoginName(loginName);
+        //
+        // List<User> userList1 = userBO.queryUserList(condition);
+        // if (CollectionUtils.isEmpty(userList1)) {
+        // throw new BizException("xn805050", "登录名不存在");
+        // }
+        // condition.setLoginPwd(MD5Util.md5(loginPwd));
+        // List<User> userList2 = userBO.queryUserList(condition);
+        // if (CollectionUtils.isEmpty(userList2)) {
+        // throw new BizException("xn805050", "登录密码错误");
+        // }
+        // User user = userList2.get(0);
+        // if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+        // throw new BizException("xn805050",
+        // "该账号" + EUserStatus.getMap().get(user.getStatus()).getValue()
+        // + "，请联系工作人员");
+        // }
+        // // 增加登陆日志
+        // SignLog data = new SignLog();
+        // data.setUserId(user.getUserId());
+        // data.setType(ESignLogType.LOGIN.getCode());
+        // data.setClient(client);
+        // data.setLocation(location);
+        // signLogBO.saveSignLog(data);
+        //
+        // return user.getUserId();
     }
 
     @Override
@@ -599,12 +616,28 @@ public class UserAOImpl implements IUserAO {
         } else {
             user.setTradepwdFlag(false);
         }
+
         // 是否设置过登录密码
         if (StringUtils.isNotBlank(user.getLoginPwdStrength())) {
             user.setLoginPwdFlag(true);
         } else {
             user.setLoginPwdFlag(false);
         }
+
+        // 是否绑定邮箱
+        if (StringUtils.isNotBlank(user.getEmail())) {
+            user.setEmailBindFlag(true);
+        } else {
+            user.setEmailBindFlag(false);
+        }
+
+        // 是否开始谷歌认证
+        if (StringUtils.isNotBlank(user.getGoogleSecret())) {
+            user.setGoogleAuthFlag(true);
+        } else {
+            user.setGoogleAuthFlag(false);
+        }
+
         // 拉取ext数据
         UserExt data = userExtBO.getUserExt(userId);
         if (data != null) {
@@ -618,6 +651,14 @@ public class UserAOImpl implements IUserAO {
             user.setWorkTime(data.getWorkTime());
             user.setGradDatetime(data.getGradDatetime());
         }
+
+        // 用户统计信息
+        UserStatistics userStatistics = this.tradeOrderBO
+            .obtainUserStatistics(userId, "");
+        // 获取信任数量
+        userStatistics.setBeiXinRenCount(this.userRelationBO
+            .getRelationCount(userId, EUserReleationType.TRUST.getCode()));
+        user.setUserStatistics(userStatistics);
 
         return user;
     }
