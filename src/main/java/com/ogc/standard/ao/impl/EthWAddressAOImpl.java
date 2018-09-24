@@ -16,9 +16,9 @@ import com.ogc.standard.ao.IEthWAddressAO;
 import com.ogc.standard.bo.IEthWAddressBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.EthWAddress;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EWAddressStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: haiqingzheng 
@@ -36,13 +36,13 @@ public class EthWAddressAOImpl implements IEthWAddressAO {
         EthWAddress ethWAddress = ethWAddressBO
             .getEthWAddressByAddress(address);
         if (ethWAddress != null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "归集地址" + address + "已经存在，请勿重复导入");
+            throw new BizException(EErrorCode_main.coin_WADDRESSEXIST.getCode(),
+                address);
         }
         // 地址有效性校验
         if (!WalletUtils.isValidAddress(address)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "地址" + address + "不符合以太坊规则，请仔细核对");
+            throw new BizException(EErrorCode_main.coin_WADDRESSEXIST.getCode(),
+                address);
         }
         ethWAddressBO.saveEthWAddress(address);
     }
@@ -51,8 +51,7 @@ public class EthWAddressAOImpl implements IEthWAddressAO {
     public void abandon(Long id) {
         EthWAddress ethWAddress = ethWAddressBO.getEthWAddress(id);
         if (EWAddressStatus.INVALID.getCode().equals(ethWAddress.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "地址已失效，无需重复弃用");
+            throw new BizException(EErrorCode_main.coin_INVALIDATE.getCode());
         }
         ethWAddressBO.abandon(ethWAddress);
     }

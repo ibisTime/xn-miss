@@ -17,8 +17,8 @@ import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.EthWAddress;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
@@ -30,7 +30,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             BigDecimal amount, String payCardInfo, String payCardNo,
             String applyUser, String applyNote) {
         if (amount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "充值金额不能为0");
+            throw new BizException(EErrorCode_main.charge_AMOUNT.getCode());
         }
         String code = OrderNoGenerater.generate("CZ");
 
@@ -63,7 +63,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             BigDecimal transAmount, EChannelType channelType, String applyUser,
             String fromAddress) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "充值金额不能为0");
+            throw new BizException(EErrorCode_main.charge_AMOUNT.getCode());
         }
         String code = OrderNoGenerater.generate("CZ");
         Charge data = new Charge();
@@ -94,7 +94,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             EChannelType channelType, String channalOrder, String payNote,
             String hash) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "充值金额不能为0");
+            throw new BizException(EErrorCode_main.charge_AMOUNT.getCode());
         }
         String code = OrderNoGenerater.generate("CZ");
         Charge data = new Charge();
@@ -158,7 +158,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             condition.setCode(code);
             order = chargeDAO.select(condition);
             if (null == order) {
-                throw new BizException("xn000000", "订单号[" + code + "]不存在");
+                throw new BizException(
+                    EErrorCode_main.charge_NOTEXIST.getCode());
             }
         }
         return order;

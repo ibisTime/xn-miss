@@ -9,6 +9,7 @@
 package com.ogc.standard.dto.req;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 /** 
  * @author: taojian 
@@ -19,7 +20,10 @@ public abstract class BaseReq implements Serializable {
 
     private static final long serialVersionUID = -1532302972775442373L;
 
-    private String language;// 语言
+    Locale defaultLocale = Locale.getDefault();
+
+    // 语言
+    private String language = defaultLocale.getLanguage();
 
     public String getLanguage() {
         return language;

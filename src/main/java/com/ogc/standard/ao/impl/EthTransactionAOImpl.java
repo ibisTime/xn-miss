@@ -40,6 +40,7 @@ import com.ogc.standard.domain.EthTransaction;
 import com.ogc.standard.domain.EthXAddress;
 import com.ogc.standard.domain.TokenEvent;
 import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypeCold;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EOriginialCoin;
@@ -97,7 +98,8 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         EthXAddress ethXAddress = ethXAddressBO
             .getEthXAddressByAddress(toAddress);
         if (ethXAddress == null) {
-            throw new BizException("xn6250000", "充值地址不存在");
+            throw new BizException(
+                EErrorCode_main.coin_ADDRESSNOTEXIST.getCode());
         }
         Charge condition = new Charge();
         condition.setChannelOrder(ctqEthTransaction.getHash());
@@ -143,7 +145,8 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         EthXAddress ethXAddress = ethXAddressBO
             .getEthXAddressByAddress(tokenEvent.getTokenTo());
         if (ethXAddress == null) {
-            throw new BizException("xn6250000", "充值地址不存在");
+            throw new BizException(
+                EErrorCode_main.coin_ADDRESSNOTEXIST.getCode());
         }
         TokenEvent condition = new TokenEvent();
         condition.setHash(ctqEthTransaction.getHash());
@@ -269,7 +272,7 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         EthXAddress xEthAddress = ethXAddressBO
             .getEthXAddressByAddress(address);
         if (xEthAddress == null) {
-            throw new BizException("xn625000", "该地址不能归集");
+            throw new BizException(EErrorCode_main.eth_COLLECT.getCode());
         }
         EthXAddress fromAddressSecret = ethXAddressBO
             .getEthXAddressSecret(xEthAddress.getId());
@@ -278,7 +281,7 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         BigDecimal limit = coin.getCollectStart();
         BigDecimal balance = EthClient.getBalance(address); // 余额大于配置值时，进行归集
         if (balance.compareTo(limit) < 0) {
-            throw new BizException("xn625000", "未达到归集条件，无需归集");
+            throw new BizException(EErrorCode_main.eth_NOTCOLLECT.getCode());
         }
         // 开始归集
         collectBO.doETHCollect(fromAddressSecret, chargeCode, balance);
@@ -328,7 +331,8 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         EthMAddress ethMAddress = ethMAddressBO
             .getEthMAddressByAddress(ctqEthTransaction.getTo());
         if (ethMAddress == null) {
-            throw new BizException("xn6250000", "充值地址不存在");
+            throw new BizException(
+                EErrorCode_main.coin_ADDRESSNOTEXIST.getCode());
         }
         BigDecimal amount = ctqEthTransaction.getValue();
         // 获取冷钱包账户
@@ -357,7 +361,8 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         EthMAddress ethMAddress = ethMAddressBO
             .getEthMAddressByAddress(tokenEvent.getTokenTo());
         if (ethMAddress == null) {
-            throw new BizException("xn6250000", "充值地址不存在");
+            throw new BizException(
+                EErrorCode_main.coin_ADDRESSNOTEXIST.getCode());
         }
         // 落地定存记录
         String symbol = tokenEvent.getSymbol();

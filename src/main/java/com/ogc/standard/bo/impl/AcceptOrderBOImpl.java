@@ -31,11 +31,11 @@ import com.ogc.standard.enums.EAcceptOrderStatus;
 import com.ogc.standard.enums.EAcceptType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECoin;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.ESysConfigType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class AcceptOrderBOImpl extends PaginableBOImpl<AcceptOrder>
@@ -152,7 +152,8 @@ public class AcceptOrderBOImpl extends PaginableBOImpl<AcceptOrder>
             condition.setCode(code);
             data = acceptOrderDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "订单不存在");
+                throw new BizException(
+                    EErrorCode_main.accept_ORDEREXIST.getCode());
             }
         }
         return data;
@@ -218,8 +219,7 @@ public class AcceptOrderBOImpl extends PaginableBOImpl<AcceptOrder>
         // 校验当时行情，需在容错误差内
         BigDecimal price = StringValidater.toBigDecimal(tradePrice);
         if (price.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "交易价格必须大于0");
+            throw new BizException(EErrorCode_main.accept_PRICEZERO.getCode());
         }
         BigDecimal btcToCurrency = marketAO
             .coinPriceByPlatform(ECoin.BTC.getCode(), tradeCurrecny).getMid();
@@ -228,18 +228,16 @@ public class AcceptOrderBOImpl extends PaginableBOImpl<AcceptOrder>
             .getMid();
         BigDecimal newPrice = btcToCurrency.multiply(xToBtc);
         if (newPrice.subtract(price).abs().compareTo(BigDecimal.ONE) >= 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "交易价格误差过大");
+            throw new BizException(EErrorCode_main.accept_PRICEERROR.getCode());
         }
         BigDecimal count = StringValidater.toBigDecimal(tradeCount);
         if (count.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "交易数量必须大于0");
+            throw new BizException(EErrorCode_main.accept_COUNTZERO.getCode());
         }
 
         BigDecimal tradeAmount = StringValidater.toBigDecimal(amount);
         if (tradeAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "交易金额必须大于0");
+            throw new BizException(EErrorCode_main.accept_AMOUNTZERO.getCode());
         }
     }
 

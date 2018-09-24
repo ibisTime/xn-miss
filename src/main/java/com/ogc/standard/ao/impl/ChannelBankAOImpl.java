@@ -11,6 +11,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.ChannelBank;
 import com.ogc.standard.dto.req.XN802110Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -47,7 +48,7 @@ public class ChannelBankAOImpl implements IChannelBankAO {
     @Override
     public void dropChannelBank(Long id) {
         if (!channelBankBO.isChannelBankExist(id)) {
-            throw new BizException("xn0000", "渠道银行序号不存在");
+            throw new BizException(EErrorCode_main.chann_NOTEXIST.getCode());
         }
         channelBankBO.removeChannelBank(id);
     }

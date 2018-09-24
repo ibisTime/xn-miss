@@ -16,7 +16,9 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2018年9月12日 上午10:29:09 
  * @history:
  */
-public class XN805086Req {
+public class XN805086Req extends BaseReq {
+
+    private static final long serialVersionUID = -303603668632593271L;
 
     // 邮箱验证码
     @NotBlank

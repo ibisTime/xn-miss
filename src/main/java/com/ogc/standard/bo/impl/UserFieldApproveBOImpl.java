@@ -19,8 +19,8 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IUserFieldApproveDAO;
 import com.ogc.standard.domain.UserFieldApprove;
 import com.ogc.standard.enums.EApproveStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -66,7 +66,7 @@ public class UserFieldApproveBOImpl extends PaginableBOImpl<UserFieldApprove>
         condition.setId(id);
         UserFieldApprove data = userFieldApproveDAO.select(condition);
         if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在该申请");
+            throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
         }
         return data;
     }
@@ -77,8 +77,7 @@ public class UserFieldApproveBOImpl extends PaginableBOImpl<UserFieldApprove>
         condition.setApplyUser(applyUser);
         condition.setStatus(EApproveStatus.TOAPPROVE.getCode());
         if (getTotalCount(condition) > 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "该用户有申请在审批中");
+            throw new BizException(EErrorCode_main.user_INAPPROVE.getCode());
         }
     }
 

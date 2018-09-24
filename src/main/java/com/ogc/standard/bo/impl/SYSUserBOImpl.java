@@ -15,6 +15,7 @@ import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISYSUserDAO;
 import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -105,7 +106,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             condition.setUserId(userId);
             data = sysUserDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "系统用户不存在");
+                throw new BizException(
+                    EErrorCode_main.sysuser_NOTEXIST.getCode());
             }
         }
         return data;
@@ -116,7 +118,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
         SYSUser condition = new SYSUser();
         List<SYSUser> list = sysUserDAO.selectList(condition);
         if (CollectionUtils.isEmpty(list)) {
-            throw new BizException("xn0000", "系统用户不存在");
+            throw new BizException(EErrorCode_main.sysuser_NOTEXIST.getCode());
         }
         return list.get(0);
 
@@ -143,10 +145,12 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             condition.setLoginPwd(MD5Util.md5(loginPwd));
             long count = this.getTotalCount(condition);
             if (count != 1) {
-                throw new BizException("jd00001", "原登录密码错误");
+                throw new BizException(
+                    EErrorCode_main.user_OLDLOGINPWDWRONG.getCode());
             }
         } else {
-            throw new BizException("jd00001", "原登录密码错误");
+            throw new BizException(
+                EErrorCode_main.user_OLDLOGINPWDWRONG.getCode());
         }
     }
 
@@ -185,7 +189,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);
             if (count > 0) {
-                throw new BizException("li01003", "登录名已经存在");
+                throw new BizException(
+                    EErrorCode_main.user_LOGINNAME.getCode());
             }
         }
     }

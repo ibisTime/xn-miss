@@ -16,10 +16,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.ogc.standard.enums.ELanguage;
-import com.ogc.standard.enums.ELanguage_en_US;
-import com.ogc.standard.enums.ELanguage_zh_CN;
-
 /** 
  * @author: miyb 
  * @since: 2015-5-16 下午1:30:31 
@@ -54,15 +50,6 @@ public class BizException extends RuntimeException {
     public BizException(String errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
-    }
-
-    public BizException(String errorCode, ELanguage language) {
-        this.errorCode = errorCode;
-        if (ELanguage.en_US.equals(language)) {
-            this.errorMessage = ELanguage_en_US.getMap().get(errorCode)
-                .getValue();
-        }
-        this.errorMessage = ELanguage_zh_CN.getMap().get(errorCode).getValue();
     }
 
     public BizException(Throwable cause, String errorCode) {

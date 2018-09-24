@@ -20,8 +20,8 @@ import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserExtBO;
 import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.req.XN805085Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: dl 
@@ -48,28 +48,13 @@ public class UserExtAOImpl implements IUserExtAO {
         try {
             data.setGradDatetime(format.parse(req.getGradDatetime()));
         } catch (ParseException e) {
-            throw new BizException("3", "毕业日期格式不对");
+            throw new BizException(EErrorCode_main.date_WRONGFORMAT.getCode());
         }
         data.setIntroduce(req.getIntroduce());
         data.setOccupation(req.getOccupation());
         data.setPdf(req.getPdf());
         userExtBO.refreshUserExt(data);
         return req.getUserId();
-    }
-
-    @Override
-    public void bindEmail(String captcha, String email, String userId) {
-        smsOutBO.checkCaptcha(email, captcha, "805086");
-        UserExt data = userExtBO.getUserExt(userId);
-        if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户不存在");
-        }
-        if (data.getEmail() != null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户已绑定邮箱");
-        }
-        userExtBO.isEmailExit(email);
-        data.setEmail(email);
-        userExtBO.refreshEmail(data);
     }
 
 }

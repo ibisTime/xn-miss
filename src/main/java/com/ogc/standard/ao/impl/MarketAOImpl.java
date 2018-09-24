@@ -29,6 +29,7 @@ import com.ogc.standard.domain.MarketDetail;
 import com.ogc.standard.dto.req.XN650101Req;
 import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EMarketOrigin;
 import com.ogc.standard.exception.BizException;
 
@@ -262,7 +263,7 @@ public class MarketAOImpl implements IMarketAO {
         }
 
         if (eCoin == null) {
-            throw new BizException("xn000", coin + "不支持的货币类型");
+            throw new BizException(EErrorCode_main.coin_UNSUPPORT.getCode());
         }
 
         Market market = this.marketBO.standardMarket(eCoin, refCurrency);

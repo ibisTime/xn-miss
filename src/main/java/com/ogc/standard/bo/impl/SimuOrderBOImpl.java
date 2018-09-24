@@ -15,12 +15,12 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISimuOrderDAO;
 import com.ogc.standard.domain.SimuOrder;
 import com.ogc.standard.dto.req.XN650050Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.ESimuOrderDirection;
 import com.ogc.standard.enums.ESimuOrderStatus;
 import com.ogc.standard.enums.ESimuOrderType;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
@@ -149,8 +149,7 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
             condition.setCode(code);
             data = simuOrderDAO.select(condition);
             if (data == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "委托单号" + code + "不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
         }
         return data;

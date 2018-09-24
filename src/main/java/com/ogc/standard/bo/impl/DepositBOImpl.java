@@ -20,6 +20,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IDepositDAO;
 import com.ogc.standard.domain.Deposit;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -29,8 +30,8 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 @Component
-public class DepositBOImpl extends PaginableBOImpl<Deposit> implements
-        IDepositBO {
+public class DepositBOImpl extends PaginableBOImpl<Deposit>
+        implements IDepositBO {
 
     @Autowired
     private IDepositDAO depositDAO;
@@ -43,7 +44,7 @@ public class DepositBOImpl extends PaginableBOImpl<Deposit> implements
             condition.setCode(code);
             data = depositDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "定存订单不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
 
             }
         }
@@ -52,10 +53,10 @@ public class DepositBOImpl extends PaginableBOImpl<Deposit> implements
 
     @Override
     public String saveDeposit(String symbol, String fromAddress,
-            String toAddress, BigDecimal amount, String hash,
-            BigDecimal gasFee, Date confirmDatetime) {
-        String code = OrderNoGenerater.generate(EGeneratePrefix.DEPOSIT
-            .getCode());
+            String toAddress, BigDecimal amount, String hash, BigDecimal gasFee,
+            Date confirmDatetime) {
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.DEPOSIT.getCode());
         Deposit deposit = new Deposit();
 
         deposit.setCode(code);

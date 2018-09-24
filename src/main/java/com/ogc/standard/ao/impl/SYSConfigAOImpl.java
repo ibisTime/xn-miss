@@ -10,6 +10,7 @@ import com.ogc.standard.ao.ISYSConfigAO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSConfig;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -30,7 +31,7 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
         if (data != null) {
             count = sysConfigBO.refreshSYSConfig(data);
         } else {
-            throw new BizException("lh5031", "系统参数ID不存在！");
+            throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
         }
         return count;
     }

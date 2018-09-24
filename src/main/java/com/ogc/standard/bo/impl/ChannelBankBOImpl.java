@@ -11,6 +11,7 @@ import com.ogc.standard.bo.IChannelBankBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IChannelBankDAO;
 import com.ogc.standard.domain.ChannelBank;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -74,7 +75,8 @@ public class ChannelBankBOImpl extends PaginableBOImpl<ChannelBank>
             condition.setId(id);
             data = channelBankDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "渠道银行不存在");
+                throw new BizException(
+                    EErrorCode_main.chann_NOTEXIST.getCode());
             }
         }
         return data;

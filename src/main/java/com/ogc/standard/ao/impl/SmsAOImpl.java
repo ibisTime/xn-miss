@@ -27,6 +27,7 @@ import com.ogc.standard.domain.Sms;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805300Req;
 import com.ogc.standard.dto.req.XN805301Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EReadStatus;
 import com.ogc.standard.enums.ESmsStauts;
@@ -77,7 +78,7 @@ public class SmsAOImpl implements ISmsAO {
             Sms sms = smsBO.getSms(req.getCode());
             // 判断该消息是否发布
             if (sms.getStatus().equals(ESmsStauts.SENDED.getCode())) {
-                throw new BizException("lh4000", "消息已发布！");
+                throw new BizException(EErrorCode_main.sms_PUBLISHED.getCode());
             }
             data.setCode(req.getCode());
             smsBO.refreshSms(data);
@@ -122,7 +123,7 @@ public class SmsAOImpl implements ISmsAO {
     @Override
     public Sms getSms(String code) {
         if (!smsBO.isSmsExit(code)) {
-            throw new BizException("lh4000", "消息不存在！");
+            throw new BizException(EErrorCode_main.sms_NOTEXIST.getCode());
         }
         return smsBO.getSms(code);
     }

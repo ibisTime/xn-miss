@@ -5,6 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import com.ogc.standard.api.IProcessor;
 import com.ogc.standard.common.JsonUtil;
+import com.ogc.standard.enums.EErrorCode_en_US;
+import com.ogc.standard.enums.EErrorCode_main;
+import com.ogc.standard.enums.ELanguage;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.http.BizConnecter;
@@ -16,7 +19,7 @@ public class DispatcherImpl implements IDispatcher {
 
     @Override
     public String doDispatcher(String transcode, String inputParams,
-            String operator) {
+            String operator, String language) {
         // ConfigDescribe configDescribe = ConfigLoader.loadConfig();
         /*
          * if (StringUtils.isNotBlank(transcode) && configDescribe != null) {
@@ -53,9 +56,26 @@ public class DispatcherImpl implements IDispatcher {
             System.out.println("Exception Post:" + e.getMessage());
 
             if (e instanceof BizException) {
-                rm.setErrorCode(EErrorCode.BIZ_ERR.getCode());
-                rm.setErrorInfo(((BizException) e).getErrorMessage());
+
+                String errorCode = ((BizException) e).getErrorCode();
+
+                String errorInfo = "";
+                if (ELanguage.en_US.getCode().equalsIgnoreCase(language)) {
+
+                    errorInfo = String.format(
+                        EErrorCode_en_US.getMap().get(errorCode).getValue(),
+                        ((BizException) e).getErrorParams());
+
+                } else {
+                    errorInfo = String.format(
+                        EErrorCode_main.getMap().get(errorCode).getValue(),
+                        ((BizException) e).getErrorParams());
+                }
+
+                rm.setErrorCode(errorCode);
+                rm.setErrorInfo(errorInfo);
                 rm.setData("");
+
             } else if (e instanceof ParaException) {
                 rm.setErrorCode(EErrorCode.PARA_ERR.getCode());
                 rm.setErrorInfo(((ParaException) e).getErrorMessage());

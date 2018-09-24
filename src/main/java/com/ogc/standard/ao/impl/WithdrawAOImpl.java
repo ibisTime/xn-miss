@@ -40,6 +40,7 @@ import com.ogc.standard.dto.res.XN802356Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECoinType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EJourType;
@@ -108,7 +109,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 账户可用余额是否充足
         if (dbAccount.getAmount().subtract(dbAccount.getFrozenAmount())
             .compareTo(amount) == -1) {
-            throw new BizException("xn000000", "可用余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
 
         // 判断本月是否次数已满，且现在只能有一笔取现未支付记录
@@ -130,8 +132,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (ECoinType.ETH.getCode().equals(coin.getSymbol())
                 || ECoinType.X.getCode().equals(coin.getSymbol())) {
             if (!WalletUtils.isValidAddress(payCardNo)) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "提现地址不符合" + ECoinType.ETH.getCode() + "规则，请仔细核对");
+                throw new BizException(
+                    EErrorCode_main.coin_ADDRESSRULE.getCode());
             }
         }
     }
@@ -142,8 +144,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String approveResult, String approveNote) {
         Withdraw data = withdrawBO.getWithdraw(code);
         if (null == data) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "取现订单编号不存在");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         if (!EWithdrawStatus.toApprove.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -162,8 +163,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 取现记录验证
         Withdraw withdraw = withdrawBO.getWithdraw(code);
         if (withdraw == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "不存在编号为" + code + "的订单");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         if (!EWithdrawStatus.Approved_YES.getCode()
             .equals(withdraw.getStatus())) {

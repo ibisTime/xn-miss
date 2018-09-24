@@ -17,6 +17,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -53,7 +54,8 @@ public class JourAOImpl implements IJourAO {
     private void doCheckJourNow(String code, BigDecimal checkAmount,
             String checkUser, String checkNote, Jour jour) {
         if (!EJourStatus.todoCheck.getCode().equals(jour.getStatus())) {
-            throw new BizException("xn000000", "该流水<" + code + ">不处于待对账状态");
+            throw new BizException(
+                EErrorCode_main.jour_DUIZHANGSTATUS.getCode());
         }
         if (checkAmount.compareTo(BigDecimal.ZERO) != 0) {
             Account account = accountBO.getAccount(jour.getAccountNumber());

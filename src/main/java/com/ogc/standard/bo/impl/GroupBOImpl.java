@@ -20,6 +20,7 @@ import com.ogc.standard.domain.Group;
 import com.ogc.standard.domain.GroupCoin;
 import com.ogc.standard.domain.GroupCoinJour;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EGroupStatus;
 import com.ogc.standard.exception.BizException;
@@ -119,7 +120,7 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
             condition.setCode(code);
             data = groupDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "组合记录不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
         }
         return data;
@@ -133,7 +134,7 @@ public class GroupBOImpl extends PaginableBOImpl<Group> implements IGroupBO {
             condition.setCode(code);
             data = groupDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "组合记录不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
 
             // 获取关注记录

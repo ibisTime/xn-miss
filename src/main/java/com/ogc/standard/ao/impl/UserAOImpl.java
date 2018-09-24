@@ -54,6 +54,7 @@ import com.ogc.standard.dto.res.XN625000Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
 import com.ogc.standard.enums.ECoin;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EIDKind;
 import com.ogc.standard.enums.ERefType;
 import com.ogc.standard.enums.ESignLogType;
@@ -64,7 +65,6 @@ import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: dl 
@@ -116,7 +116,7 @@ public class UserAOImpl implements IUserAO {
     private IIdentifyBO identifyBO;
 
     @Override
-    public void doCheckMobile(String mobile) {
+    public void doCheckMobile(String mobile, String language) {
         userBO.isMobileExist(mobile);
     }
 
@@ -220,7 +220,7 @@ public class UserAOImpl implements IUserAO {
     @Override // 渠道商用户代注册
     @Transactional
     public String doAddQDS(String mobile, String idKind, String idNo,
-            String realName, String respArea) {
+            String realName, String respArea, String language) {
         // 检查手机号是否存在
         userBO.isMobileExist(mobile);
         // 注册
@@ -268,7 +268,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public String doLogin(String loginName, String loginPwd, String client,
-            String location) {
+            String location, String language) {
         User condition = new User();
         condition.setMobile(loginName);
 
@@ -277,13 +277,13 @@ public class UserAOImpl implements IUserAO {
         condition1.setEmail(loginName);
         userList.addAll(userBO.queryUserList(condition1));
         if (CollectionUtils.isEmpty(userList)) {
-            throw new BizException("xn805050", "登录名不存在");
+            throw new BizException(EErrorCode_main.user_LOGINNAME.getCode());
         }
         User con = new User();
         con.setLoginPwd(MD5Util.md5(loginPwd));
         List<User> listUser = userBO.queryUserList(con);
         if (CollectionUtils.isEmpty(userList)) {
-            throw new BizException("xn805050", "登录密码错误");
+            throw new BizException(EErrorCode_main.user_LOGINPWD.getCode());
         }
         String userId = null;
         for (User user : listUser) {
@@ -294,13 +294,11 @@ public class UserAOImpl implements IUserAO {
             }
         }
         if (userId == null) {
-            throw new BizException("xn805050", "登录密码错误");
+            throw new BizException(EErrorCode_main.user_LOGINPWD.getCode());
         }
         User user = userBO.getUser(userId);
         if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-            throw new BizException("xn805050",
-                "该账号" + EUserStatus.getMap().get(user.getStatus()).getValue()
-                        + "，请联系工作人员");
+            throw new BizException(EErrorCode_main.user_ACCABNOMAL.getCode());
         }
         // 增加登陆日志
         SignLog data = new SignLog();
@@ -344,12 +342,13 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doChangeMoblie(String userId, String newMobile,
-            String smsCaptcha) {
+            String smsCaptcha, String language) {
         User user = userBO.getUser(userId);
 
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
-            throw new BizException("xn000000", "新手机与原手机一致");
+//            throw new BizException("000005",
+//                ErrorMessage.getErrorMes("000005", language));
         }
         // 验证手机号
         userBO.isMobileExist(newMobile);
@@ -371,12 +370,12 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doChangeMoblie(String userId, String newMobile,
-            String smsCaptcha, String tradePwd) {
+            String smsCaptcha, String tradePwd, String language) {
         User user = userBO.getUser(userId);
 
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
-            throw new BizException("xn000000", "新手机与原手机一致");
+            throw new BizException(EErrorCode_main.user_SAMEMOBILE.getCode());
         }
         userBO.isMobileExist(newMobile);
         // 验证支付密码
@@ -401,9 +400,6 @@ public class UserAOImpl implements IUserAO {
     public void doResetLoginPwd(String mobile, String smsCaptcha,
             String newLoginPwd) {
         String userId = userBO.getUserId(mobile);
-        if (StringUtils.isBlank(userId)) {
-            throw new BizException("li01004", "用户不存在,请先注册");
-        }
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805063");
         userBO.refreshLoginPwd(userId, newLoginPwd);
@@ -417,12 +413,12 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doModifyLoginPwd(String userId, String oldLoginPwd,
-            String newLoginPwd) {
+            String newLoginPwd, String language) {
         User user = userBO.getUser(userId);
         // 验证当前登录密码是否正确
         userBO.checkLoginPwd(userId, oldLoginPwd);
         if (oldLoginPwd.equals(newLoginPwd)) {
-            throw new BizException("li01006", "新登录密码不能与原有密码重复");
+            throw new BizException(EErrorCode_main.user_SAMELOGINPWD.getCode());
         }
 
         // 重置
@@ -481,15 +477,15 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doResetTradePwd(String userId, String newTradePwd,
-            String smsCaptcha, String idKind, String idNo) {
+            String smsCaptcha, String idKind, String idNo, String language) {
         User user = userBO.getUser(userId);
         if (user.getIdKind() == null || user.getIdNo() == null) {
-            throw new BizException("li01004", "请先实名认证");
+            throw new BizException(EErrorCode_main.user_DOIDFIRST.getCode());
         }
         // 证件是否正确
         if (!(user.getIdKind().equalsIgnoreCase(idKind)
                 && user.getIdNo().equalsIgnoreCase(idNo))) {
-            throw new BizException("li01009", "身份证不符合");
+            throw new BizException(EErrorCode_main.user_IDWRONG.getCode());
         }
         // 短信验证码是否正确
         String mobile = user.getMobile();
@@ -505,7 +501,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doModifyTradePwd(String userId, String oldTradePwd,
-            String newTradePwd) {
+            String newTradePwd, String language) {
 
         User conditon = new User();
         conditon.setUserId(userId);
@@ -515,10 +511,11 @@ public class UserAOImpl implements IUserAO {
         if (CollectionUtils.isNotEmpty(list)) {
             user = list.get(0);
         } else {
-            throw new BizException("li01008", "旧资金密码不正确");
+            throw new BizException(
+                EErrorCode_main.user_TRADEPWDWRONG.getCode());
         }
         if (oldTradePwd.equals(newTradePwd)) {
-            throw new BizException("li01008", "新支付密码与原有支付密码重复");
+            throw new BizException(EErrorCode_main.user_SAMETRADEPWD.getCode());
         }
         userBO.refreshTradePwd(userId, newTradePwd);
         String mobile = user.getMobile();
@@ -540,11 +537,12 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void doCloseOpen(String userId, String updater, String remark) {
+    public void doCloseOpen(String userId, String updater, String remark,
+            String language) {
         User user = userBO.getUser(userId);
         // admin 不注销
         if (EUser.ADMIN.getCode().equals(user.getLoginName())) {
-            throw new BizException("li01004", "管理员无法注销");
+            throw new BizException(EErrorCode_main.user_LOGOUT.getCode());
         }
         String mobile = user.getMobile();
         String smsContent = "";
@@ -626,11 +624,12 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
-            String userId) {
+            String userId, String language) {
         User user = userBO.getUser(userId);
 
         if (user.getMobile() != null) {
-            throw new BizException("xn000000", "用户已绑定手机");
+            throw new BizException(
+                EErrorCode_main.user_HAVEBOUNDMOBILE.getCode());
         }
         // 验证手机号
         userBO.isMobileExist(mobile);
@@ -720,23 +719,26 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void bindEmail(String captcha, String email, String userId) {
+    public void bindEmail(String captcha, String email, String userId,
+            String language) {
         smsOutBO.checkCaptcha(email, captcha, "805086");
         User data = userBO.getUser(userId);
         if (data.getEmail() != null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户已绑定邮箱");
+            throw new BizException(
+                EErrorCode_main.user_HAVEBOUNDEMAIL.getCode());
         }
         userBO.isEmailExist(email);
         userBO.refreshEmail(userId, email);
     }
 
     @Override
-    public void editRespArea(String userId, String respArea, String updater) {
+    public void editRespArea(String userId, String respArea, String updater,
+            String language) {
         // 判断用户是否存在
         User user = userBO.getUser(userId);
         // 判断是否为渠道商
         if (!EUserKind.QDS.getCode().equals(user.getKind())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户不是渠道商");
+            throw new BizException(EErrorCode_main.user_ISNOTQDS.getCode());
         }
         // 修改
         userBO.refreshRespArea(userId, respArea, updater);

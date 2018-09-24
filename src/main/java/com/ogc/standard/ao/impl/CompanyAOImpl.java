@@ -20,6 +20,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Company;
 import com.ogc.standard.dto.req.XN630300Req;
 import com.ogc.standard.dto.req.XN630302Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -58,7 +59,7 @@ public class CompanyAOImpl implements ICompanyAO {
             company.setRemark(req.getRemark());
             companyBO.refreshCompany(company);
         } else {
-            throw new BizException("lh4000", "角色编号不存在！");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
 
     }

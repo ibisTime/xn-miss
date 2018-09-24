@@ -2,7 +2,9 @@ package com.ogc.standard.dto.req;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class XN805084Req {
+public class XN805084Req extends BaseReq {
+
+    private static final long serialVersionUID = -1915628516664306144L;
 
     // 用户编号(必填)
     @NotBlank

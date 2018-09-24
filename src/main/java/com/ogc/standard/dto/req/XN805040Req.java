@@ -15,7 +15,9 @@ import org.hibernate.validator.constraints.NotBlank;
  * @since: 2018年8月20日 下午1:57:20 
  * @history:
  */
-public class XN805040Req {
+public class XN805040Req extends BaseReq {
+    private static final long serialVersionUID = 2021805815367718571L;
+
     // 手机号
     @NotBlank
     private String mobile;

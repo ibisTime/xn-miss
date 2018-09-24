@@ -13,7 +13,7 @@ public interface ISmsOutAO {
     // public void sendSmsCaptcha(String mobile, String bizType);
 
     // 4位短信验证码
-    public void sendSmsCaptcha(String mobile, String bizType);
+    public void sendSmsCaptcha(String mobile, String bizType, String language);
 
     // 4位邮箱验证码
     public void sendEmailCaptcha(String email, String bizType);

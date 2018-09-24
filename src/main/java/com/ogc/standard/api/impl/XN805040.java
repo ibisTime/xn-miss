@@ -23,7 +23,7 @@ public class XN805040 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doCheckMobile(req.getMobile());
+        userAO.doCheckMobile(req.getMobile(), req.getLanguage());
         return new BooleanRes(true);
     }
 

@@ -24,6 +24,7 @@ import com.ogc.standard.dto.res.XN628271Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommentStatus;
 import com.ogc.standard.enums.ECommentType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EFilterFlag;
 import com.ogc.standard.enums.EInteractType;
 import com.ogc.standard.enums.EKeyWordReaction;
@@ -64,15 +65,15 @@ public class CommentAOImpl implements ICommentAO {
         if (CollectionUtils.isNotEmpty(keywordList)) {
 
             // 直接拦截
-            if (EKeyWordReaction.REFUSE.getCode().equals(
-                keywordList.get(0).getReaction())) {
-                throw new BizException("xn000", "评论内容存在关键字：【"
-                        + keywordList.get(0).getWord() + "】,请删除后再评论！");
+            if (EKeyWordReaction.REFUSE.getCode()
+                .equals(keywordList.get(0).getReaction())) {
+                throw new BizException(EErrorCode_main.comm_KEYWORD.getCode(),
+                    keywordList.get(0).getWord());
             }
 
             // 替换**
-            if (EKeyWordReaction.REPLACE.getCode().equals(
-                keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.REPLACE.getCode()
+                .equals(keywordList.get(0).getReaction())) {
                 for (Keyword keyword : keywordList) {
                     content = keywordBO.replaceKeyword(content,
                         keyword.getWord());
@@ -82,8 +83,8 @@ public class CommentAOImpl implements ICommentAO {
             }
 
             // 审核
-            if (EKeyWordReaction.APPROVE.getCode().equals(
-                keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.APPROVE.getCode()
+                .equals(keywordList.get(0).getReaction())) {
                 status = ECommentStatus.TO_APPROVE.getCode();
             }
         }
@@ -107,7 +108,7 @@ public class CommentAOImpl implements ICommentAO {
             String approver, String approveNote) {
         Comment comment = commentBO.getComment(code);
         if (!ECommentStatus.TO_APPROVE.getCode().equals(comment.getStatus())) {
-            throw new BizException("xn000", "评论不处于可审核状态！");
+            throw new BizException(EErrorCode_main.comm_STATUS.getCode());
         }
 
         String status = null;
@@ -157,7 +158,7 @@ public class CommentAOImpl implements ICommentAO {
     public void dropOssComment(String code, String updater) {
         Comment comment = commentBO.getComment(code);
         if (!ECommentStatus.DELETED.getCode().equals(comment.getStatus())) {
-            throw new BizException("xn000", "评论不处于可删除状态！");
+            throw new BizException(EErrorCode_main.comm_STATUS.getCode());
         }
 
         commentBO.removeComment(code);
@@ -167,14 +168,14 @@ public class CommentAOImpl implements ICommentAO {
     public void dropFrontComment(String code, String userId) {
         Comment comment = commentBO.getComment(code);
         if (!ECommentStatus.DELETED.getCode().equals(comment.getStatus())) {
-            throw new BizException("xn000", "评论不处于可删除状态！");
+            throw new BizException(EErrorCode_main.comm_STATUS.getCode());
         }
 
         Post post = postBO.getPost(comment.getObjectCode());
         Team team = teamBO.getTeam(post.getPlateCode());
         if (!userId.equals(comment.getUserId())
                 && !userId.equals(team.getCaptain())) {
-            throw new BizException("xn0000", "当前用户不是评论用户或战队队长，无法删除该评论！");
+            throw new BizException(EErrorCode_main.comm_USERRIGHTS.getCode());
         }
 
         commentBO.removeComment(code);

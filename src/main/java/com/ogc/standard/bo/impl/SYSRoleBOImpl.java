@@ -12,9 +12,9 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ISYSRoleDAO;
 import com.ogc.standard.domain.SYSRole;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class SYSRoleBOImpl extends PaginableBOImpl<SYSRole>
@@ -79,8 +79,7 @@ public class SYSRoleBOImpl extends PaginableBOImpl<SYSRole>
             condition.setCode(code);
             data = sysRoleDAO.select(condition);
             if (data == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "该部门不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
         }
         return data;

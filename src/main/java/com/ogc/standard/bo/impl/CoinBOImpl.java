@@ -12,8 +12,8 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ICoinDAO;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.enums.ECoinStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class CoinBOImpl extends PaginableBOImpl<Coin> implements ICoinBO {
@@ -81,7 +81,7 @@ public class CoinBOImpl extends PaginableBOImpl<Coin> implements ICoinBO {
 
         data = coinDAO.select(condition);
         if (data == null) {
-            throw new BizException("xn0000", "币种" + id + "不存在");
+            throw new BizException(EErrorCode_main.coin_UNSUPPORT.getCode());
         }
         return data;
     }
@@ -92,7 +92,7 @@ public class CoinBOImpl extends PaginableBOImpl<Coin> implements ICoinBO {
         condition.setSymbol(symbol);
         Coin data = coinDAO.select(condition);
         if (data == null) {
-            throw new BizException("xn0000", "币种" + symbol + "不存在");
+            throw new BizException(EErrorCode_main.coin_UNSUPPORT.getCode());
         }
         return data;
 
@@ -118,7 +118,7 @@ public class CoinBOImpl extends PaginableBOImpl<Coin> implements ICoinBO {
         // condition.setType(type);
         condition.setStatus(ECoinStatus.PUBLISHED.getCode());
         if (coinDAO.selectTotalCount(condition) <= 1) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "至少保留一个币种");
+            throw new BizException(EErrorCode_main.coin_ONESYMBOL.getCode());
         }
     }
 

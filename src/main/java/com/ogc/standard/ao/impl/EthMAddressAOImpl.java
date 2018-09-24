@@ -15,9 +15,9 @@ import com.ogc.standard.ao.IEthMAddressAO;
 import com.ogc.standard.bo.IEthMAddressBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.EthMAddress;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EWAddressStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: haiqingzheng 
@@ -39,8 +39,7 @@ public class EthMAddressAOImpl implements IEthMAddressAO {
     public void abandon(Long id) {
         EthMAddress ethMAddress = ethMAddressBO.getEthMAddress(id);
         if (EWAddressStatus.INVALID.getCode().equals(ethMAddress.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "地址已失效，无需重复弃用");
+            throw new BizException(EErrorCode_main.coin_INVALIDATE.getCode());
         }
         ethMAddressBO.abandon(ethMAddress);
     }

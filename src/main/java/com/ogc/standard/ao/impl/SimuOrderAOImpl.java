@@ -27,13 +27,13 @@ import com.ogc.standard.domain.SimuKLine;
 import com.ogc.standard.domain.SimuOrder;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN650050Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESimuKLinePeriod;
 import com.ogc.standard.enums.ESimuOrderDirection;
 import com.ogc.standard.enums.ESimuOrderStatus;
 import com.ogc.standard.enums.ESimuOrderType;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 import com.ogc.standard.util.SymbolUtil;
 
 @Service
@@ -82,7 +82,8 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         } else {
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不支持的买卖方向");
+            throw new BizException(
+                EErrorCode_main.simuorder_UNSUPPORTDIR.getCode());
 
         }
 
@@ -94,8 +95,8 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
     public void cancel(String code) {
         SimuOrder data = simuOrderBO.getSimuOrderCheck(code);
         if (!ESimuOrderStatus.SUBMIT.getCode().equals(data.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不支持撤单");
+            throw new BizException(
+                EErrorCode_main.simuorder_UNSUPPORTREVORK.getCode());
         }
 
         // 更新委托单信息
@@ -185,8 +186,8 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             req.getToSymbol());
         if (account.getAmount().subtract(account.getFrozenAmount())
             .compareTo(totalAmount) < 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前账户" + account.getCurrency() + "资产可用余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
 
         // 落地委托单
@@ -234,8 +235,8 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             req.getSymbol());
         if (account.getAmount().subtract(account.getFrozenAmount())
             .compareTo(totalCount) < 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前账户" + req.getSymbol() + "资产可用余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
 
         // 落地委托单
@@ -257,8 +258,8 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             .getOrderType(req.getType());
         if (ESimuOrderType.LIMIT.getCode().equals(eSimuOrderType.getCode())) {
             if (StringUtils.isBlank(req.getPrice())) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "限价委托单委托价格需必填");
+                throw new BizException(
+                    EErrorCode_main.simuorder_PRICE.getCode());
             }
         }
 
@@ -270,16 +271,15 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             StringValidater.toBigDecimal(req.getTotalCount()), coin.getUnit());
         if (count.compareTo(SysConstants.minCountLimit) < 0
                 || count.compareTo(SysConstants.maxCountLimit) > 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "委托数量应在" + SysConstants.minCountLimit + "至"
-                        + SysConstants.maxCountLimit + "之间");
+            throw new BizException(EErrorCode_main.simucount_COUNT.getCode(),
+                SysConstants.minCountLimit, SysConstants.maxCountLimit);
         }
 
         // 是否是最小委托数量的整数倍
         if (BigDecimal.ZERO.compareTo(
             count.divideAndRemainder(SysConstants.minCountLimit)[1]) != 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "委托数量应当" + SysConstants.minCountLimit + "的整数倍");
+            throw new BizException(
+                EErrorCode_main.simuorder_MINCOUNT.getCode());
         }
 
         // 委托价格是否超过价格范围:不高于前收盘价的900%，不低于前收盘价测50%
@@ -291,14 +291,14 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
         if (null != simuKLine) {
             if (price.compareTo(
                 simuKLine.getClose().multiply(new BigDecimal("9"))) > 0) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "委托价格不得高于前收盘价的900%");
+                throw new BizException(
+                    EErrorCode_main.simuorder_PRICELESSTHAN.getCode());
             }
 
             if (price.compareTo(
                 simuKLine.getClose().multiply(new BigDecimal("0.5"))) < 0) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "委托价格不得低于前收盘价测50%");
+                throw new BizException(
+                    EErrorCode_main.simuorder_PRICEMORETHAN.getCode());
             }
 
         }

@@ -42,6 +42,7 @@ import com.ogc.standard.enums.EAdsStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ECommentLevel;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ERefType;
@@ -113,7 +114,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         User user = this.userBO.getUser(buyUser);
         // 是否实名
         if (StringUtils.isBlank(user.getRealName())) {
-            throw new BizException("xn00000", "您还未实名认证，请前往个人中心进行认证");
+            throw new BizException(EErrorCode_main.user_DOIDFIRST.getCode());
         }
 
         // 获取广告详情
@@ -189,8 +190,7 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
 
         // 是否实名
         if (StringUtils.isBlank(user.getRealName())) {
-            // throw new BizException("xn00000", "您还未实名认证，请前往个人中心进行认证");
-            System.out.println("实名认证未处理");
+            throw new BizException(EErrorCode_main.user_DOIDFIRST.getCode());
         }
 
         // 检查黑名单
@@ -200,14 +200,13 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         if (!this.tradeOrderBO.checkUserHasUnFinishOrder(buyUser,
             ETradeOrderType.BUY, ads.getTradeCoin())) {
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "您有尚未完成的购买订单");
+            throw new BizException(EErrorCode_main.tradeorder_UNDONE.getCode());
         }
         // 必须为卖币广告
         if (!ads.getTradeType().equals(ETradeType.SELL.getCode())) {
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "该广告不是卖币广告");
+            throw new BizException(
+                EErrorCode_main.tradeorder_NOTSELL.getCode());
         }
 
         // 校验广告状态，和广告 与 购买者的关系
@@ -272,16 +271,14 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         if (!this.tradeOrderBO.checkUserHasUnFinishOrder(sellUser,
             ETradeOrderType.SELL, ads.getTradeCoin())) {
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "您有尚未完成的出售订单");
+            throw new BizException(EErrorCode_main.tradeorder_UNSELL.getCode());
 
         }
 
         // 必须为买币广告
         if (!ads.getTradeType().equals(ETradeType.BUY.getCode())) {
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "该广告不是购买广告");
+            throw new BizException(EErrorCode_main.tradeorder_NOTBUY.getCode());
         }
 
         // 校验广告
@@ -296,8 +293,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             .subtract(sellUserAccount.getFrozenAmount())
             .compareTo(tradeCount) < 0) {
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "您的" + ads.getTradeCoin() + "可用余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
 
         // 计算交易广告费
@@ -351,8 +348,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             if (!this.userRelationBO.checkReleation(ads.getUserId(), applyUser,
                 EUserReleationType.TRUST.getCode())) {
 
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "您未被广告发布者信任，不能与之进行交易");
+                throw new BizException(
+                    EErrorCode_main.tradeOrder_TRUST.getCode());
 
             }
 
@@ -362,17 +359,16 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         boolean isBlack = this.userRelationBO.isExistUserRelation(
             ads.getUserId(), applyUser, EUserReleationType.BLACKLIST.getCode());
         if (isBlack) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "您已被该用户拉黑，不能与他进行交易");
+            throw new BizException(
+                EErrorCode_main.tradeorder_BLACKLIST.getCode());
         }
 
         if (!EAdsStatus.SHANGJIA.getCode().equals(ads.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "广告未上架，不能进行交易");
+            throw new BizException(EErrorCode_main.tradeorder_ADS.getCode());
         }
         if (applyUser.equals(ads.getUserId())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "您是广告发布者，不能进行该操作");
+            throw new BizException(
+                EErrorCode_main.tradeorder_YOUCANNOT.getCode());
         }
     }
 
@@ -381,14 +377,14 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
     public void userCancel(String code, String updater, String remark) {
         TradeOrder order = this.tradeOrderBO.getTradeOrder(code);
         if (order == null) {
-            throw new BizException("xn000000", "无效的订单编号");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
         if (!ETradeOrderStatus.TO_PAY.getCode().equals(tradeOrder.getStatus())
                 && !ETradeOrderStatus.ARBITRATE.getCode()
                     .equals(tradeOrder.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不能取消订单");
+            throw new BizException(
+                EErrorCode_main.tradeorder_STATUSCANCEL.getCode());
         }
 
         // 变更广告信息 剩余可交易金额
@@ -437,13 +433,13 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
         if (!ETradeOrderStatus.ARBITRATE.getCode()
             .equals(tradeOrder.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不能被平台取消订单");
+            throw new BizException(
+                EErrorCode_main.tradeorder_STATUSCANCEL.getCode());
         }
 
         TradeOrder order = this.tradeOrderBO.getTradeOrder(code);
         if (order == null) {
-            throw new BizException("xn000000", "无效的订单编号");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
 
         // 变更广告信息 剩余可交易金额
@@ -502,8 +498,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         //
         if (!ETradeOrderStatus.TO_PAY.getCode()
             .equals(tradeOrder.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不能标记已打款");
+            throw new BizException(
+                EErrorCode_main.tradeorder_CANNOTMARK.getCode());
         }
 
         // 变更交易订单信息
@@ -527,14 +523,14 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         if (!(ETradeOrderStatus.PAYED.getCode().equals(tradeOrder.getStatus())
                 || ETradeOrderStatus.ARBITRATE.getCode()
                     .equals(tradeOrder.getStatus()))) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不能释放");
+            throw new BizException(
+                EErrorCode_main.tradeorder_CANNOTRELEASE.getCode());
         }
         if (EReleaserKind.plat.getCode().equals(kind)) {
             if (!ETradeOrderStatus.ARBITRATE.getCode()
                 .equals(tradeOrder.getStatus())) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "当前状态下不能释放");
+                throw new BizException(
+                    EErrorCode_main.tradeorder_CANNOTRELEASE.getCode());
             }
         }
         // if (user != null
@@ -599,8 +595,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         } else if (userId.equals(tradeOrder.getSellUser())) {
             doSbComment(tradeOrder, userId, comment); // 卖家对买家进行评论
         } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "您无权评价该交易订单");
+            throw new BizException(
+                EErrorCode_main.tradeorder_NOCOMMENT.getCode());
         }
     }
 
@@ -610,8 +606,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             String attach) {
         TradeOrder tradeOrder = tradeOrderBO.getTradeOrder(code);
         if (!ETradeOrderStatus.PAYED.getCode().equals(tradeOrder.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不能申请仲裁");
+            throw new BizException(
+                EErrorCode_main.tradeorder_NOARBITRATE.getCode());
         }
         String yuangao = applyUser; // 原告
         String beigao = null; // 被告
@@ -620,7 +616,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         } else if (applyUser.equals(tradeOrder.getSellUser())) {
             beigao = tradeOrder.getBuyUser();
         } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "您无权申请仲裁");
+            throw new BizException(
+                EErrorCode_main.tradeorder_USERNOTARB.getCode());
         }
         // 更新交易订单信息
         tradeOrderBO.applyArbitrate(tradeOrder, applyUser);
@@ -760,16 +757,16 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
             .equals(tradeOrder.getStatus())
                 && !ETradeOrderStatus.CANCEL.getCode()
                     .equals(tradeOrder.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "只有待下单和已取消的订单可以删除");
+            throw new BizException(
+                EErrorCode_main.tradeorder_CANNOTDELETE.getCode());
         }
 
         // 判断订单是不是被仲裁过
         Arbitrate condition = new Arbitrate();
         condition.setTradeOrderCode(code);
         if (arbitrateBO.getTotalCount(condition) > 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "订单发生仲裁，不能删除");
+            throw new BizException(
+                EErrorCode_main.tradeorder_CANNOTDELETE.getCode());
         }
 
         tradeOrderBO.removeTradeOrder(tradeOrder);
@@ -781,8 +778,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         String status = tradeOrder.getStatus();
         String remark = "买家已评价，等待卖家评价";
         if (StringUtils.isNotBlank(tradeOrder.getBsComment())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "您已经完成评价，请勿重复评价");
+            throw new BizException(
+                EErrorCode_main.tradeorder_COMMENTREPEAT.getCode());
         }
         // 如果卖家已经评价过，订单完成
         if (StringUtils.isNotBlank(tradeOrder.getSbComment())) {
@@ -799,8 +796,8 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         String status = tradeOrder.getStatus();
         String remark = "卖家已评价，等待买家评价";
         if (StringUtils.isNotBlank(tradeOrder.getSbComment())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "您已经完成评价，请勿重复评价");
+            throw new BizException(
+                EErrorCode_main.tradeorder_COMMENTREPEAT.getCode());
         }
         // 如果买家已经评价过，订单完成
         if (StringUtils.isNotBlank(tradeOrder.getBsComment())) {
@@ -946,12 +943,12 @@ public class TradeOrderAOImpl implements ITradeOrderAO {
         // }
 
         if (adsSell.getMinTrade().compareTo(tradeAmount) > 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "交易金额未达最低限额");
+            throw new BizException(
+                EErrorCode_main.tradeorder_MINPRICE.getCode());
         }
         if (adsSell.getMaxTrade().compareTo(tradeAmount) < 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "交易金额超过最高限额");
+            throw new BizException(
+                EErrorCode_main.tradeorder_MAXPRICE.getCode());
         }
         if (adsSell.getLeftCount().compareTo(count) < 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),

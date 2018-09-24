@@ -24,13 +24,14 @@ import com.ogc.standard.domain.EthWAddress;
 import com.ogc.standard.domain.EthXAddress;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.ECollectStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EOriginialCoin;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class CollectBOImpl extends PaginableBOImpl<Collect> implements
-        ICollectBO {
+public class CollectBOImpl extends PaginableBOImpl<Collect>
+        implements ICollectBO {
 
     private static final Logger logger = LoggerFactory
         .getLogger(CollectBOImpl.class);
@@ -81,7 +82,7 @@ public class CollectBOImpl extends PaginableBOImpl<Collect> implements
             condition.setCode(code);
             data = collectDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "归集记录不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
         }
         return data;
@@ -112,7 +113,8 @@ public class CollectBOImpl extends PaginableBOImpl<Collect> implements
     }
 
     @Override
-    public int colectNoticeETH(Collect data, BigDecimal txfee, Date ethDatetime) {
+    public int colectNoticeETH(Collect data, BigDecimal txfee,
+            Date ethDatetime) {
         int count = 0;
         data.setTxFee(txfee);
         data.setStatus(ECollectStatus.COLLECT_YES.getCode());
@@ -220,19 +222,19 @@ public class CollectBOImpl extends PaginableBOImpl<Collect> implements
         logger.info("地址余额=" + balance + "，以太坊平均价格=" + gasPrice + "，预计矿工费="
                 + txFee + "，预计到账金额=" + value);
         if (value.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException("xn625000", "余额不足以支付矿工费，不能归集");
+            throw new BizException(EErrorCode_main.coll_LEFTCOUNT.getCode());
         }
         // 归集广播
         String txHash = ethTransactionBO.broadcast(fromAddress,
             ethxAddress.getKeystoreName(), ethxAddress.getKeystoreContent(),
             ethxAddress.getKeystorePwd(), toAddress, value);
         if (StringUtils.isBlank(txHash)) {
-            throw new BizException("xn625000", "归集—交易广播失败");
+            throw new BizException(EErrorCode_main.coll_FAILED.getCode());
         }
         String coinType = ECoinType.ETH.getCode();
         // 归集记录落地
-        saveCollect(EOriginialCoin.ETH.getCode(), fromAddress, toAddress,
-            value, txHash, chargeCode, coinType);
+        saveCollect(EOriginialCoin.ETH.getCode(), fromAddress, toAddress, value,
+            txHash, chargeCode, coinType);
     }
 
     //

@@ -24,6 +24,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserRelation;
 import com.ogc.standard.domain.UserStatistics;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.exception.BizException;
@@ -103,11 +104,11 @@ public class UserRelationAOImpl implements IUserRelationAO {
         userBO.getUser(toUserId);
 
         if (userId.equals(toUserId)) {
-            throw new BizException("xn702001", "用户不能和自己建立关系");
+            throw new BizException(EErrorCode_main.relatin_ONESELF.getCode());
         }
         // 判断两者关系是否存在
         if (userRelationBO.isExistUserRelation(userId, toUserId, type)) {
-            throw new BizException("xn702001", "用户关系已建立");
+            throw new BizException(EErrorCode_main.relation_EXIST.getCode());
         }
 
         if (type.equals(EUserReleationType.BLACKLIST.getCode())) {
@@ -138,7 +139,8 @@ public class UserRelationAOImpl implements IUserRelationAO {
             int count = userRelationBO.removeUserRelation(userId, toUserId,
                 type);
             if (count <= 0) {
-                throw new BizException("xn000", "解除原关系失败");
+                throw new BizException(
+                    EErrorCode_main.relation_CANCEL.getCode());
             }
 
         }
@@ -153,7 +155,8 @@ public class UserRelationAOImpl implements IUserRelationAO {
         userBO.getUser(toUserId);
         // 判断两者关系是否存在
         if (!userRelationBO.isExistUserRelation(userId, toUserId, type)) {
-            throw new BizException("xn702001", "用户关系未建立，无法解除");
+            throw new BizException(
+                EErrorCode_main.relation_NONETOCANCEL.getCode());
         }
         userRelationBO.removeUserRelation(userId, toUserId, type);
     }

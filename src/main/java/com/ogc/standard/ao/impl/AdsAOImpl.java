@@ -44,11 +44,11 @@ import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.ECoinStatus;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ETradeType;
 import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /**
  * Created by tianlei on 2017/十一月/14.
@@ -105,7 +105,8 @@ public class AdsAOImpl implements IAdsAO {
         // 是否实名认证
         if (EBoolean.YES.getCode().equals(req.getOnlyCert())) {
             if (StringUtils.isBlank(user.getRealName())) {
-                throw new BizException("xn00000", "您还未实名认证，请前往个人中心进行认证");
+                throw new BizException(
+                    EErrorCode_main.user_DOIDFIRST.getCode());
             }
         }
         // 检查 平台 黑名单
@@ -139,8 +140,7 @@ public class AdsAOImpl implements IAdsAO {
             // 新广告上架
             this.directPublish(data);
         } else {
-            throw new BizException("xn00000",
-                "发布类型" + req.getPublishType() + "不支持");
+            throw new BizException(EErrorCode_main.ads_PUBLISHTYPE.getCode());
         }
     }
 
@@ -207,13 +207,12 @@ public class AdsAOImpl implements IAdsAO {
 
         // 只有待交易的可以下架
         if (!oldAds.getStatus().equals(EAdsStatus.SHANGJIA.getCode())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态不支持下架操作");
+            throw new BizException(EErrorCode_main.ads_STATUSSUPPORT.getCode());
         }
 
         // 校验操作者是否是本人
         if (!oldAds.getUserId().equals(userId)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "您无权下架该广告");
+            throw new BizException(EErrorCode_main.ads_YOUSELF.getCode());
         }
 
         // 进行下架操作
@@ -228,7 +227,7 @@ public class AdsAOImpl implements IAdsAO {
         newAds.setStatus(EAdsStatus.SHANGJIA.getCode());
         this.handleTime(newAds);
         if (this.adsBO.insertAds(newAds) != 1) {
-            throw new BizException("xn000", "发布广告失败");
+            throw new BizException(EErrorCode_main.ads_FAILED.getCode());
         }
 
         // 如果新广告是卖出广告，首先判断账户余额是否足够支付发布数量+手续费
@@ -253,7 +252,7 @@ public class AdsAOImpl implements IAdsAO {
     private void draftPublish(Ads data) {
 
         if (StringUtils.isBlank(data.getCode())) {
-            throw new BizException("xn000", "请传入广告编号");
+            throw new BizException(EErrorCode_main.ads_ID.getCode());
         }
 
         // 检查是否有同类型的 上架 广告
@@ -267,7 +266,7 @@ public class AdsAOImpl implements IAdsAO {
         this.handleTime(ads);
         int count = this.adsBO.draftPublish(ads);
         if (count != 1) {
-            throw new BizException("xn000", "草稿发布失败");
+            throw new BizException(EErrorCode_main.ads_FAILED.getCode());
         }
 
         // 如果为卖币,就有对账户进行处理
@@ -324,8 +323,7 @@ public class AdsAOImpl implements IAdsAO {
 
         Coin coin = coinBO.getCoin(data.getTradeCoin());
         if (ECoinStatus.REVOKE.getCode().equals(coin.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "币种已撤下，不能发布广告");
+            throw new BizException(EErrorCode_main.ads_FAILED.getCode());
         }
 
         Ads ads = new Ads();
@@ -352,6 +350,14 @@ public class AdsAOImpl implements IAdsAO {
             BigDecimal platPrice = marketAO
                 .coinPriceByPlatform(ads.getTradeCoin(), ads.getTradeCurrency())
                 .getMid();
+            if (ECoin.X.getCode().equals(ads.getTradeCoin())) {
+                BigDecimal xToBtc = marketAO
+                    .coinPriceByPlatform(ECoin.X.getCode(), ECoin.BTC.getCode())
+                    .getMid();
+                BigDecimal btcToTradeCurrency = marketAO.coinPriceByPlatform(
+                    ECoin.BTC.getCode(), ads.getTradeCurrency()).getMid();
+                platPrice = xToBtc.multiply(btcToTradeCurrency);
+            }
             ads.setMarketPrice(platPrice);
             BigDecimal truePrice = platPrice
                 .multiply(BigDecimal.ONE.add(data.getPremiumRate()));
@@ -375,8 +381,7 @@ public class AdsAOImpl implements IAdsAO {
             ads.setMarketPrice(data.getTruePrice());
             ads.setTruePrice(data.getTruePrice());
         } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "不能识别该币种的类型");
+            throw new BizException(EErrorCode_main.coin_UNSUPPORT.getCode());
         }
 
         // 获取用户交易广告费率
@@ -401,18 +406,18 @@ public class AdsAOImpl implements IAdsAO {
         ads.setDisplayTime(data.getDisplayTime());
 
         if (ads.getTotalCount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException("xn000000", "出售总量必须大于0");
+            throw new BizException(EErrorCode_main.ads_SELLCOUNT.getCode());
         }
 
         if (ads.getMinTrade().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException("xn000000", "单笔最小交易额必须大于0");
+            throw new BizException(EErrorCode_main.ads_MINTRADE.getCode());
         }
 
         if (ads.getMaxTrade().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException("xn000000", "单笔最大交易额必须大于0");
+            throw new BizException(EErrorCode_main.ads_MAXTRADE.getCode());
         }
         if (ads.getMaxTrade().compareTo(ads.getMinTrade()) < 0) {
-            throw new BizException("xn000000", "单笔最大交易额需大于等于单笔最小交易额");
+            throw new BizException(EErrorCode_main.ads_MAXMIN.getCode());
         }
 
         BigDecimal totalCount = BigDecimal.ZERO;
@@ -420,7 +425,7 @@ public class AdsAOImpl implements IAdsAO {
 
         if (totalCount.multiply(ads.getTruePrice())
             .compareTo(ads.getMinTrade()) < 0) {
-            throw new BizException("xn000000", "发布总量价值需大于等于单笔最小交易额");
+            throw new BizException(EErrorCode_main.ads_COUNTMIN.getCode());
         }
 
         return ads;
@@ -436,7 +441,7 @@ public class AdsAOImpl implements IAdsAO {
 
         this.handleTime(ads);
         if (this.adsBO.insertAds(ads) != 1) {
-            throw new BizException("xn000", "发布广告失败");
+            throw new BizException(EErrorCode_main.ads_FAILED.getCode());
         }
 
         if (ETradeType.SELL.getCode().equals(data.getTradeType())) {
@@ -453,7 +458,7 @@ public class AdsAOImpl implements IAdsAO {
         ads.setStatus(EAdsStatus.DRAFT.getCode());
         this.handleTime(ads);
         if (this.adsBO.insertAds(ads) != 1) {
-            throw new BizException("xn000", "发布广告失败");
+            throw new BizException(EErrorCode_main.ads_FAILED.getCode());
         }
 
     }
@@ -494,7 +499,8 @@ public class AdsAOImpl implements IAdsAO {
             ads.getTradeCoin());
         if (account.getAmount().subtract(account.getFrozenAmount())
             .compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "账户可用余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
 
         // 广告费+发布总额
@@ -514,8 +520,8 @@ public class AdsAOImpl implements IAdsAO {
 
             maxSellEther = CoinUtil.fromMinUnit(maxSell, coin.getUnit());
 
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "由于要冻结相应广告费，您最多可以出售" + maxSellEther.toString());
+            throw new BizException(EErrorCode_main.ads_FEEFROZEN.getCode(),
+                maxSellEther.toString());
         }
 
     }
@@ -532,7 +538,8 @@ public class AdsAOImpl implements IAdsAO {
 
         if (account.getAmount().subtract(account.getFrozenAmount())
             .add(oldFrezonAmount).compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "账户可用余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
 
         // 广告费+发布总额
@@ -552,8 +559,8 @@ public class AdsAOImpl implements IAdsAO {
             } else if (ECoin.BTC.getCode().equals(newAds.getTradeCoin())) {
                 maxSellEther = BTCUtil.fromBtc(maxSell);
             }
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "由于要冻结相应广告费，您最多可以出售" + maxSellEther.toString());
+            throw new BizException(EErrorCode_main.ads_FEEFROZEN.getCode(),
+                maxSellEther.toString());
         }
 
     }
@@ -581,13 +588,12 @@ public class AdsAOImpl implements IAdsAO {
 
         // 只有待交易的可以下架
         if (!ads.getStatus().equals(EAdsStatus.SHANGJIA.getCode())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态不支持下架操作");
+            throw new BizException(EErrorCode_main.ads_STATUSSUPPORT.getCode());
         }
 
         // 校验操作者是否是本人
         if (!ads.getUserId().equals(userId)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "您无权下架该广告");
+            throw new BizException(EErrorCode_main.ads_YOUSELF.getCode());
         }
 
         // 进行下架操作
@@ -730,7 +736,8 @@ public class AdsAOImpl implements IAdsAO {
         // 是否实名认证
         if (EBoolean.YES.getCode().equals(req.getOnlyCert())) {
             if (StringUtils.isBlank(user.getRealName())) {
-                throw new BizException("xn00000", "您还未实名认证，请前往个人中心进行认证");
+                throw new BizException(
+                    EErrorCode_main.user_DOIDFIRST.getCode());
             }
         }
 
@@ -767,7 +774,7 @@ public class AdsAOImpl implements IAdsAO {
 
             Ads lastAds = this.adsBO.getAds(oldAdsCode);
             if (lastAds == null) {
-                throw new BizException("xn000", "原广告不存在");
+                throw new BizException(EErrorCode_main.ads_EXIST.getCode());
             }
             xiaJiaAdsAndRepublish(data);
             return;

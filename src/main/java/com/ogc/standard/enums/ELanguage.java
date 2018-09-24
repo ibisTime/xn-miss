@@ -16,7 +16,7 @@ package com.ogc.standard.enums;
  */
 public enum ELanguage {
     // 1
-    zh_CN("zh_CN", "中文"), en_US("en_US", "英文");
+    main("zh_CN", "中文"), en_US("en_US", "英文");
 
     ELanguage(String code, String value) {
         this.code = code;

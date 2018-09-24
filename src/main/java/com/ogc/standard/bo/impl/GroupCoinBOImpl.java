@@ -14,6 +14,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IGroupCoinDAO;
 import com.ogc.standard.domain.GroupCoin;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -95,7 +96,7 @@ public class GroupCoinBOImpl extends PaginableBOImpl<GroupCoin>
             data = groupCoinDAO.select(condition);
 
             if (data == null) {
-                throw new BizException("xn0000", "币种配置记录不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
 
         }
@@ -114,8 +115,8 @@ public class GroupCoinBOImpl extends PaginableBOImpl<GroupCoin>
             data = groupCoinDAO.select(condition);
 
             if (data == null) {
-                data = distributeAccount(userId, groupCode, symbol, BigDecimal.ZERO,
-                    BigDecimal.ZERO, 0.0);
+                data = distributeAccount(userId, groupCode, symbol,
+                    BigDecimal.ZERO, BigDecimal.ZERO, 0.0);
             }
 
         }
@@ -131,7 +132,8 @@ public class GroupCoinBOImpl extends PaginableBOImpl<GroupCoin>
         BigDecimal avaliableCount = dbAccount.getCount()
             .subtract(dbAccount.getFrozenCount()).subtract(freezeAmount);
         if (avaliableCount.compareTo(BigDecimal.ZERO) == -1) {
-            throw new BizException("xn000000", "账户余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
 
         // 记录冻结流水
@@ -159,7 +161,8 @@ public class GroupCoinBOImpl extends PaginableBOImpl<GroupCoin>
         BigDecimal nowFrozenCount = dbAccount.getFrozenCount()
             .subtract(unfreezeAmount);
         if (nowFrozenCount.compareTo(BigDecimal.ZERO) == -1) {
-            throw new BizException("xn000000", "本次解冻会使" + "" + "账户冻结数量小于0");
+            throw new BizException(
+                EErrorCode_main.account_UNFROZENZERO.getCode());
         }
 
         // 记录冻结流水
@@ -184,7 +187,8 @@ public class GroupCoinBOImpl extends PaginableBOImpl<GroupCoin>
             .subtract(dbAccount.getFrozenCount()).add(transCount);
         if (!dbAccount.getUserId().startsWith("SYS_USER")
                 && avaliableAmount.compareTo(BigDecimal.ZERO) == -1) {// 特定账户余额可为负
-            throw new BizException("xn000000", "账户可用余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
         BigDecimal nowCount = dbAccount.getCount().add(transCount);
 

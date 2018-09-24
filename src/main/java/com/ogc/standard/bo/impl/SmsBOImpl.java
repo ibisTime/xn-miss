@@ -19,9 +19,9 @@ import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ISmsDAO;
 import com.ogc.standard.domain.Sms;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ESmsStauts;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: dl 
@@ -88,8 +88,7 @@ public class SmsBOImpl extends PaginableBOImpl<Sms> implements ISmsBO {
             condition.setCode(code);
             data = smsDAO.select(condition);
             if (data == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "该信息不存在");
+                throw new BizException(EErrorCode_main.sms_NOTEXIST.getCode());
             }
         }
         return data;

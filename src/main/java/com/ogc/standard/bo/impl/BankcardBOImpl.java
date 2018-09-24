@@ -14,6 +14,7 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IBankCardDAO;
 import com.ogc.standard.domain.Bankcard;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -87,7 +88,7 @@ public class BankcardBOImpl extends PaginableBOImpl<Bankcard>
             condition.setCode(code);
             data = bankcardDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "银行卡不存在");
+                throw new BizException(EErrorCode_main.ban_BANKCARD.getCode());
             }
         }
         return data;

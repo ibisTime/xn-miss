@@ -12,6 +12,7 @@ import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IKeywordDAO;
 import com.ogc.standard.domain.Keyword;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EKeyWordReaction;
 import com.ogc.standard.exception.BizException;
 
@@ -125,7 +126,7 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
         condition.setId(id);
         data = keywordDAO.select(condition);
         if (data == null) {
-            throw new BizException("xn0000", "关键字记录不存在");
+            throw new BizException(EErrorCode_main.keyword_NOTEXIST.getCode());
         }
         return data;
     }

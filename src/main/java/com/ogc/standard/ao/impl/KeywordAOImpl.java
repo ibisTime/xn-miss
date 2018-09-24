@@ -11,6 +11,7 @@ import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Keyword;
 import com.ogc.standard.dto.req.XN628000Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -37,7 +38,7 @@ public class KeywordAOImpl implements IKeywordAO {
     public void addKeyword(String word, String level, String reaction,
             String remark, String updater) {
         if (keywordBO.isKeywordExist(word)) {
-            throw new BizException("xn0000", "关键字记录已存在，请更换关键字！");
+            throw new BizException(EErrorCode_main.keyword_EXIST.getCode());
         }
 
         keywordBO.saveKeyword(word, level, reaction, remark, updater);
@@ -52,7 +53,7 @@ public class KeywordAOImpl implements IKeywordAO {
     public void editKeyword(Integer id, String word, String level,
             String reaction, String remark, String updater) {
         if (keywordBO.isKeywordExist(word)) {
-            throw new BizException("xn0000", "关键字记录已存在，请更换关键字！");
+            throw new BizException(EErrorCode_main.keyword_EXIST.getCode());
         }
 
         keywordBO.refreshKeyword(id, word, level, reaction, remark, updater);

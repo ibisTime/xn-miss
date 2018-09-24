@@ -13,8 +13,8 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SimuOrder;
 import com.ogc.standard.domain.SimuOrderDetail;
 import com.ogc.standard.domain.SimuOrderHistory;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class SimuOrderDetailAOImpl implements ISimuOrderDetailAO {
@@ -48,8 +48,8 @@ public class SimuOrderDetailAOImpl implements ISimuOrderDetailAO {
 
                     if (null == simuOrder) {
 
-                        throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                            "委托单号" + simuOrderDetail.getOrderCode() + "不存在");
+                        throw new BizException(
+                            EErrorCode_main.code_NOTEXIST.getCode());
 
                     } else {
 

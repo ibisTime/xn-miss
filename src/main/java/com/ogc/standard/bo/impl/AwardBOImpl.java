@@ -29,10 +29,10 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAwardStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECoin;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ERefType;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -62,7 +62,7 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         Award condition = new Award();
         Award award = awardDAO.select(condition);
         if (null == award) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在该奖励");
+            throw new BizException(EErrorCode_main.awa_NOTEXIST.getCode());
         }
         return award;
     }

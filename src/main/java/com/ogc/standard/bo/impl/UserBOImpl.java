@@ -28,12 +28,11 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserDAO;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN805043Req;
-import com.ogc.standard.enums.ELanguage;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: miyb 
@@ -57,7 +56,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setMobile(mobile);
             long count = getTotalCount(condition);
             if (count > 0) {
-                throw new BizException("000001", ELanguage.zh_CN);
+                throw new BizException(
+                    EErrorCode_main.user_MOBILEEXIST.getCode());
             }
         }
     }
@@ -69,7 +69,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setEmail(email);
             long count = getTotalCount(condition);
             if (count > 0) {
-                throw new BizException("li01003", "邮箱已经存在");
+                throw new BizException(
+                    EErrorCode_main.user_EMAILEXIST.getCode());
             }
         }
     }
@@ -82,7 +83,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setNickname(nickname);
             long count = getTotalCount(condition);
             if (count > 0) {
-                throw new BizException("li01003", "昵称已经被使用");
+                throw new BizException(
+                    EErrorCode_main.user_NICKNAMEEXIST.getCode());
             }
         }
     }
@@ -98,7 +100,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
                 User data = list.get(0);
                 userId = data.getUserId();
             } else
-                throw new BizException("xn702002", "手机号[" + mobile + "]用户不存在");
+                throw new BizException(
+                    EErrorCode_main.user_USERIDUNEXIST.getCode(), userId);
         }
         return userId;
     }
@@ -277,8 +280,8 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             data = userDAO.select(condition);
         }
         if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "用户编号" + userId + "不存在");
+            throw new BizException(EErrorCode_main.user_USERIDUNEXIST.getCode(),
+                userId);
         }
         return data;
     }
@@ -304,23 +307,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             userList = userDAO.selectList(condition);
         }
         return userList;
-    }
-
-    @Override
-    public User getUserByLoginName(String loginName, String systemCode) {
-        User data = null;
-        if (StringUtils.isNotBlank(loginName)) {
-            User condition = new User();
-            condition.setLoginName(loginName);
-            List<User> list = userDAO.selectList(condition);
-            if (list != null && list.size() > 1) {
-                throw new BizException("li01006", "登录名重复");
-            }
-            if (CollectionUtils.isNotEmpty(list)) {
-                data = list.get(0);
-            }
-        }
-        return data;
     }
 
     @Override
@@ -354,19 +340,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void isLoginNameExist(String loginName) {
-        if (StringUtils.isNotBlank(loginName)) {
-            // 判断格式
-            User condition = new User();
-            condition.setLoginName(loginName);
-            long count = getTotalCount(condition);
-            if (count > 0) {
-                throw new BizException("li01003", "登录名已经存在");
-            }
-        }
-    }
-
-    @Override
     public boolean isUserExist(String userId) {
         User condition = new User();
         condition.setUserId(userId);
@@ -377,34 +350,24 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public void checkUserReferee(String userReferee, String systemCode) {
-        if (StringUtils.isNotBlank(userReferee)) {
-            // 判断格式
-            User condition = new User();
-            condition.setUserId(userReferee);
-            long count = getTotalCount(condition);
-            if (count <= 0) {
-                throw new BizException("li01003", "推荐人不存在");
-            }
-        }
-    }
-
-    @Override
     public void checkTradePwd(String userId, String tradePwd) {
         if (StringUtils.isNotBlank(userId)
                 && StringUtils.isNotBlank(tradePwd)) {
             User user = this.getUser(userId);
             if (StringUtils.isBlank(user.getTradePwdStrength())) {
-                throw new BizException("jd00001", "请您先设置支付密码！");
+                throw new BizException(
+                    EErrorCode_main.user_TRADEPWDFIRST.getCode());
             }
             User condition = new User();
             condition.setUserId(userId);
             condition.setTradePwd(MD5Util.md5(tradePwd));
             if (this.getTotalCount(condition) != 1) {
-                throw new BizException("jd00001", "支付密码错误");
+                throw new BizException(
+                    EErrorCode_main.user_TRADEPWDISWRONG.getCode());
             }
         } else {
-            throw new BizException("jd00001", "支付密码错误");
+            throw new BizException(
+                EErrorCode_main.user_TRADEPWDISWRONG.getCode());
         }
     }
 
@@ -417,41 +380,12 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             condition.setLoginPwd(MD5Util.md5(loginPwd));
             long count = this.getTotalCount(condition);
             if (count != 1) {
-                throw new BizException("jd00001", "原登录密码错误");
+                throw new BizException(
+                    EErrorCode_main.user_OLDLOGINPWDWRONG.getCode());
             }
         } else {
-            throw new BizException("jd00001", "原登录密码错误");
-        }
-    }
-
-    @Override
-    public void checkLoginPwd(String userId, String loginPwd, String alertStr) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
-            User condition = new User();
-            condition.setUserId(userId);
-            condition.setLoginPwd(MD5Util.md5(loginPwd));
-            long count = this.getTotalCount(condition);
-            if (count != 1) {
-                throw new BizException("jd00001", alertStr + "错误");
-            }
-        } else {
-            throw new BizException("jd00001", alertStr + "错误");
-        }
-    }
-
-    @Override
-    public void checkIdentify(String kind, String idKind, String idNo,
-            String realName) {
-        User condition = new User();
-        condition.setIdKind(idKind);
-        condition.setIdNo(idNo);
-        condition.setRealName(realName);
-        List<User> userList = userDAO.selectList(condition);
-        if (CollectionUtils.isNotEmpty(userList)) {
-            User data = userList.get(0);
-            throw new BizException("xn000001",
-                "用户[" + data.getMobile() + "]已使用该身份信息，请重新填写");
+            throw new BizException(
+                EErrorCode_main.user_OLDLOGINPWDWRONG.getCode());
         }
     }
 

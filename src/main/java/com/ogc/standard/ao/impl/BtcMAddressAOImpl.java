@@ -15,9 +15,9 @@ import com.ogc.standard.ao.IBtcMAddressAO;
 import com.ogc.standard.bo.IBtcMAddressBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.BtcMAddress;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EMAddressStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -39,11 +39,11 @@ public class BtcMAddressAOImpl implements IBtcMAddressAO {
     public void abandon(Long id) {
         BtcMAddress btcMAddress = btcMAddressBO.getAddressById(id);
         if (btcMAddress == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "不存在改地址");
+            throw new BizException(
+                EErrorCode_main.coin_ADDRESSNOTEXIST.getCode());
         }
         if (EMAddressStatus.INVALID.getCode().equals(btcMAddress.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "地址已失效，无需重复弃用");
+            throw new BizException(EErrorCode_main.coin_INVALIDATE.getCode());
         }
         btcMAddressBO.refreshStatus(id);
 

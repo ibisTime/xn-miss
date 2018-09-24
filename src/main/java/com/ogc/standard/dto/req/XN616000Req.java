@@ -13,7 +13,9 @@ package com.ogc.standard.dto.req;
  * @since: 2017年11月7日 下午2:03:47 
  * @history:
  */
-public class XN616000Req {
+public class XN616000Req extends BaseReq {
+
+    private static final long serialVersionUID = -3365683656458383039L;
 
     private String address;
 

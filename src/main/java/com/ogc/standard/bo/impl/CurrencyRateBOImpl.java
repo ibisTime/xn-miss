@@ -11,6 +11,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ICurrencyRateDAO;
 import com.ogc.standard.domain.CurrencyRate;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -26,7 +27,7 @@ public class CurrencyRateBOImpl extends PaginableBOImpl<CurrencyRate>
     public CurrencyRate currencyRateByCurrency(String currency) {
 
         if (StringUtils.isBlank(currency)) {
-            throw new BizException("xn000000", "传入货币类型");
+            throw new BizException(EErrorCode_main.curr_NOTEXIST.getCode());
         }
 
         CurrencyRate condation = new CurrencyRate();
@@ -36,7 +37,7 @@ public class CurrencyRateBOImpl extends PaginableBOImpl<CurrencyRate>
 
         if (currencyRateList.isEmpty()) {
 
-            throw new BizException("xn000000", "汇率获取异常");
+            throw new BizException(EErrorCode_main.curr_GETERROR.getCode());
 
         }
 

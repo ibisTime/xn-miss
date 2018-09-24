@@ -12,8 +12,8 @@ import com.ogc.standard.bo.IDivideDetailBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IDivideDetailDAO;
 import com.ogc.standard.domain.DivideDetail;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class DivideDetailBOImpl extends PaginableBOImpl<DivideDetail>
@@ -58,8 +58,7 @@ public class DivideDetailBOImpl extends PaginableBOImpl<DivideDetail>
             condition.setId(id);
             data = divideDetailDAO.select(condition);
             if (data == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "分红明细记录不存在");
+                throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
             }
         }
         return data;

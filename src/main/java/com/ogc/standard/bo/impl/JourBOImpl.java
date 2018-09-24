@@ -26,6 +26,7 @@ import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourStatus;
 import com.ogc.standard.enums.EJourType;
@@ -47,10 +48,12 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
             BigDecimal transAmount) {
 
         if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
-            throw new BizException("xn000000", "新增流水流水分组不能为空");
+            throw new BizException(
+                EErrorCode_main.groupjourcoin_NOTEMPTY.getCode());
         }
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException("xn000000", "新增流水变动金额不能为0");
+            throw new BizException(
+                EErrorCode_main.groupjourcoin_NOTZERO.getCode());
         }
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AJour.getCode());
@@ -90,10 +93,12 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
             BigDecimal transAmount) {
 
         if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
-            throw new BizException("xn000000", "新增流水流水分组不能为空");
+            throw new BizException(
+                EErrorCode_main.groupjourcoin_NOTEMPTY.getCode());
         }
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException("xn000000", "新增流水变动金额不能为0");
+            throw new BizException(
+                EErrorCode_main.groupjourcoin_NOTZERO.getCode());
         }
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AJour.getCode());
@@ -202,7 +207,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
             condition.setCode(code);
             data = jourDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn000000", "单号不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
         }
         return data;

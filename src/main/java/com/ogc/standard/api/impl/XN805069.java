@@ -24,7 +24,7 @@ public class XN805069 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.doModifyTradePwd(req.getUserId(), req.getOldTradePwd(),
-            req.getNewTradePwd());
+            req.getNewTradePwd(), req.getLanguage());
         return new BooleanRes(true);
     }
 

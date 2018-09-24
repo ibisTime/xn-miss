@@ -16,9 +16,9 @@ import com.ogc.standard.bo.IBtcWAddressBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.core.BtcClient;
 import com.ogc.standard.domain.BtcWAddress;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EWAddressStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -35,13 +35,13 @@ public class BtcWAddressAOImpl implements IBtcWAddressAO {
         BtcWAddress btcWAddress = btcWAddressBO
             .getBtcWAddressByAddress(address);
         if (btcWAddress != null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "归集地址" + address + "已经存在，请勿重复导入");
+            throw new BizException(EErrorCode_main.coin_WADDRESSEXIST.getCode(),
+                address);
         }
         // 地址有效性校验
         if (!BtcClient.verifyAddress(address)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "地址" + address + "不符合比特币规则，请仔细核对");
+            throw new BizException(EErrorCode_main.coin_ADDRESSRULE.getCode(),
+                address);
         }
         btcWAddressBO.saveBtcWAddress(address);
     }
@@ -50,11 +50,11 @@ public class BtcWAddressAOImpl implements IBtcWAddressAO {
     public void abandon(Long id) {
         BtcWAddress btcWAddress = btcWAddressBO.getBtcWAddress(id);
         if (btcWAddress == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "没有该用户");
+            throw new BizException(
+                EErrorCode_main.coin_ADDRESSNOTEXIST.getCode());
         }
         if (EWAddressStatus.INVALID.getCode().equals(btcWAddress.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "地址已失效，无需重复弃用");
+            throw new BizException(EErrorCode_main.coin_INVALIDATE.getCode());
         }
         btcWAddressBO.abandon(btcWAddress);
     }

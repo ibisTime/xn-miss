@@ -23,12 +23,14 @@ public class XN805084 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        userAO.doCloseOpen(req.getUserId(), req.getUpdater(), req.getRemark());
+        userAO.doCloseOpen(req.getUserId(), req.getUpdater(), req.getRemark(),
+            req.getLanguage());
         return new BooleanRes(true);
     }
 
     @Override
-    public void doCheck(String inputparams, String operator) throws ParaException {
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN805084Req.class);
         StringValidater.validateBlank(req.getUserId(), req.getUpdater());
     }
