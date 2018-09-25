@@ -59,7 +59,7 @@ public class BankcardAOImpl implements IBankcardAO {
     @Override
     public void dropBankcard(String code) {
         if (!bankcardBO.isBankcardExist(code)) {
-            throw new BizException("xn0000", "银行卡编号不存在");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         bankcardBO.removeBankcard(code);
     }

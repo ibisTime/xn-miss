@@ -20,8 +20,8 @@ import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
-        implements ISYSUserBO {
+public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
+        ISYSUserBO {
 
     @Autowired
     private ISYSUserDAO sysUserDAO;
@@ -60,7 +60,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             condition.setMobile(mobile);
             long count = getTotalCount(condition);
             if (count > 0) {
-                throw new BizException("li01003", "手机号已经存在");
+                throw new BizException(EErrorCode_main.user_MOBILE.getCode(),
+                    (Object) mobile);
             }
         }
     }
@@ -74,7 +75,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             condition.setLoginName(loginName);
             List<SYSUser> list = sysUserDAO.selectList(condition);
             if (list != null && list.size() > 1) {
-                throw new BizException("li01006", "登录名重复");
+                throw new BizException(
+                    EErrorCode_main.user_LOGINNAMERE.getCode());
             }
             if (CollectionUtils.isNotEmpty(list)) {
                 data = list.get(0);
@@ -91,7 +93,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             condition.setMobile(mobile);
             data = sysUserDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "用户不存在");
+                throw new BizException(EErrorCode_main.user_NOTEXIST.getCode());
             }
         }
         return data;
@@ -138,8 +140,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     // 密码检查
     @Override
     public void checkLoginPwd(String userId, String loginPwd) {
-        if (StringUtils.isNotBlank(userId)
-                && StringUtils.isNotBlank(loginPwd)) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(loginPwd)) {
             SYSUser condition = new SYSUser();
             condition.setUserId(userId);
             condition.setLoginPwd(MD5Util.md5(loginPwd));
@@ -189,8 +190,7 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
             condition.setSystemCode(systemCode);
             long count = getTotalCount(condition);
             if (count > 0) {
-                throw new BizException(
-                    EErrorCode_main.user_LOGINNAME.getCode());
+                throw new BizException(EErrorCode_main.user_LOGINNAME.getCode());
             }
         }
     }
@@ -211,8 +211,8 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser>
     }
 
     @Override
-    public void refreshStatus(String userId, EUserStatus status, String updater,
-            String remark) {
+    public void refreshStatus(String userId, EUserStatus status,
+            String updater, String remark) {
         if (StringUtils.isNotBlank(userId)) {
             SYSUser data = new SYSUser();
             data.setUserId(userId);

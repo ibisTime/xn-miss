@@ -379,7 +379,17 @@ public enum EErrorCode_main {
 
     with_ZERO("000163", "取现金额不能为0"),
 
-    address_AGAIN("000164", "请勿重复添加地址");
+    address_RULE("000164", "地址%s不符合%s规则，请仔细核对"),
+
+    config_TYPE("000165", "type类型不在枚举类中 0-第一层 1-第二层"),
+
+    hl_ZERO("000166", "红蓝订单的变动金额不能为0"),
+
+    mobile_ILEAGLE("000167", "手机号格式非法"),
+
+    user_LOGINNAMERE("000168", "登录名重复"),
+
+    user_NOTEXIST("000169", "用户不存在");
 
     EErrorCode_main(String code, String value) {
         this.code = code;

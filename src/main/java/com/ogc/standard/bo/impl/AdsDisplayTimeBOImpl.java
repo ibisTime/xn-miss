@@ -1,17 +1,16 @@
 package com.ogc.standard.bo.impl;
 
-import com.ogc.standard.bo.IAdsDisplayTimeBO;
-import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.dao.IDisplayTimeDAO;
-import com.ogc.standard.dao.base.IBaseDAO;
-import com.ogc.standard.domain.Ads;
-import com.ogc.standard.domain.AdsDisplayTime;
-import com.ogc.standard.exception.BizException;
-import org.apache.commons.lang3.StringUtils;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.ogc.standard.bo.IAdsDisplayTimeBO;
+import com.ogc.standard.core.ObjValidater;
+import com.ogc.standard.dao.IDisplayTimeDAO;
+import com.ogc.standard.domain.AdsDisplayTime;
+import com.ogc.standard.enums.EErrorCode_main;
+import com.ogc.standard.exception.BizException;
 
 /**
  * Created by tianlei on 2017/十一月/15.
@@ -25,12 +24,13 @@ public class AdsDisplayTimeBOImpl implements IAdsDisplayTimeBO {
     @Override
     public void insertDisplayTime(AdsDisplayTime adsDisplayTime) {
 
-        //校验参数不能为 空
+        // 校验参数不能为 空
         ObjValidater.validateReq(adsDisplayTime);
 
-        if (adsDisplayTime.getEndTime().compareTo(adsDisplayTime.getStartTime()) < 0) {
+        if (adsDisplayTime.getEndTime()
+            .compareTo(adsDisplayTime.getStartTime()) < 0) {
 
-            throw new BizException("xn000", "结束时间不能小于开始时间");
+            throw new BizException(EErrorCode_main.page_STARTENDTIME.getCode());
 
         }
 
@@ -45,14 +45,12 @@ public class AdsDisplayTimeBOImpl implements IAdsDisplayTimeBO {
 
     }
 
-
     public List<AdsDisplayTime> queryList(String adsCode) {
 
         AdsDisplayTime condition = new AdsDisplayTime();
         condition.setAdsCode(adsCode);
-        return  this.displayTimeDAO.selectList(condition);
+        return this.displayTimeDAO.selectList(condition);
 
     }
-
 
 }

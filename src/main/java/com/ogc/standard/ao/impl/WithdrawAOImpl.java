@@ -237,7 +237,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (!WalletUtils.isValidAddress(withdraw.getPayCardNo())) {
             throw new BizException(
                 EErrorCode_main.with_INVILEDADDRESS.getCode(),
-                withdraw.getPayCardInfo());
+                (Object) withdraw.getPayCardInfo());
         }
 
         String txHash = TokenClient.transfer(secret.getAddress(),
@@ -294,7 +294,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (!WalletUtils.isValidAddress(withdraw.getPayCardNo())) {
             throw new BizException(
                 EErrorCode_main.with_INVILEDADDRESS.getCode(),
-                withdraw.getPayCardInfo());
+                (Object) withdraw.getPayCardInfo());
         }
 
         String txHash = ethTransactionBO.broadcast(address,

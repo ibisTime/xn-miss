@@ -34,12 +34,12 @@ import com.ogc.standard.enums.EAddressType;
 import com.ogc.standard.enums.EBtcUtxoRefType;
 import com.ogc.standard.enums.EBtcUtxoStatus;
 import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EOriginialCoin;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 import com.ogc.standard.util.BtcBlockExplorer;
 
 /** 
@@ -81,8 +81,8 @@ public class BtcUtxoAOImpl implements IBtcUtxoAO {
         BtcXAddress btcAddress = btcXAddressBO.getBtcAddress(ctqBtcUtxo
             .getAddress());
         if (btcAddress == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "BTC充值地址不存在");
+            throw new BizException(
+                EErrorCode_main.coin_ADDRESSNOTEXIST.getCode());
         }
 
         // 判断是否已经处理过该交易

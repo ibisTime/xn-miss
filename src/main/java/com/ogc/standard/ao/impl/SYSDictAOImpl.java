@@ -54,8 +54,7 @@ public class SYSDictAOImpl implements ISYSDictAO {
             condition.setParentKey(parentKey);
             condition.setType(EDictType.SECOND.getCode());
             if (sysDictBO.getTotalCount(condition) > 0) {
-                throw new BizException(
-                    EErrorCode_main.dict_KEYREPEAT.getCode());
+                throw new BizException(EErrorCode_main.dict_KEYREPEAT.getCode());
             }
         } else if (EDictType.FIRST.getCode().equals(type)) {
             // 第一层数据字典 key不能重复
@@ -63,11 +62,10 @@ public class SYSDictAOImpl implements ISYSDictAO {
             condition.setDkey(key);
             condition.setType(EDictType.FIRST.getCode());
             if (sysDictBO.getTotalCount(condition) > 0) {
-                throw new BizException(
-                    EErrorCode_main.dict_KEYREPEAT.getCode());
+                throw new BizException(EErrorCode_main.dict_KEYREPEAT.getCode());
             }
         } else {
-            throw new BizException("xn000000", "type类型不在枚举类中 0-第一层 1-第二层");
+            throw new BizException(EErrorCode_main.config_TYPE.getCode());
         }
         SYSDict sysDict = new SYSDict();
         sysDict.setType(type);
@@ -96,8 +94,7 @@ public class SYSDictAOImpl implements ISYSDictAO {
     }
 
     @Override
-    public int editSYSDict(Long id, String value, String updater,
-            String remark) {
+    public int editSYSDict(Long id, String value, String updater, String remark) {
         SYSDict data = new SYSDict();
         data.setId(id);
         data.setDvalue(value);

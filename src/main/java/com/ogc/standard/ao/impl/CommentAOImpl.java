@@ -65,15 +65,15 @@ public class CommentAOImpl implements ICommentAO {
         if (CollectionUtils.isNotEmpty(keywordList)) {
 
             // 直接拦截
-            if (EKeyWordReaction.REFUSE.getCode()
-                .equals(keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.REFUSE.getCode().equals(
+                keywordList.get(0).getReaction())) {
                 throw new BizException(EErrorCode_main.comm_KEYWORD.getCode(),
-                    keywordList.get(0).getWord());
+                    (Object) keywordList.get(0).getWord());
             }
 
             // 替换**
-            if (EKeyWordReaction.REPLACE.getCode()
-                .equals(keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.REPLACE.getCode().equals(
+                keywordList.get(0).getReaction())) {
                 for (Keyword keyword : keywordList) {
                     content = keywordBO.replaceKeyword(content,
                         keyword.getWord());
@@ -83,8 +83,8 @@ public class CommentAOImpl implements ICommentAO {
             }
 
             // 审核
-            if (EKeyWordReaction.APPROVE.getCode()
-                .equals(keywordList.get(0).getReaction())) {
+            if (EKeyWordReaction.APPROVE.getCode().equals(
+                keywordList.get(0).getReaction())) {
                 status = ECommentStatus.TO_APPROVE.getCode();
             }
         }

@@ -56,14 +56,14 @@ public class CoinAOImpl implements ICoinAO {
         // 检查币种符号是否已经在平台内存在
         if (coinBO.isSymbolExist(req.getSymbol())) {
             throw new BizException(EErrorCode_main.coin_SYMBOLUSED.getCode(),
-                req.getSymbol());
+                (Object) req.getSymbol());
         }
         // 检查币种符号是否已经在平台内存在
         if (coinBO.isContractAddressExist(ECoinType.X.getCode(),
             req.getContractAddress())) {
             throw new BizException(
                 EErrorCode_main.coin_CONTARTADDRESS.getCode(),
-                req.getContractAddress());
+                (Object) req.getContractAddress());
         }
 
         // 分配该币种盈亏账户和冷钱包账户
