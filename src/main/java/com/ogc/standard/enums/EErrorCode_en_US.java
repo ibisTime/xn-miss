@@ -100,8 +100,7 @@ public enum EErrorCode_en_US {
     accept_OUTOFTIME("000034",
             "Order payment timed out, the system automatically cancels"),
 
-    accept_ONLYBUYER("000035",
-            "Only buyers of this order can mark the payment"),
+    accept_ONLYBUYER("000035", "Only buyers of this order can mark the payment"),
 
     accept_STATUSPAY("000036",
             "Cannot mark a paid amount in the current status"),
@@ -130,7 +129,8 @@ public enum EErrorCode_en_US {
     account_UNFROZENZERO("000042",
             "This thawing will make the account freeze amount less than 0"),
 
-    account_SAME("000043",
+    account_SAME(
+            "000043",
             "The account number of both parties is the same, no internal transfer is required"),
 
     // 广告
@@ -282,7 +282,8 @@ public enum EErrorCode_en_US {
     simuorder_MINCOUNT("000106", "The number of orders should be"
             + SysConstants.minCountLimit + "Integer multiple"),
 
-    simuorder_PRICELESSTHAN("000107",
+    simuorder_PRICELESSTHAN(
+            "000107",
             "The commission price must not be higher than 900% of the previous closing price"),
 
     simuorder_PRICEMORETHAN("000108",
@@ -386,7 +387,44 @@ public enum EErrorCode_en_US {
 
     setting_FAILCANCEL("000149", "Cancel setup failed"),
 
-    setting_FAILADD("000150", "Add settings failed");
+    setting_FAILADD("000150", "Add settings failed"),
+
+    with_COUNTFEE("000151",
+            "The cash amount needs to be greater than the handling fee"),
+
+    with_APPROVE(
+            "000152",
+            "The status of the application record is not pending approval and cannot be approved"),
+
+    with_BROADCAST("000153",
+            "The pre-acquisition record is not pending broadcast"),
+
+    with_NOTEMPTY("000154", "Buffer address cannot be empty"),
+
+    eth_INVALIBLEADDRESS("000155",
+            "Invalid ETH address, only the address can be fetched!"),
+
+    eth_INWITHDRAW("000156",
+            "he address is being broadcasted. Please try again later!"),
+
+    eth_ADDRESSABUNDON("000157", "This spam address has been deprecated!"),
+
+    with_INVILEDADDRESS("000158", "Invalid cash withdrawal address"),
+
+    with_FAILED("000159", "Cash withdrawal failed"),
+
+    with_SIGNED(
+            "000160",
+            "The transaction signature failed. Please check carefully whether the address is eligible for withdrawal."),
+
+    with_STATUS("000161",
+            "The status of the application record is not pending and cannot be paid."),
+
+    with_AGAIN(
+            "000162",
+            "The application for cash withdrawal has not been processed successfully and cannot be applied again."),
+
+    with_ZERO("000163", "The amount of cash cannot be 0");
 
     EErrorCode_en_US(String code, String value) {
         this.code = code;

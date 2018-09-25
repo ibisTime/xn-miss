@@ -54,7 +54,7 @@ public class APIServlet extends HttpServlet {
         String code = request.getParameter("code");
         String operator = request.getParameter("operator");
         String json = request.getParameter("json");
-        String language = request.getHeader("language");
+        String language = request.getHeader("Accept-Language");
         IDispatcher dispatcher = new DispatcherImpl();
         String result = dispatcher.doDispatcher(code, json, operator, language);
         PrintWriter writer = response.getWriter();

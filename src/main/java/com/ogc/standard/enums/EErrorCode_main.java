@@ -259,8 +259,7 @@ public enum EErrorCode_main {
 
     simucount_COUNT("000105", "委托数量应在%s和%s之间"),
 
-    simuorder_MINCOUNT("000106",
-            "委托数量应当" + SysConstants.minCountLimit + "的整数倍"),
+    simuorder_MINCOUNT("000106", "委托数量应当" + SysConstants.minCountLimit + "的整数倍"),
 
     simuorder_PRICELESSTHAN("000107", "委托价格不得高于前收盘价的900%"),
 
@@ -352,7 +351,33 @@ public enum EErrorCode_main {
 
     setting_FAILCANCEL("000149", "取消设置失败"),
 
-    setting_FAILADD("000150", "添加设置失败");
+    setting_FAILADD("000150", "添加设置失败"),
+
+    with_COUNTFEE("000151", "提现金额需大于手续费"),
+
+    with_APPROVE("000152", "申请记录状态不是待审批状态，无法审批"),
+
+    with_BROADCAST("000153", "前取现记录不处于待广播状态"),
+
+    with_NOTEMPTY("000154", "散取地址不能为空"),
+
+    eth_INVALIBLEADDRESS("000155", "无效的ETH地址，只有散取地址才能进行取现广播！"),
+
+    eth_INWITHDRAW("000156", "该散取地址正在广播使用，请稍后再试！"),
+
+    eth_ADDRESSABUNDON("000157", "该散取地址已被弃用！"),
+
+    with_INVILEDADDRESS("000158", "无效的取现地址"),
+
+    with_FAILED("000159", "提现广播失败"),
+
+    with_SIGNED("000160", "交易签名失败，请仔细检查散取地址是否符合提现要求"),
+
+    with_STATUS("000161", "申请记录状态不是待支付状态，无法支付"),
+
+    with_AGAIN("000162", "上笔取现申请还未处理成功，不能再次申请"),
+
+    with_ZERO("000163", "取现金额不能为0");
 
     EErrorCode_main(String code, String value) {
         this.code = code;
