@@ -22,6 +22,8 @@ public interface ISimuOrderBO extends IPaginableBO<SimuOrder> {
 
     public int refreshLimitSimuOrder(SimuOrder data);
 
+    public void refreshScan(String code);
+
     public List<SimuOrder> querySimuOrderList(SimuOrder condition);
 
     /**

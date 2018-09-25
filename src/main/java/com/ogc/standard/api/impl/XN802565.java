@@ -1,11 +1,3 @@
-/**
- * @Title XN802586.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author taojian  
- * @date 2018年9月11日 下午2:14:28 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IBtcXAddressAO;
@@ -21,8 +13,8 @@ import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
  * 分页查询BTC分发地址
- * @author: taojian 
- * @since: 2018年9月11日 下午2:14:28 
+ * @author: lei 
+ * @since: 2018年9月25日 下午3:35:21 
  * @history:
  */
 public class XN802565 extends AProcessor {
@@ -48,5 +40,4 @@ public class XN802565 extends AProcessor {
         req = JsonUtil.json2Bean(inputparams, XN802565Req.class);
         ObjValidater.validateReq(req);
     }
-
 }

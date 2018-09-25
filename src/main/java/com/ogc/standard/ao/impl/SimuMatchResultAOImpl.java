@@ -108,8 +108,8 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
 
             // 扣减买家手续费
             accountBO.transAmount(data.getBuyUserId(), data.getSymbol(),
-                ESysUser.SYS_USER.getCode(), data.getSymbol(),
-                data.getSellFee(), EJourBizTypeUser.AJ_BBORDER_FEE.getCode(),
+                ESysUser.SYS_USER.getCode(), data.getSymbol(), data.getBuyFee(),
+                EJourBizTypeUser.AJ_BBORDER_FEE.getCode(),
                 EJourBizTypePlat.AJ_BBORDER_FEE.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_FEE.getValue(),
                 EJourBizTypePlat.AJ_BBORDER_FEE.getValue(),

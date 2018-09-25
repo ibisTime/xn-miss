@@ -82,13 +82,22 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
     public void saveHandicap(SimuOrder simuOrder) {
         Handicap data = new Handicap();
         data.setOrderCode(simuOrder.getCode());
-        data.setPrice(simuOrder.getPrice());
-        data.setCount(simuOrder.getTotalCount());
-        data.setDirection(simuOrder.getDirection());
 
-        data.setSymbol(simuOrder.getSymbol());
-        data.setToSymbol(simuOrder.getToSymbol());
-        handicapDAO.insert(data);
+        // 当前委托单是否盘口内时
+        List<Handicap> currentHandicaps = queryHandicapList(data);
+        if (CollectionUtils.isEmpty(currentHandicaps)) {
+            data.setPrice(simuOrder.getPrice());
+            data.setCount(simuOrder.getTotalCount());
+            data.setDirection(simuOrder.getDirection());
+
+            data.setSymbol(simuOrder.getSymbol());
+            data.setToSymbol(simuOrder.getToSymbol());
+            handicapDAO.insert(data);
+
+            // 将委托单改为已扫描
+            simuOrderBO.refreshScan(simuOrder.getCode());
+        }
+
     }
 
     @Override

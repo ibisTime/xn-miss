@@ -25,6 +25,7 @@
 		<result column="status" property="status" />
 		<result column="is_scan" property="isScan" />
 	</resultMap>
+	
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
@@ -54,6 +55,9 @@
 					open="(" separator="," close=")">
 					#{item}
 				</foreach>
+			</if>
+			<if test="isScan != null and isScan != '' ">
+				AND t.is_scan = #{isScan}
 			</if>
 		</trim>
 	</sql>
@@ -187,6 +191,14 @@
 		,traded_fee = #{tradedFee}
 		,last_traded_datetime =#{lastTradedDatetime}
 		,status = #{status}
+		
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_scan" parameterType="simuOrder">
+		UPDATE tsimu_order
+		SET
+		is_scan = #{isScan}
 		
 		WHERE code = #{code}
 	</update>

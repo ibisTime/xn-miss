@@ -1,11 +1,3 @@
-/**
- * @Title IBtcXAddressAO.java 
- * @Package com.ogc.standard.ao 
- * @Description 
- * @author taojian  
- * @date 2018年9月11日 下午2:09:04 
- * @version V1.0   
- */
 package com.ogc.standard.ao;
 
 import com.ogc.standard.bo.base.Paginable;

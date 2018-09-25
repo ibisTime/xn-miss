@@ -74,9 +74,9 @@ public class SimuMatchResultBOImpl extends PaginableBOImpl<SimuMatchResult>
 
                 data.setSellUserId(asksOrderDetail.getUserId());
                 // 交易数量（symbol数量）
-                data.setSymbolCount(bidsOrderDetail.getTradedAmount());
+                data.setSymbolCount(asksOrderDetail.getTradedCount());
                 // 计价数量（toSymbol数量）
-                data.setToSymbolCount(asksOrderDetail.getTradedCount());
+                data.setToSymbolCount(bidsOrderDetail.getTradedAmount());
                 data.setBuyFee(bidsOrderDetail.getTradedFee());
                 data.setSellFee(asksOrderDetail.getTradedFee());
 
@@ -86,9 +86,9 @@ public class SimuMatchResultBOImpl extends PaginableBOImpl<SimuMatchResult>
 
             } else {
 
-                data.setSymbolCount(bidsOrderDetail.getTradedAmount()
+                data.setSymbolCount(bidsOrderDetail.getTradedCount()
                     .add(data.getSymbolCount()));
-                data.setToSymbolCount(asksOrderDetail.getTradedCount()
+                data.setToSymbolCount(asksOrderDetail.getTradedAmount()
                     .add(data.getToSymbolCount()));
                 data.setBuyFee(
                     bidsOrderDetail.getTradedFee().add(data.getBuyFee()));

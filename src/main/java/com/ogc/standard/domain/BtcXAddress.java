@@ -42,6 +42,9 @@ public class BtcXAddress extends ABaseDO {
     // 地址模糊查询
     private String addressForQuery;
 
+    // 用户信息
+    private User userInfo;
+
     private Long useCount;
 
     private BigDecimal useAmount;
@@ -50,12 +53,28 @@ public class BtcXAddress extends ABaseDO {
 
     private String balanceString;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getPrivatekey() {
+        return privatekey;
+    }
+
+    public void setPrivatekey(String privatekey) {
+        this.privatekey = privatekey;
     }
 
     public String getUserId() {
@@ -72,14 +91,6 @@ public class BtcXAddress extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public List<String> getStatusList() {
@@ -106,6 +117,14 @@ public class BtcXAddress extends ABaseDO {
         this.addressForQuery = addressForQuery;
     }
 
+    public User getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
+    }
+
     public Long getUseCount() {
         return useCount;
     }
@@ -120,7 +139,6 @@ public class BtcXAddress extends ABaseDO {
 
     public void setUseAmount(BigDecimal useAmount) {
         this.useAmount = useAmount;
-        this.useAmountString = useAmount.toString();
     }
 
     public String getUseAmountString() {
@@ -131,14 +149,6 @@ public class BtcXAddress extends ABaseDO {
         this.useAmountString = useAmountString;
     }
 
-    public String getPrivatekey() {
-        return privatekey;
-    }
-
-    public void setPrivatekey(String privatekey) {
-        this.privatekey = privatekey;
-    }
-
     public String getBalanceString() {
         return balanceString;
     }
@@ -146,4 +156,5 @@ public class BtcXAddress extends ABaseDO {
     public void setBalanceString(String balanceString) {
         this.balanceString = balanceString;
     }
+
 }

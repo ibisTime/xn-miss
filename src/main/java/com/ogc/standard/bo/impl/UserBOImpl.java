@@ -281,7 +281,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
         if (data == null) {
             throw new BizException(EErrorCode_main.user_USERIDUNEXIST.getCode(),
-                userId);
+                (Object) userId);
         }
         return data;
     }

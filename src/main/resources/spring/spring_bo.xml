@@ -279,5 +279,4 @@
 	<bean id="divideDetailBO" class="com.ogc.standard.bo.impl.DivideDetailBOImpl">
 		<property name="paginableDAO" ref="divideDetailDAOImpl"/>
 	</bean>
-	
 </beans>

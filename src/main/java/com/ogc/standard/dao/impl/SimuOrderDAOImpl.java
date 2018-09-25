@@ -58,6 +58,11 @@ public class SimuOrderDAOImpl extends AMybatisTemplate
     }
 
     @Override
+    public int updateScan(SimuOrder data) {
+        return super.update(NAMESPACE.concat("update_scan"), data);
+    }
+
+    @Override
     public int cancel(SimuOrder data) {
         return super.update(NAMESPACE.concat("cancel_simuOrder"), data);
     }

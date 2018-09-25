@@ -11,6 +11,8 @@ public interface ISimuOrderDAO extends IBaseDAO<SimuOrder> {
 
     public int updateLimitSimuOrder(SimuOrder data);
 
+    public int updateScan(SimuOrder data);
+
     public int cancel(SimuOrder data);
 
     public int tradeSuccess(SimuOrder data);

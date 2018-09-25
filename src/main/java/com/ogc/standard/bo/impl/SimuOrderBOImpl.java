@@ -65,6 +65,8 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
         simuOrder.setCreateDatetime(new Date());
         simuOrder.setStatus(ESimuOrderStatus.SUBMIT.getCode());
 
+        simuOrder.setIsScan(EBoolean.NO.getCode());
+
         simuOrderDAO.insert(simuOrder);
 
         return simuOrder;
@@ -166,6 +168,17 @@ public class SimuOrderBOImpl extends PaginableBOImpl<SimuOrder>
             data = simuOrderDAO.select(condition);
         }
         return data;
+    }
+
+    @Override
+    public void refreshScan(String code) {
+        SimuOrder data = null;
+        if (StringUtils.isNotBlank(code)) {
+            data = new SimuOrder();
+            data.setCode(code);
+            data.setIsScan(EBoolean.YES.getCode());
+            simuOrderDAO.updateScan(data);
+        }
     }
 
     @Override

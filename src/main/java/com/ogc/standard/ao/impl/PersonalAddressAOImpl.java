@@ -67,6 +67,13 @@ public class PersonalAddressAOImpl implements IPersonalAddressAO {
                         + address + "不符合" + ECoinType.ETH.getCode()
                         + "规则，请仔细核对");
             }
+        } else {
+            // 地址有效性校验
+            if (!WalletUtils.isValidAddress(address)) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "地址"
+                        + address + "不符合" + ECoinType.BTC.getValue()
+                        + "规则，请仔细核对");
+            }
         }
     }
 
