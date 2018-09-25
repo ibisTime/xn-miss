@@ -33,7 +33,7 @@ public class XN805060 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.doBindMobile(req.getIsSendSms(), req.getMobile(),
-            req.getSmsCaptcha(), req.getUserId());
+            req.getSmsCaptcha(), req.getUserId(), req.getLanguage());
         return new BooleanRes(true);
     }
 

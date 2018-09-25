@@ -27,12 +27,12 @@ import com.ogc.standard.dto.req.XN625271Req;
 import com.ogc.standard.enums.EAcceptOrderStatus;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECoin;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class AcceptOrderAOImpl implements IAcceptOrderAO {
@@ -61,7 +61,7 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
         List<Bankcard> bankcardList = bankcardBO.queryBankcardList(
             ESysUser.SYS_USER.getCode(), req.getReceiveType());
         if (CollectionUtils.isEmpty(bankcardList)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "付款方式不支持");
+            throw new BizException(EErrorCode_main.accept_UNSUPPORT.getCode());
         }
         return acceptOrderBO.saveBuyAcceptOrder(req, bankcardList);
     }
@@ -83,7 +83,7 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
             .subtract(sellUserAccount.getFrozenAmount()).subtract(tradeFee);// 剩余余额=
         if (balanceCount
             .compareTo(StringValidater.toBigDecimal(req.getCount())) < 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "可出售余额不足");
+            throw new BizException(EErrorCode_main.accept_SALEABLE.getCode());
         }
 
         // 保存订单
@@ -107,8 +107,7 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
         AcceptOrder order = acceptOrderBO.getAcceptOrder(code);
 
         if (!EAcceptOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不能取消订单");
+            throw new BizException(EErrorCode_main.accept_UNCANCEL.getCode());
         }
 
         acceptOrderBO.cancel(order, userId, remark);
@@ -119,8 +118,7 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
         AcceptOrder order = acceptOrderBO.getAcceptOrder(code);
 
         if (!EAcceptOrderStatus.PAYED.getCode().equals(order.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不能取消订单");
+            throw new BizException(EErrorCode_main.accept_UNCANCEL.getCode());
         }
 
         acceptOrderBO.cancel(order, userId, remark);
@@ -136,23 +134,19 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
             // 订单已超时,取消订单
             cancelBuyOrder(order.getCode(), ESysUser.SYS_USER.getCode(),
                 "订单支付超时，系统自动取消");
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "订单支付超时，系统自动取消");
+            throw new BizException(EErrorCode_main.accept_OUTOFTIME.getCode());
         }
 
         if (!order.getUserId().equals(updater)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "只有此单的买家才可以标记打款");
+            throw new BizException(EErrorCode_main.accept_ONLYBUYER.getCode());
         }
 
         if (!EAcceptOrderStatus.TO_PAY.getCode().equals(order.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "当前状态下不能标记已打款");
+            throw new BizException(EErrorCode_main.accept_STATUSPAY.getCode());
         }
 
         if (order.getType().equals(EBoolean.YES.getCode())) { // 0买入/1卖出
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "卖币订单不能标记打款");
+            throw new BizException(EErrorCode_main.accept_ONLYBUYER.getCode());
 
         }
 
@@ -185,8 +179,8 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
 //            }
             if (!(EAcceptOrderStatus.PAYED.getCode()
                 .equals(order.getStatus()))) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "当前状态下不能处理");
+                throw new BizException(
+                    EErrorCode_main.accept_UNCANCEL.getCode());
             }
 
             Account dbAccount = accountBO.getAccountByUser(order.getUserId(),
@@ -244,8 +238,8 @@ public class AcceptOrderAOImpl implements IAcceptOrderAO {
 //            }
             if (!EAcceptOrderStatus.TO_PAY.getCode()
                 .equals(order.getStatus())) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "该订单不是待支付状态");
+                throw new BizException(
+                    EErrorCode_main.accept_UNCANCEL.getCode());
             }
             Account dbAccount = accountBO.getAccountByUser(order.getUserId(),
                 order.getTradeCoin());

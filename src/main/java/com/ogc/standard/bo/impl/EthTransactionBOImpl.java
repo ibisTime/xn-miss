@@ -30,14 +30,15 @@ import com.ogc.standard.common.PropertiesUtil;
 import com.ogc.standard.dao.IEthTransactionDAO;
 import com.ogc.standard.domain.CtqEthTransaction;
 import com.ogc.standard.domain.EthTransaction;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 @Component
 public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
         implements IEthTransactionBO {
 
-    private static Web3j web3j = Web3j.build(new HttpService(
-        PropertiesUtil.Config.ETH_URL));
+    private static Web3j web3j = Web3j
+        .build(new HttpService(PropertiesUtil.Config.ETH_URL));
 
     @Autowired
     private IEthTransactionDAO ethTransactionDAO;
@@ -56,11 +57,11 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
                 transaction.setNonce(ctqEthTransaction.getNonce());
                 transaction.setBlockHash(ctqEthTransaction.getBlockHash());
                 transaction.setBlockNumber(ctqEthTransaction.getBlockNumber());
-                transaction.setBlockCreateDatetime(ctqEthTransaction
-                    .getBlockCreateDatetime());
+                transaction.setBlockCreateDatetime(
+                    ctqEthTransaction.getBlockCreateDatetime());
 
-                transaction.setTransactionIndex(ctqEthTransaction
-                    .getTransactionIndex());
+                transaction.setTransactionIndex(
+                    ctqEthTransaction.getTransactionIndex());
                 transaction.setFrom(ctqEthTransaction.getFrom());
                 transaction.setTo(ctqEthTransaction.getTo());
                 transaction.setValue(ctqEthTransaction.getValue());
@@ -138,7 +139,8 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
             condition.setHash(hash);
             data = ethTransactionDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "以太坊交易记录不存在");
+                throw new BizException(
+                    EErrorCode_main.eth_RECORDNOTEXIST.getCode());
             }
         }
         return data;
@@ -148,10 +150,10 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
     public BigDecimal getGasPrice() {
         BigDecimal price = null;
         try {
-            price = new BigDecimal(web3j.ethGasPrice().send().getGasPrice()
-                .toString());
+            price = new BigDecimal(
+                web3j.ethGasPrice().send().getGasPrice().toString());
         } catch (IOException e) {
-            throw new BizException("xn0000", "以太坊gas价格获取异常");
+            throw new BizException(EErrorCode_main.eth_GSEPRICEERROR.getCode());
         }
         return price;
     }
@@ -176,8 +178,9 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
                     bw.write(keystoreContent);
                     bw.close();
                 } catch (Exception e) {
-                    throw new BizException("xn625000", "keystore文件写入异常，原因"
-                            + e.getMessage());
+                    throw new BizException(
+                        EErrorCode_main.eth_KEYSTOREERROE.getCode(),
+                        e.getMessage());
                 }
             }
 
@@ -196,12 +199,12 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
 
             // 本地签名的
             RawTransaction rawTransaction = RawTransaction.createTransaction(
-                nonce, gasPrice, gasLimit, to,
-                new BigInteger(value.toString()), "");
+                nonce, gasPrice, gasLimit, to, new BigInteger(value.toString()),
+                "");
 
             // 签名
-            byte[] signedMessage = TransactionEncoder.signMessage(
-                rawTransaction, credentials);
+            byte[] signedMessage = TransactionEncoder
+                .signMessage(rawTransaction, credentials);
             txHash = Numeric.toHexString(signedMessage);
             EthSendTransaction ethSendTransaction = web3j
                 .ethSendRawTransaction(txHash).sendAsync().get();
@@ -212,7 +215,8 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
             txHash = ethSendTransaction.getTransactionHash();
 
         } catch (Exception e) {
-            throw new BizException("xn625000", "交易广播异常" + e.getMessage());
+            throw new BizException(EErrorCode_main.eth_BROADCAST.getCode(),
+                e.getMessage());
         }
         return txHash;
         // success

@@ -38,6 +38,7 @@ import com.ogc.standard.domain.TokenEvent;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.ECollectStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypeCold;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EOriginialCoin;
@@ -45,7 +46,6 @@ import com.ogc.standard.enums.ESAddressStatus;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ETransactionReceiptStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 import com.ogc.standard.token.OrangeCoinToken.TransferEventResponse;
 import com.ogc.standard.token.TokenClient;
 
@@ -183,7 +183,7 @@ public class CollectAOImpl implements ICollectAO {
             String refNo) {
         Coin coin = coinBO.getCoin(currency);
         if (null == coin) {
-            throw new BizException("0000", "暂不支持" + currency + "币种");
+            throw new BizException(EErrorCode_main.coin_UNSUPPORT.getCode());
         }
         BigDecimal tokenBalanceStart = AmountUtil
             .toOriginal(new BigDecimal(balanceStart), coin.getUnit());
@@ -197,7 +197,7 @@ public class CollectAOImpl implements ICollectAO {
         EthXAddress xEthAddress = ethXAddressBO
             .getEthXAddressByAddress(address);
         if (xEthAddress == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该地址不能归集");
+            throw new BizException(EErrorCode_main.coll_UNABLE.getCode());
         }
 
         Coin coin = coinBO.getCoin(symbol);
@@ -207,7 +207,7 @@ public class CollectAOImpl implements ICollectAO {
             coin.getContractAddress());
         // 余额大于配置值时，进行归集
         if (balance.compareTo(limit) < 0) {
-            throw new BizException("xn625000", "未达到归集条件，无需归集");
+            throw new BizException(EErrorCode_main.coll_CONDITION.getCode());
         }
 
         // 获取归集地址

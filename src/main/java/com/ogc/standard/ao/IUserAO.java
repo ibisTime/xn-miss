@@ -19,7 +19,7 @@ public interface IUserAO {
     String DEFAULT_ORDER_COLUMN = "user_id";
 
     // 检查手机号是否存在
-    public void doCheckMobile(String mobile);
+    public void doCheckMobile(String mobile, String language);
 
     // 注册前端用户
     public String doRegisterByMobile(XN805041Req req);
@@ -33,18 +33,18 @@ public interface IUserAO {
     public void editTradeRate(String userId, Double tradeRate);
 
     public void doBindMobile(String isSendSms, String mobile, String smsCaptcha,
-            String userId);
+            String userId, String language);
 
     // 平台代注册渠道商用户
     public String doAddQDS(String mobile, String idKind, String idNo,
-            String realName, String respArea);
+            String realName, String respArea, String language);
 
     // // 申请注册
     // public String doApplyRegUser(XN805043Req req);
 
     // 用户登录
     public String doLogin(String loginName, String loginPwd, String client,
-            String location);
+            String location, String language);
 
     // 修改定位信息
     public void doChangeLocation(XN805081Req req);
@@ -65,11 +65,11 @@ public interface IUserAO {
     //
     // 更换手机号
     public void doChangeMoblie(String userId, String newMobile,
-            String smsCaptcha);
+            String smsCaptcha, String language);
 
     // 更换手机号_需支付密码
     public void doChangeMoblie(String userId, String newMobile,
-            String smsCaptcha, String tradePwd);
+            String smsCaptcha, String tradePwd, String language);
 
     // 重置登录密码
     public void doResetLoginPwd(String mobile, String smsCaptcha,
@@ -77,7 +77,7 @@ public interface IUserAO {
 
     // 修改登录密码
     public void doModifyLoginPwd(String userId, String oldLoginPwd,
-            String newLoginPwd);
+            String newLoginPwd, String language);
 
     // 管理员重置用户密码
     public void doResetLoginPwdByOss(String userId, String loginPwd,
@@ -97,11 +97,11 @@ public interface IUserAO {
 
     // 重置支付密码(需实名认证)
     public void doResetTradePwd(String userId, String newTradePwd,
-            String smsCaptcha, String idKind, String idNo);
+            String smsCaptcha, String idKind, String idNo, String language);
 
     // 修改支付密码
     public void doModifyTradePwd(String userId, String oldTradePwd,
-            String newTradePwd);
+            String newTradePwd, String language);
 
     // 获取腾讯云签名
     public XN625000Res getTencentSign(String userId);
@@ -122,7 +122,8 @@ public interface IUserAO {
     // String latitude);
 
     // 注销/激活用户
-    public void doCloseOpen(String userId, String updater, String remark);
+    public void doCloseOpen(String userId, String updater, String remark,
+            String language);
 
     // // 设置角色
     // public void doRoleUser(String userId, String roleCode, String updater,
@@ -208,10 +209,12 @@ public interface IUserAO {
             String googleCaptcha);
 
     // 绑定邮箱
-    public void bindEmail(String captcha, String email, String userId);
+    public void bindEmail(String captcha, String email, String userId,
+            String language);
 
     // 修改负责区域
-    public void editRespArea(String userId, String respArea, String updater);
+    public void editRespArea(String userId, String respArea, String updater,
+            String language);
 
     // 直退用户查询
     public Paginable<User> queryFirstRefPage(XN802399Req req, int start,

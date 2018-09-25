@@ -30,9 +30,6 @@ public interface IUserBO extends IPaginableBO<User> {
     // 判断昵称是否存在
     public void isNicknameExist(String nickname);
 
-    // 判断登录名是否存在
-    public void isLoginNameExist(String loginName);
-
     public String getUserId(String mobile);
 
     public User getUserUnCheck(String userId);
@@ -64,16 +61,6 @@ public interface IUserBO extends IPaginableBO<User> {
     // 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
     public void checkLoginPwd(String userId, String loginPwd);
 
-    // 验证登录密码:拿loginPwd进行MD5后与数据库中userId得数据库支付密码比对
-    public void checkLoginPwd(String userId, String loginPwd, String alertStr);
-
-    // 校验是否已经有人实名认证
-    public void checkIdentify(String kind, String idKind, String idNo,
-            String realName);
-
-    // 判断推荐人是否存在(手机号)
-    public void checkUserReferee(String userReferee, String systemCode);
-
     public int refreshIdentity(String userId, String realName, String idKind,
             String idNo);
 
@@ -93,8 +80,6 @@ public interface IUserBO extends IPaginableBO<User> {
     public User getUser(String userId);
 
     public List<User> getUsersByUserReferee(String userReferee);
-
-    public User getUserByLoginName(String loginName, String systemCode);
 
     public List<User> queryUserList(User condition);
 

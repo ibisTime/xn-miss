@@ -13,13 +13,13 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IArbitrateDAO;
 import com.ogc.standard.domain.Arbitrate;
 import com.ogc.standard.enums.EArbitrateStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
-public class ArbitrateBOImpl extends PaginableBOImpl<Arbitrate> implements
-        IArbitrateBO {
+public class ArbitrateBOImpl extends PaginableBOImpl<Arbitrate>
+        implements IArbitrateBO {
 
     @Autowired
     private IArbitrateDAO arbitrateDAO;
@@ -27,8 +27,8 @@ public class ArbitrateBOImpl extends PaginableBOImpl<Arbitrate> implements
     @Override
     public String submit(String tradeOrderCode, String yuangao, String beigao,
             String reason, String attach) {
-        String code = OrderNoGenerater.generate(EGeneratePrefix.ARBITRATE
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.ARBITRATE.getCode());
         Arbitrate data = new Arbitrate();
 
         data.setCode(code);
@@ -72,8 +72,7 @@ public class ArbitrateBOImpl extends PaginableBOImpl<Arbitrate> implements
             condition.setCode(code);
             data = arbitrateDAO.select(condition);
             if (data == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "编号为"
-                        + code + "的仲裁工单不存在");
+                throw new BizException(EErrorCode_main.arb_NOTEXIST.getCode());
             }
         }
         return data;

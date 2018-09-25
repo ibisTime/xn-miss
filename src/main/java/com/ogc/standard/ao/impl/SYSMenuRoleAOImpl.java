@@ -16,6 +16,7 @@ import com.ogc.standard.bo.ISYSMenuRoleBO;
 import com.ogc.standard.bo.ISYSRoleBO;
 import com.ogc.standard.domain.SYSMenu;
 import com.ogc.standard.domain.SYSMenuRole;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -35,7 +36,7 @@ public class SYSMenuRoleAOImpl implements ISYSMenuRoleAO {
     public int addSYSMenuRole(SYSMenuRole data) {
         int count = 0;
         if (!sysRoleBO.isSYSRoleExist(data.getRoleCode())) {
-            throw new BizException("lh0000", "角色编号不存在！");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         // 删除角色所关联的菜单
         sysMenuRoleBO.removeSYSMenuList(data.getRoleCode());
@@ -43,7 +44,8 @@ public class SYSMenuRoleAOImpl implements ISYSMenuRoleAO {
         if (CollectionUtils.isNotEmpty(data.getMenuCodeList())) {
             for (String sysMenuCode : data.getMenuCodeList()) {
                 if (!sysMenuBO.isSYSMenuExist(sysMenuCode)) {
-                    throw new BizException("lh0000", "菜单编号不存在！");
+                    throw new BizException(
+                        EErrorCode_main.code_NOTEXIST.getCode());
                 }
                 SYSMenuRole sysMenuRole = new SYSMenuRole();
                 sysMenuRole.setMenuCode(sysMenuCode);

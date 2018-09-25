@@ -9,6 +9,7 @@ import com.ogc.standard.ao.ICNavigateAO;
 import com.ogc.standard.bo.ICNavigateBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.CNavigate;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -25,7 +26,7 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public void dropCNavigate(String code) {
         if (!cNavigateBO.isCNavigateExist(code)) {
-            throw new BizException("xn0000", "该编号不存在");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         cNavigateBO.removeCNavigate(code);
     }

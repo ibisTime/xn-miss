@@ -13,6 +13,7 @@ import com.ogc.standard.dao.IBlacklistDAO;
 import com.ogc.standard.domain.Blacklist;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBlacklistStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -71,7 +72,7 @@ public class BlacklistBOImpl extends PaginableBOImpl<Blacklist>
             condition.setId(id);
             data = blacklistDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "黑名单记录不存在");
+                throw new BizException(EErrorCode_main.bla_NOTEXIST.getCode());
             }
         }
         return data;
@@ -84,7 +85,7 @@ public class BlacklistBOImpl extends PaginableBOImpl<Blacklist>
         condition.setUserId(userId);
         condition.setStatus(EBlacklistStatus.VALID.getCode());
         if (getTotalCount(condition) > 0) {
-            throw new BizException("xn000000", "该用户已经在黑名单中");
+            throw new BizException(EErrorCode_main.bla_INBLACKLIST.getCode());
         }
     }
 }

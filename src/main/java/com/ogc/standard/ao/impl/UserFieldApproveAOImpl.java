@@ -19,9 +19,9 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.UserFieldApprove;
 import com.ogc.standard.enums.EApplyType;
 import com.ogc.standard.enums.EApproveStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EResultType;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -64,8 +64,7 @@ public class UserFieldApproveAOImpl implements IUserFieldApproveAO {
             } else if (EApplyType.EMAIL.getCode().equals(data.getType())) {
                 userBO.refreshEmail(data.getApplyUser(), data.getField());
             } else {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "不能修改手机号邮箱以外的信息");
+                throw new BizException(EErrorCode_main.user_APPROVE.getCode());
             }
         } else {
             data.setStatus(EApproveStatus.REFUSE.getCode());

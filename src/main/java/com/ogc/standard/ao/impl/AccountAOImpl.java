@@ -22,9 +22,9 @@ import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.ECoinType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class AccountAOImpl implements IAccountAO {
@@ -78,8 +78,8 @@ public class AccountAOImpl implements IAccountAO {
                     accountBO.distributeAccount(userId, EAccountType.Customer,
                         coin, btcXAddress);
                 } else {
-                    throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                        "不支持的币种" + coin.getSymbol());
+                    throw new BizException(
+                        EErrorCode_main.coin_UNSUPPORT.getCode());
                 }
 
             }
@@ -101,22 +101,6 @@ public class AccountAOImpl implements IAccountAO {
             }
         }
         return results;
-    }
-
-    private String generateAddress(String userId, String accountId, Coin coin) {
-
-        String address = null;
-        if (ECoinType.ETH.getCode().equals(coin.getType())
-                || ECoinType.X.getCode().equals(coin.getType())) {
-            address = ethXAddressBO.generateAddress(userId);
-        } else if (ECoinType.BTC.getCode().equals(coin.getType())) {
-            address = btcXAddressBO.generateAddress(userId);
-        } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "不支持的币种" + coin.getSymbol());
-        }
-
-        return address;
     }
 
     @Override
@@ -240,18 +224,19 @@ public class AccountAOImpl implements IAccountAO {
         Account fromAccount = getAccount(fromAddress, currency);
         Account toAccount = getAccount(toAddress, currency);
         if (fromAccount == null || toAccount == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "账户未找到");
+            throw new BizException(EErrorCode_main.account_EXIST.getCode());
         }
 
         if (transAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "转账金额需大于0");
+            throw new BizException(
+                EErrorCode_main.account_TRANSFERAMOUNT.getCode());
         }
 
         // 账户可用余额是否充足
         if (fromAccount.getAmount().subtract(fromAccount.getFrozenAmount())
             .compareTo(transAmount) == -1) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "个人账户可用余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
 
         // accountBO.transAmount(fromAccount, toAccount, transAmount,

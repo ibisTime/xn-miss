@@ -10,6 +10,7 @@ import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.dto.req.XN805140Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ESignLogClient;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.exception.BizException;
@@ -23,7 +24,8 @@ public class SignLogAOImpl implements ISignLogAO {
     @Override
     public int addSignLog(XN805140Req req) {
         if (signLogBO.isCheckIn(req.getUserId())) {
-            throw new BizException("3", "今日已签到");
+            throw new BizException(
+                EErrorCode_main.signlog_TODAYSIGNED.getCode());
         }
         SignLog data = new SignLog();
         data.setClient(req.getClient());

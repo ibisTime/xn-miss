@@ -16,6 +16,7 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EDirection;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EHLOrderStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -75,8 +76,7 @@ public class HLOrderBOImpl extends PaginableBOImpl<HLOrder>
             condition.setCode(code);
             order = hlOrderDAO.select(condition);
             if (order == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "单号不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
         }
         return order;

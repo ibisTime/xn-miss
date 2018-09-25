@@ -13,6 +13,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.dto.req.XN630000Req;
 import com.ogc.standard.dto.req.XN630002Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -39,7 +40,7 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
     @Transactional
     public boolean dropSYSRole(String roleCode) {
         if (!sysRoleBO.isSYSRoleExist(roleCode)) {
-            throw new BizException("lh4000", "角色编号不存在！");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         // User condition = new User();
         // condition.setRoleCode(roleCode);
@@ -63,7 +64,7 @@ public class SYSRoleAOImpl implements ISYSRoleAO {
             data.setRemark(req.getRemark());
             sysRoleBO.refreshSYSRole(data);
         } else {
-            throw new BizException("lh4000", "角色编号不存在！");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         return true;
     }

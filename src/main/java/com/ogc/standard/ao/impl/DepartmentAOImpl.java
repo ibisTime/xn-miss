@@ -19,6 +19,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Department;
 import com.ogc.standard.dto.req.XN630310Req;
 import com.ogc.standard.dto.req.XN630312Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -65,7 +66,7 @@ public class DepartmentAOImpl implements IDepartmentAO {
             data.setUpdater(req.getUpdater());
             departmentBO.refreshDepartment(data);
         } else {
-            throw new BizException("lh4000", "角色编号不存在！");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
 
     }
@@ -84,7 +85,7 @@ public class DepartmentAOImpl implements IDepartmentAO {
     @Override
     public Department getDepartment(String code) {
         if (!departmentBO.isDepartmentExist(code)) {
-            throw new BizException("lh4000", "角色编号不存在！");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         return departmentBO.getDepartment(code);
     }

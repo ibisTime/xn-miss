@@ -21,9 +21,9 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICompanyDAO;
 import com.ogc.standard.domain.Company;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: tao 
@@ -74,8 +74,7 @@ public class CompanyBOImpl extends PaginableBOImpl<Company>
             condition.setCode(code);
             Company company = companyDAO.select(condition);
             if (company == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "该公司不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
             count = companyDAO.delete(condition);
 
@@ -106,8 +105,7 @@ public class CompanyBOImpl extends PaginableBOImpl<Company>
             condition.setCode(code);
             data = companyDAO.select(condition);
             if (data == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "该公司不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
         }
         return data;

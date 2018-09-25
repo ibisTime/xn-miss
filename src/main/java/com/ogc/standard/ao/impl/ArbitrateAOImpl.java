@@ -17,8 +17,8 @@ import com.ogc.standard.domain.Arbitrate;
 import com.ogc.standard.domain.TradeOrder;
 import com.ogc.standard.enums.EArbitrateStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class ArbitrateAOImpl implements IArbitrateAO {
@@ -47,8 +47,7 @@ public class ArbitrateAOImpl implements IArbitrateAO {
         Arbitrate arbitrate = arbitrateBO.getArbitrate(code);
         if (!EArbitrateStatus.TO_HANDLE.getCode()
             .equals(arbitrate.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "仲裁工单不处于待处理状态");
+            throw new BizException(EErrorCode_main.arb_STAUTUS.getCode());
         }
         // 订单信息
         TradeOrder tradeOrder = tradeOrderBO

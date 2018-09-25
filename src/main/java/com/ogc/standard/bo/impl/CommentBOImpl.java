@@ -21,6 +21,7 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommentStatus;
 import com.ogc.standard.enums.ECommentType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EInteractType;
 import com.ogc.standard.enums.EObjectType;
@@ -33,8 +34,8 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 @Component
-public class CommentBOImpl extends PaginableBOImpl<Comment> implements
-        ICommentBO {
+public class CommentBOImpl extends PaginableBOImpl<Comment>
+        implements ICommentBO {
 
     @Autowired
     private ICommentDAO commentDAO;
@@ -60,8 +61,8 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
             String parentUserId, String content, String status, String userId) {
         Comment data = new Comment();
 
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Comment
-            .getCode());
+        String code = OrderNoGenerater
+            .generate(EGeneratePrefix.Comment.getCode());
         data.setCode(code);
         data.setType(type);
         data.setParentCode(parentCode);
@@ -146,7 +147,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
             condition.setCode(code);
             data = commentDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "评论记录不存在");
+                throw new BizException(EErrorCode_main.comm_NOTEXIST.getCode());
             }
         }
         return data;

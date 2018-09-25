@@ -19,8 +19,8 @@ import com.ogc.standard.dto.req.XN802000Req;
 import com.ogc.standard.dto.req.XN802002Req;
 import com.ogc.standard.enums.ECoinStatus;
 import com.ogc.standard.enums.ECoinType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class CoinAOImpl implements ICoinAO {
@@ -41,8 +41,7 @@ public class CoinAOImpl implements ICoinAO {
         if (ECoinType.X.getCode().equals(req.getType())) {
             addEthToken(req);
         } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "暂不支持此类型的币种");
+            throw new BizException(EErrorCode_main.coin_UNSUPPORT.getCode());
         }
 
     }
@@ -50,20 +49,21 @@ public class CoinAOImpl implements ICoinAO {
     private void addEthToken(XN802000Req req) {
 
         if (!WalletUtils.isValidAddress(req.getContractAddress())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "合约地址不符合" + ECoinType.ETH.getCode() + "规则，请仔细核对");
+            throw new BizException(EErrorCode_main.coin_ADDRESSRULE.getCode(),
+                req.getContractAddress());
         }
 
         // 检查币种符号是否已经在平台内存在
         if (coinBO.isSymbolExist(req.getSymbol())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "币种符号" + req.getSymbol() + "已经被使用");
+            throw new BizException(EErrorCode_main.coin_SYMBOLUSED.getCode(),
+                req.getSymbol());
         }
         // 检查币种符号是否已经在平台内存在
         if (coinBO.isContractAddressExist(ECoinType.X.getCode(),
             req.getContractAddress())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "合约地址" + req.getContractAddress() + "已经被使用");
+            throw new BizException(
+                EErrorCode_main.coin_CONTARTADDRESS.getCode(),
+                req.getContractAddress());
         }
 
         // 分配该币种盈亏账户和冷钱包账户
@@ -163,8 +163,8 @@ public class CoinAOImpl implements ICoinAO {
 
         Coin coin = coinBO.getCoin(id);
         if (ECoinStatus.PUBLISHED.getCode().equals(coin.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "币种已发布，请勿重复操作");
+            throw new BizException(
+                EErrorCode_main.coin_COINPUBLISHED.getCode());
         }
 
         coinBO.refreshStatus(coin, ECoinStatus.PUBLISHED, updater, remark);
@@ -176,8 +176,8 @@ public class CoinAOImpl implements ICoinAO {
 
         Coin coin = coinBO.getCoin(id);
         if (!ECoinStatus.PUBLISHED.getCode().equals(coin.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "币种未发布，不能进行撤下操作");
+            throw new BizException(
+                EErrorCode_main.coin_COINUNPUBLISH.getCode());
         }
         // 检查币种类型数量，至少保留一个币种
         coinBO.checkCoinCount(coin.getType());

@@ -15,9 +15,9 @@ import com.ogc.standard.ao.IEthSAddressAO;
 import com.ogc.standard.bo.IEthSAddressBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.EthSAddress;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ESAddressStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: haiqingzheng 
@@ -39,8 +39,7 @@ public class EthSAddressAOImpl implements IEthSAddressAO {
     public void abandon(Long id) {
         EthSAddress ethSAddress = ethSAddressBO.getEthSAddress(id);
         if (ESAddressStatus.INVALID.getCode().equals(ethSAddress.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "地址已失效，无需重复弃用");
+            throw new BizException(EErrorCode_main.coin_INVALIDATE.getCode());
         }
         ethSAddressBO.abandon(ethSAddress);
     }

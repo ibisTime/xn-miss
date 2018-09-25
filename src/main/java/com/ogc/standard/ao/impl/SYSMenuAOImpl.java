@@ -12,6 +12,7 @@ import com.ogc.standard.bo.ISYSMenuBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.SYSMenu;
 import com.ogc.standard.dto.req.XN630010Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -36,11 +37,11 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
             data.setSystemCode(req.getSystemCode());
             if (!"0".equalsIgnoreCase(data.getParentCode())
                     && !sysMenuBO.isSYSMenuExist(data.getParentCode())) {
-                throw new BizException("lh0000", "父节点菜单编号不存在！");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
             sysMenuBO.saveSYSMenu(data);
         } else {
-            throw new BizException("lh0000", "菜单编号已经存在！");
+            throw new BizException(EErrorCode_main.code_EXIST.getCode());
         }
         return data.getCode();
     }
@@ -48,7 +49,7 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
     @Override
     public boolean dropSYSMenu(String code) {
         if (!sysMenuBO.isSYSMenuExist((code))) {
-            throw new BizException("lh0000", "删除菜单不存在！");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         sysMenuBO.removeSYSMenu(code);
         return true;
@@ -59,7 +60,7 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
         if (data != null && sysMenuBO.isSYSMenuExist(data.getCode())) {
             sysMenuBO.refreshSYSMenu(data);
         } else {
-            throw new BizException("lh0000", "菜单编号不存在！");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         return true;
     }
@@ -89,7 +90,7 @@ public class SYSMenuAOImpl implements ISYSMenuAO {
     @Override
     public SYSMenu getSYSMenu(String code) {
         if (!sysMenuBO.isSYSMenuExist(code)) {
-            throw new BizException("lh0000", "菜单编号不存在！");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         SYSMenu condition = new SYSMenu();
         condition.setCode(code);

@@ -24,7 +24,7 @@ public class XN805064 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.doModifyLoginPwd(req.getUserId(), req.getOldLoginPwd(),
-            req.getNewLoginPwd());
+            req.getNewLoginPwd(), req.getLanguage());
         return new BooleanRes(true);
     }
 

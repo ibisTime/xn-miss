@@ -20,8 +20,8 @@ import com.ogc.standard.dao.IUserIdAuthDAO;
 import com.ogc.standard.domain.UserIdAuth;
 import com.ogc.standard.dto.req.XN805160Req;
 import com.ogc.standard.enums.EApproveStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -67,7 +67,7 @@ public class UserIdAuthBOImpl extends PaginableBOImpl<UserIdAuth>
         condition.setId(id);
         data = userIdAuthDAO.select(condition);
         if (data == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该申请不存在");
+            throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
         }
         return data;
     }
@@ -92,12 +92,11 @@ public class UserIdAuthBOImpl extends PaginableBOImpl<UserIdAuth>
         condition.setApplyUser(userId);
         condition.setStatus(EApproveStatus.PASS.getCode());
         if (userIdAuthDAO.select(condition) != null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该用户已认证成功");
+            throw new BizException(EErrorCode_main.idauth_SUCCESSED.getCode());
         }
         condition.setStatus(EApproveStatus.TOAPPROVE.getCode());
         if (userIdAuthDAO.select(condition) != null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "该用户已有认证审批中");
+            throw new BizException(EErrorCode_main.idauth_INAPPROVE.getCode());
         }
 
     }

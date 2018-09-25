@@ -17,9 +17,9 @@ import com.ogc.standard.dao.IAdsDAO;
 import com.ogc.standard.domain.Ads;
 import com.ogc.standard.enums.EAdsStatus;
 import com.ogc.standard.enums.ECoin;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ETradeType;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /**
  * Created by tianlei on 2017/十一月/14.
@@ -47,7 +47,7 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
         Ads resultAds = this.adsDAO.select(condition);
 
         if (resultAds == null) {
-            throw new BizException("xn000", "广告不存在");
+            throw new BizException(EErrorCode_main.ads_EXIST.getCode());
         }
 
         return resultAds;
@@ -58,14 +58,14 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
     public void addLeftCount(String adsCode, BigDecimal value) {
 
         if (value.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException("xn000", "改变金额需大于0");
+            throw new BizException(EErrorCode_main.ads_CHANGEAMOUNT.getCode());
         }
 
         Ads condition = new Ads();
         condition.setCode(adsCode);
         Ads ads = this.adsDAO.select(condition);
         if (ads == null) {
-            throw new BizException("xn", "广告不存在");
+            throw new BizException(EErrorCode_main.ads_EXIST.getCode());
         }
 
         Ads updateCcondition = new Ads();
@@ -73,7 +73,7 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
         updateCcondition.setLeftCount(ads.getLeftCount().add(value));
         int count = this.adsDAO.updateByPrimaryKeySelective(updateCcondition);
         if (count != 1) {
-            throw new BizException("xn", "更新失败");
+            throw new BizException(EErrorCode_main.ads_FAILED.getCode());
         }
     }
 
@@ -81,7 +81,7 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
     public void cutLeftCount(String adsCode, BigDecimal value) {
 
         if (value.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException("xn000", "改变金额需大于0");
+            throw new BizException(EErrorCode_main.ads_CHANGEAMOUNT.getCode());
         }
 
         Ads ads = getAds(adsCode);
@@ -92,7 +92,7 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
         // 校验余额
         int count = this.adsDAO.updateByPrimaryKeySelective(updateCondition);
         if (count != 1) {
-            throw new BizException("xn", "更新失败可售余额失败");
+            throw new BizException(EErrorCode_main.ads_FAILED.getCode());
         }
 
     }
@@ -103,7 +103,7 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
         adsSell.setStatus(EAdsStatus.XIAJIA.getCode());
         int count = this.adsDAO.updateByPrimaryKeySelective(adsSell);
         if (count != 1) {
-            throw new BizException("xn000000", "下架失败");
+            throw new BizException(EErrorCode_main.ads_FAILED.getCode());
         }
 
     }
@@ -117,12 +117,14 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
 
     // 前端分页
     @Override
-    public Paginable<Ads> frontPage(Integer start, Integer limit, Ads condition) {
+    public Paginable<Ads> frontPage(Integer start, Integer limit,
+            Ads condition) {
 
-        if (condition.getMaxPrice() != null && condition.getMinPrice() != null) {
-            if (condition.getMaxPrice().compareTo(condition.getMinPrice()) <= 0) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "最大金额需大于等于最小金额");
+        if (condition.getMaxPrice() != null
+                && condition.getMinPrice() != null) {
+            if (condition.getMaxPrice()
+                .compareTo(condition.getMinPrice()) <= 0) {
+                throw new BizException(EErrorCode_main.ads_MAXMIN.getCode());
             }
         }
 
@@ -212,15 +214,11 @@ public class AdsBOImpl extends PaginableBOImpl<Ads> implements IAdsBO {
 
             if (tradeType.equals(ETradeType.BUY.getCode())) {
 
-                throw new BizException("xn000", "您已经有一个已上架的购买广告");
+                throw new BizException(EErrorCode_main.ads_ISEXIST.getCode());
 
             } else if (tradeType.equals(ETradeType.SELL.getCode())) {
 
-                throw new BizException("xn000", "您已经有一个已上架的出售广告");
-
-            } else {
-
-                throw new BizException("xn000", "不支持的交易类型");
+                throw new BizException(EErrorCode_main.ads_ISEXIST.getCode());
 
             }
 

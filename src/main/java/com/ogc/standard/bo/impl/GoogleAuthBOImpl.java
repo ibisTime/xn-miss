@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IGoogleAuthBO;
 import com.ogc.standard.core.GoogleAuthenticator;
 import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: haiqingzheng 
@@ -36,8 +36,7 @@ public class GoogleAuthBOImpl implements IGoogleAuthBO {
         boolean result = ga.check_code(secret,
             StringValidater.toLong(googleCaptcha), timeMsec);
         if (!result) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "谷歌验证码校验失败，请仔细核对！");
+            throw new BizException(EErrorCode_main.goog_FAILED.getCode());
         }
     }
 

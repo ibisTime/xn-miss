@@ -25,8 +25,8 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.AwardMonth;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -111,8 +111,7 @@ public class AwardMonthBOImpl extends PaginableBOImpl<AwardMonth>
         condition.setNow(date);
         AwardMonth awardMonth = awardMonthDAO.select(condition);
         if (awardMonth == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "不能结算本月的奖励");
+            throw new BizException(EErrorCode_main.awa_MONTHSETTLE.getCode());
         }
         awardMonth.setUnsettleCount(
             awardMonth.getUnsettleCount().subtract(data.getCount()));

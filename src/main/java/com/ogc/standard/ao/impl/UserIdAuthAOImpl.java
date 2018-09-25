@@ -21,9 +21,9 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserIdAuth;
 import com.ogc.standard.dto.req.XN805160Req;
 import com.ogc.standard.enums.EApproveStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EResultType;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -43,7 +43,7 @@ public class UserIdAuthAOImpl implements IUserIdAuthAO {
     public void apply(XN805160Req req) {
         User applyUser = userBO.getUser(req.getApplyUser());
         if (applyUser.getIdKind() != null && applyUser.getIdNo() != null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该用户已认证成功");
+            throw new BizException(EErrorCode_main.idauth_SUCCESSED.getCode());
         }
         // 检验审批状态
         userIdAuthBO.checkApproveStatus(req.getApplyUser());
@@ -57,7 +57,7 @@ public class UserIdAuthAOImpl implements IUserIdAuthAO {
 
         UserIdAuth data = userIdAuthBO.getUserIdAuth(id);
         if (!EApproveStatus.TOAPPROVE.getCode().equals(data.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该申请已审批");
+            throw new BizException(EErrorCode_main.idauth_APPROVED.getCode());
         }
         if (EResultType.PASS.getCode().equals(approveResult)) {
             data.setStatus(EApproveStatus.PASS.getCode());

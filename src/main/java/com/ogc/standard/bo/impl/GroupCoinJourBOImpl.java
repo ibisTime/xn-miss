@@ -14,6 +14,7 @@ import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IGroupCoinJourDAO;
 import com.ogc.standard.domain.GroupCoin;
 import com.ogc.standard.domain.GroupCoinJour;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
@@ -28,10 +29,12 @@ public class GroupCoinJourBOImpl extends PaginableBOImpl<GroupCoinJour>
     public String addJour(GroupCoin dbAccount, String refNo, String bizType,
             String bizNote, BigDecimal transCount) {
         if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
-            throw new BizException("xn000000", "新增流水流水分组不能为空");
+            throw new BizException(
+                EErrorCode_main.groupjourcoin_NOTEMPTY.getCode());
         }
         if (transCount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException("xn000000", "新增流水变动金额不能为0");
+            throw new BizException(
+                EErrorCode_main.groupjourcoin_NOTZERO.getCode());
         }
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AJour.getCode());
@@ -59,10 +62,12 @@ public class GroupCoinJourBOImpl extends PaginableBOImpl<GroupCoinJour>
     public String addFrozenJour(GroupCoin dbAccount, String refNo,
             String bizType, String bizNote, BigDecimal transCount) {
         if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
-            throw new BizException("xn000000", "新增流水流水分组不能为空");
+            throw new BizException(
+                EErrorCode_main.groupjourcoin_NOTEMPTY.getCode());
         }
         if (transCount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException("xn000000", "新增流水变动金额不能为0");
+            throw new BizException(
+                EErrorCode_main.groupjourcoin_NOTZERO.getCode());
         }
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AJour.getCode());

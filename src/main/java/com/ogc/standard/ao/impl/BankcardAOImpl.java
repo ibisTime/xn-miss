@@ -14,6 +14,7 @@ import com.ogc.standard.domain.Bankcard;
 import com.ogc.standard.dto.req.XN802020Req;
 import com.ogc.standard.dto.req.XN802022Req;
 import com.ogc.standard.dto.req.XN802023Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -71,7 +72,8 @@ public class BankcardAOImpl implements IBankcardAO {
                 bankcard.getUserId(), bankcard.getSystemCode());
             for (Bankcard card : list) {
                 if (req.getBankcardNumber().equals(card.getBankcardNumber())) {
-                    throw new BizException("xn0000", "银行卡号已存在");
+                    throw new BizException(
+                        EErrorCode_main.ban_BANKCARD.getCode());
                 }
             }
         }
@@ -102,7 +104,8 @@ public class BankcardAOImpl implements IBankcardAO {
                 bankcard.getUserId(), bankcard.getSystemCode());
             for (Bankcard card : list) {
                 if (req.getBankcardNumber().equals(card.getBankcardNumber())) {
-                    throw new BizException("xn0000", "银行卡号已存在");
+                    throw new BizException(
+                        EErrorCode_main.ban_ISEXIST.getCode());
                 }
             }
         }

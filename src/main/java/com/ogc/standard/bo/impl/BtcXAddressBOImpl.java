@@ -14,6 +14,7 @@ import com.ogc.standard.core.BtcAddressRes;
 import com.ogc.standard.core.BtcClient;
 import com.ogc.standard.dao.IBtcXAddressDAO;
 import com.ogc.standard.domain.BtcXAddress;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -82,7 +83,8 @@ public class BtcXAddressBOImpl extends PaginableBOImpl<BtcXAddress>
         condition.setId(id);
         data = BtcXAddressDAO.select(condition);
         if (data == null) {
-            throw new BizException("xn0000", "Btc地址不存在");
+            throw new BizException(
+                EErrorCode_main.coin_ADDRESSNOTEXIST.getCode());
         }
         return data;
     }

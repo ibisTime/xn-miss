@@ -1,6 +1,8 @@
 package com.ogc.standard.dto.req;
 
-public class XN805064Req {
+public class XN805064Req extends BaseReq {
+    private static final long serialVersionUID = 313883431012663207L;
+
     // userId
     private String userId;
 

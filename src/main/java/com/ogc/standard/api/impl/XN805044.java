@@ -33,7 +33,8 @@ public class XN805044 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         String userId = userAO.doAddQDS(req.getMobile(), req.getIdKind(),
-            req.getIdNo(), req.getRealName(), req.getRespArea());
+            req.getIdNo(), req.getRealName(), req.getRespArea(),
+            req.getLanguage());
 
         return new PKCodeRes(userId);
     }

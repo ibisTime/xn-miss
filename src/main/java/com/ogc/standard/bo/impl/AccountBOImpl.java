@@ -23,11 +23,11 @@ import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /**
  * @author: xieyj 
@@ -92,7 +92,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             .subtract(dbAccount.getFrozenAmount()).add(transAmount);
         if (!dbAccount.getUserId().startsWith(ESysUser.SYS_USER.getCode())
                 && avaliableAmount.compareTo(BigDecimal.ZERO) == -1) {// 特定账户余额可为负
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "账户可用余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
         BigDecimal nowAmount = dbAccount.getAmount().add(transAmount);
 
@@ -122,7 +123,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         BigDecimal nowAmount = dbAccount.getAmount().add(transAmount);
         if (!dbAccount.getUserId().startsWith("SYS_USER")
                 && nowAmount.compareTo(BigDecimal.ZERO) == -1) {
-            throw new BizException("xn000000", "账户余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
         // 更改余额
         Account data = new Account();
@@ -162,7 +164,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         BigDecimal avaliableAmount = dbAccount.getAmount()
             .subtract(dbAccount.getFrozenAmount()).subtract(freezeAmount);
         if (avaliableAmount.compareTo(BigDecimal.ZERO) == -1) {
-            throw new BizException("xn000000", "账户余额不足");
+            throw new BizException(
+                EErrorCode_main.account_PERSONALLEFT.getCode());
         }
         // 记录冻结流水
         String lastOrder = jourBO.addFrozenJour(dbAccount, EChannelType.NBZ,
@@ -185,7 +188,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount()
             .subtract(unfreezeAmount);
         if (nowFrozenAmount.compareTo(BigDecimal.ZERO) == -1) {
-            throw new BizException("xn000000", "本次解冻会使账户冻结金额小于0");
+            throw new BizException(
+                EErrorCode_main.account_UNFROZENZERO.getCode());
         }
 
         // 记录流水
@@ -215,7 +219,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             condition.setAccountNumber(accountNumber);
             data = accountDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn702502", "无对应账户，请检查账号正确性");
+                throw new BizException(EErrorCode_main.account_EXIST.getCode());
             }
         }
         return data;
@@ -247,8 +251,9 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
             condition.setCurrency(currency);
             data = accountDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn802000",
-                    "用户[" + userId + ";" + currency + "]无此类型账户");
+                throw new BizException(
+                    EErrorCode_main.account_NOTEXIST.getCode(), userId,
+                    currency);
             }
         }
         return data;
@@ -286,8 +291,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account>
         String fromAccountNumber = fromAccount.getAccountNumber();
         String toAccountNumber = toAccount.getAccountNumber();
         if (fromAccountNumber.equals(toAccountNumber)) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "来去双方账号一致，无需内部划转");
+            throw new BizException(EErrorCode_main.account_SAME.getCode());
         }
         this.changeAmount(fromAccount, transAmount.negate(), EChannelType.NBZ,
             null, refNo, fromBizType, fromBizNote);

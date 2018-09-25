@@ -26,12 +26,12 @@ import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAwardStatus;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ERefType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -60,7 +60,7 @@ public class AwardAOImpl implements IAwardAO {
         Award data = awardBO.getAward(id);
 
         if (!EAwardStatus.TOHAND.getCode().equals(data.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该奖励已处理");
+            throw new BizException(EErrorCode_main.awa_HANDLE.getCode());
         }
         if (EBoolean.YES.getCode().equals(isSettle)) {
             // 奖励结算

@@ -11,6 +11,7 @@ import com.ogc.standard.bo.IMarketBO;
 import com.ogc.standard.dao.IMarketDAO;
 import com.ogc.standard.domain.Market;
 import com.ogc.standard.enums.ECoin;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -34,7 +35,7 @@ public class MarketBOImpl implements IMarketBO {
         BigDecimal avg = this.marketDAO.selectMarketAvg(avgCondition);
         avg = avg.setScale(4, BigDecimal.ROUND_HALF_EVEN);
         if (avg == null) {
-            throw new BizException("xn000", "行情加权值获取异常");
+            throw new BizException(EErrorCode_main.market_RATE.getCode());
         }
 
         Market market = new Market();

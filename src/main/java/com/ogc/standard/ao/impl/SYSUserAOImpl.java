@@ -17,8 +17,8 @@ import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.core.OrderNoGenerater;
-import com.ogc.standard.domain.SYSRole;
 import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserStatus;
@@ -65,12 +65,12 @@ public class SYSUserAOImpl implements ISYSUserAO {
         condition.setLoginName(loginName);
         List<SYSUser> userList1 = sysUserBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList1)) {
-            throw new BizException("xn805050", "登录名不存在");
+            throw new BizException(EErrorCode_main.user_LOGINNAME.getCode());
         }
         condition.setLoginPwd(MD5Util.md5(loginPwd));
         List<SYSUser> userList2 = sysUserBO.queryUserList(condition);
         if (CollectionUtils.isEmpty(userList2)) {
-            throw new BizException("xn805050", "登录密码错误");
+            throw new BizException(EErrorCode_main.user_LOGINPWD.getCode());
         }
         SYSUser user = userList2.get(0);
         return user.getUserId();
@@ -80,12 +80,9 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public void doCloseOpen(String userId, String updater, String remark) {
         SYSUser user = sysUserBO.getSYSUser(userId);
-        if (user == null) {
-            throw new BizException("li01004", "用户不存在");
-        }
         // admin 不注销
         if (EUser.ADMIN.getCode().equals(user.getLoginName())) {
-            throw new BizException("li01004", "管理员无法注销");
+            throw new BizException(EErrorCode_main.sysuser_CLOSE.getCode());
         }
         String mobile = user.getMobile();
         String smsContent = "";
@@ -110,14 +107,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
     @Override
     public void doRoleSYSUser(String userId, String roleCode, String updater,
             String remark) {
-        SYSUser user = sysUserBO.getSYSUser(userId);
-        if (user == null) {
-            throw new BizException("li01004", "用户不存在");
-        }
-        SYSRole role = sysRoleBO.getSYSRole(roleCode);
-        if (role == null) {
-            throw new BizException("li01004", "角色不存在");
-        }
+        sysUserBO.getSYSUser(userId);
+        sysRoleBO.getSYSRole(roleCode);
         sysUserBO.refreshRole(userId, roleCode, updater, remark);
     }
 
@@ -137,7 +128,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         SYSUser user = sysUserBO.getUserByMobile(mobile);
         String oldPwd = user.getLoginPwd();
         if (newLoginPwd.equals(oldPwd)) {
-            throw new BizException("xn000000", "新密码与原密码一致");
+            throw new BizException(EErrorCode_main.user_SAMELOGINPWD.getCode());
         }
 
         // 新密码验证
@@ -159,7 +150,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
             throw new BizException("xn000000", "用户不存在！");
         }
         if (!user.getLoginPwd().equals(oldPwd)) {
-            throw new BizException("xn000000", "原密码不正确");
+            throw new BizException(
+                EErrorCode_main.user_OLDLOGINPWDWRONG.getCode());
         }
         sysUserBO.resetSelfPwd(user, newPwd);
 
@@ -179,7 +171,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         SYSUser user = sysUserBO.getSYSUser(userId);
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
-            throw new BizException("xn000000", "新手机与原手机一致");
+            throw new BizException(EErrorCode_main.user_SAMEMOBILE.getCode());
         }
         // 判断手机号是否存在
         sysUserBO.isMobileExist(newMobile);
@@ -206,7 +198,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
                 && condition.getCreateDatetimeEnd() != null
                 && condition.getCreateDatetimeStart()
                     .after(condition.getCreateDatetimeEnd())) {
-            throw new BizException("xn00000", "开始时间不能大于结束时间");
+            throw new BizException(EErrorCode_main.page_STARTENDTIME.getCode());
         }
 
         Paginable<SYSUser> page = sysUserBO.getPaginable(start, limit,

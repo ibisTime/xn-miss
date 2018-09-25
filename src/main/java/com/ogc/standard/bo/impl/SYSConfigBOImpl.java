@@ -18,6 +18,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ISYSConfigDAO;
 import com.ogc.standard.domain.SYSConfig;
 import com.ogc.standard.dto.req.XN660918Req;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.http.BizConnecter;
 import com.ogc.standard.http.JsonUtils;
@@ -65,7 +66,7 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
             condition.setCkey(ckey);
             result = sysConfigDAO.select(condition);
             if (null == result) {
-                throw new BizException("xn000000", "id记录不存在");
+                throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
             }
         }
         return result;

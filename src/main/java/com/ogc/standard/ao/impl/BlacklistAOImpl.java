@@ -12,6 +12,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Blacklist;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBlacklistStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -28,9 +29,6 @@ public class BlacklistAOImpl implements IBlacklistAO {
     public void addBlacklist(String userId, String type, String updater,
             String remark) {
         User user = userBO.getUser(userId);
-        if (user == null) {
-            throw new BizException("xn000000", "用户编号不存在");
-        }
         blacklistBO.isAddBlacklist(userId);
         blacklistBO.saveBlacklist(user, type, updater, remark);
         // 修改用户状态为人工锁定
@@ -45,7 +43,7 @@ public class BlacklistAOImpl implements IBlacklistAO {
         if (EBlacklistStatus.VALID.getCode().equals(blacklist.getStatus())) {
             count = blacklistBO.refreshBlacklist(id, updater, remark);
         } else {
-            throw new BizException("xn000000", "黑名单记录不存在");
+            throw new BizException(EErrorCode_main.bla_NOTEXIST.getCode());
         }
         return count;
     }

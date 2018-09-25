@@ -33,7 +33,7 @@ public class XN805091 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         userAO.editRespArea(req.getUserId(), req.getRespArea(),
-            req.getUpdater());
+            req.getUpdater(), req.getLanguage());
         return new BooleanRes(true);
     }
 

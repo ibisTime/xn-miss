@@ -20,11 +20,11 @@ import com.ogc.standard.domain.Ads;
 import com.ogc.standard.domain.TradeOrder;
 import com.ogc.standard.domain.UserStatistics;
 import com.ogc.standard.enums.ECommentLevel;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.ETradeOrderStatus;
 import com.ogc.standard.enums.ETradeOrderType;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class TradeOrderBOImpl extends PaginableBOImpl<TradeOrder>
@@ -364,8 +364,7 @@ public class TradeOrderBOImpl extends PaginableBOImpl<TradeOrder>
             condition.setCode(code);
             data = tradeOrderDAO.select(condition);
             if (data == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "编号为" + code + "的交易订单不存在");
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
         }
         return data;

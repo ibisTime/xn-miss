@@ -14,9 +14,8 @@ import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.dao.IBtcTransactionDAO;
 import com.ogc.standard.domain.BtcTransaction;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.EOriginialCoin;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
 public class BtcTransactionBOImpl extends PaginableBOImpl<BtcTransaction>
@@ -82,8 +81,7 @@ public class BtcTransactionBOImpl extends PaginableBOImpl<BtcTransaction>
             condition.setTxid(txid);
             data = btcTransactionDAO.select(condition);
             if (data == null) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    EOriginialCoin.BTC.getCode() + "广播记录不存在");
+                throw new BizException(EErrorCode_main.btc_BROADCAST.getCode());
             }
         }
         return data;

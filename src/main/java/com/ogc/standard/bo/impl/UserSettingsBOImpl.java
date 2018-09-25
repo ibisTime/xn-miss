@@ -3,22 +3,19 @@ package com.ogc.standard.bo.impl;
 import java.util.Date;
 import java.util.List;
 
-import com.ogc.standard.exception.EBizErrorCode;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IUserSettingsBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
-import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserSettingsDAO;
 import com.ogc.standard.domain.UserSettings;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
-
 @Component
-public class UserSettingsBOImpl extends PaginableBOImpl<UserSettings> implements IUserSettingsBO {
+public class UserSettingsBOImpl extends PaginableBOImpl<UserSettings>
+        implements IUserSettingsBO {
 
     @Autowired
     private IUserSettingsDAO UserSettingsDAO;
@@ -40,7 +37,7 @@ public class UserSettingsBOImpl extends PaginableBOImpl<UserSettings> implements
         int count = UserSettingsDAO.insert(data);
         if (count != 1) {
 
-            throw new BizException("xn000", "添加设置失败");
+            throw new BizException(EErrorCode_main.setting_FAILADD.getCode());
 
         }
 
@@ -80,8 +77,7 @@ public class UserSettingsBOImpl extends PaginableBOImpl<UserSettings> implements
 
     }
 
-
-    //	@Override
+    // @Override
 //	public UserSettings getUserSettings(in code) {
 //		UserSettings data = null;
 //		if (StringUtils.isNotBlank(code)) {

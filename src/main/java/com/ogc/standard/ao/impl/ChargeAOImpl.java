@@ -28,12 +28,12 @@ import com.ogc.standard.dto.res.XN802347Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECoinType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class ChargeAOImpl implements IChargeAO {
@@ -63,7 +63,7 @@ public class ChargeAOImpl implements IChargeAO {
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "充值金额需大于零");
+            throw new BizException(EErrorCode_main.charge_AMOUNT.getCode());
         }
         Account account = accountBO.getAccount(accountNumber);
         // 生成充值订单
@@ -79,8 +79,7 @@ public class ChargeAOImpl implements IChargeAO {
             String payNote) {
         Charge data = chargeBO.getCharge(code);
         if (!EChargeStatus.toPay.getCode().equals(data.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "申请记录状态不是待支付状态，无法支付");
+            throw new BizException(EErrorCode_main.charge_STATUS.getCode());
         }
         if (EBoolean.YES.getCode().equals(payResult)) {
             payOrderYES(data, payUser, payNote);

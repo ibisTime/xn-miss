@@ -18,6 +18,7 @@ import com.ogc.standard.bo.IReadBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IReadDAO;
 import com.ogc.standard.domain.Read;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EReadStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -42,7 +43,7 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
     @Override
     public void refreshStatusRead(long id) {
         if (!isReadExit(id)) {
-            throw new BizException("3", "该信息不存在");
+            throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
         }
         Read data = new Read();
         data.setId(id);
@@ -54,7 +55,7 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
     @Override
     public void refreshStatusDelete(long id) {
         if (!isReadExit(id)) {
-            throw new BizException("3", "该信息不存在");
+            throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
         }
         Read data = new Read();
         data.setId(id);
