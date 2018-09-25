@@ -103,7 +103,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         verifyPayCardNo(coin, payCardNo);
 
         // 校验资金密码
-        // userBO.checkTradePwd(applyUser, tradePwd);
+        userBO.checkTradePwd(applyUser, tradePwd);
 
         // 账户可用余额是否充足
         if (dbAccount.getAmount().subtract(dbAccount.getFrozenAmount())
