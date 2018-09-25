@@ -424,7 +424,9 @@ public enum EErrorCode_en_US {
             "000162",
             "The application for cash withdrawal has not been processed successfully and cannot be applied again."),
 
-    with_ZERO("000163", "The amount of cash cannot be 0");
+    with_ZERO("000163", "The amount of cash cannot be 0"),
+
+    address_AGAIN("000164", "Do not add addresses repeatedly");
 
     EErrorCode_en_US(String code, String value) {
         this.code = code;

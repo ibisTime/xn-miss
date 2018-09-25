@@ -377,7 +377,9 @@ public enum EErrorCode_main {
 
     with_AGAIN("000162", "上笔取现申请还未处理成功，不能再次申请"),
 
-    with_ZERO("000163", "取现金额不能为0");
+    with_ZERO("000163", "取现金额不能为0"),
+
+    address_AGAIN("000164", "请勿重复添加地址");
 
     EErrorCode_main(String code, String value) {
         this.code = code;

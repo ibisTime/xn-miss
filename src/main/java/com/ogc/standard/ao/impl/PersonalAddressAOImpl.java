@@ -13,6 +13,7 @@ import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.PersonalAddress;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECoinType;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EPersonalAddressStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -43,7 +44,8 @@ public class PersonalAddressAOImpl implements IPersonalAddressAO {
         condition.setUserId(userId);
         condition.setAddress(address);
         if (personalAddressBO.getTotalCount(condition) > 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "请勿重复添加地址");
+            throw new BizException(
+                EErrorCode_main.personal_REPEATEDLY.getCode());
         }
 
         // 是否设置为认证地址
@@ -61,9 +63,9 @@ public class PersonalAddressAOImpl implements IPersonalAddressAO {
                 || ECoinType.X.getCode().equals(coin.getType())) {
             // 地址有效性校验
             if (!WalletUtils.isValidAddress(address)) {
-                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                    "地址" + address + "不符合" + ECoinType.ETH.getCode()
-                            + "规则，请仔细核对");
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "地址"
+                        + address + "不符合" + ECoinType.ETH.getCode()
+                        + "规则，请仔细核对");
             }
         }
     }

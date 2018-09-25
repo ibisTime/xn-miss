@@ -50,7 +50,7 @@ public class CoinAOImpl implements ICoinAO {
 
         if (!WalletUtils.isValidAddress(req.getContractAddress())) {
             throw new BizException(EErrorCode_main.coin_ADDRESSRULE.getCode(),
-                req.getContractAddress());
+                (Object) req.getContractAddress());
         }
 
         // 检查币种符号是否已经在平台内存在
@@ -145,11 +145,9 @@ public class CoinAOImpl implements ICoinAO {
         data.setBlockUrl(req.getBlockUrl());
         data.setIcoDatetime(req.getIcoDatetime());
         data.setCollectStart(CoinUtil.toMinUnit(
-            StringValidater.toBigDecimal(req.getCollectStart()),
-            data.getUnit()));
+            StringValidater.toBigDecimal(req.getCollectStart()), data.getUnit()));
         data.setWithdrawFee(CoinUtil.toMinUnit(
-            StringValidater.toBigDecimal(req.getWithdrawFee()),
-            data.getUnit()));
+            StringValidater.toBigDecimal(req.getWithdrawFee()), data.getUnit()));
 
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
@@ -163,8 +161,7 @@ public class CoinAOImpl implements ICoinAO {
 
         Coin coin = coinBO.getCoin(id);
         if (ECoinStatus.PUBLISHED.getCode().equals(coin.getStatus())) {
-            throw new BizException(
-                EErrorCode_main.coin_COINPUBLISHED.getCode());
+            throw new BizException(EErrorCode_main.coin_COINPUBLISHED.getCode());
         }
 
         coinBO.refreshStatus(coin, ECoinStatus.PUBLISHED, updater, remark);
@@ -176,8 +173,7 @@ public class CoinAOImpl implements ICoinAO {
 
         Coin coin = coinBO.getCoin(id);
         if (!ECoinStatus.PUBLISHED.getCode().equals(coin.getStatus())) {
-            throw new BizException(
-                EErrorCode_main.coin_COINUNPUBLISH.getCode());
+            throw new BizException(EErrorCode_main.coin_COINUNPUBLISH.getCode());
         }
         // 检查币种类型数量，至少保留一个币种
         coinBO.checkCoinCount(coin.getType());
