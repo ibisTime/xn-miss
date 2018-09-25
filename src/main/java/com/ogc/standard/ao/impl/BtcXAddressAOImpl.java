@@ -9,6 +9,7 @@
 package com.ogc.standard.ao.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IBtcXAddressAO;
 import com.ogc.standard.bo.IBtcXAddressBO;
@@ -20,6 +21,7 @@ import com.ogc.standard.domain.BtcXAddress;
  * @since: 2018年9月11日 下午2:10:44 
  * @history:
  */
+@Service
 public class BtcXAddressAOImpl implements IBtcXAddressAO {
 
     @Autowired
@@ -28,9 +30,7 @@ public class BtcXAddressAOImpl implements IBtcXAddressAO {
     @Override
     public Paginable<BtcXAddress> queryBtcXAddressPage(int start, int limit,
             BtcXAddress condition) {
-        Paginable<BtcXAddress> result = btcXAddressBO.getPaginable(start, limit,
-            condition);
-        return result;
+        return btcXAddressBO.getPaginable(start, limit, condition);
     }
 
 }

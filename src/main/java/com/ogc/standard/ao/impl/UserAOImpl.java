@@ -645,7 +645,6 @@ public class UserAOImpl implements IUserAO {
         if (data != null) {
             user.setGender(data.getGender());
             user.setBirthday(data.getBirthday());
-            user.setEmail(data.getEmail());
             user.setDiploma(data.getDiploma());
             user.setIntroduce(data.getIntroduce());
             user.setOccupation(data.getOccupation());

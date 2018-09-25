@@ -6,15 +6,18 @@
 		<result column="id" property="id" />
 		<result column="buy_order_code" property="buyOrderCode" />
 		<result column="sell_order_code" property="sellOrderCode" />
+		<result column="buy_order_detail_code" property="buyOrderDetailCode" />
+		<result column="sell_order_detail_code" property="sellOrderDetailCode" />
+		
 		<result column="symbol" property="symbol" />
 		<result column="to_symbol" property="toSymbol" />
-		
 		<result column="buy_user_id" property="buyUserId" />
 		<result column="sell_user_id" property="sellUserId" />
-		<result column="buy_amount" property="buyAmount" />
-		<result column="sell_amount" property="sellAmount" />
-		<result column="buy_fee" property="buyFee" />
+		<result column="exchange_rate" property="exchangeRate" />
 		
+		<result column="symbol_count" property="symbolCount" />
+		<result column="to_symbol_count" property="toSymbolCount" />
+		<result column="buy_fee" property="buyFee" />
 		<result column="sell_fee" property="sellFee" />
 		<result column="create_datetime" property="createDatetime" />
 	</resultMap>
@@ -32,15 +35,18 @@
 		t.id
 		,t.buy_order_code
 		,t.sell_order_code
+		,t.buy_order_detail_code
+		,t.sell_order_detail_code
+		
 		,t.symbol
 		,t.to_symbol
-		
 		,t.buy_user_id
 		,t.sell_user_id
-		,t.buy_amount
-		,t.sell_amount
-		,t.buy_fee
+		,t.exchange_rate
 		
+		,t.symbol_count
+		,t.to_symbol_count
+		,t.buy_fee
 		,t.sell_fee
 		,t.create_datetime
 		FROM
@@ -65,15 +71,18 @@
 		id
 		,buy_order_code
 		,sell_order_code
+		,buy_order_detail_code
+		,sell_order_detail_code
+		
 		,symbol
 		,to_symbol
-		
 		,buy_user_id
 		,sell_user_id
-		,buy_amount
-		,sell_amount
-		,buy_fee
+		,exchange_rate
 		
+		,symbol_count
+		,to_symbol_count
+		,buy_fee
 		,sell_fee
 		,create_datetime
 		)
@@ -81,15 +90,18 @@
 		#{id}
 		,#{buyOrderCode}
 		,#{sellOrderCode}
+		,#{buyOrderDetailCode}
+		,#{sellOrderDetailCode}
+		
 		,#{symbol}
 		,#{toSymbol}
-		
 		,#{buyUserId}
 		,#{sellUserId}
-		,#{buyAmount}
-		,#{sellAmount}
-		,#{buyFee}
+		,#{exchangeRate}
 		
+		,#{symbolCount}
+		,#{toSymbolCount}
+		,#{buyFee}
 		,#{sellFee}
 		,#{createDatetime}
 		)
@@ -98,8 +110,8 @@
 	<update id="update_simuMatchResult" parameterType="simuMatchResult">
 		UPDATE tsimu_match_result
 		SET
-		buy_amount = #{buyAmount}
-		,sell_amount = #{sellAmount}
+		symbol_count = #{symbolCount}
+		,to_symbol_count = #{toSymbolCount}
 		,buy_fee = #{buyFee}
 		,sell_fee = #{sellFee}
 		

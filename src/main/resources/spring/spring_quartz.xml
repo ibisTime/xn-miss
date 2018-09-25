@@ -23,8 +23,8 @@
        		    <!-- <ref bean="marketTrigger"/> -->
        		    
        		    <!-- 币币交易 -->
-       		   <!--  <ref bean="doScanSimuOrderTrigger"/> 
-       		    <ref bean="doSaveKLineTrigger"/>-->
+       		   <!--  <ref bean="doScanSimuOrderTrigger"/> -->
+       		    <!-- <ref bean="doSaveKLineTrigger"/> -->
        		    
 				<!-- <ref bean="doERC20CollectTrigger"/>
 				<ref bean="doERC20CheckGetFeeTxTrigger"/>
@@ -51,11 +51,11 @@
 		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
 	</bean>	
 
-	<!-- 扫描交易对 -->
+	<!-- 扫描委托单 -->
 	<bean id="doScanSimuOrderTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="doScanSimuOrder" />
-		<property name="cronExpression" value="0/1 * * * * ?" />
+		<property name="cronExpression" value="0/5 * * * * ?" />
 	</bean>
 	
 	<bean id="doScanSimuOrder"

@@ -720,19 +720,23 @@ CREATE TABLE `tsimu_kline` (
 DROP TABLE IF EXISTS `tsimu_match_result`;
 CREATE TABLE `tsimu_match_result` (
   `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '撮合编号',
-  `buy_order_code` varchar(32) DEFAULT NULL COMMENT '买单成交单编号',
-  `sell_order_code` varchar(32) DEFAULT NULL COMMENT '卖单成交单编号',
+  `buy_order_code` varchar(32) DEFAULT NULL COMMENT '买单委托单编号',
+  `sell_order_code` varchar(32) DEFAULT NULL COMMENT '卖单委托单编号',
+  `buy_order_detail_code` varchar(32) DEFAULT NULL COMMENT '买单成交单编号',
+  `sell_order_detail_code` varchar(32) DEFAULT NULL COMMENT '卖单成交单编号',
   `symbol` varchar(32) DEFAULT NULL COMMENT '交易币种',
   `to_symbol` varchar(32) DEFAULT NULL COMMENT '计价币种',
   `buy_user_id` varchar(32) DEFAULT NULL COMMENT '买方用户编号',
   `sell_user_id` varchar(32) DEFAULT NULL COMMENT '卖方用户编号',
-  `buy_amount` decimal(64,8) DEFAULT NULL COMMENT '交易数量',
-  `sell_amount` decimal(64,8) DEFAULT NULL COMMENT '计价数量',
+  `exchange_rate` decimal(64,8) DEFAULT NULL COMMENT '兑换比例',
+  `symbol_count` decimal(64,8) DEFAULT NULL COMMENT '交易数量',
+  `to_symbol_count` decimal(64,8) DEFAULT NULL COMMENT '计价数量',
   `buy_fee` decimal(64,8) DEFAULT NULL COMMENT '买方手续费',
   `sell_fee` decimal(64,8) DEFAULT NULL COMMENT '卖方手续费',
   `create_datetime` datetime DEFAULT NULL COMMENT '撮合时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='撮合结果';
+
 
 -- ----------------------------
 --  Table structure for `tsimu_match_result_history`
@@ -740,19 +744,23 @@ CREATE TABLE `tsimu_match_result` (
 DROP TABLE IF EXISTS `tsimu_match_result_history`;
 CREATE TABLE `tsimu_match_result_history` (
   `id` bigint(32) NOT NULL DEFAULT '0' COMMENT '撮合编号',
-  `buy_order_code` varchar(32) DEFAULT NULL COMMENT '买单成交单编号',
-  `sell_order_code` varchar(32) DEFAULT NULL COMMENT '卖单成交单编号',
+  `buy_order_code` varchar(32) DEFAULT NULL COMMENT '买单委托单编号',
+  `sell_order_code` varchar(32) DEFAULT NULL COMMENT '卖单委托单编号',
+  `buy_order_detail_code` varchar(32) DEFAULT NULL COMMENT '买单成交单编号',
+  `sell_order_detail_code` varchar(32) DEFAULT NULL COMMENT '卖单成交单编号',
   `symbol` varchar(32) DEFAULT NULL COMMENT '交易币种',
   `to_symbol` varchar(32) DEFAULT NULL COMMENT '计价币种',
   `buy_user_id` varchar(32) DEFAULT NULL COMMENT '买方用户编号',
   `sell_user_id` varchar(32) DEFAULT NULL COMMENT '卖方用户编号',
-  `buy_amount` decimal(64,8) DEFAULT NULL COMMENT '交易数量',
-  `sell_amount` decimal(64,8) DEFAULT NULL COMMENT '计价数量',
+  `exchange_rate` decimal(64,8) DEFAULT NULL COMMENT '兑换比例',
+  `symbol_count` decimal(64,8) DEFAULT NULL COMMENT '交易数量',
+  `to_symbol_count` decimal(64,8) DEFAULT NULL COMMENT '计价数量',
   `buy_fee` decimal(64,8) DEFAULT NULL COMMENT '买方手续费',
   `sell_fee` decimal(64,8) DEFAULT NULL COMMENT '卖方手续费',
   `create_datetime` datetime DEFAULT NULL COMMENT '撮合时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='撮合结果历史';
+
 
 -- ----------------------------
 --  Table structure for `tsimu_order`
@@ -776,6 +784,7 @@ CREATE TABLE `tsimu_order` (
   `create_datetime` datetime DEFAULT NULL COMMENT '创建时间',
   `cancel_datetime` datetime DEFAULT NULL COMMENT '撤销时间',
   `status` varchar(32) DEFAULT NULL COMMENT '状态(2-部分成交撤销，3-完全成交，4-已撤销)',
+  `is_scan` varchar(32) DEFAULT NULL COMMENT '是否扫描',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='委托单';
 
