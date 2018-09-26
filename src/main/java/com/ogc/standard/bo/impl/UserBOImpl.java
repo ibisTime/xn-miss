@@ -175,7 +175,11 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setLoginName(req.getEmail());
         data.setEmail(req.getEmail());
         data.setKind(EUserKind.Customer.getCode());
-        data.setNickname(userId.substring(userId.length() - 8, userId.length()));
+        if (req.getNickname() == null) {
+            data.setNickname(userId.substring(userId.length() - 8,
+                userId.length()));
+        }
+        data.setNickname(req.getNickname());
         if (StringUtils.isNotBlank(req.getLoginPwd())) {
             data.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
             data.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req

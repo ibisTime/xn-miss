@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 /** 
@@ -29,6 +30,9 @@ public class XN805043Req {
     @NotBlank
     private String loginPwd;
 
+    @Length(min = 2, max = 10, message = "昵称长度必须在2-10之间")
+    private String nickname; // 昵称
+
     // 推荐人手机号
     private String userReferee;
 
@@ -41,7 +45,7 @@ public class XN805043Req {
     // 区
     private String area;
 
-    /// 经度
+    // / 经度
     private String latitude;
 
     // 纬度
@@ -117,6 +121,14 @@ public class XN805043Req {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
 }

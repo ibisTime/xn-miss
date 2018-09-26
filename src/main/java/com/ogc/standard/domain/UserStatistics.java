@@ -23,8 +23,8 @@ public class UserStatistics {
     // ETH交易量
     private String totalTradeCountEth;
 
-    // SC交易量
-    private String totalTradeCountSc;
+    // X交易量
+    private String totalTradeCountX;
 
     // BTC交易量
     private String totalTradeCountBtc;
@@ -55,12 +55,12 @@ public class UserStatistics {
         this.totalTradeCountEth = totalTradeCountEth;
     }
 
-    public String getTotalTradeCountSc() {
-        return totalTradeCountSc;
+    public String getTotalTradeCountX() {
+        return totalTradeCountX;
     }
 
-    public void setTotalTradeCountSc(String totalTradeCountSc) {
-        this.totalTradeCountSc = totalTradeCountSc;
+    public void setTotalTradeCountX(String totalTradeCountX) {
+        this.totalTradeCountX = totalTradeCountX;
     }
 
     public String getTotalTradeCountBtc() {

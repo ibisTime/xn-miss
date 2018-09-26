@@ -309,7 +309,7 @@ public class AdsAOImpl implements IAdsAO {
         // 获取用户X交易量
         BigDecimal totalTradeCountX = this.tradeOrderBO.getUserTotalTradeCount(
             user.getUserId(), ECoin.X.getCode());
-        userStatistics.setTotalTradeCountSc(totalTradeCountX.toString());
+        userStatistics.setTotalTradeCountX(totalTradeCountX.toString());
         // 为了版本兼容，留下的代码 end
         user.setUserStatistics(userStatistics);
         ads.setUserStatistics(userStatistics);
