@@ -23,14 +23,14 @@
        		    <!-- <ref bean="marketTrigger"/> -->
        		    
        		    <!-- 币币交易 -->
-       		   <!--  <ref bean="doScanSimuOrderTrigger"/> -->
-       		    <!-- <ref bean="doSaveKLineTrigger"/> -->
+       		   	<!-- <ref bean="doScanSimuOrderTrigger"/>
+       		    <ref bean="doSaveKLineTrigger"/> -->
        		    
-				<!-- <ref bean="doERC20CollectTrigger"/>
+<!-- 				<ref bean="doERC20CollectTrigger"/>
 				<ref bean="doERC20CheckGetFeeTxTrigger"/>
 				<ref bean="doERC20CheckCollectTxTrigger"/>       		    
 				<ref bean="doEthCollectTxTrigger"/>    
-				<ref bean="doETHAndTokenWithDrawGetTxTrigger"/>-->
+				<ref bean="doETHAndTokenWithDrawGetTxTrigger"/> -->
 				
 			</list>
 		</property>
@@ -70,13 +70,13 @@
 	<bean id="doSaveKLineTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="doSaveKLine" />
-		<property name="cronExpression" value="0 */1 * * * ?" />
+		<property name="cronExpression" value="0 0/1 * * * ?" />
 	</bean>
 	
 	<bean id="doSaveKLine"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="exchangePairAOImpl" />
-		<property name="targetMethod" value="saveKLineMin1" />
+		<property name="targetObject" ref="simuKLineAOImpl" />
+		<property name="targetMethod" value="saveKLine" />
 		<property name="concurrent" value="false" />
 		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
 	</bean>	

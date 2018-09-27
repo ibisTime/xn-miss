@@ -25,6 +25,9 @@
 
   <sql id="whereCondation">
     <trim prefix="where" prefixOverrides="AND | OR">
+    <if test="origin != null and origin != ''">
+        AND origin = #{origin}
+      </if>
       <if test="symbol != null and symbol != ''">
         AND symbol = #{symbol}
       </if>

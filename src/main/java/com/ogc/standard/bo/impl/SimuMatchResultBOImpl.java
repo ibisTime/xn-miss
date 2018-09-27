@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class SimuMatchResultBOImpl extends PaginableBOImpl<SimuMatchResult>
                 data.setSellOrderCode(asksOrderDetail.getCode());
                 data.setBuyUserId(bidsOrderDetail.getUserId());
 
+                data.setExchangeRate(asksOrderDetail.getTradedPrice());
                 data.setSellUserId(asksOrderDetail.getUserId());
                 // 交易数量（symbol数量）
                 data.setSymbolCount(asksOrderDetail.getTradedCount());
@@ -90,6 +92,10 @@ public class SimuMatchResultBOImpl extends PaginableBOImpl<SimuMatchResult>
                     .add(data.getSymbolCount()));
                 data.setToSymbolCount(asksOrderDetail.getTradedAmount()
                     .add(data.getToSymbolCount()));
+
+                BigDecimal exchangeRate = data.getToSymbolCount()
+                    .divide(data.getSymbolCount(), 8, BigDecimal.ROUND_DOWN);
+                data.setExchangeRate(exchangeRate);
                 data.setBuyFee(
                     bidsOrderDetail.getTradedFee().add(data.getBuyFee()));
                 data.setSellFee(

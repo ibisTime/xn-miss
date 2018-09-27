@@ -626,12 +626,6 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','trade_remind','1.交易前请详细了解卖家的交易信息 \n2.请通过平台进行沟通约定，并保存好相关聊天记录 \n3.如遇到交易纠纷，请通过平台“帮助”解决问题','admin',now(),'交易提醒');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','activity_rule','1.分享好友，并通过链接注册成功；\n2.注册之后每一笔成功交易，您都将获得一笔提成，金额为交易手续费的0.1% \n3.HappyMoney保留对活动的解释权。','admin',now(),'活动规则');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','tips','1.温馨提示；\n2.温馨提示 \n3.温馨提示。','admin',now(),'温馨提示');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_type','0','BTC','admin',now(),'比特币');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_type','1','ETH','admin',now(),'以太坊');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_type','0T','HPM','admin',now(),'x币');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_status','0','已发布','admin',now(),'币种状态');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('coin_status','1','已撤下','admin',now(),'币种状态');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_app_code','1400139627','admin',now(),'应用编号');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_app_admin','admin','admin',now(),'账号管理员');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_access_key','-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEjpFnJBYdffrPuhNwuMVHgA8ww9tx\n5b3N12QOOneRRrM9FfOv5FE+GmmyFjZPNlxemK35TAru63AUgQpNzs+x1g==\n-----END PUBLIC KEY-----','admin',now(),'公钥');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_secret_key','-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgX50tBBPq9VZnCYvU\n68DXJlWtimgmGVQbYJ2vbK5AczahRANCAASOkWckFh19+s+6E3C4xUeADzDD23Hl\nvc3XZA46d5FGsz0V86/kUT4aabIWNk82XF6YrflMCu7rcBSBCk3Oz7HW\n-----END PRIVATE KEY-----','admin',now(),'私钥');
@@ -648,6 +642,35 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('simu_order_rule','simu_order_fee_rate','0.001','admin',now(),'币币交易手续费率');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ads_rule','trade_fee_rate','0.001','admin',now(),'场外交易广告费率');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('withdraw_rule','withdraw_fee','0.005','admin',now(),'用户提币手续费');
+
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','about_us','关于我们','admin',now(),'关于我们');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','service','联系客服','admin',now(),'联系客服');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','reg_protocol','注册协议','admin',now(),'注册协议');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','privacy','隐私政策','admin',now(),'隐私政策');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','invite_url','邀请好友链接','admin',now(),'邀请好友链接');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','premiumRate','基于市场价的溢出比例，市场价是根据部分大型交易所实时价格得出的，确保您的报价趋于一个相对合理的范围，比如当前价格为8000，溢价比例为10%，那么价格为8800。','admin',now(),'买币溢价率说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','price','基于比例得出的报价，每10分钟更新一次。','admin',now(),'买币价格说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','minTrade','一次交易最低的交易限制','admin',now(),'买币最小交易额说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','maxTrade','一次交易中的最大交易限制，您的钱包余额也会影响最大量的设置。','admin',now(),'买币最大交易额说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','payType','您需指定最有效的付款方式，帮助对方更快的与你达成交易。','admin',now(),'买币支付方式说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','payLimit','您希望对方在此期限内付款。','admin',now(),'买币付款期限说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','totalCount','广告想要购买的数字货币的总量。','admin',now(),'买币交易总量说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','protectPrice','广告最高可成交的价格，可帮助您在价格剧烈波动时保持稳定的盈利，比如最高为5000时，市场价高于5000以下时，您的广告依旧以5000的价格展示。','admin',now(),'买币保护价说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','displayTime','您希望广告自动显示和隐藏的天数和小时数。','admin',now(),'广告展示时间');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','trust','开启后，仅限与自己信任的用户与本广告交易','admin',now(),'仅限受信任的交易者');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('buy_ads_hint','tradeCoin','请选择您要交易的币种。','admin',now(),'币种');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','tradeCoin','请选择您要交易的币种。','admin',now(),'币种');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','premiumRate','基于市场价的溢出比例，市场价是根据部分大型交易所实时价格得出的，确保您的报价趋于一个相对合理的范围，比如当前价格为8000，溢价比例为10%，那么价格为8800。','admin',now(),'卖币溢价率说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','price','基于比例得出的报价，每10分钟更新一次。','admin',now(),'卖币价格说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','minTrade','一次交易最低的交易限制','admin',now(),'卖币最小交易说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','maxTrade','一次交易中的最大交易限制，您的钱包余额也会影响最大量的设置。','admin',now(),'卖币最大交易说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','payType','您需指定最有效的付款方式，帮助对方更快的与你达成交易。','admin',now(),'卖币支付方式说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','payLimit','您希望对方在此期限内付款。','admin',now(),'卖币支付超时说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','totalCount','您想出售的货币数量，发布的时候会被冻结。','admin',now(),'卖币总额说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','protectPrice','广告最低可成交的价格，可帮助您在价格剧烈波动时保持稳定的盈利，比如最低为5000时，市场价处于5000以下时，您的广告依旧以5000的价格展示。','admin',now(),'卖币最低价格说明');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','displayTime','您希望广告自动显示和隐藏的天数和小时数。','admin',now(),'广告展示时间');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sell_ads_hint','trust','开启后，仅限与自己信任的用户与本广告交易','admin',now(),'仅限受信任的交易者');
+
 
 /*
 -- Query: SELECT `type`,`parent_key`,`dkey`,`dvalue`,`updater`,now() as `update_datetime`,`remark`FROM tsys_dict
@@ -844,7 +867,7 @@ INSERT INTO `tcoin_market` (`symbol`,`refer_currency`,`origin`,`last_price`,`bid
 INSERT INTO `tcoin_market` (`symbol`,`refer_currency`,`origin`,`last_price`,`bid`,`ask`,`mid`,`low`,`high`,`volume`,`update_datetime`,`coinmarketcap_id`) VALUES ('ETH','CNY','cctrade',2000.0000,NULL,NULL,2000.0000,4000.0000,1000.0000,NULL,'2018-09-08 00:00:00',3);
 
 /*
--- Query: SELECT `id`,`exchange_ename`,`symbol`,`to_symbol`,`pair`,`price`,`updater`,`update_datetime`,`remark` FROM tmk_exchange_pair
+-- Query: SELECT `exchange_ename`,`symbol`,`to_symbol`,`pair`,`price`,`updater`,`update_datetime`,`remark` FROM tmk_exchange_pair
 LIMIT 0, 1000
 
 -- Date: 2018-09-19 23:11

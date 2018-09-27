@@ -26,10 +26,11 @@ public interface ICollectBO extends IPaginableBO<Collect> {
     public void doETHCollect(EthXAddress ethAddress, String chargeCode,
             BigDecimal balance);
 
-    public int colectNoticeETH(Collect data, BigDecimal txfee, Date ethDatetime);
+    public int colectNoticeETH(Collect data, BigDecimal txfee,
+            Date ethDatetime);
 
-    // public int colectionNoticeBTC(Collect data, BigDecimal txfee,
-    // Date btcDatetime);
+    public int colectNoticeBTC(Collect data, BigDecimal txfee,
+            Date btcDatetime);
     //
     // public int colectionNoticeSC(Collect data, String fromAddress,
     // BigDecimal txfee, Date ethDatetime);

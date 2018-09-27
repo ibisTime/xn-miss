@@ -10,7 +10,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 
+ * 获取币种行情
  * @author: lei 
  * @since: 2018年9月15日 下午3:17:30 
  * @history:

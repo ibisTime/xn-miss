@@ -18,5 +18,4 @@ public interface ISimuKLineBO extends IPaginableBO<SimuKLine> {
     public SimuKLine getLatestSimuKLine(String symbol, String toSymbol,
             String period);
 
-    public void saveKLineByPeriod(ExchangePair pair, String period);
 }

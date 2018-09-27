@@ -45,9 +45,9 @@ public class Market extends ABaseDO implements Serializable {
 
     private Date updateDatetime;
 
-    private List<String> coinList;
+    private String coinmarketcapId;
 
-    private String CoinmarketcapId;
+    private List<String> coinList;
 
     public String getSymbol() {
         return symbol;
@@ -145,20 +145,20 @@ public class Market extends ABaseDO implements Serializable {
         this.updateDatetime = updateDatetime;
     }
 
+    public String getCoinmarketcapId() {
+        return coinmarketcapId;
+    }
+
+    public void setCoinmarketcapId(String coinmarketcapId) {
+        this.coinmarketcapId = coinmarketcapId;
+    }
+
     public List<String> getCoinList() {
         return coinList;
     }
 
     public void setCoinList(List<String> coinList) {
         this.coinList = coinList;
-    }
-
-    public String getCoinmarketcapId() {
-        return CoinmarketcapId;
-    }
-
-    public void setCoinmarketcapId(String coinmarketcapId) {
-        CoinmarketcapId = coinmarketcapId;
     }
 
 }

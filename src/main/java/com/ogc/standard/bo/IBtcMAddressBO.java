@@ -9,6 +9,8 @@ public interface IBtcMAddressBO extends IPaginableBO<BtcMAddress> {
 
     public String saveAddress();
 
+    public BtcMAddress getBtcAddress(String address);
+
     public int refreshStatus(Long id);;
 
 }

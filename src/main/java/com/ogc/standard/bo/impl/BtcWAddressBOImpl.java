@@ -19,7 +19,9 @@ import com.ogc.standard.bo.IBtcWAddressBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IBtcWAddressDAO;
 import com.ogc.standard.domain.BtcWAddress;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EWAddressStatus;
+import com.ogc.standard.exception.BizException;
 
 /** 
  * @author: taojian 
@@ -72,6 +74,18 @@ public class BtcWAddressBOImpl extends PaginableBOImpl<BtcWAddress>
             data = btcWAddressDAO.select(condition);
         }
         return data;
+    }
+
+    @Override
+    public BtcWAddress getWBtcAddressToday() {
+        BtcWAddress condition = new BtcWAddress();
+        condition.setStatus(EWAddressStatus.VALID.getCode());
+        condition.setOrder("create_datetime", "desc");
+        List<BtcWAddress> wList = btcWAddressDAO.selectList(condition);
+        if (CollectionUtils.isEmpty(wList)) {
+            throw new BizException(EErrorCode_main.btc_BROADCAST.getCode());
+        }
+        return wList.get(0);
     }
 
 }

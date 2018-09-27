@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.domain.Market;
@@ -17,10 +18,14 @@ public interface IMarketBO {
 
     public Market marketByCoinTypeAndOrigin(String coinType, String origin);
 
+    public Market getMarketBysymbolAndCurrency(String symbol,
+            String referCurrency);
+
     int updateMarket(String origin, String cointType, Market market);
 
-    List<Market> marketListByCondation(Market condation);
+    List<Market> marketListByCondition(Market condition);
 
-//    BigDecimal getMarketAVG(ECoin coin);
+    public BigDecimal getMarketPrice(String symbol, String referCurrency,
+            String origin);
 
 }

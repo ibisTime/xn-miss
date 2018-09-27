@@ -26,4 +26,7 @@ public interface IBtcWAddressBO extends IPaginableBO<BtcWAddress> {
     public int abandon(BtcWAddress btcWAddress);
 
     public BtcWAddress getBtcWAddress(Long id);
+
+    public BtcWAddress getWBtcAddressToday();
+
 }

@@ -13,8 +13,10 @@ import com.ogc.standard.exception.BizException;
  */
 public enum ESimuKLinePeriod {
 
-    MIN1("1min", "-1"), MIN5("5min", "-5"), MIN15("15min",
-            "-15"), MIN30("30min", "-30");
+    MIN1("1min", "-1"), MIN5("5min", "-5"), MIN15("15min", "-15"), MIN30(
+            "30min", "-30"), MIN60("30min", "-60"), DAY("1day",
+                    "-1440"), WEEK("1week", "-10080"), MONTH("1mon",
+                            "-43200"), YEAR("1year", "-525600"),;
 
     public static Map<String, ESimuKLinePeriod> getJourKindResultMap() {
         Map<String, ESimuKLinePeriod> map = new HashMap<String, ESimuKLinePeriod>();

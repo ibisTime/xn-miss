@@ -26,6 +26,18 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="symbol != null and symbol != '' ">
+				AND t.symbol = #{symbol}
+			</if>
+			<if test="toSymbol != null and toSymbol != '' ">
+				AND t.to_symbol = #{toSymbol}
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
 		</trim> 
 	</sql>
 	<select id="select_simuMatchResultHistory" parameterType="simuMatchResultHistory" resultMap="simuMatchResultHistory_DB_Result">
@@ -69,8 +81,8 @@
 		id
 		,buy_order_code
 		,sell_order_code
-		,t.buy_order_detail_code
-		,t.sell_order_detail_code
+		,buy_order_detail_code
+		,sell_order_detail_code
 		
 		,symbol
 		,to_symbol

@@ -14,6 +14,7 @@ import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IBtcXAddressBO;
 import com.ogc.standard.bo.ICoinBO;
+import com.ogc.standard.bo.ICtqBO;
 import com.ogc.standard.bo.IEthXAddressBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -21,6 +22,7 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
+import com.ogc.standard.enums.EAddressType;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ESysUser;
@@ -38,8 +40,8 @@ public class AccountAOImpl implements IAccountAO {
     @Autowired
     private IBtcXAddressBO btcXAddressBO;
 
-    // @Autowired
-    // private ICtqBO ctqBO;
+    @Autowired
+    private ICtqBO ctqBO;
 
     @Autowired
     private IUserBO userBO;
@@ -68,12 +70,15 @@ public class AccountAOImpl implements IAccountAO {
                         || ECoinType.X.getCode().equals(coin.getType())) {
                     if (ethXAddress == null) {
                         ethXAddress = ethXAddressBO.generateAddress(userId);
+                        ctqBO.uploadEthAddress(ethXAddress,
+                            EAddressType.X.getCode());
                     }
                     accountBO.distributeAccount(userId, EAccountType.Customer,
                         coin, ethXAddress);
                 } else if (ECoinType.BTC.getCode().equals(coin.getType())) {
                     if (btcXAddress == null) {
                         btcXAddress = btcXAddressBO.generateAddress(userId);
+                        ctqBO.uploadBtcAddress(btcXAddress);
                     }
                     accountBO.distributeAccount(userId, EAccountType.Customer,
                         coin, btcXAddress);

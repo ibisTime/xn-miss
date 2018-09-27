@@ -124,17 +124,17 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
         return count;
     }
 
-    // @Override
-    // public int colectionNoticeBTC(Collect data, BigDecimal txfee,
-    // Date confirmDatetime) {
-    // int count = 0;
-    // data.setTxFee(txfee);
-    // data.setStatus(ECollectStatus.Broadcast_YES.getCode());
-    // data.setConfirmDatetime(confirmDatetime);
-    // data.setUpdateDatetime(new Date());
-    // collectDAO.updateNoticeBTC(data);
-    // return count;
-    // }
+    @Override
+    public int colectNoticeBTC(Collect data, BigDecimal txfee,
+            Date confirmDatetime) {
+        int count = 0;
+        data.setTxFee(txfee);
+        data.setStatus(ECollectStatus.COLLECT_YES.getCode());
+        data.setConfirmDatetime(confirmDatetime);
+        data.setFinishDatetime(new Date());
+        collectDAO.updateNoticeBTC(data);
+        return count;
+    }
     //
     // @Override
     // public int colectionNoticeSC(Collect data, String fromAddress,

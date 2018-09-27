@@ -70,8 +70,31 @@ public class MarketAOImpl implements IMarketAO {
         Market condition = new Market();
         condition.setSymbol(req.getSymbol());
         condition.setReferCurrency(req.getReferCurrency());
-        return this.marketBO.marketListByCondation(condition);
+        return marketBO.marketListByCondition(condition);
 
+    }
+
+    @Override
+    public BigDecimal getMarket(String symbol, String referCurrency) {
+
+        BigDecimal rate = BigDecimal.ZERO;
+
+        if (ECoin.X.getCode().equals(symbol)) {
+
+            // 获取X与BTC的汇率
+            BigDecimal coinRate = marketBO.getMarketPrice(symbol,
+                ECoin.BTC.getCode(), "");
+
+            rate = coinRate.multiply(marketBO
+                .getMarketPrice(ECoin.BTC.getCode(), referCurrency, ""));
+
+        } else {
+
+            rate = marketBO.getMarketPrice(symbol, referCurrency, "");
+
+        }
+
+        return rate;
     }
 
     // 获取多个币种的行情列表

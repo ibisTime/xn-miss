@@ -1,11 +1,3 @@
-/**
- * @Title APIServlet.java 
- * @Package com.hsnet.pz.api 
- * @Description 
- * @author miyb  
- * @date 2015-3-24 下午4:23:53 
- * @version V1.0   
- */
 package com.ogc.standard;
 
 import java.io.IOException;
@@ -42,7 +34,7 @@ public class APIServlet extends HttpServlet {
         logger.info("Successful Deployment");
         PrintWriter writer = response.getWriter();
         writer.append("Version:1.0.0 \n");
-        writer.append("Description:homney-biz HMONEY 1st-2 \n");
+        writer.append("Description:homney-biz HMONEY 2st \n");
         writer.flush();
     }
 

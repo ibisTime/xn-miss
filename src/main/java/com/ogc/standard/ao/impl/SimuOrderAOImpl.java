@@ -192,6 +192,7 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             price = StringValidater.toBigDecimal(req.getPrice());
             totalAmount = price
                 .multiply(CoinUtil.fromMinUnit(totalCount, coin.getUnit()));
+
         } else {
             // 市价买单没有价格
             price = new BigDecimal(-1);

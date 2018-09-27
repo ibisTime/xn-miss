@@ -16,6 +16,8 @@ public interface IMarketAO {
 
     public List<Market> marketListByReq(XN650101Req req);
 
+    public BigDecimal getMarket(String symbol, String referCurrency);
+
     public void saveMarket(String coin, String origin, String currency,
             String coinId, BigDecimal price);
 

@@ -60,6 +60,14 @@ public class SimuMatchResultHistory extends ABaseDO {
     // 撮合时间
     private Date createDatetime;
 
+    // ******************db properties**************
+
+    // 成交时间起
+    private Date createDatetimeStart;
+
+    // 成交时间止
+    private Date createDatetimeEnd;
+
     public Long getId() {
         return id;
     }
@@ -178,6 +186,22 @@ public class SimuMatchResultHistory extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
 }

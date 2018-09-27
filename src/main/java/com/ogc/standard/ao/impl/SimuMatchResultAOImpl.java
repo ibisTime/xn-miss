@@ -43,6 +43,9 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
     @Autowired
     private IAwardBO awardBO;
 
+    @Autowired
+    private MarketAOImpl marketAOImpl;
+
     @Transactional
     public void doCheckMatchResult() {
 
@@ -60,11 +63,13 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
             data.setSellOrderCode(matchResult.getSellOrderCode());
             data.setBuyOrderDetailCode(matchResult.getBuyOrderDetailCode());
             data.setSellOrderDetailCode(matchResult.getSellOrderDetailCode());
+
             data.setSymbol(matchResult.getSymbol());
             data.setToSymbol(matchResult.getToSymbol());
-
             data.setBuyUserId(matchResult.getBuyUserId());
             data.setSellUserId(matchResult.getSellUserId());
+            data.setExchangeRate(matchResult.getExchangeRate());
+
             data.setSymbolCount(matchResult.getSymbolCount());
             data.setToSymbolCount(matchResult.getToSymbolCount());
             data.setBuyFee(matchResult.getBuyFee());
@@ -75,6 +80,11 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
 
             // 删除存活撮合结果
             simuMatchResultBO.removeSimuMatchResult(matchResult.getId());
+
+            // 更新行情
+            marketAOImpl.saveMarket(data.getSymbol().toUpperCase(),
+                "HappyMoney", data.getToSymbol().toUpperCase(), "",
+                data.getExchangeRate());
 
             // 用户分成
             award(data);

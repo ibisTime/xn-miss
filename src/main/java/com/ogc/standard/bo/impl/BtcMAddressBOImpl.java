@@ -9,7 +9,9 @@
 package com.ogc.standard.bo.impl;
 
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -50,6 +52,18 @@ public class BtcMAddressBOImpl extends PaginableBOImpl<BtcMAddress>
         btcMAddressDAO.insert(data);
 
         return newAddress;
+    }
+
+    @Override
+    public BtcMAddress getBtcAddress(String address) {
+        BtcMAddress data = null;
+        BtcMAddress condition = new BtcMAddress();
+        condition.setAddress(address);
+        List<BtcMAddress> results = btcMAddressDAO.selectList(condition);
+        if (CollectionUtils.isNotEmpty(results)) {
+            data = results.get(0);
+        }
+        return data;
     }
 
     @Override

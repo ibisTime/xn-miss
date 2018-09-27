@@ -65,6 +65,21 @@ public class MarketBOImpl implements IMarketBO {
     }
 
     @Override
+    public Market getMarketBysymbolAndCurrency(String symbol,
+            String referCurrency) {
+
+        if (StringUtils.isBlank(symbol) || StringUtils.isBlank(referCurrency)) {
+            return null;
+        }
+
+        Market condition = new Market();
+        condition.setSymbol(symbol);
+        condition.setReferCurrency(referCurrency);
+        return this.marketDAO.select(condition);
+
+    }
+
+    @Override
     public int updateMarket(String origin, String coinType, Market market) {
 
         market.setOrigin(origin);
@@ -74,9 +89,20 @@ public class MarketBOImpl implements IMarketBO {
     }
 
     @Override
-    public List<Market> marketListByCondation(Market condation) {
+    public List<Market> marketListByCondition(Market condition) {
 
-        return this.marketDAO.selectList(condation);
+        return this.marketDAO.selectList(condition);
+
+    }
+
+    @Override
+    public BigDecimal getMarketPrice(String symbol, String referCurrency,
+            String origin) {
+
+        Market condition = new Market();
+        condition.setSymbol(symbol);
+        condition.setReferCurrency(referCurrency);
+        return marketDAO.select(condition).getLastPrice();
 
     }
 

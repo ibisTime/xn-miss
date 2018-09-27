@@ -15,7 +15,14 @@ import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import com.ogc.standard.ao.ICollectAO;
+import com.ogc.standard.bitcoin.original.BitcoinOfflineRawTxBuilder;
+import com.ogc.standard.bitcoin.original.OfflineTxInput;
+import com.ogc.standard.bitcoin.original.OfflineTxOutput;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IBtcMAddressBO;
+import com.ogc.standard.bo.IBtcUtxoBO;
+import com.ogc.standard.bo.IBtcWAddressBO;
+import com.ogc.standard.bo.IBtcXAddressBO;
 import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.ICollectBO;
 import com.ogc.standard.bo.IEthSAddressBO;
@@ -26,8 +33,12 @@ import com.ogc.standard.bo.ITokenEventBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.EthClient;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.BtcUtxo;
+import com.ogc.standard.domain.BtcWAddress;
+import com.ogc.standard.domain.BtcXAddress;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.Collect;
 import com.ogc.standard.domain.CtqEthTransaction;
@@ -35,6 +46,9 @@ import com.ogc.standard.domain.EthSAddress;
 import com.ogc.standard.domain.EthWAddress;
 import com.ogc.standard.domain.EthXAddress;
 import com.ogc.standard.domain.TokenEvent;
+import com.ogc.standard.enums.EAddressType;
+import com.ogc.standard.enums.EBtcUtxoRefType;
+import com.ogc.standard.enums.EBtcUtxoStatus;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.ECollectStatus;
@@ -46,8 +60,10 @@ import com.ogc.standard.enums.ESAddressStatus;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ETransactionReceiptStatus;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 import com.ogc.standard.token.OrangeCoinToken.TransferEventResponse;
 import com.ogc.standard.token.TokenClient;
+import com.ogc.standard.util.BtcBlockExplorer;
 
 @Service
 public class CollectAOImpl implements ICollectAO {
@@ -79,7 +95,22 @@ public class CollectAOImpl implements ICollectAO {
     @Autowired
     private IEthTransactionBO ethTransactionBO;
 
+    @Autowired
+    private IBtcUtxoBO btcUtxoBO;
+
+    @Autowired
+    private IBtcXAddressBO btcXAddressBO;
+
+    @Autowired
+    private IBtcMAddressBO btcMAddressBO;
+
+    @Autowired
+    private IBtcWAddressBO btcWAddressBO;
+
     private BigDecimal minBalance = new BigDecimal("5000000000000000");
+
+    @Autowired
+    private BtcBlockExplorer btcBlockExplorer;
 
     @Override
     public Paginable<Collect> queryCollectPage(int start, int limit,
@@ -110,6 +141,123 @@ public class CollectAOImpl implements ICollectAO {
         if (EOriginialCoin.ETH.getCode().equals(currency)) {
             doCollectManualETH(balanceStart);
         }
+        if (EOriginialCoin.BTC.getCode().equals(currency)) {
+            doCollectBTC(balanceStart, refNo);
+        }
+    }
+
+    private void doCollectBTC(BigDecimal balanceStart, String refNo) {
+
+        if (balanceStart.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BizException("xn0000", "阀值必须大于等于0");
+        }
+
+        // 获取分发地址的UTXO总额，判断是否满足归集条件
+        BigDecimal enableCount = btcUtxoBO
+            .getTotalEnableUTXOCount(EAddressType.X);
+        if (enableCount.compareTo(balanceStart) < 0) {
+            throw new BizException("xn0000",
+                "归集触发，UTXO总量" + AmountUtil.fromBtc(enableCount).toString()
+                        + "，未达到归集阀值" + balanceStart + "，无需归集");
+        }
+
+        // 获取今日归集地址
+        BtcWAddress toAddress = btcWAddressBO.getWBtcAddressToday();
+
+        // 降序遍历可使用的M类地址UTXO，组装Input
+        BitcoinOfflineRawTxBuilder rawTxBuilder = new BitcoinOfflineRawTxBuilder();
+
+        List<BtcUtxo> inputBtcUtxoList = new ArrayList<BtcUtxo>();
+        BigDecimal realAmount = buildRawTx(toAddress.getAddress(), rawTxBuilder,
+            inputBtcUtxoList);
+
+        // 广播
+        broadcastCollect(refNo, toAddress.getAddress(), rawTxBuilder,
+            inputBtcUtxoList, realAmount);
+
+    }
+
+    private void broadcastCollect(String refNo, String toAddress,
+            BitcoinOfflineRawTxBuilder rawTxBuilder,
+            List<BtcUtxo> inputBtcUtxoList, BigDecimal realAmount) {
+        // 归集广播
+        try {
+            String signResult = rawTxBuilder.offlineSign();
+            // 广播
+            String trueTxid = btcBlockExplorer.broadcastRawTx(signResult);
+            if (trueTxid != null) {
+
+                // 归集记录落地
+                String collectionCode = collectBO.saveCollect(
+                    EOriginialCoin.BTC.getCode(),
+                    JsonUtil.Object2Json(inputBtcUtxoList), toAddress,
+                    realAmount, trueTxid, refNo, ECoinType.BTC.getCode());
+                if (CollectionUtils.isNotEmpty(inputBtcUtxoList)) {
+                    for (BtcUtxo data : inputBtcUtxoList) {
+                        btcUtxoBO.refreshBroadcast(data, EBtcUtxoStatus.USING,
+                            EBtcUtxoRefType.COLLECTION, collectionCode);
+                    }
+                }
+
+            } else {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "");
+            }
+        } catch (Exception e) {
+            throw new BizException("-100", e.getMessage());
+        }
+    }
+
+    private BigDecimal buildRawTx(String toAddress,
+            BitcoinOfflineRawTxBuilder rawTxBuilder,
+            List<BtcUtxo> inputBtcUtxoList) {
+
+        BigDecimal shouldCollectCount = BigDecimal.ZERO;
+
+        int start = 1;
+        int limit = 100;
+        while (true) {
+            List<BtcUtxo> list = btcUtxoBO.queryEnableUtxoList(start, limit,
+                EAddressType.X);
+            if (CollectionUtils.isNotEmpty(list)) {
+                for (BtcUtxo utxo : list) {
+                    String txid = utxo.getTxid();
+                    Integer vout = utxo.getVout();
+                    // 应归集总额
+                    shouldCollectCount = shouldCollectCount
+                        .add(utxo.getCount());
+                    BtcXAddress btcAddress = btcXAddressBO
+                        .getBtcAddress(utxo.getAddress());
+                    // 构造签名交易，输入
+                    OfflineTxInput offlineTxInput = new OfflineTxInput(txid,
+                        vout, utxo.getScriptPubKey(),
+                        btcAddress.getPrivatekey());
+                    rawTxBuilder.in(offlineTxInput);
+                    inputBtcUtxoList.add(utxo);
+                }
+            } else {
+                break;
+            }
+            start++;// 不够再遍历
+        }
+        // 组装Output，设置找零账户
+        // 如何估算手续费，先预先给一个size,然后拿这个size进行签名
+        // 对签名的数据进行解码，拿到真实大小，然后进行矿工费的修正
+        int preSize = BitcoinOfflineRawTxBuilder
+            .calculateSize(inputBtcUtxoList.size(), 1);
+        int feePerByte = btcBlockExplorer.getFee();
+        // 计算出手续费
+        int preFee = preSize * feePerByte;
+
+        // 构造输出，归集无需找零，只要算出矿工费，其余到转到归集地址
+        BigDecimal realAmount = shouldCollectCount
+            .subtract(BigDecimal.valueOf(preFee));
+        OfflineTxOutput offlineTxOutput = new OfflineTxOutput(toAddress,
+            AmountUtil.fromBtc(realAmount));
+        rawTxBuilder.out(offlineTxOutput);
+
+        logger.info("OTXO总额=" + shouldCollectCount + "，比特币平均费率=" + feePerByte
+                + "，预计矿工费=" + preFee + "，预计到账金额=" + realAmount);
+        return realAmount;
     }
 
     //
