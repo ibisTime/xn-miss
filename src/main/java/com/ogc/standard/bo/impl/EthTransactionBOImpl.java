@@ -37,8 +37,8 @@ import com.ogc.standard.exception.BizException;
 public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
         implements IEthTransactionBO {
 
-    private static Web3j web3j = Web3j
-        .build(new HttpService(PropertiesUtil.Config.ETH_URL));
+    private static Web3j web3j = Web3j.build(new HttpService(
+        PropertiesUtil.Config.ETH_URL));
 
     @Autowired
     private IEthTransactionDAO ethTransactionDAO;
@@ -57,11 +57,11 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
                 transaction.setNonce(ctqEthTransaction.getNonce());
                 transaction.setBlockHash(ctqEthTransaction.getBlockHash());
                 transaction.setBlockNumber(ctqEthTransaction.getBlockNumber());
-                transaction.setBlockCreateDatetime(
-                    ctqEthTransaction.getBlockCreateDatetime());
+                transaction.setBlockCreateDatetime(ctqEthTransaction
+                    .getBlockCreateDatetime());
 
-                transaction.setTransactionIndex(
-                    ctqEthTransaction.getTransactionIndex());
+                transaction.setTransactionIndex(ctqEthTransaction
+                    .getTransactionIndex());
                 transaction.setFrom(ctqEthTransaction.getFrom());
                 transaction.setTo(ctqEthTransaction.getTo());
                 transaction.setValue(ctqEthTransaction.getValue());
@@ -150,8 +150,8 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
     public BigDecimal getGasPrice() {
         BigDecimal price = null;
         try {
-            price = new BigDecimal(
-                web3j.ethGasPrice().send().getGasPrice().toString());
+            price = new BigDecimal(web3j.ethGasPrice().send().getGasPrice()
+                .toString());
         } catch (IOException e) {
             throw new BizException(EErrorCode_main.eth_GSEPRICEERROR.getCode());
         }
@@ -180,7 +180,7 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
                 } catch (Exception e) {
                     throw new BizException(
                         EErrorCode_main.eth_KEYSTOREERROE.getCode(),
-                        e.getMessage());
+                        (Object) e.getMessage());
                 }
             }
 
@@ -199,12 +199,12 @@ public class EthTransactionBOImpl extends PaginableBOImpl<EthTransaction>
 
             // 本地签名的
             RawTransaction rawTransaction = RawTransaction.createTransaction(
-                nonce, gasPrice, gasLimit, to, new BigInteger(value.toString()),
-                "");
+                nonce, gasPrice, gasLimit, to,
+                new BigInteger(value.toString()), "");
 
             // 签名
-            byte[] signedMessage = TransactionEncoder
-                .signMessage(rawTransaction, credentials);
+            byte[] signedMessage = TransactionEncoder.signMessage(
+                rawTransaction, credentials);
             txHash = Numeric.toHexString(signedMessage);
             EthSendTransaction ethSendTransaction = web3j
                 .ethSendRawTransaction(txHash).sendAsync().get();

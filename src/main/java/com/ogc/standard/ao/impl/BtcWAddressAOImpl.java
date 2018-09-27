@@ -35,13 +35,13 @@ public class BtcWAddressAOImpl implements IBtcWAddressAO {
         BtcWAddress btcWAddress = btcWAddressBO
             .getBtcWAddressByAddress(address);
         if (btcWAddress != null) {
-            throw new BizException(EErrorCode_main.coin_WADDRESSEXIST.getCode(),
-                address);
+            throw new BizException(
+                EErrorCode_main.coin_WADDRESSEXIST.getCode(), (Object) address);
         }
         // 地址有效性校验
         if (!BtcClient.verifyAddress(address)) {
             throw new BizException(EErrorCode_main.coin_ADDRESSRULE.getCode(),
-                address);
+                (Object) address);
         }
         btcWAddressBO.saveBtcWAddress(address);
     }

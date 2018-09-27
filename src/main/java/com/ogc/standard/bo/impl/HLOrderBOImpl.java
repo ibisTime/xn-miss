@@ -19,20 +19,18 @@ import com.ogc.standard.enums.EDirection;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EHLOrderStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 @Component
-public class HLOrderBOImpl extends PaginableBOImpl<HLOrder>
-        implements IHLOrderBO {
+public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
+        IHLOrderBO {
     @Autowired
     private IHLOrderDAO hlOrderDAO;
 
     @Override
-    public String applyOrder(Account account, Jour jour, BigDecimal applyAmount,
-            String applyUser, String applyNote) {
+    public String applyOrder(Account account, Jour jour,
+            BigDecimal applyAmount, String applyUser, String applyNote) {
         if (applyAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
-                "红蓝订单的变动金额不能为0");
+            throw new BizException(EErrorCode_main.hl_ZERO.getCode());
         }
         String code = OrderNoGenerater.generate("HL");
         HLOrder data = new HLOrder();

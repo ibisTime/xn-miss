@@ -424,7 +424,22 @@ public enum EErrorCode_en_US {
             "000162",
             "The application for cash withdrawal has not been processed successfully and cannot be applied again."),
 
-    with_ZERO("000163", "The amount of cash cannot be 0");
+    with_ZERO("000163", "The amount of cash cannot be 0"),
+
+    address_AGAIN("000164",
+            "Address %s is not allowed rule of %s,please check carefully"),
+
+    config_TYPE("000165",
+            "Type type is not in the enumeration class 0 - first layer 1 - second layer"),
+
+    hl_ZERO("000166",
+            "The amount of change for red and blue orders cannot be 0"),
+
+    mobile_ILEAGLE("000167", "Illegal phone number format"),
+
+    user_LOFINNAMERE("000168", "Same login name exist"),
+
+    user_NOTEXIST("000169", "User is not exist");
 
     EErrorCode_en_US(String code, String value) {
         this.code = code;

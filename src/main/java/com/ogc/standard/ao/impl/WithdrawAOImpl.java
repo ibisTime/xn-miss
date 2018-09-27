@@ -103,7 +103,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         verifyPayCardNo(coin, payCardNo);
 
         // 校验资金密码
-        // userBO.checkTradePwd(applyUser, tradePwd);
+        userBO.checkTradePwd(applyUser, tradePwd);
 
         // 账户可用余额是否充足
         if (dbAccount.getAmount().subtract(dbAccount.getFrozenAmount())
@@ -237,7 +237,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (!WalletUtils.isValidAddress(withdraw.getPayCardNo())) {
             throw new BizException(
                 EErrorCode_main.with_INVILEDADDRESS.getCode(),
-                withdraw.getPayCardInfo());
+                (Object) withdraw.getPayCardInfo());
         }
 
         String txHash = TokenClient.transfer(secret.getAddress(),
@@ -294,7 +294,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (!WalletUtils.isValidAddress(withdraw.getPayCardNo())) {
             throw new BizException(
                 EErrorCode_main.with_INVILEDADDRESS.getCode(),
-                withdraw.getPayCardInfo());
+                (Object) withdraw.getPayCardInfo());
         }
 
         String txHash = ethTransactionBO.broadcast(address,

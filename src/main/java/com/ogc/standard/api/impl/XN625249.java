@@ -1,11 +1,3 @@
-/**
- * @Title XN625240.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author leo(haiqing)  
- * @date 2017年11月14日 下午12:40:28 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.ITradeOrderAO;
@@ -44,7 +36,8 @@ public class XN625249 extends AProcessor {
      * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
      */
     @Override
-    public void doCheck(String inputparams, String operator) throws ParaException {
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN625249Req.class);
         ObjValidater.validateReq(req);
     }

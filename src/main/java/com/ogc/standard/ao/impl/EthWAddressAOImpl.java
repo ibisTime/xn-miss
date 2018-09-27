@@ -36,13 +36,13 @@ public class EthWAddressAOImpl implements IEthWAddressAO {
         EthWAddress ethWAddress = ethWAddressBO
             .getEthWAddressByAddress(address);
         if (ethWAddress != null) {
-            throw new BizException(EErrorCode_main.coin_WADDRESSEXIST.getCode(),
-                address);
+            throw new BizException(
+                EErrorCode_main.coin_WADDRESSEXIST.getCode(), (Object) address);
         }
         // 地址有效性校验
         if (!WalletUtils.isValidAddress(address)) {
-            throw new BizException(EErrorCode_main.coin_WADDRESSEXIST.getCode(),
-                address);
+            throw new BizException(
+                EErrorCode_main.coin_WADDRESSEXIST.getCode(), (Object) address);
         }
         ethWAddressBO.saveEthWAddress(address);
     }

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /**
  * 
@@ -27,8 +26,7 @@ public enum ECoin {
         Map<String, ECoin> map = getCurrencyMap();
         ECoin result = map.get(code);
         if (result == null) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), code
-                    + "对应的coin不存在");
+            throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
         }
         return result;
     }

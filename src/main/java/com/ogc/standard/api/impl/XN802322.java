@@ -30,12 +30,13 @@ public class XN802322 extends AProcessor {
         condition.setType(req.getType());
         condition.setAccountNumber(req.getAccountNumber());
         condition.setBizType(req.getBizType());
+        condition.setBizTypeList(req.getBizTypeList());
         condition.setChannelType(req.getChannelType());
         condition.setStatus(req.getStatus());
-        condition.setCreateDatetimeStart(
-            DateUtil.getFrontDate(req.getDateStart(), false));
-        condition.setCreateDatetimeEnd(
-            DateUtil.getFrontDate(req.getDateEnd(), true));
+        condition.setCreateDatetimeStart(DateUtil.getFrontDate(
+            req.getDateStart(), false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
+            true));
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IJourAO.DEFAULT_ORDER_COLUMN;

@@ -17,11 +17,12 @@ import com.ogc.standard.domain.CtqBtcUtxo;
 import com.ogc.standard.enums.EAddressType;
 import com.ogc.standard.enums.EBtcUtxoRefType;
 import com.ogc.standard.enums.EBtcUtxoStatus;
+import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class BtcUtxoBOImpl extends PaginableBOImpl<BtcUtxo>
-        implements IBtcUtxoBO {
+public class BtcUtxoBOImpl extends PaginableBOImpl<BtcUtxo> implements
+        IBtcUtxoBO {
 
     @Autowired
     private IBtcUtxoDAO btcUtxoDAO;
@@ -105,7 +106,7 @@ public class BtcUtxoBOImpl extends PaginableBOImpl<BtcUtxo>
             condition.setVout(vout);
             data = btcUtxoDAO.select(condition);
             if (data == null) {
-                throw new BizException("xn0000", "UTXO记录不存在");
+                throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
             }
         }
         return data;
