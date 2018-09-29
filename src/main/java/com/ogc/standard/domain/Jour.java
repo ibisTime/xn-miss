@@ -55,6 +55,14 @@ public class Jour extends ABaseDO {
 
     private String postAmountString;
 
+    // **************************db properties **************************
+
+    // 真实姓名
+    private String realName;
+
+    // 手机号
+    private String mobile;
+
     public String getPreAmountString() {
         return preAmountString;
     }
@@ -356,6 +364,22 @@ public class Jour extends ABaseDO {
 
     public void setTransAmountString(String transAmountString) {
         this.transAmountString = transAmountString;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }

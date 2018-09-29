@@ -22,7 +22,6 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EAccountType;
-import com.ogc.standard.enums.EAddressType;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ESysUser;
@@ -70,15 +69,15 @@ public class AccountAOImpl implements IAccountAO {
                         || ECoinType.X.getCode().equals(coin.getType())) {
                     if (ethXAddress == null) {
                         ethXAddress = ethXAddressBO.generateAddress(userId);
-                        ctqBO.uploadEthAddress(ethXAddress,
-                            EAddressType.X.getCode());
+                        // ctqBO.uploadEthAddress(ethXAddress,
+                        // EAddressType.X.getCode());
                     }
                     accountBO.distributeAccount(userId, EAccountType.Customer,
                         coin, ethXAddress);
                 } else if (ECoinType.BTC.getCode().equals(coin.getType())) {
                     if (btcXAddress == null) {
                         btcXAddress = btcXAddressBO.generateAddress(userId);
-                        ctqBO.uploadBtcAddress(btcXAddress);
+                        // ctqBO.uploadBtcAddress(btcXAddress);
                     }
                     accountBO.distributeAccount(userId, EAccountType.Customer,
                         coin, btcXAddress);
@@ -120,8 +119,8 @@ public class AccountAOImpl implements IAccountAO {
             for (Account account : list) {
                 User user = userBO.getUserUnCheck(account.getUserId());
                 if (null != user) {
-                    account.setRealName(user.getRealName());
                     account.setMobile(user.getMobile());
+                    account.setRealName(user.getRealName());
                 }
 
             }

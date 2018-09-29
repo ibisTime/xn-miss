@@ -129,6 +129,7 @@ public class SimuKLineAOImpl implements ISimuKLineAO {
 
     private void createKLine(ExchangePair pair, String period,
             List<SimuMatchResultHistory> resultHistorieList) {
+
         // 成交量
         BigDecimal volume = BigDecimal.ZERO;
         // 成交笔数

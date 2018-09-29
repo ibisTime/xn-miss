@@ -39,6 +39,17 @@ public class ExchangePair extends ABaseDO {
     // 更新时间
     private Date updateDatetime;
 
+    // **************************db properties **************************
+
+    // 法币价格
+    private BigDecimal currencyPrice;
+
+    // 涨幅
+    private BigDecimal exchangeRate;
+
+    // 日线
+    private SimuKLine dayLineInfo;
+
     public String getId() {
         return id;
     }
@@ -101,6 +112,30 @@ public class ExchangePair extends ABaseDO {
 
     public void setUpdateDatetime(Date updateDatetime) {
         this.updateDatetime = updateDatetime;
+    }
+
+    public BigDecimal getCurrencyPrice() {
+        return currencyPrice;
+    }
+
+    public void setCurrencyPrice(BigDecimal currencyPrice) {
+        this.currencyPrice = currencyPrice;
+    }
+
+    public BigDecimal getExchangeRate() {
+        return exchangeRate;
+    }
+
+    public void setExchangeRate(BigDecimal exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
+
+    public SimuKLine getDayLineInfo() {
+        return dayLineInfo;
+    }
+
+    public void setDayLineInfo(SimuKLine dayLineInfo) {
+        this.dayLineInfo = dayLineInfo;
     }
 
 }

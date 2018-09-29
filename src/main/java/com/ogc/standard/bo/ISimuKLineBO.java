@@ -18,4 +18,6 @@ public interface ISimuKLineBO extends IPaginableBO<SimuKLine> {
     public SimuKLine getLatestSimuKLine(String symbol, String toSymbol,
             String period);
 
+    public BigDecimal getKLineExchangeRate(String symbol, String toSymbol);
+
 }

@@ -9,7 +9,8 @@ package com.ogc.standard.enums;
 public enum EMarketOrigin {
 
     BITFINEX("bitfinex", "B站"), BITTREX("Bittrex", "SC B站"), OKEX("okex",
-            "okex"), COINMARKETCAP("coinmarketcap", "coinmarketcap");
+            "okex"), COINMARKETCAP("coinmarketcap",
+                    "coinmarketcap"), HAPPYMONEY("happymoney", "happymoney");
 
     EMarketOrigin(String code, String value) {
         this.code = code;

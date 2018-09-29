@@ -13,9 +13,11 @@ import com.ogc.standard.ao.IJourAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IHLOrderBO;
 import com.ogc.standard.bo.IJourBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Jour;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourStatus;
@@ -28,6 +30,9 @@ import com.ogc.standard.exception.BizException;
  */
 @Service
 public class JourAOImpl implements IJourAO {
+
+    @Autowired
+    private IUserBO userBO;
 
     @Autowired
     private IJourBO jourBO;
@@ -81,7 +86,22 @@ public class JourAOImpl implements IJourAO {
             condition.setBizType(null);
             condition.setBizTypeList(bizTypeList);
         }
-        return jourBO.getPaginable(start, limit, condition);
+
+        Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);
+
+        if (null != page) {
+            List<Jour> list = page.getList();
+            for (Jour jour : list) {
+                User user = userBO.getUserUnCheck(jour.getUserId());
+                if (null != user) {
+                    jour.setMobile(user.getMobile());
+                    jour.setRealName(user.getRealName());
+                }
+
+            }
+        }
+
+        return page;
     }
 
     @Override

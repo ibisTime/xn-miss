@@ -18,9 +18,6 @@
 			<if test="id != null and id !=''">
 				AND t.id = #{id}
 			</if>
-			<if test="exchangeEname != null and exchangeEname != '' ">
-				AND t.exchange_ename like "%"#{exchangeEname}"%"
-			</if>
 			<if test="symbol != null and symbol != '' ">
 				AND t.symbol = #{symbol}
 			</if>

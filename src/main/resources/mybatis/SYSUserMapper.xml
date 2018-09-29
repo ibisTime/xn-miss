@@ -28,10 +28,9 @@
 			<if test="departmentCode != null and departmentCode != '' ">
 				AND t.department_code = #{departmentCode}
 			</if>
-			<if test="loginName != null and loginName != '' ">
-				AND t.login_name = #{loginName}
-
-			</if>					
+			<if test="loginNameForQuery != null and loginNameForQuery != '' ">
+				AND t.login_name like "%"#{loginNameForQuery}"%"
+			</if>				
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
@@ -50,7 +49,6 @@
 			<if test="mobile != null and mobile != '' ">
 				AND t.mobile = #{mobile}
 			</if>
-					
 			<if test="systemCode != null and systemCode != '' ">
 				AND t.system_code = #{systemCode}
 			</if>
@@ -62,7 +60,7 @@
 			</if>
 			<if test="realNameForQuery != null and realNameForQuery != '' ">
 				AND t.real_name like "%"#{realNameForQuery}"%"
-			</if>		
+			</if>
 		</trim>
 	</sql>
 	

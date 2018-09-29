@@ -46,6 +46,9 @@ public class SimuOrderDetailBOImpl extends PaginableBOImpl<SimuOrderDetail>
             // 交易手续费
             data.setTradedFee(tradedFee);
             data.setCreateDatetime(new Date());
+            // set买卖方向
+            data.setDirection(simuOrder.getDirection());
+
             simuOrderDetailDAO.insert(data);
         }
         return data;

@@ -68,6 +68,10 @@ public class Bankcard extends ABaseDO {
     // 系统编号
     private String systemCode;
 
+    // **************************db properties **************************
+
+    private User userInfo;
+
     public String getBankCode() {
         return bankCode;
     }
@@ -210,6 +214,14 @@ public class Bankcard extends ABaseDO {
 
     public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
+    }
+
+    public User getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
     }
 
 }

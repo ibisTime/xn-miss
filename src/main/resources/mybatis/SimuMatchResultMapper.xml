@@ -27,6 +27,18 @@
 			<if test="id != null and id != '' ">
 				AND t.id = #{id}
 			</if>
+			<if test="buyOrderCode != null and buyOrderCode != '' ">
+				AND t.buy_order_code = #{buyOrderCode}
+			</if>
+			<if test="sellOrderCode != null and sellOrderCode != '' ">
+				AND t.sell_order_code = #{sellOrderCode}
+			</if>
+			<if test="buyOrderDetailCode != null and buyOrderDetailCode != '' ">
+				AND t.buy_order_detail_code = #{buyOrderDetailCode}
+			</if>
+			<if test="sellOrderDetailCode != null and sellOrderDetailCode != '' ">
+				AND t.sell_order_detail_code = #{sellOrderDetailCode}
+			</if>
 		</trim>
 	</sql>
 	

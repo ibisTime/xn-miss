@@ -37,7 +37,8 @@ public class XN650100 extends AProcessor {
         condition.setOrder(orderColumn, "asc");
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return exchangePairAO.queryExchangePairPage(start, limit, condition);
+        return exchangePairAO.queryExchangePairPage(start, limit, condition,
+            req.getReferCurrency());
     }
 
     @Override

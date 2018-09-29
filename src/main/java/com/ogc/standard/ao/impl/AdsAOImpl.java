@@ -105,9 +105,15 @@ public class AdsAOImpl implements IAdsAO {
         // 是否实名认证
         if (EBoolean.YES.getCode().equals(req.getOnlyCert())) {
             if (StringUtils.isBlank(user.getRealName())) {
-                throw new BizException(EErrorCode_main.user_DOIDFIRST.getCode());
+                throw new BizException(
+                    EErrorCode_main.user_DOIDFIRST.getCode());
             }
         }
+        // 是否绑定手机号
+        if (StringUtils.isBlank(user.getMobile())) {
+            throw new BizException(EErrorCode_main.mobile_UNBIND.getCode());
+        }
+
         // 检查 平台 黑名单
         blacklistBO.isAddBlacklist(user.getUserId());
 
@@ -131,8 +137,8 @@ public class AdsAOImpl implements IAdsAO {
         // 0.存草稿
         if (EAdsPublishType.DRAFT.getCode().equals(req.getPublishType())) {
             this.saveDraft(data);
-        } else if (EAdsPublishType.PUBLISH.getCode().equals(
-            req.getPublishType())) {
+        } else if (EAdsPublishType.PUBLISH.getCode()
+            .equals(req.getPublishType())) {
             // 直接发布校验是否有，正在上架的同类型的广告
             adsBO.checkHaveSameTypeShangJiaAds(req.getUserId(),
                 req.getTradeType(), req.getTradeCoin());
@@ -146,8 +152,8 @@ public class AdsAOImpl implements IAdsAO {
     @Override
     public Object frontPage(Integer start, Integer limit, Ads condition) {
 
-        Paginable<Ads> paginable = this.adsBO
-            .frontPage(start, limit, condition);
+        Paginable<Ads> paginable = this.adsBO.frontPage(start, limit,
+            condition);
         List<Ads> adsList = paginable.getList();
         for (Ads ads : adsList) {
             this.getAdsMasterAndSetMaster(ads);
@@ -283,16 +289,16 @@ public class AdsAOImpl implements IAdsAO {
 
         User user = this.userBO.getUser(ads.getUserId());
         ads.setUser(user);
-        UserStatistics userStatistics = this.tradeOrderBO.obtainUserStatistics(
-            ads.getUserId(), ads.getTradeCoin());
+        UserStatistics userStatistics = this.tradeOrderBO
+            .obtainUserStatistics(ads.getUserId(), ads.getTradeCoin());
 
         // 获取信任数量
         userStatistics.setBeiXinRenCount(this.userRelationBO.getRelationCount(
             ads.getUserId(), EUserReleationType.TRUST.getCode()));
 
         // 获取用户广告对应币种交易量
-        BigDecimal totalTradeCount = this.tradeOrderBO.getUserTotalTradeCount(
-            user.getUserId(), ads.getTradeCoin());
+        BigDecimal totalTradeCount = this.tradeOrderBO
+            .getUserTotalTradeCount(user.getUserId(), ads.getTradeCoin());
         userStatistics.setTotalTradeCount(totalTradeCount.toString());
 
         // 为了版本兼容，留下的代码 start
@@ -307,8 +313,8 @@ public class AdsAOImpl implements IAdsAO {
         userStatistics.setTotalTradeCountBtc(totalTradeCountBtc.toString());
 
         // 获取用户X交易量
-        BigDecimal totalTradeCountX = this.tradeOrderBO.getUserTotalTradeCount(
-            user.getUserId(), ECoin.X.getCode());
+        BigDecimal totalTradeCountX = this.tradeOrderBO
+            .getUserTotalTradeCount(user.getUserId(), ECoin.X.getCode());
         userStatistics.setTotalTradeCountX(totalTradeCountX.toString());
         // 为了版本兼容，留下的代码 end
         user.setUserStatistics(userStatistics);
@@ -347,27 +353,29 @@ public class AdsAOImpl implements IAdsAO {
             // }
             //
             // BigDecimal platPrice = this.getPlatformPrice(market);
-            BigDecimal platPrice = marketAO.coinPriceByPlatform(
-                ads.getTradeCoin(), ads.getTradeCurrency()).getMid();
+            BigDecimal platPrice = marketAO
+                .coinPriceByPlatform(ads.getTradeCoin(), ads.getTradeCurrency())
+                .getMid();
             if (ECoin.X.getCode().equals(ads.getTradeCoin())) {
-                BigDecimal xToBtc = marketAO.coinPriceByPlatform(
-                    ECoin.X.getCode(), ECoin.BTC.getCode()).getMid();
+                BigDecimal xToBtc = marketAO
+                    .coinPriceByPlatform(ECoin.X.getCode(), ECoin.BTC.getCode())
+                    .getMid();
                 BigDecimal btcToTradeCurrency = marketAO.coinPriceByPlatform(
                     ECoin.BTC.getCode(), ads.getTradeCurrency()).getMid();
                 platPrice = xToBtc.multiply(btcToTradeCurrency);
             }
             ads.setMarketPrice(platPrice);
-            BigDecimal truePrice = platPrice.multiply(BigDecimal.ONE.add(data
-                .getPremiumRate()));
+            BigDecimal truePrice = platPrice
+                .multiply(BigDecimal.ONE.add(data.getPremiumRate()));
             if (data.getTradeType().equals(ETradeType.SELL.getCode())) {
 
-                truePrice = truePrice.compareTo(data.getProtectPrice()) > 0 ? truePrice
-                        : data.getProtectPrice();
+                truePrice = truePrice.compareTo(data.getProtectPrice()) > 0
+                        ? truePrice : data.getProtectPrice();
 
             } else {
 
-                truePrice = truePrice.compareTo(data.getProtectPrice()) < 0 ? truePrice
-                        : data.getProtectPrice();
+                truePrice = truePrice.compareTo(data.getProtectPrice()) < 0
+                        ? truePrice : data.getProtectPrice();
 
             }
 
@@ -381,16 +389,19 @@ public class AdsAOImpl implements IAdsAO {
         }
 
         // 获取用户交易广告费率
-        User user = userBO.getUser(data.getUserId());
-        Double fee = user.getTradeRate();
+        // User user = userBO.getUser(data.getUserId());
+        // Double fee = user.getTradeRate();
+
+        BigDecimal fee = sysConfigBO
+            .getBigDecimalValue(SysConstants.TRADE_FEE_RATE);
 
         // 如果活动期间的广告费率大于等于0，表示活动开启，优先取优惠费率
-        Double activityTradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.ACTIVITY_TRADE_FEE_RATE);
-        if (activityTradeRate >= 0) {
-            fee = activityTradeRate;
-        }
-        ads.setFeeRate(BigDecimal.valueOf(fee));
+        // Double activityTradeRate = sysConfigBO
+        // .getDoubleValue(SysConstants.ACTIVITY_TRADE_FEE_RATE);
+        // if (activityTradeRate >= 0) {
+        // fee = activityTradeRate;
+        // }
+        ads.setFeeRate(fee);
         // 设置保护价
         ads.setProtectPrice(data.getProtectPrice());
         ads.setMaxTrade(data.getMaxTrade());
@@ -613,17 +624,17 @@ public class AdsAOImpl implements IAdsAO {
             BigDecimal leftCount = ads.getLeftCount();
 
             // 算出应该退还的广告费
-            BigDecimal backFee = leftCount.multiply(ads.getFeeRate()).setScale(
-                0, BigDecimal.ROUND_DOWN);
+            BigDecimal backFee = leftCount.multiply(ads.getFeeRate())
+                .setScale(0, BigDecimal.ROUND_DOWN);
 
             Account dbAccount = accountBO.getAccountByUser(ads.getUserId(),
                 ads.getTradeCoin());
             // 解冻 未卖出金额
-            accountBO.unfrozenAmount(dbAccount,
-                ads.getLeftCount().add(backFee),
+            accountBO.unfrozenAmount(dbAccount, ads.getLeftCount().add(backFee),
                 EJourBizTypeUser.AJ_CCORDER_UNFROZEN_REVOKE.getCode(),
                 EJourBizTypeUser.AJ_CCORDER_UNFROZEN_REVOKE.getValue()
-                        + "-广告未卖出部分解冻", ads.getCode());
+                        + "-广告未卖出部分解冻",
+                ads.getCode());
 
         }
     }
@@ -648,7 +659,8 @@ public class AdsAOImpl implements IAdsAO {
         // 只有上架的 广告才可以下架。
         if (EAdsStatus.SHANGJIA.getCode().equals(ads.getStatus())) {
             // 剩余金额小于 单笔最小交易金额就下架
-            boolean condition1 = ads.getLeftCount().compareTo(BigDecimal.ZERO) <= 0;
+            boolean condition1 = ads.getLeftCount()
+                .compareTo(BigDecimal.ZERO) <= 0;
 
             Coin coin = coinBO.getCoin(ads.getTradeCoin());
 
@@ -694,8 +706,8 @@ public class AdsAOImpl implements IAdsAO {
             // 取出溢价率
             BigDecimal premiumRate = ads.getPremiumRate();
             // 算出 溢价之后的价格
-            BigDecimal truePrice = ads.getMarketPrice().multiply(
-                BigDecimal.ONE.add(premiumRate));
+            BigDecimal truePrice = ads.getMarketPrice()
+                .multiply(BigDecimal.ONE.add(premiumRate));
             BigDecimal protectPrice = ads.getProtectPrice();
 
             if (ads.getTradeType().equals(ETradeType.SELL.getCode())) {
@@ -731,7 +743,8 @@ public class AdsAOImpl implements IAdsAO {
         // 是否实名认证
         if (EBoolean.YES.getCode().equals(req.getOnlyCert())) {
             if (StringUtils.isBlank(user.getRealName())) {
-                throw new BizException(EErrorCode_main.user_DOIDFIRST.getCode());
+                throw new BizException(
+                    EErrorCode_main.user_DOIDFIRST.getCode());
             }
         }
 
@@ -762,8 +775,8 @@ public class AdsAOImpl implements IAdsAO {
             return;
         }
         // 3. 重新编辑发布
-        if (req.getPublishType().equals(
-            EAdsPublishType.PUBLISH_REEDIT.getCode())) {
+        if (req.getPublishType()
+            .equals(EAdsPublishType.PUBLISH_REEDIT.getCode())) {
             String oldAdsCode = req.getAdsCode();
 
             Ads lastAds = this.adsBO.getAds(oldAdsCode);

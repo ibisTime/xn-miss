@@ -1,4 +1,5 @@
 /**
+
  * @Title Status.java 
  * @Package com.ibis.pz.enums 
  * @Description 
@@ -20,6 +21,9 @@ import com.ogc.standard.common.SysConstants;
  * @history:
  */
 public enum EErrorCode_en_US {
+
+    // DEFAULT("Biz000", "system error"),
+
     // 1
     user_MOBILEEXIST("000001", "Mobile is exist"),
 
@@ -100,7 +104,8 @@ public enum EErrorCode_en_US {
     accept_OUTOFTIME("000034",
             "Order payment timed out, the system automatically cancels"),
 
-    accept_ONLYBUYER("000035", "Only buyers of this order can mark the payment"),
+    accept_ONLYBUYER("000035",
+            "Only buyers of this order can mark the payment"),
 
     accept_STATUSPAY("000036",
             "Cannot mark a paid amount in the current status"),
@@ -123,14 +128,13 @@ public enum EErrorCode_en_US {
     account_PERSONALLEFT("000042",
             "Insufficient balance available for personal account"),
 
-    account_NOTEXIST("000041",
+    account_NOTEXIST("000170",
             "User [%s;%s] does not have this type of account"),
 
-    account_UNFROZENZERO("000042",
+    account_UNFROZENZERO("000171",
             "This thawing will make the account freeze amount less than 0"),
 
-    account_SAME(
-            "000043",
+    account_SAME("000043",
             "The account number of both parties is the same, no internal transfer is required"),
 
     // 广告
@@ -282,8 +286,7 @@ public enum EErrorCode_en_US {
     simuorder_MINCOUNT("000106", "The number of orders should be"
             + SysConstants.minCountLimit + "Integer multiple"),
 
-    simuorder_PRICELESSTHAN(
-            "000107",
+    simuorder_PRICELESSTHAN("000107",
             "The commission price must not be higher than 900% of the previous closing price"),
 
     simuorder_PRICEMORETHAN("000108",
@@ -392,8 +395,7 @@ public enum EErrorCode_en_US {
     with_COUNTFEE("000151",
             "The cash amount needs to be greater than the handling fee"),
 
-    with_APPROVE(
-            "000152",
+    with_APPROVE("000152",
             "The status of the application record is not pending approval and cannot be approved"),
 
     with_BROADCAST("000153",
@@ -413,15 +415,13 @@ public enum EErrorCode_en_US {
 
     with_FAILED("000159", "Cash withdrawal failed"),
 
-    with_SIGNED(
-            "000160",
+    with_SIGNED("000160",
             "The transaction signature failed. Please check carefully whether the address is eligible for withdrawal."),
 
     with_STATUS("000161",
             "The status of the application record is not pending and cannot be paid."),
 
-    with_AGAIN(
-            "000162",
+    with_AGAIN("000162",
             "The application for cash withdrawal has not been processed successfully and cannot be applied again."),
 
     with_ZERO("000163", "The amount of cash cannot be 0"),
@@ -439,7 +439,12 @@ public enum EErrorCode_en_US {
 
     user_LOFINNAMERE("000168", "Same login name exist"),
 
-    user_NOTEXIST("000169", "User is not exist");
+    user_NOTEXIST("000169", "User is not exist"),
+
+    mobile_UNBIND("000172", "Please binding mobile phone number first"),
+
+    simuorder_PRICE_0("000173",
+            "Limit order to entrust prices should be greater than zero");
 
     EErrorCode_en_US(String code, String value) {
         this.code = code;

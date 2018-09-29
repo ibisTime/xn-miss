@@ -21,6 +21,8 @@ import com.ogc.standard.common.SysConstants;
  */
 public enum EErrorCode_main {
 
+    // DEFAULT("Biz000", "系统错误"),
+
     // 用户
     user_MOBILEEXIST("000001", "手机号已存在"),
 
@@ -113,9 +115,9 @@ public enum EErrorCode_main {
 
     account_PERSONALLEFT("000042", "个人账户可用余额不足"),
 
-    account_NOTEXIST("000041", "用户[%s;%s]无此类型账户"),
+    account_NOTEXIST("000170", "用户[%s;%s]无此类型账户"),
 
-    account_UNFROZENZERO("000042", "本次解冻会使账户冻结金额小于0"),
+    account_UNFROZENZERO("000171", "本次解冻会使账户冻结金额小于0"),
 
     account_SAME("000043", "来去双方账号一致，无需内部划转"),
 
@@ -259,7 +261,8 @@ public enum EErrorCode_main {
 
     simucount_COUNT("000105", "委托数量应在%s和%s之间"),
 
-    simuorder_MINCOUNT("000106", "委托数量应当" + SysConstants.minCountLimit + "的整数倍"),
+    simuorder_MINCOUNT("000106",
+            "委托数量应当" + SysConstants.minCountLimit + "的整数倍"),
 
     simuorder_PRICELESSTHAN("000107", "委托价格不得高于前收盘价的900%"),
 
@@ -389,7 +392,11 @@ public enum EErrorCode_main {
 
     user_LOGINNAMERE("000168", "登录名重复"),
 
-    user_NOTEXIST("000169", "用户不存在");
+    user_NOTEXIST("000169", "用户不存在"),
+
+    mobile_UNBIND("000172", "请先绑定手机号"),
+
+    simuorder_PRICE_0("000173", "限价委托单委托价格需大于0");
 
     EErrorCode_main(String code, String value) {
         this.code = code;

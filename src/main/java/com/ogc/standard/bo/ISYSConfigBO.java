@@ -1,11 +1,3 @@
-/**
- * @Title ISYSConfigBO.java 
- * @Package com.xnjr.moom.bo 
- * @Description 
- * @author haiqingzheng  
- * @date 2016年4月17日 下午2:40:52 
- * @version V1.0   
- */
 package com.ogc.standard.bo;
 
 import java.math.BigDecimal;

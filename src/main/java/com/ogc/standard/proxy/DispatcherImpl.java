@@ -53,7 +53,7 @@ public class DispatcherImpl implements IDispatcher {
             rm.setData(data);
         } catch (Exception e) {
 
-            System.out.println("Exception Post:" + e.getMessage());
+            System.out.println("Exception Post-o:" + e.getMessage());
 
             if (e instanceof BizException) {
 
@@ -62,14 +62,28 @@ public class DispatcherImpl implements IDispatcher {
                 String errorInfo = "";
                 if (ELanguage.en_US.getCode().equalsIgnoreCase(language)) {
 
-                    errorInfo = String.format(
-                        EErrorCode_en_US.getMap().get(errorCode).getValue(),
-                        ((BizException) e).getErrorParams());
+                    EErrorCode_en_US eErrorCode_en_US = EErrorCode_en_US
+                        .getMap().get(errorCode);
+
+                    if (null == eErrorCode_en_US) {
+                        errorInfo = ((BizException) e).getErrorMessage();
+                    } else {
+                        errorInfo = String.format(eErrorCode_en_US.getValue(),
+                            ((BizException) e).getErrorParams());
+                    }
 
                 } else {
-                    errorInfo = String.format(
-                        EErrorCode_main.getMap().get(errorCode).getValue(),
-                        ((BizException) e).getErrorParams());
+
+                    EErrorCode_main eErrorCode_main = EErrorCode_main.getMap()
+                        .get(errorCode);
+
+                    if (null == eErrorCode_main) {
+                        errorInfo = ((BizException) e).getErrorMessage();
+                    } else {
+                        errorInfo = String.format(eErrorCode_main.getValue(),
+                            ((BizException) e).getErrorParams());
+                    }
+
                 }
 
                 rm.setErrorCode(errorCode);

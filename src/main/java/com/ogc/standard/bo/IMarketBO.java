@@ -28,4 +28,6 @@ public interface IMarketBO {
     public BigDecimal getMarketPrice(String symbol, String referCurrency,
             String origin);
 
+    public BigDecimal getMarketRate(String symbol, String referCurrency);
+
 }

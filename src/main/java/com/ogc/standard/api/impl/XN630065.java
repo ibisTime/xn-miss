@@ -30,8 +30,9 @@ public class XN630065 extends AProcessor {
     public Object doBusiness() throws BizException {
         SYSUser condition = new SYSUser();
         condition.setDepartmentCode(req.getDepartmentCode());
-        condition.setMobileForQuery(req.getKeyword());
-        condition.setRealNameForQuery(req.getKeyword());
+        // condition.setMobileForQuery(req.getKeyword());
+        // condition.setRealNameForQuery(req.getKeyword());
+        condition.setLoginNameForQuery(req.getKeyword());
         condition.setRoleCode(req.getRoleCode());
         condition.setStatus(req.getStatus());
         condition.setUpdater(req.getUpdater());

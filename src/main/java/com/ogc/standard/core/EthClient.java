@@ -1,11 +1,3 @@
-/**
- * @Title ParityClient.java 
- * @Package ethereum 
- * @Description 
- * @author leo(haiqing)  
- * @date 2017年10月18日 下午7:42:57 
- * @version V1.0   
- */
 package com.ogc.standard.core;
 
 import java.io.BufferedWriter;
@@ -166,6 +158,8 @@ public class EthClient {
     }
 
     public static void main(String[] args) {
+
+        System.out.println(newAccount());
 
         // System.out.println(getGasPrice());
         // getBalance("0xd6095084132581043451cce50351d4beb2b4da15");

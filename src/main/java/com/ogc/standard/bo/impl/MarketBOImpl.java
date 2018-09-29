@@ -32,7 +32,16 @@ public class MarketBOImpl implements IMarketBO {
         Market avgCondition = new Market();
         avgCondition.setSymbol(coin.getCode());
         avgCondition.setReferCurrency(refCurrency);
-        BigDecimal avg = this.marketDAO.selectMarketAvg(avgCondition);
+
+        BigDecimal avg;
+        if (coin.getCode().equals(ECoin.X.getCode())) {
+
+            avg = getMarketRate(coin.getCode(), refCurrency);
+
+        } else {
+            avg = marketDAO.selectMarketAvg(avgCondition);
+        }
+
         avg = avg.setScale(4, BigDecimal.ROUND_HALF_EVEN);
         if (avg == null) {
             throw new BizException(EErrorCode_main.market_RATE.getCode());
@@ -104,6 +113,29 @@ public class MarketBOImpl implements IMarketBO {
         condition.setReferCurrency(referCurrency);
         return marketDAO.select(condition).getLastPrice();
 
+    }
+
+    @Override
+    public BigDecimal getMarketRate(String symbol, String referCurrency) {
+
+        BigDecimal rate = BigDecimal.ZERO;
+
+        if (ECoin.X.getCode().equals(symbol)) {
+
+            // 获取X与BTC的汇率
+            BigDecimal coinRate = getMarketPrice(symbol, ECoin.BTC.getCode(),
+                "");
+
+            rate = coinRate.multiply(
+                getMarketPrice(ECoin.BTC.getCode(), referCurrency, ""));
+
+        } else {
+
+            rate = getMarketPrice(symbol, referCurrency, "");
+
+        }
+
+        return rate;
     }
 
 }

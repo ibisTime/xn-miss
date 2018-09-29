@@ -8,13 +8,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IChargeBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IChargeDAO;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.EthWAddress;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.EErrorCode_main;
@@ -22,8 +25,15 @@ import com.ogc.standard.exception.BizException;
 
 @Component
 public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
+
     @Autowired
     private IChargeDAO chargeDAO;
+
+    @Autowired
+    private IAccountBO accountBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public String applyOrderOffline(Account account, String bizType,
@@ -152,17 +162,21 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
     @Override
     public Charge getCharge(String code) {
-        Charge order = null;
+        Charge charge = null;
         if (StringUtils.isNotBlank(code)) {
             Charge condition = new Charge();
             condition.setCode(code);
-            order = chargeDAO.select(condition);
-            if (null == order) {
+            charge = chargeDAO.select(condition);
+            if (null == charge) {
                 throw new BizException(
                     EErrorCode_main.charge_NOTEXIST.getCode());
             }
+
+            Account account = accountBO.getAccount(charge.getAccountNumber());
+            User user = userBO.getUser(account.getUserId());
+            charge.setPayer(user);
         }
-        return order;
+        return charge;
     }
 
     @Override
