@@ -1,11 +1,3 @@
-/**
- * @Title XN805160.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author taojian  
- * @date 2018年9月13日 下午7:36:43 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IUserIdAuthAO;

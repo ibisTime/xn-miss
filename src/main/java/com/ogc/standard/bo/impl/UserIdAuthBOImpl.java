@@ -101,4 +101,30 @@ public class UserIdAuthBOImpl extends PaginableBOImpl<UserIdAuth>
 
     }
 
+    @Override
+    public UserIdAuth getApproveByUser(String userId) {
+        String status = "";
+
+        UserIdAuth condition = new UserIdAuth();
+        condition.setApplyUser(userId);
+
+        condition.setStatus(EApproveStatus.PASS.getCode());
+        if (userIdAuthDAO.select(condition) != null) {
+            return userIdAuthDAO.select(condition);
+
+        }
+
+        condition.setStatus(EApproveStatus.TOAPPROVE.getCode());
+        if (userIdAuthDAO.select(condition) != null) {
+            return userIdAuthDAO.select(condition);
+        }
+
+        condition.setStatus(EApproveStatus.REFUSE.getCode());
+        if (userIdAuthDAO.select(condition) != null) {
+            return userIdAuthDAO.select(condition);
+        }
+
+        return null;
+    }
+
 }

@@ -69,7 +69,7 @@ public class PropertyAOImpl implements IPropertyAO {
         }
 
         // 获取X与法币的汇率
-        BigDecimal rate = marketAO.getMarket(ECoin.X.getCode(), converCurrency);
+        BigDecimal rate = marketAO.getMarketRate(ECoin.X.getCode(), converCurrency);
 
         Property property = new Property();
         property.setSymbol(symbol);

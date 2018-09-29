@@ -12,6 +12,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ISimuMatchResultDAO;
 import com.ogc.standard.domain.SimuMatchResult;
 import com.ogc.standard.domain.SimuOrderDetail;
+import com.ogc.standard.enums.ESimuOrderDirection;
 
 @Component
 public class SimuMatchResultBOImpl extends PaginableBOImpl<SimuMatchResult>
@@ -52,8 +53,21 @@ public class SimuMatchResultBOImpl extends PaginableBOImpl<SimuMatchResult>
     }
 
     @Override
-    public void doSimuMatchResult(SimuOrderDetail bidsOrderDetail,
-            SimuOrderDetail asksOrderDetail) {
+    public void doSimuMatchResult(SimuOrderDetail simuOrderDetail,
+            SimuOrderDetail handicapOrderDetail) {
+
+        // 区分买卖单
+        SimuOrderDetail bidsOrderDetail;
+        SimuOrderDetail asksOrderDetail;
+        if (ESimuOrderDirection.BUY.getCode()
+            .equals(simuOrderDetail.getDirection())) {
+            bidsOrderDetail = simuOrderDetail;
+            asksOrderDetail = handicapOrderDetail;
+        } else {
+            bidsOrderDetail = handicapOrderDetail;
+            asksOrderDetail = simuOrderDetail;
+        }
+
         SimuMatchResult data = null;
         if (null != bidsOrderDetail && null != asksOrderDetail) {
 
@@ -69,8 +83,10 @@ public class SimuMatchResultBOImpl extends PaginableBOImpl<SimuMatchResult>
                 data = new SimuMatchResult();
                 data.setSymbol(bidsOrderDetail.getSymbol());
                 data.setToSymbol(bidsOrderDetail.getToSymbol());
-                data.setBuyOrderCode(bidsOrderDetail.getCode());
-                data.setSellOrderCode(asksOrderDetail.getCode());
+                data.setBuyOrderCode(bidsOrderDetail.getOrderCode());
+                data.setSellOrderCode(asksOrderDetail.getOrderCode());
+                data.setBuyOrderDetailCode(bidsOrderDetail.getCode());
+                data.setSellOrderDetailCode(asksOrderDetail.getCode());
                 data.setBuyUserId(bidsOrderDetail.getUserId());
 
                 data.setExchangeRate(asksOrderDetail.getTradedPrice());

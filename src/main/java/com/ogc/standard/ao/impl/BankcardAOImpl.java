@@ -11,6 +11,7 @@ import com.ogc.standard.bo.IBankcardBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Bankcard;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN802020Req;
 import com.ogc.standard.dto.req.XN802022Req;
 import com.ogc.standard.dto.req.XN802023Req;
@@ -130,7 +131,18 @@ public class BankcardAOImpl implements IBankcardAO {
     @Override
     public Paginable<Bankcard> queryBankcardPage(int start, int limit,
             Bankcard condition) {
-        return bankcardBO.getPaginable(start, limit, condition);
+        Paginable<Bankcard> page = bankcardBO.getPaginable(start, limit,
+            condition);
+
+        if (null != page) {
+            for (Bankcard bankcard : page.getList()) {
+                User user = userBO.getUser(bankcard.getUserId());
+                bankcard.setUserInfo(user);
+            }
+
+        }
+
+        return page;
     }
 
     @Override
@@ -140,6 +152,11 @@ public class BankcardAOImpl implements IBankcardAO {
 
     @Override
     public Bankcard getBankcard(String code) {
-        return bankcardBO.getBankcard(code);
+
+        Bankcard bankcard = bankcardBO.getBankcard(code);
+        User user = userBO.getUser(bankcard.getUserId());
+        bankcard.setUserInfo(user);
+
+        return bankcard;
     }
 }

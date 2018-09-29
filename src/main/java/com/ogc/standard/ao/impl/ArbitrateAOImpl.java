@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IArbitrateAO;
 import com.ogc.standard.ao.ITradeOrderAO;
 import com.ogc.standard.bo.IArbitrateBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ITencentBO;
 import com.ogc.standard.bo.ITradeOrderBO;
 import com.ogc.standard.bo.IUserBO;
@@ -38,10 +39,15 @@ public class ArbitrateAOImpl implements IArbitrateAO {
     @Autowired
     private ITencentBO tencentBO;
 
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
     @Override
     @Transactional
     public void handle(String code, String result, String updater,
             String remark) {
+
+        sysUserBO.getSYSUser(updater);
 
         // 工单信息
         Arbitrate arbitrate = arbitrateBO.getArbitrate(code);

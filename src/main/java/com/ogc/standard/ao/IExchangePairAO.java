@@ -11,6 +11,6 @@ public interface IExchangePairAO {
     static final String DEFAULT_ORDER_COLUMN = "id";
 
     public Paginable<ExchangePair> queryExchangePairPage(int start, int limit,
-            ExchangePair condition);
+            ExchangePair condition, String referCurrency);
 
 }

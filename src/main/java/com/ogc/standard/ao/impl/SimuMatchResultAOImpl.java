@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,20 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ogc.standard.ao.ICoinAO;
+import com.ogc.standard.ao.IMarketAO;
 import com.ogc.standard.ao.ISimuMatchResultAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAwardBO;
 import com.ogc.standard.bo.ISimuMatchResultBO;
 import com.ogc.standard.bo.ISimuMatchResultHistoryBO;
 import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.common.CoinUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Award;
+import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.SimuMatchResult;
 import com.ogc.standard.domain.SimuMatchResultHistory;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.EMarketOrigin;
 import com.ogc.standard.enums.ERefType;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.EUserKind;
@@ -44,9 +50,13 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
     private IAwardBO awardBO;
 
     @Autowired
-    private MarketAOImpl marketAOImpl;
+    private IMarketAO marketAO;
+
+    @Autowired
+    private ICoinAO coinAO;
 
     @Transactional
+    @Override
     public void doCheckMatchResult() {
 
         // 获取所有的存活撮合结果
@@ -74,17 +84,18 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
             data.setToSymbolCount(matchResult.getToSymbolCount());
             data.setBuyFee(matchResult.getBuyFee());
             data.setSellFee(matchResult.getSellFee());
-
-            data.setCreateDatetime(matchResult.getCreateDatetime());
+            data.setCreateDatetime(new Date());
             simuMatchResultHistoryBO.saveSimuMatchResultHistory(data);
 
             // 删除存活撮合结果
             simuMatchResultBO.removeSimuMatchResult(matchResult.getId());
 
             // 更新行情
-            marketAOImpl.saveMarket(data.getSymbol().toUpperCase(),
-                "HappyMoney", data.getToSymbol().toUpperCase(), "",
-                data.getExchangeRate());
+            Coin coin = coinAO.getCoin(data.getToSymbol());
+            marketAO.saveMarket(data.getSymbol().toUpperCase(),
+                EMarketOrigin.HAPPYMONEY.getCode(),
+                data.getToSymbol().toUpperCase(), "",
+                CoinUtil.fromMinUnit(data.getExchangeRate(), coin.getUnit()));
 
             // 用户分成
             award(data);

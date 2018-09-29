@@ -121,18 +121,17 @@ public class SysConstants {
 
     public static final String ACCEPT_ORDER_MAX_AMOUNT = "accept_order_max_amount";// 单笔交易最大额度(人民币)
 
+    public static final String TRADE_FEE_RATE = "trade_fee_rate"; // 用户交易广告费率
+
     // ****** 币币交易 ******
 
     public static final String SIMU_ORDER_FEE_RATE = "simu_order_fee_rate"; // 用户币币交易手续费率
 
-    public static Integer handicapLimit = 5; // 盘口数量限制
+    public static Integer handicapLimit = 7; // 盘口数量限制
 
     public static BigDecimal minCountLimit = new BigDecimal("0.00001"); // 最小委托数量
 
     public static BigDecimal maxCountLimit = new BigDecimal("1000000"); // 最大委托数量
-
-    // 用户广告费率
-    public static String TRADE_FEE_RATE = "trade_fee_rate"; // 用户交易广告费率
 
     // 提币手续费率
     public static String WITHDRAW_FEE = "withdraw_fee"; // 用户提币手续费率

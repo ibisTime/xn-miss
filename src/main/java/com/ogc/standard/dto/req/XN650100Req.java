@@ -21,6 +21,9 @@ public class XN650100Req extends APageReq {
     // 计价币种
     private String tosymbol;
 
+    // 法币类型
+    private String referCurrency;
+
     public String getExchange() {
         return exchange;
     }
@@ -43,6 +46,14 @@ public class XN650100Req extends APageReq {
 
     public void setTosymbol(String tosymbol) {
         this.tosymbol = tosymbol;
+    }
+
+    public String getReferCurrency() {
+        return referCurrency;
+    }
+
+    public void setReferCurrency(String referCurrency) {
+        this.referCurrency = referCurrency;
     }
 
 }

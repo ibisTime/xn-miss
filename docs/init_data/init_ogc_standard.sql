@@ -610,12 +610,11 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','COINSM201708241037322072730','admin',now(),NULL,'CD-HPMN000024');
 
 /*
--- Query: SELECT `type`,`ckey`,`cvalue`,`updater`,now() as `update_datetime`,`remark`FROM ogc_standard.tsys_config
+-- Query: SELECT `type`,`ckey`,`cvalue`,`updater`,now() as `update_datetime`,`remark`FROM tsys_config
 LIMIT 0, 1000
 
 -- Date: 2018-09-11 13:29
 */
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('trade_rule','activity_trade_fee_rate','-1','admin',now(),'活动期间交易手续费率，小于0表示关闭活动');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_access_key','Dc0pMP8ImFm78-uk4iGsOPpB2-vHc64D07OsOQVi','admin',now(),'七牛云key1');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_secret_key','3NP-tpZP9-5fH-R-FhvKTfYpPPVFNvjFF3JXmrcq','admin',now(),'七牛云key1');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_bucket','test','admin',now(),'存储空间');
@@ -626,12 +625,15 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','trade_remind','1.交易前请详细了解卖家的交易信息 \n2.请通过平台进行沟通约定，并保存好相关聊天记录 \n3.如遇到交易纠纷，请通过平台“帮助”解决问题','admin',now(),'交易提醒');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','activity_rule','1.分享好友，并通过链接注册成功；\n2.注册之后每一笔成功交易，您都将获得一笔提成，金额为交易手续费的0.1% \n3.HappyMoney保留对活动的解释权。','admin',now(),'活动规则');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','tips','1.温馨提示；\n2.温馨提示 \n3.温馨提示。','admin',now(),'温馨提示');
+
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_app_code','1400139627','admin',now(),'应用编号');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_app_admin','admin','admin',now(),'账号管理员');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_access_key','-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEjpFnJBYdffrPuhNwuMVHgA8ww9tx\n5b3N12QOOneRRrM9FfOv5FE+GmmyFjZPNlxemK35TAru63AUgQpNzs+x1g==\n-----END PUBLIC KEY-----','admin',now(),'公钥');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_secret_key','-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgX50tBBPq9VZnCYvU\n68DXJlWtimgmGVQbYJ2vbK5AczahRANCAASOkWckFh19+s+6E3C4xUeADzDD23Hl\nvc3XZA46d5FGsz0V86/kUT4aabIWNk82XF6YrflMCu7rcBSBCk3Oz7HW\n-----END PRIVATE KEY-----','admin',now(),'私钥');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('tencent_im','tx_account_type','38263','admin',now(),'账户类型');
+
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('reg_award','cuser_ref','10','admin',now(),'普通用户推荐送X币');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('reg_award','duser_ref','15','admin',now(),'普通用户推荐送X币');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('reg_award','duser_ref','15','admin',now(),'渠道商用户推荐送X币');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_buy_fee_rate','0.001','admin',now(),'买入交易手续费');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_sell_fee_rate','0.002','admin',now(),'卖出交易手续费');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_cancel_max_time','10','admin',now(),'每天交易取消最大次数');
@@ -829,6 +831,27 @@ INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_d
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','sms_status','0','草稿','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','sms_status','1','已发送','admin',now(),'');
 INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','sms_status','2','已撤回','admin',now(),'');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0',NULL,'approve_status','认证审核状态','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','approve_status','0','待审核','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','approve_status','1','审核通过','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','approve_status','2','审核不通过','admin',now(),'');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0','','banner_location','banner位置','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','banner_location','web_banner','WEB首页','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','banner_location','h5_banner','h5首页','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','banner_location','h5_trade','h5交易活动图','admin',now(),'');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0','','apply_type','KYC资料类型','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','apply_type','1','手机','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','apply_type','2','邮箱','admin',now(),'');
+
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('0','','id_kind','证件类型','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','id_kind','1','身份证','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','id_kind','2','护照','admin',now(),'');
+INSERT INTO `tsys_dict` (`type`,`parent_key`,`dkey`,`dvalue`,`updater`,`update_datetime`,`remark`) VALUES ('1','id_kind','3','驾驶证','admin',now(),'');
+
+
 /*
 -- Query: SELECT `account_number`,`user_id`,`currency`,`address`,`type`,`status`,`amount`,`frozen_amount`,`md5`,`in_amount`,`out_amount`,`create_datetime`,`last_order` FROM tstd_account where user_id in ('SYS_USER_COLD')
 LIMIT 0, 5000

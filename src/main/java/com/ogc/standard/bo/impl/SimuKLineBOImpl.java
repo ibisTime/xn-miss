@@ -13,6 +13,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.ISimuKLineDAO;
 import com.ogc.standard.domain.ExchangePair;
 import com.ogc.standard.domain.SimuKLine;
+import com.ogc.standard.enums.ESimuKLinePeriod;
 
 @Component
 public class SimuKLineBOImpl extends PaginableBOImpl<SimuKLine>
@@ -72,6 +73,44 @@ public class SimuKLineBOImpl extends PaginableBOImpl<SimuKLine>
             data = simuKLines.get(0);
         }
         return data;
+    }
+
+    @Override
+    public BigDecimal getKLineExchangeRate(String symbol, String toSymbol) {
+        BigDecimal exchangeRate = BigDecimal.ZERO;
+
+        SimuKLine condition = new SimuKLine();
+        condition.setSymbol(symbol);
+        condition.setToSymbol(toSymbol);
+        condition.setPeriod(ESimuKLinePeriod.DAY.getCode());
+        condition.setOrder("create_datetime desc");
+
+        SimuKLine now = null;
+        SimuKLine last = null;
+
+        // 获取最新的两条
+        List<SimuKLine> simuKLines = querySimuKLineList(condition);
+        if (CollectionUtils.isNotEmpty(simuKLines)) {
+
+            if (simuKLines.size() >= 2) {
+                now = simuKLines.get(0);
+                BigDecimal nowPrice = now.getHigh().add(now.getLow())
+                    .divide(new BigDecimal("2"), 8, BigDecimal.ROUND_HALF_DOWN);
+
+                last = simuKLines.get(1);
+                BigDecimal lastPrice = last.getHigh().add(last.getLow())
+                    .divide(new BigDecimal("2"), 8, BigDecimal.ROUND_HALF_DOWN);
+
+                exchangeRate = nowPrice.subtract(lastPrice).divide(lastPrice, 4,
+                    BigDecimal.ROUND_HALF_DOWN);
+            } else {
+                exchangeRate = BigDecimal.ZERO;
+            }
+        } else {
+            exchangeRate = BigDecimal.ZERO;
+        }
+
+        return exchangeRate;
     }
 
 }

@@ -11,6 +11,7 @@ import org.web3j.crypto.WalletUtils;
 import com.ogc.standard.ao.ICoinAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ICoinBO;
+import com.ogc.standard.bo.ICtqBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.CoinUtil;
 import com.ogc.standard.core.StringValidater;
@@ -28,8 +29,8 @@ public class CoinAOImpl implements ICoinAO {
     @Autowired
     private ICoinBO coinBO;
 
-    // @Autowired
-    // private ICtqBO ctqBO;
+    @Autowired
+    private ICtqBO ctqBO;
 
     @Autowired
     private IAccountBO accountBO;
@@ -113,8 +114,7 @@ public class CoinAOImpl implements ICoinAO {
         coinBO.saveCoin(data);
 
         // 上传合约地址
-        // ctqBO.uploadContractAddress(req.getSymbol(),
-        // req.getContractAddress());
+        ctqBO.uploadContractAddress(req.getSymbol(), req.getContractAddress());
 
     }
 
@@ -145,9 +145,11 @@ public class CoinAOImpl implements ICoinAO {
         data.setBlockUrl(req.getBlockUrl());
         data.setIcoDatetime(req.getIcoDatetime());
         data.setCollectStart(CoinUtil.toMinUnit(
-            StringValidater.toBigDecimal(req.getCollectStart()), data.getUnit()));
+            StringValidater.toBigDecimal(req.getCollectStart()),
+            data.getUnit()));
         data.setWithdrawFee(CoinUtil.toMinUnit(
-            StringValidater.toBigDecimal(req.getWithdrawFee()), data.getUnit()));
+            StringValidater.toBigDecimal(req.getWithdrawFee()),
+            data.getUnit()));
 
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
@@ -161,7 +163,8 @@ public class CoinAOImpl implements ICoinAO {
 
         Coin coin = coinBO.getCoin(id);
         if (ECoinStatus.PUBLISHED.getCode().equals(coin.getStatus())) {
-            throw new BizException(EErrorCode_main.coin_COINPUBLISHED.getCode());
+            throw new BizException(
+                EErrorCode_main.coin_COINPUBLISHED.getCode());
         }
 
         coinBO.refreshStatus(coin, ECoinStatus.PUBLISHED, updater, remark);
@@ -173,7 +176,8 @@ public class CoinAOImpl implements ICoinAO {
 
         Coin coin = coinBO.getCoin(id);
         if (!ECoinStatus.PUBLISHED.getCode().equals(coin.getStatus())) {
-            throw new BizException(EErrorCode_main.coin_COINUNPUBLISH.getCode());
+            throw new BizException(
+                EErrorCode_main.coin_COINUNPUBLISH.getCode());
         }
         // 检查币种类型数量，至少保留一个币种
         coinBO.checkCoinCount(coin.getType());

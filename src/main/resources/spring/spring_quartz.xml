@@ -20,13 +20,13 @@
 			<list>
 			
 				<!-- 行情 -->
-       		    <!-- <ref bean="marketTrigger"/> -->
+       		    <ref bean="marketTrigger"/>
        		    
        		    <!-- 币币交易 -->
-       		   	<!-- <ref bean="doScanSimuOrderTrigger"/>
-       		    <ref bean="doSaveKLineTrigger"/> -->
+				<ref bean="doScanSimuOrderTrigger"/>
+       		    <ref bean="doSaveKLineTrigger"/>
        		    
-<!-- 				<ref bean="doERC20CollectTrigger"/>
+				<!-- <ref bean="doERC20CollectTrigger"/>
 				<ref bean="doERC20CheckGetFeeTxTrigger"/>
 				<ref bean="doERC20CheckCollectTxTrigger"/>       		    
 				<ref bean="doEthCollectTxTrigger"/>    

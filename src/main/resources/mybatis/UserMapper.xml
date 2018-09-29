@@ -132,6 +132,11 @@
 	            	#{item}
                 </foreach> 
 			</if>
+			<if test="keyword != null and keyword != '' ">
+				AND (t.mobile like "%"#{keyword}"%" 
+				OR t.nickname like "%"#{keyword}"%"
+				OR t.email like "%"#{keyword}"%")
+			</if>
 		</trim>
 	</sql>
 	

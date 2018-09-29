@@ -1,11 +1,3 @@
-/**
- * @Title XN630093.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author taojian  
- * @date 2018年9月12日 上午11:22:42 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.ISmsOutAO;

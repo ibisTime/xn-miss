@@ -65,13 +65,13 @@ public class BizConnecter {
         if (YES.equalsIgnoreCase(errorCode)) {
             data = RegexUtils.find(resJson, "data\":(.*)\\}", 1);
         } else {
-            System.out
-                .println("*******************posterrorstart*************************");
+            System.out.println(
+                "*******************posterrorstart*************************");
             System.out.println("code:\n" + code);
             System.out.println("json:\n" + json);
             System.out.println("errorInfo:\n" + errorInfo);
-            System.out
-                .println("*******************posterrorend*******************************");
+            System.out.println(
+                "*******************posterrorend*******************************");
             throw new BizException("Biz000", errorInfo);
         }
         return data;
@@ -87,9 +87,7 @@ public class BizConnecter {
             postUrl = BC_WALLET_URL;
         } else if (code.startsWith("660")) {
             postUrl = CORE_URL;
-        } else if (code.equals("626206") || code.equals("626026")) {
-            postUrl = BLOCKCHAIN_DATA_URL;
-        } else if (code.equals("626020")) {
+        } else if (code.startsWith("626")) {
             postUrl = CTQ_URL;
         }
         return postUrl;

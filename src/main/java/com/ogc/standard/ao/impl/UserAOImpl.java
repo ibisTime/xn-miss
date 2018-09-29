@@ -1,11 +1,3 @@
-/**
- * @Title UserAOImpl.java 
- * @Package com.ogc.standard.ao.impl 
- * @Description 
- * @author dl  
- * @date 2018年8月20日 下午1:50:42 
- * @version V1.0   
- */
 package com.ogc.standard.ao.impl;
 
 import java.util.ArrayList;
@@ -20,9 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.ao.IUserAO;
-import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAwardBO;
-import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.IGoogleAuthBO;
 import com.ogc.standard.bo.IIdentifyBO;
 import com.ogc.standard.bo.ISYSConfigBO;
@@ -102,13 +92,7 @@ public class UserAOImpl implements IUserAO {
     private ISYSUserBO sysUserBO;
 
     @Autowired
-    private IAccountBO accountBO;
-
-    @Autowired
     private IAccountAO accountAO;
-
-    @Autowired
-    private ICoinBO coinBO;
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
@@ -364,8 +348,8 @@ public class UserAOImpl implements IUserAO {
 
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
-//            throw new BizException("000005",
-//                ErrorMessage.getErrorMes("000005", language));
+            // throw new BizException("000005",
+            // ErrorMessage.getErrorMes("000005", language));
         }
         // 验证手机号
         userBO.isMobileExist(newMobile);
@@ -638,6 +622,9 @@ public class UserAOImpl implements IUserAO {
             user.setGoogleAuthFlag(false);
         }
 
+        // 证件认证状态
+        user.setUserIdAuthInfo(userIdAuthBO.getApproveByUser(userId));
+
         // 拉取ext数据
         UserExt data = userExtBO.getUserExt(userId);
         if (data != null) {
@@ -722,7 +709,7 @@ public class UserAOImpl implements IUserAO {
     public void doIdentify(String userId, String idKind, String idNo,
             String realName) {
         // 更新用户表
-        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+        userBO.refreshIdentity(userId, realName, EIDKind.ID_CARD.getCode(),
             idNo);
     }
 
@@ -733,7 +720,7 @@ public class UserAOImpl implements IUserAO {
         identifyBO.doTwoIdentify(ESystemCode.BZ.getCode(),
             ESystemCode.BZ.getCode(), userId, realName, idKind, idNo);
         // 更新用户表
-        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+        userBO.refreshIdentity(userId, realName, EIDKind.ID_CARD.getCode(),
             idNo);
 
     }
@@ -745,7 +732,7 @@ public class UserAOImpl implements IUserAO {
         identifyBO.doFourIdentify(userId, realName, idKind, idNo, cardNo,
             bindMobile);
         // 更新用户表
-        userBO.refreshIdentity(userId, realName, EIDKind.IDCard.getCode(),
+        userBO.refreshIdentity(userId, realName, EIDKind.ID_CARD.getCode(),
             idNo);
 
     }

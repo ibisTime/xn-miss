@@ -35,6 +35,9 @@ public class SYSRole extends ABaseDO {
 
     // ***********db properties***********
 
+    // 角色名称
+    private String nameForQuery;
+
     public String getSystemCode() {
         return systemCode;
     }
@@ -82,4 +85,13 @@ public class SYSRole extends ABaseDO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public String getNameForQuery() {
+        return nameForQuery;
+    }
+
+    public void setNameForQuery(String nameForQuery) {
+        this.nameForQuery = nameForQuery;
+    }
+
 }

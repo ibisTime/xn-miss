@@ -191,16 +191,19 @@ public class HandicapBOImpl extends PaginableBOImpl<Handicap>
     public List<Handicap> queryHandicapList(String symbol, String toSymbol,
             String direction, int start, int limit) {
         Handicap condition = new Handicap();
+
+        String order = "";
         if (ESimuOrderDirection.BUY.getCode().equals(direction)) {
+            order = "price asc,id desc";
             direction = ESimuOrderDirection.SELL.getCode();
         } else {
+            order = "price desc,id desc";
             direction = ESimuOrderDirection.BUY.getCode();
         }
         condition.setDirection(direction);
         condition.setSymbol(symbol);
         condition.setToSymbol(toSymbol);
-        condition.setOrder(ESimuOrderDirection.BUY.getCode().equals(direction)
-                ? "price desc,id desc" : "price asc,id desc");
+        condition.setOrder(order);
         Paginable<Handicap> page = getPaginable(start, limit, condition);
         return page.getList();
     }

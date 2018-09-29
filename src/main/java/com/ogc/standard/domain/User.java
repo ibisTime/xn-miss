@@ -128,6 +128,9 @@ public class User extends ABaseDO {
     // ***********db properties***********
 
     // 登录名模糊查询
+    private String keyword;
+
+    // 登录名模糊查询
     private String loginNameForQuery;
 
     // 昵称模糊查询
@@ -233,8 +236,8 @@ public class User extends ABaseDO {
     // 是否绑定邮箱
     private boolean emailBindFlag;
 
-    // 是否已证件认证
-    private UserIdAuth userIdAuth;
+    // 证件认证状态
+    private UserIdAuth userIdAuthInfo;
 
     // 用户推荐人
     private User refereeUser;
@@ -545,6 +548,14 @@ public class User extends ABaseDO {
         this.lastLogin = lastLogin;
     }
 
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
     public String getLoginNameForQuery() {
         return loginNameForQuery;
     }
@@ -657,12 +668,12 @@ public class User extends ABaseDO {
         this.emailBindFlag = emailBindFlag;
     }
 
-    public UserIdAuth getUserIdAuth() {
-        return userIdAuth;
+    public UserIdAuth getUserIdAuthInfo() {
+        return userIdAuthInfo;
     }
 
-    public void setUserIdAuth(UserIdAuth userIdAuth) {
-        this.userIdAuth = userIdAuth;
+    public void setUserIdAuthInfo(UserIdAuth userIdAuthInfo) {
+        this.userIdAuthInfo = userIdAuthInfo;
     }
 
     public User getRefereeUser() {

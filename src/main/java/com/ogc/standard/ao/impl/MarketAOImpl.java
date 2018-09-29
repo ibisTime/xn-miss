@@ -75,26 +75,9 @@ public class MarketAOImpl implements IMarketAO {
     }
 
     @Override
-    public BigDecimal getMarket(String symbol, String referCurrency) {
+    public BigDecimal getMarketRate(String symbol, String referCurrency) {
 
-        BigDecimal rate = BigDecimal.ZERO;
-
-        if (ECoin.X.getCode().equals(symbol)) {
-
-            // 获取X与BTC的汇率
-            BigDecimal coinRate = marketBO.getMarketPrice(symbol,
-                ECoin.BTC.getCode(), "");
-
-            rate = coinRate.multiply(marketBO
-                .getMarketPrice(ECoin.BTC.getCode(), referCurrency, ""));
-
-        } else {
-
-            rate = marketBO.getMarketPrice(symbol, referCurrency, "");
-
-        }
-
-        return rate;
+        return marketBO.getMarketRate(symbol, referCurrency);
     }
 
     // 获取多个币种的行情列表
@@ -231,15 +214,14 @@ public class MarketAOImpl implements IMarketAO {
         // 落地Coin的CNY行情
         JSONObject cnyObject = jsonObject.getJSONObject("data")
             .getJSONObject("quotes").getJSONObject("CNY");
-        saveMarket(coin, "coinmarketcap", ECurrency.CNY.getCode(), coinId,
-            cnyObject.getBigDecimal("price"));
+        saveMarket(coin, EMarketOrigin.COINMARKETCAP.getCode(),
+            ECurrency.CNY.getCode(), coinId, cnyObject.getBigDecimal("price"));
 
         // 落地Coin的USD行情
         JSONObject usdObject = jsonObject.getJSONObject("data")
             .getJSONObject("quotes").getJSONObject("USD");
         saveMarket(coin, "coinmarketcap", ECurrency.USD.getCode(), coinId,
             usdObject.getBigDecimal("price"));
-
     }
 
     @Override
@@ -259,8 +241,7 @@ public class MarketAOImpl implements IMarketAO {
 
         // 确定mid
         // 保存 存在就更新，不存在就插入
-        this.marketBO.updateMarket(EMarketOrigin.COINMARKETCAP.getCode(), coin,
-            cnyMarket);
+        this.marketBO.updateMarket(origin, coin, cnyMarket);
 
     }
 

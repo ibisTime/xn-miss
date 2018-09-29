@@ -23,7 +23,7 @@ public class XN650102 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return marketAO.getMarket(req.getSymbol().toUpperCase(),
+        return marketAO.getMarketRate(req.getSymbol().toUpperCase(),
             req.getReferCurrency().toUpperCase());
     }
 

@@ -34,7 +34,7 @@ public class PhoneUtil {
         if (StringUtils.isBlank(mobile)) {
             result = false;
         } else {
-            Pattern p = Pattern.compile("^1[34578]\\d{9}$"); // 验证手机号
+            Pattern p = Pattern.compile("^1[345678]\\d{9}$"); // 验证手机号
             Matcher m = p.matcher(mobile);
             if (!m.matches()) {
                 result = false;
@@ -52,7 +52,7 @@ public class PhoneUtil {
         if (StringUtils.isBlank(mobile)) {
             throw new BizException(EErrorCode_main.mobile_ILEAGLE.getCode());
         }
-        Pattern p = Pattern.compile("^1[34578]\\d{9}$"); // 验证手机号
+        Pattern p = Pattern.compile("^1[345678]\\d{9}$"); // 验证手机号
         Matcher m = p.matcher(mobile);
         if (!m.matches()) {
             throw new BizException(EErrorCode_main.mobile_ILEAGLE.getCode());
@@ -69,7 +69,7 @@ public class PhoneUtil {
         if (StringUtils.isBlank(mobile)) {
             throw new ParaException("FA0000", message + "格式非法");
         }
-        Pattern p = Pattern.compile("^1[34578]\\d{9}$"); // 验证手机号
+        Pattern p = Pattern.compile("^1[345678]\\d{9}$"); // 验证手机号
         Matcher m = p.matcher(mobile);
         if (!m.matches()) {
             throw new ParaException("FA0000", message + "格式非法");

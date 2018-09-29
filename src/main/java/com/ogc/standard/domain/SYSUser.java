@@ -79,6 +79,9 @@ public class SYSUser extends ABaseDO {
     // 名字模糊查询
     private String realNameForQuery;
 
+    // 登录名模糊查询
+    private String loginNameForQuery;
+
     public String getMobileForQuery() {
         return mobileForQuery;
     }
@@ -242,6 +245,14 @@ public class SYSUser extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getLoginNameForQuery() {
+        return loginNameForQuery;
+    }
+
+    public void setLoginNameForQuery(String loginNameForQuery) {
+        this.loginNameForQuery = loginNameForQuery;
     }
 
 }

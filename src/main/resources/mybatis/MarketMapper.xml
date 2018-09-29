@@ -105,7 +105,8 @@
   <select id="selectMarketAvg" resultType="Decimal" parameterType="com.ogc.standard.domain.Market">
     SELECT avg(mid)
     FROM tcoin_market
-    WHERE symbol = #{symbol}
+    <include refid="whereCondation"/>
+    <!-- WHERE symbol = #{symbol} -->
   </select>
 
   <!--<select id="selectList" parameterType="java.lang.String" resultMap="BaseResultMap">-->

@@ -266,7 +266,7 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         // 冻结出售币种资产
         accountBO.frozenAmount(account, totalCount,
-            EJourBizTypeUser.AJ_BBORDER_SELL.getCode(), "提交卖出[" + SymbolUtil
+            EJourBizTypeUser.AJ_BBORDER_FROZEN.getCode(), "提交卖出[" + SymbolUtil
                 .getSymbolPair(req.getSymbol(), req.getToSymbol()) + "]委托单",
             simuOrder.getCode());
 
@@ -275,6 +275,20 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
     }
 
     private void parameterValidater(XN650050Req req) {
+
+        // 校验用户是否存在
+        User user = userBO.getUser(req.getUserId());
+
+        // 是否实名认证
+        if (StringUtils.isBlank(user.getRealName())) {
+            throw new BizException(EErrorCode_main.user_DOIDFIRST.getCode());
+        }
+
+        // 是否绑定手机号
+        if (StringUtils.isBlank(user.getMobile())) {
+            throw new BizException(EErrorCode_main.mobile_UNBIND.getCode());
+        }
+
         ESimuOrderType eSimuOrderType = ESimuOrderType
             .getOrderType(req.getType());
         if (ESimuOrderType.LIMIT.getCode().equals(eSimuOrderType.getCode())) {
@@ -282,14 +296,31 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
                 throw new BizException(
                     EErrorCode_main.simuorder_PRICE.getCode());
             }
+
+            if (new BigDecimal(req.getPrice())
+                .compareTo(BigDecimal.ZERO) == 0) {
+                throw new BizException(
+                    EErrorCode_main.simuorder_PRICE.getCode());
+            }
+        }
+
+        String coinSymbol = req.getSymbol();
+        if ((ESimuOrderType.MARKET.getCode()
+            .equals(eSimuOrderType.getCode()))) {
+
+            if (ESimuOrderDirection.BUY.getCode().equals(req.getDirection())) {
+                coinSymbol = req.getToSymbol();
+            }
+
         }
 
         // 获取币种单位
-        Coin coin = coinBO.getCoin(req.getSymbol());
+        Coin coin = coinBO.getCoin(coinSymbol);
 
         // 委托数量是否超过限制
         BigDecimal count = CoinUtil.fromMinUnit(
             StringValidater.toBigDecimal(req.getTotalCount()), coin.getUnit());
+
         if (count.compareTo(SysConstants.minCountLimit) < 0
                 || count.compareTo(SysConstants.maxCountLimit) > 0) {
             throw new BizException(EErrorCode_main.simucount_COUNT.getCode(),
@@ -338,7 +369,6 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             }
 
             for (SimuOrder simuOrder : simuOrderList) {
-
                 doMatchMarket(simuOrder);
             }
         }
@@ -364,7 +394,6 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
             }
 
             for (Handicap handicap : resultList) {
-                // 此处有坑，写main方法测试
                 if (!priceArray.contains(handicap.getPrice())) {
                     priceArray.add(handicap.getPrice());
                     handicapList.add(handicap);
@@ -387,12 +416,23 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         } else {
 
-            // 撮合成功后的交易明细
-            List<SimuOrderDetail> simuOrderDetailList = new ArrayList<>();
-
             // 获取价格匹配的盘口
             List<Handicap> usableHandicapList = getUsableHandicapList(simuOrder,
                 handicapList);
+
+            if (CollectionUtils.isEmpty(usableHandicapList)) {
+                // 当对方盘口可交易档位为空，当前限价单无法撮合成交，则 进入己方盘口
+                if (ESimuOrderType.LIMIT.getCode()
+                    .equals(simuOrder.getType())) {
+                    handicapBO.saveHandicap(simuOrder);
+                } else {
+                    doEmptyIntoHistory(simuOrder);
+                }
+                return;
+            }
+
+            // 撮合成功后的交易明细
+            List<SimuOrderDetail> simuOrderDetailList = new ArrayList<>();
 
             // 不为空遍历
             for (Handicap handicap : usableHandicapList) {

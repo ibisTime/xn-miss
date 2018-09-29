@@ -1,11 +1,3 @@
-/**
- * @Title IUserIdAuthBO.java 
- * @Package com.ogc.standard.bo 
- * @Description 
- * @author taojian  
- * @date 2018年9月13日 下午5:15:21 
- * @version V1.0   
- */
 package com.ogc.standard.bo;
 
 import java.util.List;
@@ -34,4 +26,6 @@ public interface IUserIdAuthBO extends IPaginableBO<UserIdAuth> {
     public void checkApproveStatus(String userId);
 
     public UserIdAuth getUserIdAuthWithNoCheck(Long id);
+
+    public UserIdAuth getApproveByUser(String userId);
 }

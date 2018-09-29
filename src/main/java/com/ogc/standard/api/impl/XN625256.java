@@ -36,7 +36,6 @@ public class XN625256 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
 
-        // throw new BizException("xn000","已经弃用");
         UserStatistics userStatistics = this.tradeOrderAO
             .userStatisticsInfoContainTradeCount(req.getMaster(),
                 req.getCurrency());
@@ -53,9 +52,8 @@ public class XN625256 extends AProcessor {
 
             userStatistics.setIsTrust(
                 isTruest ? EBoolean.YES.getCode() : EBoolean.NO.getCode());
-            userStatistics
-                .setIsAddBlackList(isAddBlackList ? EBoolean.YES.getCode()
-                        : EBoolean.NO.getCode());
+            userStatistics.setIsAddBlackList(isAddBlackList
+                    ? EBoolean.YES.getCode() : EBoolean.NO.getCode());
 
             // 之间的交易次数
             long tradeTimesBetweenUser = this.tradeOrderAO

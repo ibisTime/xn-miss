@@ -1,11 +1,3 @@
-/**
- * @Title XN625240.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author leo(haiqing)  
- * @date 2017年11月14日 下午12:40:28 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.ITradeOrderAO;

@@ -14,8 +14,7 @@ package com.ogc.standard.enums;
  * @history:
  */
 public enum EIDKind {
-    // 1
-    IDCard("1", "身份证");
+    ID_CARD("1", "身份证"), PASS_PORT("2", "护照"), DRIVING_LICENSE("3", "驾驶证");
 
     EIDKind(String code, String value) {
         this.code = code;
