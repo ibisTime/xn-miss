@@ -102,13 +102,13 @@ public class AdsAOImpl implements IAdsAO {
     public void publishAds(XN625220Req req) {
         // 校验用户是否存在
         User user = userBO.getUser(req.getUserId());
+
         // 是否实名认证
-        if (EBoolean.YES.getCode().equals(req.getOnlyCert())) {
-            if (StringUtils.isBlank(user.getRealName())) {
-                throw new BizException(
-                    EErrorCode_main.user_DOIDFIRST.getCode());
-            }
+        if (ETradeType.BUY.getCode().equals(req.getTradeType())
+                && StringUtils.isBlank(user.getRealName())) {
+            throw new BizException(EErrorCode_main.user_DOIDFIRST.getCode());
         }
+
         // 是否绑定手机号
         if (StringUtils.isBlank(user.getMobile())) {
             throw new BizException(EErrorCode_main.mobile_UNBIND.getCode());
@@ -356,14 +356,14 @@ public class AdsAOImpl implements IAdsAO {
             BigDecimal platPrice = marketAO
                 .coinPriceByPlatform(ads.getTradeCoin(), ads.getTradeCurrency())
                 .getMid();
-            if (ECoin.X.getCode().equals(ads.getTradeCoin())) {
-                BigDecimal xToBtc = marketAO
-                    .coinPriceByPlatform(ECoin.X.getCode(), ECoin.BTC.getCode())
-                    .getMid();
-                BigDecimal btcToTradeCurrency = marketAO.coinPriceByPlatform(
-                    ECoin.BTC.getCode(), ads.getTradeCurrency()).getMid();
-                platPrice = xToBtc.multiply(btcToTradeCurrency);
-            }
+            // if (ECoin.X.getCode().equals(ads.getTradeCoin())) {
+            // BigDecimal xToBtc = marketAO
+            // .coinPriceByPlatform(ECoin.X.getCode(), ECoin.BTC.getCode())
+            // .getMid();
+            // BigDecimal btcToTradeCurrency = marketAO.coinPriceByPlatform(
+            // ECoin.BTC.getCode(), ads.getTradeCurrency()).getMid();
+            // platPrice = xToBtc.multiply(btcToTradeCurrency);
+            // }
             ads.setMarketPrice(platPrice);
             BigDecimal truePrice = platPrice
                 .multiply(BigDecimal.ONE.add(data.getPremiumRate()));

@@ -29,7 +29,7 @@ public class XN650100 extends AProcessor {
     public Object doBusiness() throws BizException {
         ExchangePair condition = new ExchangePair();
         condition.setSymbol(req.getSymbol());
-        condition.setToSymbol(req.getTosymbol());
+        condition.setToSymbol(req.getToSymbol());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IExchangePairAO.DEFAULT_ORDER_COLUMN;

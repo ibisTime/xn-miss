@@ -39,7 +39,6 @@ public class XN625220Req {
     private String onlyTrust;
 
     // 是否需要实名认证1是0否
-    @NotBlank
     private String onlyCert;
 
     // 溢价率（原生币必填）
