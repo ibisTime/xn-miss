@@ -45,6 +45,7 @@ import com.ogc.standard.enums.EBtcUtxoRefType;
 import com.ogc.standard.enums.EBtcUtxoStatus;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECollectStatus;
+import com.ogc.standard.enums.EDepositType;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourBizTypeCold;
@@ -233,6 +234,20 @@ public class BtcUtxoAOImpl implements IBtcUtxoAO {
             withdraw.getCode(), EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE
                 .getCode(), EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE.getValue()
                     + "-外部地址：" + withdraw.getPayCardNo());
+
+        // 平台散取账户减钱
+        Account mAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_BTC_M
+            .getCode());
+
+        accountBO.changeAmount(
+            mAccount,
+            withdraw.getAmount().subtract(withdraw.getFee()).negate(),
+            EChannelType.Online,
+            withdraw.getChannelOrder(),
+            withdraw.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getValue() + "-外部地址："
+                    + withdraw.getPayCardNo());
     }
 
     @Override
@@ -346,8 +361,8 @@ public class BtcUtxoAOImpl implements IBtcUtxoAO {
         // 落地定存记录
         String code = depositBO.saveDeposit(symbol, "",
             ctqBtcUtxo.getAddress(), ctqBtcUtxo.getCount(),
-            ctqBtcUtxo.getTxid(), btcOriginalTx.getFees(),
-            ctqBtcUtxo.getSyncTime());
+            EDepositType.DEPOSIT_M, ctqBtcUtxo.getTxid(),
+            btcOriginalTx.getFees(), ctqBtcUtxo.getSyncTime());
         // 落地UTXO
         btcUtxoBO.saveBtcUtxo(ctqBtcUtxo, EAddressType.M);
         // 落地交易记录
@@ -359,6 +374,20 @@ public class BtcUtxoAOImpl implements IBtcUtxoAO {
             EChannelType.Online, btcOriginalTx.getTxid(), code,
             EJourBizTypePlat.AJ_DEPOSIT_MINING_FEE.getCode(), "-交易ID："
                     + btcOriginalTx.getTxid());
+
+        // 平台散取账户加钱
+        Account mAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_BTC_M
+            .getCode());
+
+        accountBO.changeAmount(
+            mAccount,
+            amount,
+            EChannelType.Online,
+            ctqBtcUtxo.getTxid(),
+            code,
+            EJourBizTypeUser.AJ_CHARGE.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getValue() + "-交易id："
+                    + ctqBtcUtxo.getTxid());
     }
 
     @Override

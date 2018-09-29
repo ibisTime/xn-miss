@@ -25,8 +25,10 @@ import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.ICollectBO;
 import com.ogc.standard.bo.IDepositBO;
 import com.ogc.standard.bo.IEthMAddressBO;
+import com.ogc.standard.bo.IEthSAddressBO;
 import com.ogc.standard.bo.IEthTransactionBO;
 import com.ogc.standard.bo.IEthXAddressBO;
+import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.ITokenEventBO;
 import com.ogc.standard.bo.IWithdrawBO;
 import com.ogc.standard.bo.base.Paginable;
@@ -36,10 +38,13 @@ import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.CtqEthTransaction;
 import com.ogc.standard.domain.EthMAddress;
+import com.ogc.standard.domain.EthSAddress;
 import com.ogc.standard.domain.EthTransaction;
 import com.ogc.standard.domain.EthXAddress;
+import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.TokenEvent;
 import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.EDepositType;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EJourBizTypeCold;
 import com.ogc.standard.enums.EJourBizTypePlat;
@@ -90,6 +95,12 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
 
     @Autowired
     private ICollectAO collectAO;
+
+    @Autowired
+    private IEthSAddressBO ethSAddressBO;
+
+    @Autowired
+    private IJourBO jourBO;
 
     @Override
     @Transactional
@@ -345,8 +356,8 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
 
         String code = depositBO.saveDeposit(symbol,
             ctqEthTransaction.getFrom(), ctqEthTransaction.getTo(),
-            ctqEthTransaction.getValue(), ctqEthTransaction.getHash(),
-            ctqEthTransaction.getGasFee(),
+            ctqEthTransaction.getValue(), EDepositType.DEPOSIT_M,
+            ctqEthTransaction.getHash(), ctqEthTransaction.getGasFee(),
             ctqEthTransaction.getBlockCreateDatetime());
         // 平台冷钱包减钱
         coldAccount = accountBO.changeAmount(coldAccount, amount.negate(),
@@ -362,6 +373,16 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
             .negate(), EChannelType.Online, ctqEthTransaction.getHash(), code,
             EJourBizTypePlat.AJ_DEPOSIT_MINING_FEE.getCode(),
             EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE.getValue() + "-交易ID"
+                    + ctqEthTransaction.getHash());
+
+        // 平台散取账户加钱
+        Account mAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_ETH_M
+            .getCode());
+
+        accountBO.changeAmount(mAccount, amount, EChannelType.Online,
+            ctqEthTransaction.getHash(), code,
+            EJourBizTypeUser.AJ_CHARGE.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getValue() + "-交易id："
                     + ctqEthTransaction.getHash());
     }
 
@@ -380,7 +401,8 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         String symbol = tokenEvent.getSymbol();
         String code = depositBO.saveDeposit(symbol, tokenEvent.getTokenFrom(),
             tokenEvent.getTokenTo(), tokenEvent.getTokenValue(),
-            ctqEthTransaction.getHash(), ctqEthTransaction.getGasFee(),
+            EDepositType.DEPOSIT_M, ctqEthTransaction.getHash(),
+            ctqEthTransaction.getGasFee(),
             ctqEthTransaction.getBlockCreateDatetime());
         // 落地交易记录
         ethTransactionBO.saveEthTransaction(ctqEthTransaction);
@@ -401,11 +423,28 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         // 获取平台盈亏账户
         Account sysAccount = accountBO.getAccount(ESystemAccount
             .getProfitAndLossAccount(symbol));
-        // 平台盈亏账户减去ERC20定存的矿工费
-        accountBO.changeAmount(sysAccount, ctqEthTransaction.getGasFee()
-            .negate(), EChannelType.Online, ctqEthTransaction.getHash(), code,
-            EJourBizTypePlat.AJ_DEPOSIT_MINING_FEE_ERC20.getCode(),
-            EJourBizTypePlat.AJ_DEPOSIT_MINING_FEE_ERC20.getValue() + "-交易ID"
+
+        Jour condition = new Jour();
+        condition.setChannelOrder(ctqEthTransaction.getHash());
+        BigDecimal fee = jourBO.getTotalAmount(condition);
+        // 已经扣过手续费，不再扣取
+        if (fee.compareTo(BigDecimal.ZERO) <= 0) {
+            // 平台盈亏账户减去ERC20定存的矿工费
+            accountBO.changeAmount(sysAccount, ctqEthTransaction.getGasFee()
+                .negate(), EChannelType.Online, ctqEthTransaction.getHash(),
+                code, EJourBizTypePlat.AJ_DEPOSIT_MINING_FEE_ERC20.getCode(),
+                EJourBizTypePlat.AJ_DEPOSIT_MINING_FEE_ERC20.getValue()
+                        + "-交易ID" + ctqEthTransaction.getHash());
+        }
+
+        // 平台散取账户加钱
+        Account mAccount = accountBO.getAccount(ESystemAccount
+            .getMAccount(symbol));
+
+        accountBO.changeAmount(mAccount, amount, EChannelType.Online,
+            ctqEthTransaction.getHash(), code,
+            EJourBizTypeUser.AJ_CHARGE.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getValue() + "-交易id："
                     + ctqEthTransaction.getHash());
     }
 
@@ -418,5 +457,37 @@ public class EthTransactionAOImpl implements IEthTransactionAO {
         if (CollectionUtils.isNotEmpty(tokenEventList)) {
             tokenEventBO.insertEventsList(tokenEventList);
         }
+    }
+
+    @Override
+    public void ethSupplyDepositNotice(CtqEthTransaction ctqEthTransaction) {
+        // 充值地址在M地址表中查询
+        EthSAddress ethSAddress = ethSAddressBO
+            .getEthSAddressByAddress(ctqEthTransaction.getTo());
+        if (ethSAddress == null) {
+            throw new BizException(
+                EErrorCode_main.coin_ADDRESSNOTEXIST.getCode());
+        }
+
+        // 落地交易记录
+        ethTransactionBO.saveEthTransaction(ctqEthTransaction);
+        // 落地定存记录
+        String symbol = EOriginialCoin.ETH.getCode();
+
+        String code = depositBO.saveDeposit(symbol,
+            ctqEthTransaction.getFrom(), ctqEthTransaction.getTo(),
+            ctqEthTransaction.getValue(), EDepositType.DEPOSIT_S,
+            ctqEthTransaction.getHash(), ctqEthTransaction.getGasFee(),
+            ctqEthTransaction.getBlockCreateDatetime());
+
+        // 获取平台盈亏账户
+        Account sysAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_ETH
+            .getCode());
+        // 盈亏账户减去加上补给的数量
+        accountBO.changeAmount(sysAccount, ctqEthTransaction.getValue(),
+            EChannelType.Online, ctqEthTransaction.getHash(), code,
+            EJourBizTypePlat.AJ_WITHDRAW_SUPPLY_MINING_FEE_ERC20.getCode(),
+            EJourBizTypePlat.AJ_WITHDRAW_SUPPLY_MINING_FEE_ERC20.getValue()
+                    + "-交易ID" + ctqEthTransaction.getHash());
     }
 }

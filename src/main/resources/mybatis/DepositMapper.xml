@@ -8,6 +8,7 @@
 		<result column="from_address" property="fromAddress"/>
 		<result column="to_address" property="toAddress"/>
 		<result column="amount" property="amount"/>
+		<result column="type" property="type"/>
 		<result column="tx_hash" property="txHash"/>
 		<result column="tx_fee" property="txFee"/>
 		<result column="confirm_datetime" property="confirmDatetime"/>
@@ -18,6 +19,9 @@
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
 			</if>
 			<if test="codeForQuery != null and codeForQuery != '' ">
 				AND t.code like "%"#{codeForQuery}"%"
@@ -40,6 +44,8 @@
 		,t.from_address
 		,t.to_address
 		,t.amount
+		
+		,t.type
 		,t.tx_hash
 		,t.tx_fee
 		,t.confirm_datetime
@@ -66,6 +72,7 @@
 			,`to_address`
 			,`amount`
 			
+			,`type`
 			,`tx_hash`
 			,`tx_fee`
 			,`confirm_datetime`
@@ -79,6 +86,7 @@
 				,#{toAddress}
 				,#{amount}
 				
+				,#{type}
 				,#{txHash}
 				,#{txFee}
 				,#{confirmDatetime}

@@ -17,9 +17,11 @@ import com.google.gson.reflect.TypeToken;
 import com.ogc.standard.ao.IEthTransactionAO;
 import com.ogc.standard.bo.ICtqBO;
 import com.ogc.standard.bo.IEthMAddressBO;
+import com.ogc.standard.bo.IEthSAddressBO;
 import com.ogc.standard.bo.IEthXAddressBO;
 import com.ogc.standard.domain.CtqEthTransaction;
 import com.ogc.standard.domain.EthMAddress;
+import com.ogc.standard.domain.EthSAddress;
 import com.ogc.standard.domain.EthXAddress;
 import com.ogc.standard.domain.TokenEvent;
 import com.ogc.standard.util.ListUtil;
@@ -46,6 +48,9 @@ public class CallbackControllerETH {
 
     @Autowired
     ICtqBO ctqBO;
+
+    @Autowired
+    private IEthSAddressBO ethSAddressBO;
 
     // ETH和token交易通知，只有充值订单
     @RequestMapping("/eth/tx/notice")
@@ -82,7 +87,7 @@ public class CallbackControllerETH {
                         // 查询地址是否是M定存充值地址
                         mToAddress = ethMAddressBO
                             .getEthMAddressByAddress(tokenEvent.getTokenTo());
-                        if (null != mToAddress) {// 每日定存
+                        if (null != mToAddress) {// 散取地址每日定存
                             ethTransactionAO.tokenDepositNotice(
                                 ctqEthTransaction, tokenEvent);
                             hashList.add(ctqEthTransaction.getHash());
@@ -101,9 +106,17 @@ public class CallbackControllerETH {
                     // 查询地址是否是M定存充值地址
                     mToAddress = ethMAddressBO
                         .getEthMAddressByAddress(ctqEthTransaction.getTo());
-                    if (null != mToAddress) {// 每日定存
+                    if (null != mToAddress) {// 散取地址每日定存
                         ethTransactionAO.ethDepositNotice(ctqEthTransaction);
                         hashList.add(ctqEthTransaction.getHash());
+                        continue;
+                    }
+                    // 查询s是否是补给地址
+                    EthSAddress ethSAddress = ethSAddressBO
+                        .getEthSAddressByAddress(ctqEthTransaction.getTo());
+                    if (null != ethSAddress) {// 矿工费补给地址每日定存
+                        ethTransactionAO
+                            .ethSupplyDepositNotice(ctqEthTransaction);
                     }
                 }
 

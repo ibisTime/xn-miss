@@ -30,6 +30,9 @@ public class Deposit extends ABaseDO {
     // 定存数量
     private BigDecimal amount;
 
+    // 定存类型 0 散取地址定存 1矿工费补给地址定存
+    private String type;
+
     // 交易hash
     private String txHash;
 
@@ -83,6 +86,14 @@ public class Deposit extends ABaseDO {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getTxHash() {
