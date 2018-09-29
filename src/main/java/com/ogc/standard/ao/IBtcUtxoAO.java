@@ -26,13 +26,13 @@ public interface IBtcUtxoAO {
     public String chargeNotice(CtqBtcUtxo ctqBtcUtxo);
 
     // 提现
-    public void withdrawNotice(CtqBtcUtxo ctqBtcUtxo);
+    public void withdrawNotice(BtcUtxo btcUtxo);
 
     // 充值触发的自动归集
     public void collection(String chargeCode);
 
     // 归集交易通知处理
-    public void collectionNotice(CtqBtcUtxo ctqBtcUtxo);
+    public void collectionNotice(BtcUtxo btcUtxo);
 
     // 分页查询UTXO
     public Paginable<BtcUtxo> queryBtcUtxoPage(int start, int limit,

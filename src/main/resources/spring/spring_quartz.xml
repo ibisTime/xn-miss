@@ -26,12 +26,10 @@
        		   	<!-- <ref bean="doScanSimuOrderTrigger"/>
        		    <ref bean="doSaveKLineTrigger"/> -->
        		    
-<!-- 				<ref bean="doERC20CollectTrigger"/>
-				<ref bean="doERC20CheckGetFeeTxTrigger"/>
-				<ref bean="doERC20CheckCollectTxTrigger"/>       		    
-				<ref bean="doEthCollectTxTrigger"/>    
-				<ref bean="doETHAndTokenWithDrawGetTxTrigger"/> -->
-				
+       		    <!-- 归集相关定时器 -->
+				<ref bean="doCollectTrigger" />
+				<!-- 取现相关定时器 -->
+				<ref bean="doWithDrawTrigger" />
 			</list>
 		</property>
 		<property name="autoStartup" value="true" />
@@ -95,70 +93,30 @@
 		<property name="concurrent" value="false" />
 		是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程
 	</bean>	 -->
-
-	<!-- 定时扫描待归集的ERC20订单 -->
-	<bean id="doERC20CollectTrigger"
+	
+	<!-- 定时扫描归集相关操作 -->
+	<bean id="doCollectTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doERC20Collect" />
+		<property name="jobDetail" ref="doCollect" />
 		<property name="cronExpression" value="0 */1 * * * ?"/><!-- 每分钟执行 -->
 	</bean>
-	<bean id="doERC20Collect"
+	<bean id="doCollect"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="collectAOImpl" />
-		<property name="targetMethod" value="doERC20Collect" />
-		<property name="concurrent" value="false" />
-	</bean>
-
-	<!-- 定时扫描获取矿工费广播中的ERC20订单 -->
-	<bean id="doERC20CheckGetFeeTxTrigger"
-		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doERC20CheckGetFeeTx" />
-		<property name="cronExpression" value="0 */1 * * * ?"/><!-- 每分钟执行 -->
-	</bean>
-	<bean id="doERC20CheckGetFeeTx"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="collectAOImpl" />
-		<property name="targetMethod" value="doERC20CheckGetFeeTx" />
+		<property name="targetMethod" value="doCollect" />
 		<property name="concurrent" value="false" />
 	</bean>
 	
-	
-	<!-- 定时扫描归集广播中的ERC20订单 -->
-	<bean id="doERC20CheckCollectTxTrigger"
+	<!-- 定时取现相关操作 -->
+	<bean id="doWithDrawTrigger"
 		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doERC20CheckCollectTx" />
+		<property name="jobDetail" ref="doWithDraw" />
 		<property name="cronExpression" value="0 */1 * * * ?"/><!-- 每分钟执行 -->
 	</bean>
-	<bean id="doERC20CheckCollectTx"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="collectAOImpl" />
-		<property name="targetMethod" value="doERC20CheckCollectTx" />
-		<property name="concurrent" value="false" />
-	</bean>
-
-	<!-- 定时扫描归集广播中的ETH订单 -->
-	<bean id="doEthCollectTxTrigger"
-		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doEthCollectTx" />
-		<property name="cronExpression" value="0 */1 * * * ?"/><!-- 每分钟执行 -->
-	</bean>
-	<bean id="doEthCollectTx"
-		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="collectAOImpl" />
-		<property name="targetMethod" value="doEthCollectTx" />
-		<property name="concurrent" value="false" />
-	</bean>
-
-	<!-- 定时扫描token和eth提现广播中的订单 -->
-	<bean id="doETHAndTokenWithDrawGetTxTrigger"
-		  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="doETHAndTokenWithDrawGetTx" />
-		<property name="cronExpression" value="0 */1 * * * ?"/><!-- 每分钟执行 -->
-	</bean>
-	<bean id="doETHAndTokenWithDrawGetTx"
+	<bean id="doWithDraw"
 		  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetObject" ref="withdrawAOImpl" />
-		<property name="targetMethod" value="doETHAndTokenWithDrawGetTx" />
+		<property name="targetMethod" value="doWithDraw" />
 		<property name="concurrent" value="false" />
 	</bean>
 </beans>

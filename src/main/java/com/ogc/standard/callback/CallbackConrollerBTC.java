@@ -66,9 +66,6 @@ public class CallbackConrollerBTC {
                 // UTXO关联的地址
                 String address = ctqBtcUtxo.getAddress();
 
-                // 橙提取UTXO的状态
-                String ctqBtcUtxoStatus = ctqBtcUtxo.getStatus();
-
                 BtcXAddress btcXAddress = btcXAddressBO.getBtcAddress(address);
                 BtcMAddress btcMAddress = btcMAddressBO.getBtcAddress(address);
 
@@ -79,7 +76,7 @@ public class CallbackConrollerBTC {
                 }
 
                 if (btcXAddress != null) {
-                    // 1、ctqBtcUtxoStatus为输出未推送 则说明是分发地址充值通知
+                    // 分发地址充值通知
                     String code = btcUtxoAO.chargeNotice(ctqBtcUtxo);
                     if (StringUtils.isNotBlank(code)) {
                         btcUtxoAO.collection(code);

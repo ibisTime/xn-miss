@@ -7,12 +7,14 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.ICtqBO;
 import com.ogc.standard.bo.IEthMAddressBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.EthClient;
 import com.ogc.standard.dao.IEthMAddressDAO;
 import com.ogc.standard.domain.EthMAddress;
 import com.ogc.standard.domain.EthXAddress;
+import com.ogc.standard.enums.EAddressType;
 import com.ogc.standard.enums.EMAddressStatus;
 
 @Component
@@ -21,6 +23,9 @@ public class EthMAddressBOImpl extends PaginableBOImpl<EthMAddress> implements
 
     @Autowired
     private IEthMAddressDAO ethMAddressDAO;
+
+    @Autowired
+    private ICtqBO CtqBO;
 
     @Override
     public String generate() {
@@ -36,6 +41,8 @@ public class EthMAddressBOImpl extends PaginableBOImpl<EthMAddress> implements
         data.setCreateDatetime(new Date());
         ethMAddressDAO.insert(data);
 
+        // 散取地址通知Ctq
+        CtqBO.uploadEthAddress(data.getAddress(), EAddressType.M.getCode());
         return newAddress.getAddress();
 
     }

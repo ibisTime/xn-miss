@@ -9,8 +9,8 @@ import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.BtcMAddress;
 
 @Repository("btcMAddressDAOImpl")
-public class BtcMAddressDAOImpl extends AMybatisTemplate
-        implements IBtcMAddressDAO {
+public class BtcMAddressDAOImpl extends AMybatisTemplate implements
+        IBtcMAddressDAO {
 
     @Override
     public int insert(BtcMAddress data) {
@@ -36,7 +36,8 @@ public class BtcMAddressDAOImpl extends AMybatisTemplate
 
     @Override
     public List<BtcMAddress> selectList(BtcMAddress condition) {
-        return null;
+        return super.selectList(NAMESPACE.concat("select_btcMAddress"),
+            condition, BtcMAddress.class);
     }
 
     @Override

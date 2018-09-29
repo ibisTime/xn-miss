@@ -279,4 +279,8 @@
 	<bean id="divideDetailBO" class="com.ogc.standard.bo.impl.DivideDetailBOImpl">
 		<property name="paginableDAO" ref="divideDetailDAOImpl"/>
 	</bean>
+	
+	<bean id="btcUtxoBO" class="com.ogc.standard.bo.impl.BtcUtxoBOImpl">
+		<property name="paginableDAO" ref="btcUtxoDAOImpl"/>
+	</bean>
 </beans>

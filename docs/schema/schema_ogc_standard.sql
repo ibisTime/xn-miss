@@ -169,6 +169,26 @@ CREATE TABLE `tcoin_btc_xaddress` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `tcoin_btc_utxo`;
+CREATE TABLE `tcoin_btc_utxo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `txid` char(64) DEFAULT NULL,
+  `vout` int(11) DEFAULT NULL,
+  `count` decimal(64,0) DEFAULT NULL,
+  `script_pub_key` text,
+  `address` varchar(40) DEFAULT NULL,
+  `sync_time` datetime DEFAULT NULL COMMENT '同步时间',
+  `block_height` int(11) DEFAULT NULL,
+  `status` varchar(4) DEFAULT NULL COMMENT '0-未使用，1-广播中，2-已使用',
+  `address_type` varchar(4) DEFAULT NULL COMMENT '地址类型',
+  `ref_type` varchar(4) DEFAULT NULL COMMENT '参考类型(1 取现 2 归集)',
+  `ref_no` varchar(32) DEFAULT NULL COMMENT '参考编号',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `txid_vout_unique_key` (`txid`,`vout`),
+  KEY `address` (`address`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- ----------------------------
 --  Table structure for `tcoin_currency_rate`
 -- ----------------------------
@@ -1493,3 +1513,5 @@ CREATE TABLE `tsys_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+

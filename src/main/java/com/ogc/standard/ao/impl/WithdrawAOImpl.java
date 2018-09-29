@@ -15,8 +15,15 @@ import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
+import com.ogc.standard.ao.IBtcUtxoAO;
 import com.ogc.standard.ao.IWithdrawAO;
+import com.ogc.standard.bitcoin.original.BTCOriginalTx;
+import com.ogc.standard.bitcoin.original.BitcoinOfflineRawTxBuilder;
+import com.ogc.standard.bitcoin.original.OfflineTxInput;
+import com.ogc.standard.bitcoin.original.OfflineTxOutput;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IBtcMAddressBO;
+import com.ogc.standard.bo.IBtcUtxoBO;
 import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.IEthMAddressBO;
 import com.ogc.standard.bo.IEthTransactionBO;
@@ -26,9 +33,12 @@ import com.ogc.standard.bo.ITokenEventBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IWithdrawBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.EthClient;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.BtcMAddress;
+import com.ogc.standard.domain.BtcUtxo;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.CtqEthTransaction;
 import com.ogc.standard.domain.EthMAddress;
@@ -37,7 +47,10 @@ import com.ogc.standard.domain.Jour;
 import com.ogc.standard.domain.TokenEvent;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.dto.res.XN802356Res;
+import com.ogc.standard.enums.EAddressType;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EBtcUtxoRefType;
+import com.ogc.standard.enums.EBtcUtxoStatus;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECoinType;
 import com.ogc.standard.enums.EErrorCode_main;
@@ -52,6 +65,7 @@ import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.token.OrangeCoinToken.TransferEventResponse;
 import com.ogc.standard.token.TokenClient;
+import com.ogc.standard.util.BtcBlockExplorer;
 
 @Service
 public class WithdrawAOImpl implements IWithdrawAO {
@@ -84,6 +98,18 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     @Autowired
     private ITokenEventBO tokenEventBO;
+
+    @Autowired
+    private IBtcUtxoBO btcUtxoBO;
+
+    @Autowired
+    private BtcBlockExplorer btcBlockExplorer;
+
+    @Autowired
+    private IBtcUtxoAO btcUtxoAO;
+
+    @Autowired
+    private IBtcMAddressBO btcMAddressBO;
 
     @Override
     @Transactional
@@ -182,8 +208,142 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 throw new BizException(EErrorCode_main.with_NOTEMPTY.getCode());
             }
             doTokenBroadcast(coin, withdraw, mAddressId, approveUser);
+        } else if (EOriginialCoin.BTC.getCode().equals(account.getCurrency())) {
+            doBtcBroadcast(withdraw, approveUser);
         }
 
+    }
+
+    // btc广播逻辑：
+    // 1、预估矿工费得到取现总金额(加找零算法),判断矿工费是否足够
+    // 2、签名
+    // 3、调用接口广播
+    private void doBtcBroadcast(Withdraw withdraw, String approveUser) {
+        // 实际到账金额=取现金额-取现手续费
+        BigDecimal utxoCount = withdraw.getAmount().subtract(withdraw.getFee());
+        // 获取散取地址的UTXO总额，判断是否足够提现
+        BigDecimal enableCount = btcUtxoBO
+            .getTotalEnableUTXOCount(EAddressType.M);
+        // 相等或小于都应该是提现不成功，后续广播还要算上实际矿工费(大于也不一定成功，因为矿工费不能太小，容易交易失败)
+        if (enableCount.compareTo(utxoCount) <= 0) {
+            throw new BizException("xn0000", "散取地址总额不足，请及时定存!");
+        }
+
+        // 足够提现，降序遍历可使用的M类地址UTXO，组装Input
+        BitcoinOfflineRawTxBuilder rawTxBuilder = new BitcoinOfflineRawTxBuilder();
+        List<BtcUtxo> inputBtcUtxoList = buildRawTx(utxoCount,
+            withdraw.getPayCardNo(), rawTxBuilder);
+        // 广播
+        broadcastBtcTx(withdraw, approveUser, rawTxBuilder, inputBtcUtxoList);
+    }
+
+    private void broadcastBtcTx(Withdraw withdraw, String approveUser,
+            BitcoinOfflineRawTxBuilder rawTxBuilder,
+            List<BtcUtxo> inputBtcUtxoList) {
+        try {
+            String signResult = rawTxBuilder.offlineSign();
+            // 广播
+            String trueTxid = btcBlockExplorer.broadcastRawTx(signResult);
+            if (trueTxid != null) {
+                if (CollectionUtils.isNotEmpty(inputBtcUtxoList)) {
+                    for (BtcUtxo data : inputBtcUtxoList) {
+                        btcUtxoBO.refreshBroadcast(data, EBtcUtxoStatus.USING,
+                            EBtcUtxoRefType.WITHDRAW, withdraw.getCode());
+
+                    }
+                }
+                logger.info("广播成功：交易hash=" + trueTxid);
+                withdrawBO.broadcastOrder(withdraw, trueTxid, approveUser);
+            } else {
+                throw new BizException(EErrorCode_main.with_FAILED.getCode());
+            }
+        } catch (Exception e) {
+            throw new BizException("-100", e.getMessage());
+        }
+    }
+
+    private List<BtcUtxo> buildRawTx(BigDecimal utxoCount,
+            String withdrawAddress, BitcoinOfflineRawTxBuilder rawTxBuilder) {
+        List<BtcUtxo> inputBtcUtxoList = new ArrayList<BtcUtxo>();
+
+        BigDecimal shouldWithdrawCount = BigDecimal.ZERO;// 遍历汇总出最少条数的UTXO总额，这个总额=实际取现总额+矿工费+找零金额
+        int preFee = 0;// 矿工费
+        BigDecimal realUtxoCount = BigDecimal.ZERO;// 实际需要UTXO = 取现UXTO+矿工费
+
+        int start = 1;
+        int limit = 100;
+        boolean enoughFlag = false;// 是否足够标志
+        while (true) {
+            List<BtcUtxo> list = btcUtxoBO.queryEnableUtxoList(start, limit,
+                EAddressType.M);
+            if (CollectionUtils.isNotEmpty(list)) {
+                for (BtcUtxo utxo : list) {
+                    String txid = utxo.getTxid();
+                    Integer vout = utxo.getVout();
+                    shouldWithdrawCount = shouldWithdrawCount.add(utxo
+                        .getCount());
+
+                    BtcMAddress btcAddress = btcMAddressBO.getBtcAddress(utxo
+                        .getAddress());
+
+                    // 构造签名交易，输入
+                    OfflineTxInput offlineTxInput = new OfflineTxInput(txid,
+                        vout, utxo.getScriptPubKey(),
+                        btcAddress.getPrivatekey());
+                    rawTxBuilder.in(offlineTxInput);
+                    inputBtcUtxoList.add(utxo);
+                    preFee = calMinerFee(inputBtcUtxoList.size(), 1);// 交易输出，默认有找零
+                    realUtxoCount = utxoCount.add(BigDecimal.valueOf(preFee));
+
+                    BigDecimal backCount = shouldWithdrawCount
+                        .subtract(realUtxoCount);
+                    // 需要找零
+                    if (backCount.compareTo(BigDecimal.ZERO) > 0) {
+                        preFee = calMinerFee(inputBtcUtxoList.size(), 2);
+                        realUtxoCount = utxoCount.add(BigDecimal
+                            .valueOf(preFee));
+                        if (shouldWithdrawCount.compareTo(realUtxoCount) < 0) {// 增加找零输出，原有UTXO不够，再增加
+                            continue;
+                        } else {
+                            enoughFlag = true;
+                            break;
+                        }
+                        // 无需找零
+                    } else if (backCount.compareTo(BigDecimal.ZERO) == 0) {
+                        enoughFlag = true;
+                        break;
+                    }
+                }
+            } else {
+                break;
+            }
+
+            // UTXO已足够，跳出循环
+            if (enoughFlag) {
+                break;
+            }
+
+            start++;// 不够再遍历
+        }
+        if (!enoughFlag) {
+            throw new BizException("xn0000", "提现账户余额不足");
+        }
+
+        // 构造输出一，实际到账的金额
+        OfflineTxOutput offlineTxOutput = new OfflineTxOutput(withdrawAddress,
+            AmountUtil.fromBtc(utxoCount));
+        rawTxBuilder.out(offlineTxOutput);
+
+        // 计算需要的找零, 现在是随机找零到一个散取地址作为提现地址
+        BigDecimal backCount = shouldWithdrawCount.subtract(utxoCount)
+            .subtract(BigDecimal.valueOf(preFee));
+        if (backCount.compareTo(BigDecimal.ZERO) > 0) {
+            String backAddress = inputBtcUtxoList.get(0).getAddress();
+            OfflineTxOutput backOutput = new OfflineTxOutput(backAddress,
+                AmountUtil.fromBtc(backCount));
+            rawTxBuilder.out(backOutput);
+        }
+        return inputBtcUtxoList;
     }
 
     private void doTokenBroadcast(Coin coin, Withdraw withdraw,
@@ -253,6 +413,27 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 修改取现地址状态为广播中
         ethMAddressBO.refreshStatus(mEthAddress,
             EMAddressStatus.IN_USE.getCode());
+    }
+
+    /**
+     * 计算本次交易矿工费
+     * @param inCount
+     * @param outCount
+     * @return 
+     * @create: 2018年2月22日 下午5:28:04 xieyj
+     * @history:
+     */
+    private int calMinerFee(int inCount, int outCount) {
+        // 组装Output，设置找零账户
+        // 如何估算手续费，先预先给一个size,然后拿这个size进行签名
+        // 对签名的数据进行解码，拿到真实大小，然后进行矿工费的修正
+        int preSize = BitcoinOfflineRawTxBuilder.calculateSize(inCount,
+            outCount);
+        int feePerByte = btcBlockExplorer.getFee();
+
+        // 计算出手续费
+        int preFee = preSize * feePerByte;
+        return preFee;
     }
 
     private void doEthBroadcast(Withdraw withdraw, Long mAddressId,
@@ -548,7 +729,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 }
             }
         }
-        logger.info("****** 扫描eth和token的提现订单开始******");
+        logger.info("****** 扫描eth和token的提现订单结束******");
     }
 
     private void ethWithdrawNotice(CtqEthTransaction ctqEthTransaction,
@@ -699,5 +880,72 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 EJourBizTypePlat.AJ_WITHDRAW_FEE.getValue() + "-外部地址："
                         + withdraw.getPayCardNo());
         }
+
+        // 平台盈亏账户记入取现矿工费
+        sysAccount = accountBO.changeAmount(sysAccount, txFee.negate(),
+            EChannelType.Online, ctqEthTransaction.getHash(),
+            withdraw.getCode(),
+            EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE_ERC20.getCode(),
+            EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE_ERC20.getValue() + "-外部地址："
+                    + withdraw.getPayCardNo());
+    }
+
+    /**
+     * 定时扫描BTC广播中的取现订单
+     */
+    public void doCheckBroadcastStatus() {
+        logger.info("****** 扫描btc的提现订单开始 ******");
+        while (true) {
+            int start = 1;
+            int limit = 10;
+            Withdraw condition = new Withdraw();
+            condition.setStatus(EWithdrawStatus.Broadcast.getCode());
+            Paginable<Withdraw> withdraws = withdrawBO.getPaginable(start,
+                limit, condition);
+            if (CollectionUtils.isEmpty(withdraws.getList())) {
+                logger.info("****** 扫描btc的提现订单结束 ******");
+                break;
+            }
+            for (Withdraw withdraw : withdraws.getList()) {
+                if (EOriginialCoin.BTC.getCode().equals(withdraw.getCurrency())) {// 交易记录消失，广播不成功处理
+                    BTCOriginalTx btcTx = btcBlockExplorer.queryTxHash(withdraw
+                        .getChannelOrder());
+                    // 交易记录消失，广播不成功处理
+                    if (null == btcTx) {
+                        // utxo 改成可使用
+                        List<BtcUtxo> list = btcUtxoBO
+                            .queryBtcUtxoList(withdraw.getCode());
+                        for (BtcUtxo btcUtxo : list) {
+                            btcUtxoBO.refreshStatus(btcUtxo,
+                                EBtcUtxoStatus.ENABLE);
+                        }
+                        payOrderNO(withdraw, "system", "广播失败,交易取消", "");
+                    }
+
+                    // 交易未确认，跳过
+                    if (btcTx.getConfirmations() <= 0) {
+                        continue;
+                    }
+
+                    // 充值成功
+                    List<BtcUtxo> list = btcUtxoBO.queryBtcUtxoList(withdraw
+                        .getCode());
+                    for (BtcUtxo btcUtxo : list) {
+
+                        btcUtxoAO.withdrawNotice(btcUtxo);
+                    }
+                }
+                start++;
+            }
+        }
+        logger.info("****** 扫描btc的提现订单结束 ******");
+    }
+
+    public void doWithDraw() {
+        // eth和erc20的取现订单
+        doETHAndTokenWithDrawGetTx();
+
+        // btc的取现订单
+        doCheckBroadcastStatus();
     }
 }

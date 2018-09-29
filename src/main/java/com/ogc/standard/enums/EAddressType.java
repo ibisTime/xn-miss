@@ -7,7 +7,7 @@ import com.ogc.standard.exception.BizException;
 
 public enum EAddressType {
     W("W", "归集地址"), M("M", "散取地址"), X("X", "分发地址"), Y("Y", "提现地址"), H("H",
-            "空投地址");
+            "空投地址"), S("S", "盈亏账户补给地址");
 
     EAddressType(String code, String value) {
         this.code = code;
