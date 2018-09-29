@@ -91,7 +91,7 @@ public class BizConnecter {
             postUrl = BLOCKCHAIN_DATA_URL;
         } else if (code.equals("626020") || code.equals("626100")
                 || code.equals("626080") || code.equals("626000")
-                || code.equals("626140")) {
+                || code.equals("626140") || code.equals("626120")) {
             postUrl = CTQ_URL;
         }
         return postUrl;

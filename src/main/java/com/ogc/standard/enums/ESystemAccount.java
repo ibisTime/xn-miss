@@ -11,11 +11,11 @@ import java.util.Map;
 public enum ESystemAccount {
 
     SYS_ACOUNT_ETH("SYS_ACOUNT_ETH", "平台ETH盈亏账户"), SYS_ACOUNT_ETH_COLD(
-            "SYS_ACOUNT_ETH_COLD", "平台ETH冷钱包"), SYS_ACCOUNT_ETH_M(
+            "SYS_ACOUNT_ETH_COLD", "平台ETH冷钱包"), SYS_ACOUNT_ETH_M(
             "SYS_ACOUNT_ETH_M", "平台ETH散取账户")
 
     , SYS_ACOUNT_BTC("SYS_ACOUNT_BTC", "平台BTC盈亏账户"), SYS_ACOUNT_BTC_COLD(
-            "SYS_ACOUNT_BTC_COLD", "平台BTC冷钱包"), SYS_ACCOUNT_BTC_M(
+            "SYS_ACOUNT_BTC_COLD", "平台BTC冷钱包"), SYS_ACOUNT_BTC_M(
             "SYS_ACOUNT_BTC_M", "平台BTC散取账户")
 
     , SYS_ACOUNT_X("SYS_ACOUNT_X", "平台X盈亏账户"), SYS_ACOUNT_X_COLD(
@@ -42,6 +42,11 @@ public enum ESystemAccount {
     // 获取盈亏账户
     public static String getProfitAndLossAccount(String symbol) {
         return "SYS_ACOUNT_" + symbol;
+    }
+
+    // 获取散取账户
+    public static String getMAccount(String symbol) {
+        return "SYS_ACOUNT_" + symbol + "_M";
     }
 
     ESystemAccount(String code, String value) {

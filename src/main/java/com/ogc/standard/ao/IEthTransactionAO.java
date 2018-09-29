@@ -48,6 +48,9 @@ public interface IEthTransactionAO {
     public void tokenDepositNotice(CtqEthTransaction ctqEthTransaction,
             TokenEvent tokenEvent);
 
+    // 归集地址每日定存
+    public void ethSupplyDepositNotice(CtqEthTransaction ctqEthTransaction);
+
     // 直接落地，不进行充值逻辑
     public void addTransaction(CtqEthTransaction ctqEthTransaction);
 }

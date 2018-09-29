@@ -402,7 +402,13 @@ public class CollectAOImpl implements ICollectAO {
 
             BigDecimal ethBalance = EthClient.getBalance(collect
                 .getFromAddress());
-            if (ethBalance.compareTo(minBalance) < 0) {
+
+            // 计算矿工费
+            BigDecimal gasUse = new BigDecimal(21000);
+            BigDecimal gasPrice = EthClient.getGasPrice();
+            BigDecimal txFee = gasPrice.multiply(gasUse);
+            // 小于矿工费，则对该地址进行补给，补满0.005个eth
+            if (ethBalance.compareTo(txFee) < 0) {
 
                 BigDecimal need = minBalance.subtract(ethBalance);
 
@@ -422,9 +428,6 @@ public class CollectAOImpl implements ICollectAO {
                     .getEthSAddressSecret(sEthAddress.getId());
                 BigDecimal sEthBalance = EthClient.getBalance(sEthAddress
                     .getAddress());
-                BigDecimal gasUse = new BigDecimal(21000);
-                BigDecimal gasPrice = EthClient.getGasPrice();
-                BigDecimal txFee = gasPrice.multiply(gasUse);
                 BigDecimal value = sEthBalance.subtract(txFee).subtract(need);
                 if (value.compareTo(BigDecimal.ZERO) < 0) {
                     collectBO.collectFailed(collect, "归集矿工费补给地址余额不足");
@@ -487,7 +490,7 @@ public class CollectAOImpl implements ICollectAO {
 
             TransactionReceipt transactionReceipt = EthClient
                 .getTransactionReceipt(collect.getPreTxHash()).get();
-            if (!ETransactionReceiptStatus.SUCCESS.getCode().equals(
+            if (ETransactionReceiptStatus.SUCCESS.getCode().equals(
                 transactionReceipt.getStatus())) {
                 Transaction transaction = EthClient
                     .getEthTransactionByHash(collect.getPreTxHash());
@@ -550,7 +553,7 @@ public class CollectAOImpl implements ICollectAO {
 
             TransactionReceipt transactionReceipt = EthClient
                 .getTransactionReceipt(collect.getTxHash()).get();
-            if (!ETransactionReceiptStatus.SUCCESS.getCode().equals(
+            if (ETransactionReceiptStatus.SUCCESS.getCode().equals(
                 transactionReceipt.getStatus())) {
                 List<TokenEvent> tokenEventList = new ArrayList<TokenEvent>();
                 // 向下获取event
@@ -590,7 +593,7 @@ public class CollectAOImpl implements ICollectAO {
                     transactionReceipt.getGasUsed());
                 BigDecimal gasPrice = new BigDecimal(transaction.getGasPrice());
                 BigDecimal txfee = gasUsed.multiply(gasPrice);
-                // 平台eth盈亏账户记入归集补给费用和矿工费
+                // 平台eth盈亏账户记入矿工费
                 Account sysAccount = accountBO
                     .getAccount(ESystemAccount.SYS_ACOUNT_ETH.getCode());
                 accountBO.changeAmount(sysAccount, txfee.negate(),
@@ -598,6 +601,22 @@ public class CollectAOImpl implements ICollectAO {
                     collect.getCode(),
                     EJourBizTypePlat.AJ_COLLECT_MINING_FEE_ERC20.getCode(),
                     "-归集地址：" + collect.getFromAddress());
+
+                for (TokenEvent tokenEvent : tokenEventList) {
+
+                    Account coldAccount = accountBO.getAccount(ESystemAccount
+                        .getPlatColdAccount(collect.getCurrency()));
+                    // 平台冷钱包价钱
+                    coldAccount = accountBO.changeAmount(
+                        coldAccount,
+                        tokenEvent.getTokenValue(),
+                        EChannelType.Online,
+                        tokenEvent.getTokenLogIndex().toString(),
+                        collect.getCode(),
+                        EJourBizTypeCold.AJ_DEPOSIT.getCode(),
+                        collect.getCurrency() + "定存至取现地址(M):"
+                                + tokenEvent.getTokenTo());
+                }
             }
 
         }
@@ -624,7 +643,7 @@ public class CollectAOImpl implements ICollectAO {
 
             TransactionReceipt transactionReceipt = EthClient
                 .getTransactionReceipt(collect.getTxHash()).get();
-            if (!ETransactionReceiptStatus.SUCCESS.getCode().equals(
+            if (ETransactionReceiptStatus.SUCCESS.getCode().equals(
                 transactionReceipt.getStatus())) {
                 Transaction transaction = EthClient
                     .getEthTransactionByHash(collect.getTxHash());
@@ -668,7 +687,8 @@ public class CollectAOImpl implements ICollectAO {
             .getCode());
         accountBO.changeAmount(sysAccount, txFee.negate(), EChannelType.Online,
             ctqEthTransaction.getHash(), collect.getCode(),
-            EJourBizTypePlat.AJ_COLLECT_FIRST_MINING_FEE.getCode(), "归集地址："
+            EJourBizTypePlat.AJ_COLLECT_FIRST_MINING_FEE.getCode(),
+            EJourBizTypePlat.AJ_COLLECT_FIRST_MINING_FEE.getValue() + "-归集地址："
                     + collect.getFromAddress());
         // 落地交易记录
         ethTransactionBO.saveEthTransaction(ctqEthTransaction);
@@ -719,7 +739,7 @@ public class CollectAOImpl implements ICollectAO {
      */
     public void doCollect() {
         // 扫描ETH归集广播中的订单
-        doERC20CheckCollectTx();
+        doEthCollectTx();
 
         // 扫描ERC20待归集的订单
         doERC20Collect();

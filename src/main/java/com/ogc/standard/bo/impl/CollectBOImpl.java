@@ -30,8 +30,8 @@ import com.ogc.standard.enums.EOriginialCoin;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class CollectBOImpl extends PaginableBOImpl<Collect>
-        implements ICollectBO {
+public class CollectBOImpl extends PaginableBOImpl<Collect> implements
+        ICollectBO {
 
     private static final Logger logger = LoggerFactory
         .getLogger(CollectBOImpl.class);
@@ -48,6 +48,9 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
     //
     @Autowired
     private IEthTransactionBO ethTransactionBO;
+
+    // 归集时，给该归集的地址保留0.005的eth
+    private BigDecimal surplusBalance = new BigDecimal("5000000000000000");
 
     @Override
     public String saveCollect(String symbol, String from, String to,
@@ -113,8 +116,7 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
     }
 
     @Override
-    public int colectNoticeETH(Collect data, BigDecimal txfee,
-            Date ethDatetime) {
+    public int colectNoticeETH(Collect data, BigDecimal txfee, Date ethDatetime) {
         int count = 0;
         data.setTxFee(txfee);
         data.setStatus(ECollectStatus.COLLECT_YES.getCode());
@@ -135,6 +137,7 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
         collectDAO.updateNoticeBTC(data);
         return count;
     }
+
     //
     // @Override
     // public int colectionNoticeSC(Collect data, String fromAddress,
@@ -218,7 +221,8 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
         BigDecimal gasPrice = ethTransactionBO.getGasPrice();
         BigDecimal gasUse = new BigDecimal(21000);
         BigDecimal txFee = gasPrice.multiply(gasUse);
-        BigDecimal value = balance.subtract(txFee);
+        // 归集时，给该归集的地址保留0.005的eth，作为手续费，防止ERC20补给后，用户充值eth，超过阈值将剩余的eth一起归集走了
+        BigDecimal value = balance.subtract(txFee).subtract(surplusBalance);
         logger.info("地址余额=" + balance + "，以太坊平均价格=" + gasPrice + "，预计矿工费="
                 + txFee + "，预计到账金额=" + value);
         if (value.compareTo(BigDecimal.ZERO) <= 0) {
@@ -233,8 +237,8 @@ public class CollectBOImpl extends PaginableBOImpl<Collect>
         }
         String coinType = ECoinType.ETH.getCode();
         // 归集记录落地
-        saveCollect(EOriginialCoin.ETH.getCode(), fromAddress, toAddress, value,
-            txHash, chargeCode, coinType);
+        saveCollect(EOriginialCoin.ETH.getCode(), fromAddress, toAddress,
+            balance, txHash, chargeCode, coinType);
     }
 
     //

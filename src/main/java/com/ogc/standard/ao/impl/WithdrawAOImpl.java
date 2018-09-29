@@ -129,7 +129,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         verifyPayCardNo(coin, payCardNo);
 
         // 校验资金密码
-        userBO.checkTradePwd(applyUser, tradePwd);
+        // userBO.checkTradePwd(applyUser, tradePwd);
 
         // 账户可用余额是否充足
         if (dbAccount.getAmount().subtract(dbAccount.getFrozenAmount())
@@ -801,6 +801,24 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE.getValue() + "-外部地址："
                     + withdraw.getPayCardNo());
 
+        // 平台散取账户减钱
+        Account mAccount = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_ETH_M
+            .getCode());
+
+        accountBO.changeAmount(
+            mAccount,
+            withdraw
+                .getAmount()
+                .subtract(
+                    sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE))
+                .negate(),
+            EChannelType.Online,
+            ctqEthTransaction.getHash(),
+            withdraw.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getValue() + "-外部地址："
+                    + withdraw.getPayCardNo());
+
     }
 
     @Override
@@ -834,7 +852,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
         // 更新地址余额
         String symbol = withdraw.getCurrency();
-        Coin coin = coinBO.getCoin(symbol);
+        // Coin coin = coinBO.getCoin(symbol);
         EthMAddress from = ethMAddressBO.getEthMAddressByAddress(tokenEvent
             .getTokenFrom());
 
@@ -887,6 +905,24 @@ public class WithdrawAOImpl implements IWithdrawAO {
             withdraw.getCode(),
             EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE_ERC20.getCode(),
             EJourBizTypePlat.AJ_WITHDRAW_MINING_FEE_ERC20.getValue() + "-外部地址："
+                    + withdraw.getPayCardNo());
+
+        // 平台散取账户减钱
+        Account mAccount = accountBO.getAccount(ESystemAccount
+            .getMAccount(symbol));
+
+        accountBO.changeAmount(
+            mAccount,
+            withdraw
+                .getAmount()
+                .subtract(
+                    sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE))
+                .negate(),
+            EChannelType.Online,
+            ctqEthTransaction.getHash(),
+            withdraw.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getCode(),
+            EJourBizTypeUser.AJ_CHARGE.getValue() + "-外部地址："
                     + withdraw.getPayCardNo());
     }
 

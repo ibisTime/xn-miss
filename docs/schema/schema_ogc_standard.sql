@@ -994,13 +994,13 @@ CREATE TABLE `tstd_collect` (
 -- ----------------------------
 --  Table structure for `tstd_deposit`
 -- ----------------------------
-DROP TABLE IF EXISTS `tstd_deposit`;
 CREATE TABLE `tstd_deposit` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `currency` varchar(32) DEFAULT NULL COMMENT '币种',
   `from_address` text COMMENT '付款地址',
   `to_address` text COMMENT '收款地址',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '定存数量',
+  `type` char(1) DEFAULT NULL COMMENT '定存类型:0散取地址定存，1 矿工费补给地址定存',
   `tx_hash` varchar(255) DEFAULT NULL COMMENT '交易hash',
   `tx_fee` decimal(64,0) DEFAULT NULL COMMENT '矿工费',
   `confirm_datetime` datetime DEFAULT NULL COMMENT '网络记账时间',

@@ -13,6 +13,7 @@ import java.util.Date;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Deposit;
+import com.ogc.standard.enums.EDepositType;
 
 /** 
  * @author: dl 
@@ -24,6 +25,6 @@ public interface IDepositBO extends IPaginableBO<Deposit> {
     public Deposit getDeposit(String code);
 
     public String saveDeposit(String symbol, String fromAddress,
-            String toAddress, BigDecimal amount, String hash,
-            BigDecimal gasFee, Date confirmDatetime);
+            String toAddress, BigDecimal amount, EDepositType depositType,
+            String hash, BigDecimal gasFee, Date confirmDatetime);
 }
