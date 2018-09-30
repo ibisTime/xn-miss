@@ -91,7 +91,7 @@ public class UserIdAuthAOImpl implements IUserIdAuthAO {
         Paginable<UserIdAuth> page = userIdAuthBO.getPaginable(start, limit,
             condition);
         for (UserIdAuth data : page.getList()) {
-            data.setUser(userBO.getUser(data.getApplyUser()));
+            data.setApplyUserInfo(userBO.getUser(data.getApplyUser()));
         }
         return page;
     }

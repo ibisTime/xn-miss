@@ -54,7 +54,11 @@ public class UserFieldApprove extends ABaseDO {
 
     // 备注
     private String remark;
+
     // ***********db properties***********
+
+    // 申请人信息
+    private User applyUserInfo;
 
     public Long getId() {
         return id;
@@ -142,6 +146,14 @@ public class UserFieldApprove extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public User getApplyUserInfo() {
+        return applyUserInfo;
+    }
+
+    public void setApplyUserInfo(User applyUserInfo) {
+        this.applyUserInfo = applyUserInfo;
     }
 
 }

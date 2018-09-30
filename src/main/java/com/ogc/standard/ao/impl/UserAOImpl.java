@@ -271,20 +271,20 @@ public class UserAOImpl implements IUserAO {
             String location, String language) {
         User condition = new User();
         condition.setMobile(loginName);
-
         List<User> userList = userBO.queryUserList(condition);
+
         User condition1 = new User();
         condition1.setEmail(loginName);
         userList.addAll(userBO.queryUserList(condition1));
+
         if (CollectionUtils.isEmpty(userList)) {
             throw new BizException(EErrorCode_main.user_LOGINNAME.getCode());
         }
+
         User con = new User();
         con.setLoginPwd(MD5Util.md5(loginPwd));
         List<User> listUser = userBO.queryUserList(con);
-        if (CollectionUtils.isEmpty(userList)) {
-            throw new BizException(EErrorCode_main.user_LOGINPWD.getCode());
-        }
+
         String userId = null;
         for (User user : listUser) {
             if (loginName.equals(user.getMobile())
@@ -772,7 +772,7 @@ public class UserAOImpl implements IUserAO {
             int limit) {
         User user = userBO.getUser(req.getUserId());
         User condition = new User();
-        condition.setUserReferee(user.getMobile());
+        condition.setUserReferee(user.getUserId());
         Paginable<User> page = userBO.getPaginable(start, limit, condition);
         // 落地数据
         for (User refUser : page.getList()) {

@@ -16,6 +16,7 @@ import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserFieldApproveBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserFieldApprove;
 import com.ogc.standard.enums.EApplyType;
 import com.ogc.standard.enums.EApproveStatus;
@@ -75,7 +76,14 @@ public class UserFieldApproveAOImpl implements IUserFieldApproveAO {
 
     @Override
     public UserFieldApprove getUserFieldApprove(Long id) {
-        return userFieldApproveBO.getUserFieldApprove(id);
+        UserFieldApprove userFieldApprove = userFieldApproveBO
+            .getUserFieldApprove(id);
+        User user = userBO.getUser(userFieldApprove.getApplyUser());
+        if (null != user) {
+            userFieldApprove.setApplyUserInfo(user);
+        }
+
+        return userFieldApprove;
     }
 
     @Override
