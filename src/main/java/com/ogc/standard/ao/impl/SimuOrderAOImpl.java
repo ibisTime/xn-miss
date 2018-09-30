@@ -621,7 +621,11 @@ public class SimuOrderAOImpl implements ISimuOrderAO {
 
         if (CollectionUtils.isEmpty(SimuOrderDetailList)) {
             // 此委托单无法成交
-            doEmptyIntoHistory(simuOrder);
+            if (ESimuOrderType.LIMIT.getCode().equals(simuOrder.getType())) {
+                handicapBO.saveHandicap(simuOrder);
+            } else {
+                doEmptyIntoHistory(simuOrder);
+            }
 
             return;
         }
