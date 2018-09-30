@@ -59,7 +59,13 @@ public class AwardMonthAOImpl implements IAwardMonthAO {
 
     @Override
     public AwardMonth getAwardMonth(AwardMonth condition) {
-        return null;
+        AwardMonth awardMonth = awardMonthBO.getAwardMonth(condition);
+
+        if (awardMonth != null) {
+            awardMonth.setUser(userBO.getUser(awardMonth.getUserId()));
+        }
+
+        return awardMonth;
     }
 
     @Override
@@ -84,41 +90,41 @@ public class AwardMonthAOImpl implements IAwardMonthAO {
         res.setCcTradeCount(ccCount);
         res.setRegRefCount(regCount);
         res.setPlatCount(specialCount);
-//        Award condition = new Award();
-//        XN802397Res res = new XN802397Res();
-//        condition.setUserId(userId);
-//        // cc交易
-//        condition.setRefType(ERefType.CCTRADE.getCode());
-//        List<Award> ccTradeList = awardBO.queryAwardList(condition);
-//        BigDecimal ccCount = BigDecimal.ZERO;
-//        for (Award award : ccTradeList) {
-//            ccCount = ccCount.add(award.getCount());
-//        }
-//        res.setCcTradeCount(ccCount);
-//        // bb交易
-//        condition.setRefType(ERefType.BBTRADE.getCode());
-//        List<Award> bbTradeList = awardBO.queryAwardList(condition);
-//        BigDecimal bbCount = BigDecimal.ZERO;
-//        for (Award award : bbTradeList) {
-//            bbCount = bbCount.add(award.getCount());
-//        }
-//        res.setBbTradeCount(bbCount);
-//        // 注册奖励
-//        condition.setRefType(ERefType.REGIST.getCode());
-//        List<Award> regTradeList = awardBO.queryAwardList(condition);
-//        BigDecimal regCount = BigDecimal.ZERO;
-//        for (Award award : regTradeList) {
-//            regCount = regCount.add(award.getCount());
-//        }
-//        res.setRegRefCount(regCount);
-//        // 特殊奖励
-//        condition.setRefType(ERefType.SPECIAL.getCode());
-//        List<Award> specialTradeList = awardBO.queryAwardList(condition);
-//        BigDecimal specialCount = BigDecimal.ZERO;
-//        for (Award award : specialTradeList) {
-//            specialCount = specialCount.add(award.getCount());
-//        }
-//        res.setPlatCount(specialCount);
+        // Award condition = new Award();
+        // XN802397Res res = new XN802397Res();
+        // condition.setUserId(userId);
+        // // cc交易
+        // condition.setRefType(ERefType.CCTRADE.getCode());
+        // List<Award> ccTradeList = awardBO.queryAwardList(condition);
+        // BigDecimal ccCount = BigDecimal.ZERO;
+        // for (Award award : ccTradeList) {
+        // ccCount = ccCount.add(award.getCount());
+        // }
+        // res.setCcTradeCount(ccCount);
+        // // bb交易
+        // condition.setRefType(ERefType.BBTRADE.getCode());
+        // List<Award> bbTradeList = awardBO.queryAwardList(condition);
+        // BigDecimal bbCount = BigDecimal.ZERO;
+        // for (Award award : bbTradeList) {
+        // bbCount = bbCount.add(award.getCount());
+        // }
+        // res.setBbTradeCount(bbCount);
+        // // 注册奖励
+        // condition.setRefType(ERefType.REGIST.getCode());
+        // List<Award> regTradeList = awardBO.queryAwardList(condition);
+        // BigDecimal regCount = BigDecimal.ZERO;
+        // for (Award award : regTradeList) {
+        // regCount = regCount.add(award.getCount());
+        // }
+        // res.setRegRefCount(regCount);
+        // // 特殊奖励
+        // condition.setRefType(ERefType.SPECIAL.getCode());
+        // List<Award> specialTradeList = awardBO.queryAwardList(condition);
+        // BigDecimal specialCount = BigDecimal.ZERO;
+        // for (Award award : specialTradeList) {
+        // specialCount = specialCount.add(award.getCount());
+        // }
+        // res.setPlatCount(specialCount);
         AwardMonth conditionMonth = new AwardMonth();
         conditionMonth.setUserId(userId);
         List<AwardMonth> AwardMonthList = awardMonthBO

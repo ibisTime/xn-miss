@@ -1,11 +1,4 @@
-/**
- * @Title XN802391.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author taojian  
- * @date 2018年9月17日 下午9:06:28 
- * @version V1.0   
- */
+
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IAwardMonthAO;

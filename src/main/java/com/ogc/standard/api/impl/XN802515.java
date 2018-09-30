@@ -1,11 +1,3 @@
-/**
- * @Title XN625205.java 
- * @Package com.cdkj.coin.api.impl 
- * @Description 
- * @author leo(haiqing)  
- * @date 2017年11月8日 下午3:16:17 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -34,9 +26,6 @@ public class XN802515 extends AProcessor {
 
     private XN802515Req req = null;
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         EthMAddress condition = new EthMAddress();
@@ -50,9 +39,6 @@ public class XN802515 extends AProcessor {
         return ethMAddressAO.queryEthMAddressPage(start, limit, condition);
     }
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {

@@ -552,7 +552,7 @@ CREATE TABLE `tcoin_coin` (
   `pic2` varchar(255) DEFAULT NULL COMMENT '图标2',
   `pic3` varchar(255) DEFAULT NULL COMMENT '图标3',
   `order_no` int(11) NOT NULL COMMENT 'UI序号',
-  `introduction` varchar(255) DEFAULT NULL COMMENT '介绍',
+  `introduction` text DEFAULT NULL COMMENT '介绍',
   `total_supply` varchar(255) DEFAULT NULL COMMENT '流通量',
   `total_supply_market` varchar(255) DEFAULT NULL COMMENT '流通市值',
   `max_supply` varchar(255) DEFAULT NULL COMMENT '发行总量',

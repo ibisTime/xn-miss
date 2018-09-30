@@ -22,7 +22,6 @@ public class AwardMonth extends ABaseDO {
 
     private static final long serialVersionUID = 5072028877108946684L;
 
-    // ***********db properties***********
     // id
     private Long id;
 

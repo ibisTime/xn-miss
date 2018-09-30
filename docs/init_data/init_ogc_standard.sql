@@ -654,6 +654,8 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('reg_award','cuser_reg','10','admin',now(),'普通用户推荐送X币');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('reg_award','duser_reg','15','admin',now(),'渠道商用户推荐送X币');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('referee_rate','referee_duser_fee_rate','10','admin',now(),'渠道商推荐用户交易分成');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('referee_rate','referee_cuser_fee_rate','15','admin',now(),'普通用户推荐用户交易分成');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_buy_fee_rate','0.001','admin',now(),'买入交易手续费');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_sell_fee_rate','0.002','admin',now(),'卖出交易手续费');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('accept_rule','accept_order_cancel_max_time','10','admin',now(),'每天交易取消最大次数');

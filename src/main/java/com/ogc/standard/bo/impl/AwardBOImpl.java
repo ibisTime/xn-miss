@@ -15,7 +15,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAwardBO;
 import com.ogc.standard.bo.IAwardMonthBO;
 import com.ogc.standard.bo.ISYSConfigBO;
@@ -52,14 +51,12 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
     private ISYSConfigBO sysConfigBO;
 
     @Autowired
-    private IAccountBO accountBO;
-
-    @Autowired
     private ITradeOrderBO tradeOrderBO;
 
     @Override
     public Award getAward(Long id) {
         Award condition = new Award();
+        condition.setId(id);
         Award award = awardDAO.select(condition);
         if (null == award) {
             throw new BizException(EErrorCode_main.awa_NOTEXIST.getCode());

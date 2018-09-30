@@ -1,39 +1,40 @@
+
 package com.ogc.standard.api.impl;
 
-import com.ogc.standard.ao.IAwardAO;
+import com.ogc.standard.ao.IAwardMonthAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.dto.req.XN802390Req;
-import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.domain.AwardMonth;
+import com.ogc.standard.dto.req.XN802398Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
- * 渠道商佣金结算
+ * 统计用户/渠道商月结算记录详情查询
  * @author: taojian 
- * @since: 2018年9月14日 下午8:48:11 
+ * @since: 2018年9月17日 下午9:06:28 
  * @history:
  */
-public class XN802390 extends AProcessor {
+public class XN802398 extends AProcessor {
+    private IAwardMonthAO awardMonthAO = SpringContextHolder
+        .getBean(IAwardMonthAO.class);
 
-    private IAwardAO awardAO = SpringContextHolder.getBean(IAwardAO.class);
-
-    private XN802390Req req;
+    private XN802398Req req;
 
     @Override
     public Object doBusiness() throws BizException {
-        awardAO.settle(StringValidater.toLong(req.getId()), req.getIsSettle(),
-            req.getRemark());
-        return new BooleanRes(true);
+        AwardMonth condition = new AwardMonth();
+        condition.setId(StringValidater.toLong(req.getId()));
+        return awardMonthAO.getAwardMonth(condition);
     }
 
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802390Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN802398Req.class);
         ObjValidater.validateReq(req);
     }
 

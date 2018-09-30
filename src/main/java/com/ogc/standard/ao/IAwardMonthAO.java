@@ -1,11 +1,3 @@
-/**
- * @Title IAwardMonthAO.java 
- * @Package com.ogc.standard.ao 
- * @Description 
- * @author taojian  
- * @date 2018年9月17日 下午3:02:24 
- * @version V1.0   
- */
 package com.ogc.standard.ao;
 
 import com.ogc.standard.bo.base.Paginable;

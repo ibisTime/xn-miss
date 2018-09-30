@@ -1,11 +1,3 @@
-/**
- * @Title XN625200.java 
- * @Package com.cdkj.coin.api.impl 
- * @Description 
- * @author leo(haiqing)  
- * @date 2017年11月8日 下午3:12:21 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IEthWAddressAO;
@@ -32,18 +24,12 @@ public class XN802521 extends AProcessor {
 
     private XN802521Req req = null;
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doBusiness()
-     */
     @Override
     public Object doBusiness() throws BizException {
         ethWAddressAO.abandon(StringValidater.toLong(req.getId()));
         return new BooleanRes(true);
     }
 
-    /** 
-     * @see com.ogc.standard.api.IProcessor#doCheck(java.lang.String)
-     */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {

@@ -1,11 +1,3 @@
-/**
- * @Title XN802575.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author taojian  
- * @date 2018年9月11日 下午3:36:11 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IBtcWAddressAO;
