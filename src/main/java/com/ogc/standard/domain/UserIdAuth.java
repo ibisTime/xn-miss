@@ -25,7 +25,7 @@ public class UserIdAuth extends ABaseDO {
     // id
     private Long id;
 
-    // 类型(1=身份证,2=护照，3=驾驶证)
+    // 类型(1=手机,2=邮箱)
     private String type;
 
     // 隶属国家
@@ -34,7 +34,7 @@ public class UserIdAuth extends ABaseDO {
     // 真实姓名
     private String realName;
 
-    // 证件类型(1=身份证)
+    // 证件类型(1=身份证,2=护照，3=驾驶证)
     private String idKind;
 
     // 证件号码
@@ -68,15 +68,8 @@ public class UserIdAuth extends ABaseDO {
     private String remark;
 
     // ***********db properties***********
-    private User user;
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    private User applyUserInfo;
 
     public Long getId() {
         return id;
@@ -197,4 +190,13 @@ public class UserIdAuth extends ABaseDO {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public User getApplyUserInfo() {
+        return applyUserInfo;
+    }
+
+    public void setApplyUserInfo(User applyUserInfo) {
+        this.applyUserInfo = applyUserInfo;
+    }
+
 }

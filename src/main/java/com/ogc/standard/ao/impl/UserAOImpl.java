@@ -778,7 +778,7 @@ public class UserAOImpl implements IUserAO {
             int limit) {
         User user = userBO.getUser(req.getUserId());
         User condition = new User();
-        condition.setUserReferee(user.getMobile());
+        condition.setUserReferee(user.getUserId());
         Paginable<User> page = userBO.getPaginable(start, limit, condition);
         // 落地数据
         for (User refUser : page.getList()) {

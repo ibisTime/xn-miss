@@ -14,9 +14,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserIdAuthBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IUserIdAuthDAO;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserIdAuth;
 import com.ogc.standard.dto.req.XN805160Req;
 import com.ogc.standard.enums.EApproveStatus;
@@ -34,6 +36,9 @@ public class UserIdAuthBOImpl extends PaginableBOImpl<UserIdAuth>
 
     @Autowired
     private IUserIdAuthDAO userIdAuthDAO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public void saveApply(XN805160Req req) {
@@ -69,6 +74,11 @@ public class UserIdAuthBOImpl extends PaginableBOImpl<UserIdAuth>
         if (data == null) {
             throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
         }
+        User user = userBO.getUser(data.getApplyUser());
+        if (null != user) {
+            data.setApplyUserInfo(user);
+        }
+
         return data;
     }
 

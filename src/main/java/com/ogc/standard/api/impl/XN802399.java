@@ -1,11 +1,3 @@
-/**
- * @Title XN802398.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author taojian  
- * @date 2018年9月18日 下午1:16:39 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IUserAO;
