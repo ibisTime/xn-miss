@@ -1,7 +1,5 @@
 package com.ogc.standard.dto.req;
 
-import java.util.Date;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 /** 
@@ -71,7 +69,7 @@ public class XN802002Req {
     private String blockUrl;
 
     // ico时间
-    private Date icoDatetime;
+    private String icoDatetime;
 
     // 归集阀值
     @NotBlank
@@ -224,11 +222,11 @@ public class XN802002Req {
         this.blockUrl = blockUrl;
     }
 
-    public Date getIcoDatetime() {
+    public String getIcoDatetime() {
         return icoDatetime;
     }
 
-    public void setIcoDatetime(Date icoDatetime) {
+    public void setIcoDatetime(String icoDatetime) {
         this.icoDatetime = icoDatetime;
     }
 

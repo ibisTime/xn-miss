@@ -14,6 +14,7 @@ import com.ogc.standard.bo.ICoinBO;
 import com.ogc.standard.bo.ICtqBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.CoinUtil;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Coin;
 import com.ogc.standard.dto.req.XN802000Req;
@@ -143,7 +144,8 @@ public class CoinAOImpl implements ICoinAO {
 
         data.setWebUrl(req.getWebUrl());
         data.setBlockUrl(req.getBlockUrl());
-        data.setIcoDatetime(req.getIcoDatetime());
+        data.setIcoDatetime(DateUtil.strToDate(req.getIcoDatetime(),
+            DateUtil.DATA_TIME_PATTERN_7));
         data.setCollectStart(CoinUtil.toMinUnit(
             StringValidater.toBigDecimal(req.getCollectStart()),
             data.getUnit()));
