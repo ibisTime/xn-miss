@@ -120,7 +120,9 @@ public class WithdrawAOImpl implements IWithdrawAO {
         Account dbAccount = accountBO.getAccount(accountNumber);
         Coin coin = coinBO.getCoin(dbAccount.getCurrency());
 
-        BigDecimal fee = coin.getWithdrawFee();
+        BigDecimal fee = amount.multiply(sysConfigBO
+            .getBigDecimalValue(SysConstants.WITHDRAW_FEE));
+        fee = new BigDecimal(fee.toBigInteger());
         if (amount.compareTo(fee) == 0 || amount.compareTo(fee) == -1) {
             throw new BizException(EErrorCode_main.with_COUNTFEE.getCode());
         }
@@ -129,7 +131,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         verifyPayCardNo(coin, payCardNo);
 
         // 校验资金密码
-        // userBO.checkTradePwd(applyUser, tradePwd);
+        userBO.checkTradePwd(applyUser, tradePwd);
 
         // 账户可用余额是否充足
         if (dbAccount.getAmount().subtract(dbAccount.getFrozenAmount())
@@ -367,8 +369,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             .getId());
 
         // 实际到账金额=取现金额-取现手续费
-        BigDecimal realAmount = withdraw.getAmount().subtract(
-            sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE));
+        BigDecimal realAmount = withdraw.getAmount()
+            .subtract(withdraw.getFee());
 
         // 查询散取地址token余额
         BigDecimal tokenBalance = TokenClient.getBalance(address,
@@ -455,9 +457,11 @@ public class WithdrawAOImpl implements IWithdrawAO {
         EthMAddress secret = ethMAddressBO.getEthMAddressSecret(mEthAddress
             .getId());
 
+        // 手续费
+        BigDecimal chargeFee = withdraw.getFee();
+        chargeFee = new BigDecimal(chargeFee.toBigInteger());
         // 实际到账金额=取现金额-取现手续费
-        BigDecimal realAmount = withdraw.getAmount().subtract(
-            sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE));
+        BigDecimal realAmount = withdraw.getAmount().subtract(chargeFee);
 
         // 预估矿工费用
         BigDecimal gasPrice = ethTransactionBO.getGasPrice();
@@ -715,8 +719,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
                         .loadTransferEvents(tx);
                     for (TransferEventResponse transferEventResponse : transferEventList) {
                         // token地址不是提现地址则跳过
-                        if (!withdraw.getPayCardNo().equals(
-                            transferEventResponse.to)) {
+                        if (!withdraw.getPayCardNo().toLowerCase()
+                            .equals(transferEventResponse.to)) {
                             continue;
                         }
                         TokenEvent tokenEvent = tokenEventBO.convertTokenEvent(
@@ -761,14 +765,11 @@ public class WithdrawAOImpl implements IWithdrawAO {
             EJourBizTypeUser.AJ_WITHDRAW_UNFROZEN.getCode(),
             EJourBizTypeUser.AJ_WITHDRAW_UNFROZEN.getValue(),
             withdraw.getCode());
+        BigDecimal fee = withdraw.getFee();
         // 取现金额扣减
         userAccount = accountBO.changeAmount(
             userAccount,
-            withdraw
-                .getAmount()
-                .subtract(
-                    sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE))
-                .negate(),
+            withdraw.getAmount().subtract(fee).negate(),
             EChannelType.Online,
             ctqEthTransaction.getHash(),
             withdraw.getCode(),
@@ -807,11 +808,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
         accountBO.changeAmount(
             mAccount,
-            withdraw
-                .getAmount()
-                .subtract(
-                    sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE))
-                .negate(),
+            withdraw.getAmount().subtract(fee).negate(),
             EChannelType.Online,
             ctqEthTransaction.getHash(),
             withdraw.getCode(),
@@ -913,11 +910,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
         accountBO.changeAmount(
             mAccount,
-            withdraw
-                .getAmount()
-                .subtract(
-                    sysConfigBO.getBigDecimalValue(SysConstants.WITHDRAW_FEE))
-                .negate(),
+            withdraw.getAmount().subtract(withdraw.getFee()).negate(),
             EChannelType.Online,
             ctqEthTransaction.getHash(),
             withdraw.getCode(),
