@@ -20,16 +20,16 @@
 			<list>
 			
 				<!-- 行情 -->
-       		    <ref bean="marketTrigger"/>
+       		    <!-- <ref bean="marketTrigger"/>
        		    
-       		    <!-- 币币交易 -->
+       		    币币交易
 				<ref bean="doScanSimuOrderTrigger"/>
        		    <ref bean="doSaveKLineTrigger"/>
        		    
-       		    <!-- 归集相关定时器 -->
+       		    归集相关定时器
 				<ref bean="doCollectTrigger" />
-				<!-- 取现相关定时器 -->
-				<ref bean="doWithDrawTrigger" />
+				取现相关定时器
+				<ref bean="doWithDrawTrigger" /> -->
 			</list>
 		</property>
 		<property name="autoStartup" value="true" />
