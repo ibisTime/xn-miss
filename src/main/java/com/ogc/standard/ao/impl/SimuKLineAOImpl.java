@@ -174,21 +174,6 @@ public class SimuKLineAOImpl implements ISimuKLineAO {
 
             }
 
-        } else { // 当前时间单位没有交易产生
-
-            // 获取上一时间单位的K线
-            SimuKLine simuKLine = simuKLineBO.getLatestSimuKLine(
-                pair.getSymbol(), pair.getToSymbol(),
-                ESimuKLinePeriod.MIN1.getCode());
-
-            if (null != simuKLine) {
-
-                open = simuKLine.getClose();
-
-                close = simuKLine.getClose();
-
-            }
-
         }
 
         simuKLineBO.saveSimuKLine(pair, period, volume, quantity, amount, open,

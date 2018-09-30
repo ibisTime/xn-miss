@@ -994,6 +994,7 @@ CREATE TABLE `tstd_collect` (
 -- ----------------------------
 --  Table structure for `tstd_deposit`
 -- ----------------------------
+DROP TABLE IF EXISTS `tstd_deposit`;
 CREATE TABLE `tstd_deposit` (
   `code` varchar(32) NOT NULL COMMENT '编号',
   `currency` varchar(32) DEFAULT NULL COMMENT '币种',
