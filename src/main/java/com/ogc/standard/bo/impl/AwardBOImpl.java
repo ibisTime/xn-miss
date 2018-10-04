@@ -228,8 +228,12 @@ public class AwardBOImpl extends PaginableBOImpl<Award> implements IAwardBO {
         for (TradeOrder tradeOrder : orderList) {
             data.setRefCode(tradeOrder.getCode());
 
-            awardCount = awardCount
-                .add(getAwardByRefCode(tradeOrder.getCode()).getCount());
+            Award award = getAwardByRefCode(tradeOrder.getCode());
+
+            if (null != award) {
+                awardCount = awardCount.add(award.getCount());
+            }
+
         }
         return awardCount;
     }

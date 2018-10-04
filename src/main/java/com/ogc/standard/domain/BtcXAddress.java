@@ -33,17 +33,25 @@ public class BtcXAddress extends ABaseDO {
 
     /* DB properties 结束 */
 
+    // ******** db propertity end *********
+
     // 状态列表
     private List<String> statusList;
 
     // 类型列表
     private List<String> typeList;
 
+    // 所属用户信息
+    private User userInfo;
+
     // 地址模糊查询
     private String addressForQuery;
 
-    // 用户信息
-    private User userInfo;
+    // 余额
+    private BigDecimal balance;
+
+    // 币种
+    private String symbol;
 
     private Long useCount;
 
@@ -109,6 +117,14 @@ public class BtcXAddress extends ABaseDO {
         this.typeList = typeList;
     }
 
+    public User getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
+    }
+
     public String getAddressForQuery() {
         return addressForQuery;
     }
@@ -117,12 +133,20 @@ public class BtcXAddress extends ABaseDO {
         this.addressForQuery = addressForQuery;
     }
 
-    public User getUserInfo() {
-        return userInfo;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setUserInfo(User userInfo) {
-        this.userInfo = userInfo;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public Long getUseCount() {

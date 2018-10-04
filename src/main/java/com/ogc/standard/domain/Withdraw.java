@@ -103,7 +103,10 @@ public class Withdraw extends ABaseDO {
     private Date payDatetimeEnd;
 
     // 申请用户
-    private User user;
+    private User applyUserInfo;
+
+    // 申请用户
+    private User approveUserInfo;
 
     // 币种列表
     private List<String> currencyList;
@@ -348,12 +351,20 @@ public class Withdraw extends ABaseDO {
         this.payDatetimeEnd = payDatetimeEnd;
     }
 
-    public User getUser() {
-        return user;
+    public User getApplyUserInfo() {
+        return applyUserInfo;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setApplyUserInfo(User applyUserInfo) {
+        this.applyUserInfo = applyUserInfo;
+    }
+
+    public User getApproveUserInfo() {
+        return approveUserInfo;
+    }
+
+    public void setApproveUserInfo(User approveUserInfo) {
+        this.approveUserInfo = approveUserInfo;
     }
 
     public List<String> getCurrencyList() {

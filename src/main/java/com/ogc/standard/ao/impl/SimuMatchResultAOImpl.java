@@ -93,67 +93,64 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
             // 更新行情
             Coin coin = coinAO.getCoin(data.getToSymbol());
             marketAO.saveMarket(data.getSymbol().toUpperCase(),
-                EMarketOrigin.HAPPYMONEY.getCode(),
-                data.getToSymbol().toUpperCase(), "",
-                CoinUtil.fromMinUnit(data.getExchangeRate(), coin.getUnit()));
+                EMarketOrigin.HAPPYMONEY.getCode(), data.getToSymbol()
+                    .toUpperCase(), "", CoinUtil.fromMinUnit(
+                    data.getExchangeRate(), coin.getUnit()));
 
             // 用户分成
             award(data);
 
             // 解冻买家账户交易金额
-            Account buyAccount = accountBO.getAccountByUser(data.getBuyUserId(),
-                data.getToSymbol());
-            buyAccount = accountBO.unfrozenAmount(buyAccount,
-                data.getToSymbolCount(),
-                EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE.getCode(),
-                EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE.getValue(),
-                data.getId().toString());
+            Account buyAccount = accountBO.getAccountByUser(
+                data.getBuyUserId(), data.getToSymbol());
+            buyAccount = accountBO.unfrozenAmount(buyAccount, data
+                .getToSymbolCount(), EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE
+                .getCode(), EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE
+                .getValue(), data.getId().toString());
 
             // 解冻卖家账户交易金额
-            Account sellAccount = accountBO
-                .getAccountByUser(data.getSellUserId(), data.getSymbol());
-            sellAccount = accountBO.unfrozenAmount(sellAccount,
-                data.getSymbolCount(),
-                EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE.getCode(),
-                EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE.getValue(),
-                data.getId().toString());
+            Account sellAccount = accountBO.getAccountByUser(
+                data.getSellUserId(), data.getSymbol());
+            sellAccount = accountBO.unfrozenAmount(sellAccount, data
+                .getSymbolCount(), EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE
+                .getCode(), EJourBizTypeUser.AJ_BBORDER_UNFROZEN_TRADE
+                .getValue(), data.getId().toString());
 
             // 划转交易币种，从 卖方 划给 买方
-            accountBO.transAmount(data.getSellUserId(), data.getSymbol(),
-                data.getBuyUserId(), data.getSymbol(), data.getSymbolCount(),
+            accountBO.transAmount(data.getSellUserId(), data.getSymbol(), data
+                .getBuyUserId(), data.getSymbol(), data.getSymbolCount(),
                 EJourBizTypeUser.AJ_BBORDER_SELL.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_BUY.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_SELL.getValue(),
-                EJourBizTypeUser.AJ_BBORDER_BUY.getValue(),
-                data.getId().toString());
+                EJourBizTypeUser.AJ_BBORDER_BUY.getValue(), data.getId()
+                    .toString());
 
             // 扣减买家手续费
             accountBO.transAmount(data.getBuyUserId(), data.getSymbol(),
-                ESysUser.SYS_USER.getCode(), data.getSymbol(), data.getBuyFee(),
-                EJourBizTypeUser.AJ_BBORDER_FEE.getCode(),
+                ESysUser.SYS_USER.getCode(), data.getSymbol(),
+                data.getBuyFee(), EJourBizTypeUser.AJ_BBORDER_FEE.getCode(),
                 EJourBizTypePlat.AJ_BBORDER_FEE.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_FEE.getValue(),
-                EJourBizTypePlat.AJ_BBORDER_FEE.getValue(),
-                data.getId().toString());
+                EJourBizTypePlat.AJ_BBORDER_FEE.getValue(), data.getId()
+                    .toString());
 
             // 划转计价币种，从 买方 划给 卖方
-            accountBO.transAmount(data.getBuyUserId(), data.getToSymbol(),
-                data.getSellUserId(), data.getToSymbol(),
-                data.getToSymbolCount(),
+            accountBO.transAmount(data.getBuyUserId(), data.getToSymbol(), data
+                .getSellUserId(), data.getToSymbol(), data.getToSymbolCount(),
                 EJourBizTypeUser.AJ_BBORDER_SELL.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_BUY.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_SELL.getValue(),
-                EJourBizTypeUser.AJ_BBORDER_BUY.getValue(),
-                data.getId().toString());
+                EJourBizTypeUser.AJ_BBORDER_BUY.getValue(), data.getId()
+                    .toString());
 
             // 扣减卖家手续费
             accountBO.transAmount(data.getSellUserId(), data.getToSymbol(),
-                ESysUser.SYS_USER.getCode(), data.getToSymbol(),
-                data.getSellFee(), EJourBizTypeUser.AJ_BBORDER_FEE.getCode(),
+                ESysUser.SYS_USER.getCode(), data.getToSymbol(), data
+                    .getSellFee(), EJourBizTypeUser.AJ_BBORDER_FEE.getCode(),
                 EJourBizTypePlat.AJ_BBORDER_FEE.getCode(),
                 EJourBizTypeUser.AJ_BBORDER_FEE.getValue(),
-                EJourBizTypePlat.AJ_BBORDER_FEE.getValue(),
-                data.getId().toString());
+                EJourBizTypePlat.AJ_BBORDER_FEE.getValue(), data.getId()
+                    .toString());
         }
 
     }
@@ -169,7 +166,7 @@ public class SimuMatchResultAOImpl implements ISimuMatchResultAO {
         }
 
         // 推荐人为空 return
-        User refereeUser = this.userBO.getUserByMobile(rederUserId);
+        User refereeUser = this.userBO.getUserUnCheck(rederUserId);
         if (refereeUser == null) {
             return;
         }

@@ -90,6 +90,7 @@ public class AwardMonthAOImpl implements IAwardMonthAO {
         res.setCcTradeCount(ccCount);
         res.setRegRefCount(regCount);
         res.setPlatCount(specialCount);
+
         // Award condition = new Award();
         // XN802397Res res = new XN802397Res();
         // condition.setUserId(userId);
@@ -125,6 +126,7 @@ public class AwardMonthAOImpl implements IAwardMonthAO {
         // specialCount = specialCount.add(award.getCount());
         // }
         // res.setPlatCount(specialCount);
+
         AwardMonth conditionMonth = new AwardMonth();
         conditionMonth.setUserId(userId);
         List<AwardMonth> AwardMonthList = awardMonthBO
