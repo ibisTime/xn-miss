@@ -1,6 +1,5 @@
 package com.ogc.standard.ao.impl;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +54,6 @@ public class SYSConfigAOImpl implements ISYSConfigAO {
     @Override
     public SYSConfig getSYSConfig(String key) {
         return sysConfigBO.getConfigValue(key);
-    }
-
-    @Override
-    public List<SYSConfig> queryConfigsList(String type) {
-        return sysConfigBO.queryConfigsList(type);
     }
 
 }

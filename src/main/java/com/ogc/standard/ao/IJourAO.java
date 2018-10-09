@@ -13,7 +13,6 @@ import java.util.List;
 import com.ogc.standard.annotation.ServiceModule;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Jour;
-import com.ogc.standard.dto.res.XN802901Res;
 
 /** 
  * @author: xieyj 
@@ -34,11 +33,4 @@ public interface IJourAO {
 
     public Jour getJour(String code, String systemCode);
 
-    // 获取某业务下的统计金额
-    public Long getTotalAmount(String bizType, String channelType,
-            String accountNumber);
-
-    // 获取一段时间统计金额
-    public XN802901Res getTotalAmountByDate(String accountNumber,
-            String dateStart, String dateEnd);
 }

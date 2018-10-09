@@ -165,7 +165,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (CollectionUtils.isNotEmpty(page.getList())) {
             List<Withdraw> list = page.getList();
             for (Withdraw withdraw : list) {
-                User user = userBO.getRemoteUser(withdraw.getApplyUser());
+                User user = userBO.getUser(withdraw.getApplyUser());
                 withdraw.setUser(user);
             }
         }
@@ -177,7 +177,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         List<Withdraw> list = withdrawBO.queryWithdrawList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             for (Withdraw withdraw : list) {
-                User user = userBO.getRemoteUser(withdraw.getApplyUser());
+                User user = userBO.getUser(withdraw.getApplyUser());
                 withdraw.setUser(user);
             }
         }
@@ -187,7 +187,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     public Withdraw getWithdraw(String code, String systemCode) {
         Withdraw withdraw = withdrawBO.getWithdraw(code, systemCode);
-        User user = userBO.getRemoteUser(withdraw.getApplyUser());
+        User user = userBO.getUser(withdraw.getApplyUser());
         withdraw.setUser(user);
         return withdraw;
     }

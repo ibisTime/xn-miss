@@ -15,6 +15,7 @@ import com.ogc.standard.dao.base.ABaseDO;
 public class User extends ABaseDO {
 
     private static final long serialVersionUID = 1975331351390818527L;
+
     // ***********db properties***********
 
     // 用户编号
@@ -236,7 +237,6 @@ public class User extends ABaseDO {
     // 是否绑定邮箱
     private boolean emailBindFlag;
 
-
     // 用户推荐人
     private User refereeUser;
 
@@ -263,7 +263,6 @@ public class User extends ABaseDO {
 
     // 自我介绍
     private String introduce;
-
 
     public String getUserId() {
         return userId;
@@ -665,8 +664,6 @@ public class User extends ABaseDO {
         this.emailBindFlag = emailBindFlag;
     }
 
-
-
     public User getRefereeUser() {
         return refereeUser;
     }
@@ -738,6 +735,5 @@ public class User extends ABaseDO {
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
     }
-
 
 }

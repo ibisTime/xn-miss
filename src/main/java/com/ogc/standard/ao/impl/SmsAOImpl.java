@@ -83,8 +83,7 @@ public class SmsAOImpl implements ISmsAO {
             data.setCode(req.getCode());
             smsBO.refreshSms(data);
         } else {
-            data.setCode(
-                OrderNoGenerater.generate(EGeneratePrefix.XX.getCode()));
+            data.setCode(OrderNoGenerater.generate(EGeneratePrefix.XX.getCode()));
             smsBO.saveSms(data);
         }
         // read表中添加数据
@@ -102,12 +101,6 @@ public class SmsAOImpl implements ISmsAO {
         }
         readBO.saveToRead(dataList);
 
-    }
-
-    @Override
-    public void editStatus(String code, String updater, String remark) {
-        smsBO.revokeSms(code, updater, remark);
-        readBO.deleteRead(code);
     }
 
     @Override

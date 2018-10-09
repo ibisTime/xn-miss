@@ -1,6 +1,5 @@
 package com.ogc.standard.ao;
 
-import java.util.List;
 import java.util.Map;
 
 import com.ogc.standard.bo.base.Paginable;
@@ -26,5 +25,4 @@ public interface ISYSConfigAO {
 
     public Map<String, String> getConfigsMap(String type);
 
-    public List<SYSConfig> queryConfigsList(String type);
 }

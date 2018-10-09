@@ -14,12 +14,9 @@ import com.ogc.standard.bo.IHLOrderBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.IJourHistoryBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Jour;
-import com.ogc.standard.dto.res.XN802901Res;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.enums.EJourStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -133,34 +130,4 @@ public class JourAOImpl implements IJourAO {
         return jourBO.getJour(code, systemCode);
     }
 
-    @Override
-    public Long getTotalAmount(String bizType, String channelType,
-            String accountNumber) {
-        return jourBO.getTotalAmount(bizType, channelType, accountNumber);
-    }
-
-    @Override
-    public XN802901Res getTotalAmountByDate(String accountNumber,
-            String dateStart, String dateEnd) {
-        Jour condition = new Jour();
-        condition.setAccountNumber(accountNumber);
-        condition.setCreateDatetimeStart(DateUtil
-            .getFrontDate(dateStart, false));
-        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(dateEnd, true));
-
-        List<Jour> jourList = jourBO.queryJourList(condition);
-        Long incomeAmount = 0L;// 收入金额
-        Long withdrawAmount = 0L;// 取现金额
-        for (Jour jour : jourList) {
-            Long transAmount = jour.getTransAmount();
-            if (transAmount > 0
-                    && !EJourBizType.AJ_QX.getCode().equals(jour.getBizType())) {// 取现解冻排除
-                incomeAmount += transAmount;
-            }
-            if (EJourBizType.AJ_QX.getCode().equals(jour.getBizType())) {
-                withdrawAmount += transAmount;
-            }
-        }
-        return new XN802901Res(incomeAmount, -withdrawAmount);
-    }
 }

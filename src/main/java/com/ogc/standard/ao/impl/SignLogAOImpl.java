@@ -44,11 +44,6 @@ public class SignLogAOImpl implements ISignLogAO {
     }
 
     @Override
-    public List<SignLog> querySignLogList(SignLog condition) {
-        return signLogBO.querySignLogList(condition);
-    }
-
-    @Override
     public long keepCheckIn(String userId) {
         SignLog condition = new SignLog();
         condition.setUserId(userId);
@@ -70,7 +65,7 @@ public class SignLogAOImpl implements ISignLogAO {
                 dayNum = signLogList.get(i).getCreateDatetime().getTime()
                         / 86400000
                         - signLogList.get(i + 1).getCreateDatetime().getTime()
-                                / 86400000;
+                        / 86400000;
                 if (dayNum == 1) {
                     count++;
                 } else {
