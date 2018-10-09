@@ -31,8 +31,6 @@ public interface IKeywordAO {
     public Paginable<Keyword> queryKeywordPage(int start, int limit,
             Keyword condition);
 
-    public List<Keyword> queryKeywordList(Keyword condition);
-
     public Keyword getKeyword(Integer id);
 
 }

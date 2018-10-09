@@ -2,7 +2,6 @@ package com.ogc.standard.ao;
 
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Comment;
-import com.ogc.standard.dto.res.XN628271Res;
 
 /**
  * @author: silver 
@@ -12,8 +11,9 @@ import com.ogc.standard.dto.res.XN628271Res;
 public interface ICommentAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    // 评论评论
-    public XN628271Res commentComment(String code, String content, String userId);
+    // // 评论评论
+    // public XN628271Res commentComment(String code, String content, String
+    // userId);
 
     // 删除评论
     public void dropOssComment(String code, String updater);
@@ -25,17 +25,10 @@ public interface ICommentAO {
     public void approveComment(String code, String approveResult,
             String approver, String approveNote);
 
-    // 点赞/取消评论(front)
-    public void pointComment(String code, String userId);
-
     public Paginable<Comment> queryCommentPage(int start, int limit,
             Comment condition);
 
     public Paginable<Comment> queryMyCommentPage(int start, int limit,
             Comment condition, String userId);
-
-    public Comment getFrontComment(String code, String userId);
-
-    public Comment getComment(String code);
 
 }

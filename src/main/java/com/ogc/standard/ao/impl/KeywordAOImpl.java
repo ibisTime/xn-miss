@@ -66,11 +66,6 @@ public class KeywordAOImpl implements IKeywordAO {
     }
 
     @Override
-    public List<Keyword> queryKeywordList(Keyword condition) {
-        return keywordBO.queryKeywordList(condition);
-    }
-
-    @Override
     public Keyword getKeyword(Integer id) {
         return keywordBO.getKeyword(id);
     }

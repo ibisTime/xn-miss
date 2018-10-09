@@ -14,17 +14,9 @@ import com.ogc.standard.bo.IInteractBO;
 import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Comment;
-import com.ogc.standard.domain.Interact;
-import com.ogc.standard.domain.Keyword;
-import com.ogc.standard.dto.res.XN628271Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommentStatus;
-import com.ogc.standard.enums.ECommentType;
 import com.ogc.standard.enums.EErrorCode_main;
-import com.ogc.standard.enums.EFilterFlag;
-import com.ogc.standard.enums.EInteractType;
-import com.ogc.standard.enums.EKeyWordReaction;
-import com.ogc.standard.enums.EObjectType;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -44,54 +36,53 @@ public class CommentAOImpl implements ICommentAO {
     @Autowired
     private IInteractBO interactBO;
 
-
-    @Override
-    public XN628271Res commentComment(String commentCode, String content,
-            String userId) {
-        // 关键字过滤
-        List<Keyword> keywordList = keywordBO.checkContent(content);
-        String status = ECommentStatus.RELEASED.getCode();
-        String filterFlag = null;
-
-        if (CollectionUtils.isNotEmpty(keywordList)) {
-
-            // 直接拦截
-            if (EKeyWordReaction.REFUSE.getCode().equals(
-                keywordList.get(0).getReaction())) {
-                throw new BizException(EErrorCode_main.comm_KEYWORD.getCode(),
-                    (Object) keywordList.get(0).getWord());
-            }
-
-            // 替换**
-            if (EKeyWordReaction.REPLACE.getCode().equals(
-                keywordList.get(0).getReaction())) {
-                for (Keyword keyword : keywordList) {
-                    content = keywordBO.replaceKeyword(content,
-                        keyword.getWord());
-                }
-
-                filterFlag = EFilterFlag.REPLACED.getCode();
-            }
-
-            // 审核
-            if (EKeyWordReaction.APPROVE.getCode().equals(
-                keywordList.get(0).getReaction())) {
-                status = ECommentStatus.TO_APPROVE.getCode();
-            }
-        }
-
-        if (ECommentStatus.RELEASED.getCode().equals(status)
-                && null == filterFlag) {
-            filterFlag = EFilterFlag.NORMAN.getCode();
-        } else if (ECommentStatus.TO_APPROVE.getCode().equals(status)) {
-            filterFlag = EFilterFlag.TO_APPROVE.getCode();
-        }
-
-        String code = commentBO.saveComment(ECommentType.COMMENT.getCode(),
-            commentCode, userId, content, status, userId);
-
-        return new XN628271Res(code, filterFlag);
-    }
+    // @Override
+    // public XN628271Res commentComment(String commentCode, String content,
+    // String userId) {
+    // // 关键字过滤
+    // List<Keyword> keywordList = keywordBO.checkContent(content);
+    // String status = ECommentStatus.RELEASED.getCode();
+    // String filterFlag = null;
+    //
+    // if (CollectionUtils.isNotEmpty(keywordList)) {
+    //
+    // // 直接拦截
+    // if (EKeyWordReaction.REFUSE.getCode().equals(
+    // keywordList.get(0).getReaction())) {
+    // throw new BizException(EErrorCode_main.comm_KEYWORD.getCode(),
+    // (Object) keywordList.get(0).getWord());
+    // }
+    //
+    // // 替换**
+    // if (EKeyWordReaction.REPLACE.getCode().equals(
+    // keywordList.get(0).getReaction())) {
+    // for (Keyword keyword : keywordList) {
+    // content = keywordBO.replaceKeyword(content,
+    // keyword.getWord());
+    // }
+    //
+    // filterFlag = EFilterFlag.REPLACED.getCode();
+    // }
+    //
+    // // 审核
+    // if (EKeyWordReaction.APPROVE.getCode().equals(
+    // keywordList.get(0).getReaction())) {
+    // status = ECommentStatus.TO_APPROVE.getCode();
+    // }
+    // }
+    //
+    // if (ECommentStatus.RELEASED.getCode().equals(status)
+    // && null == filterFlag) {
+    // filterFlag = EFilterFlag.NORMAN.getCode();
+    // } else if (ECommentStatus.TO_APPROVE.getCode().equals(status)) {
+    // filterFlag = EFilterFlag.TO_APPROVE.getCode();
+    // }
+    //
+    // String code = commentBO.saveComment(ECommentType.COMMENT.getCode(),
+    // commentCode, userId, content, status, userId);
+    //
+    // return new XN628271Res(code, filterFlag);
+    // }
 
     @Override
     @Transactional
@@ -106,37 +97,11 @@ public class CommentAOImpl implements ICommentAO {
         if (EBoolean.YES.getCode().equals(approveResult)) {
             status = ECommentStatus.APPROVED_YES.getCode();
 
-
         } else {
             status = ECommentStatus.APPROVED_NO.getCode();
         }
 
         commentBO.refreshApproveComment(code, status, approver, approveNote);
-    }
-
-    @Override
-    @Transactional
-    public void pointComment(String code, String userId) {
-        Interact interact = interactBO.getInteract(
-            EInteractType.POINT.getCode(), EObjectType.COMMENT.getCode(), code,
-            userId);
-        Comment comment = commentBO.getComment(code);
-        Integer pointCount = comment.getPointCount();
-
-        // 点赞记录不存在时，添加点赞；点赞记录存在时，删除点赞
-        if (null == interact) {
-            interactBO.saveInteract(EInteractType.POINT.getCode(),
-                EObjectType.COMMENT.getCode(), code, userId);
-
-            pointCount += 1;
-        } else {
-            interactBO.removeInteract(interact.getCode());
-
-            pointCount -= 1;
-        }
-
-        // 更新帖子点赞量
-        commentBO.refreshPointComment(code, pointCount);
     }
 
     @Override
@@ -194,24 +159,6 @@ public class CommentAOImpl implements ICommentAO {
             }
         }
         return page;
-    }
-
-    @Override
-    public Comment getFrontComment(String code, String userId) {
-        Comment comment = commentBO.getComment(code);
-        commentBO.initComment(userId, comment);
-        List<Comment> commentList = new ArrayList<Comment>();
-        commentBO.searchCycleComment(comment.getCode(), commentList);
-        commentBO.orderCommentList(commentList, userId);
-        comment.setNextCommentList(commentList);
-        return comment;
-    }
-
-    @Override
-    public Comment getComment(String code) {
-        Comment comment = commentBO.getComment(code);
-        commentBO.initComment(null, comment);
-        return comment;
     }
 
 }

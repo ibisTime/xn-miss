@@ -28,9 +28,6 @@ public interface ISmsAO {
     // 发布消息
     public void releaseSms(XN805301Req req);
 
-    // 回撤消息
-    public void editStatus(String code, String updater, String remark);
-
     public Paginable<Sms> querySmsPage(int start, int limit, Sms condition);
 
     public List<Sms> querySmsList(Sms condition);
