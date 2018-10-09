@@ -91,9 +91,9 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             new BizException("xn000000", "余额不足");
         }
         // 判断是否生成条件是否满足
-        if (ESystemCode.ZHPAY.getCode().equals(user.getSystemCode())) {
-            exchangeCurrencyBO.doCheckZH(userId, fromCurrency, toCurrency);
-        }
+//        if (ESystemCode.MISS.getCode().equals(user.getSystemCode())) {
+//            exchangeCurrencyBO.doCheckZH(userId, fromCurrency, toCurrency);
+//        }
         return exchangeCurrencyBO.applyExchange(user, fromAmount, fromCurrency,
             toCurrency);
     }
@@ -218,7 +218,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         // 产生记录
         String code = exchangeCurrencyBO.saveExchange(fromUser.getUserId(),
             rmbAmount, ECurrency.CNY.getCode(), toUser, amount, currency, null,
-            fromUser.getCompanyCode(), fromUser.getSystemCode());
+            null, ESystemCode.MISS.getCode());
         // 人民币划转
         accountBO.transAmountCZB(fromUser.getUserId(), ECurrency.CNY.getCode(),
             toUser, ECurrency.CNY.getCode(), rmbAmount, bizType,
@@ -259,7 +259,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             .getExchangeRate(ECurrency.CNY.getCode(), currency));
         String code = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
             toUserId, rmbAmount, amount, currency, payType,
-            fromUser.getSystemCode());
+            ESystemCode.MISS.getCode());
 
         return weChatAO.getPrepayIdNative(fromUser.getUserId(), toUserId, code,
             code, bizType.getCode(), bizType.getValue(), rmbAmount,
@@ -291,7 +291,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             .getExchangeRate(ECurrency.CNY.getCode(), currency));
         String code = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
             toUser, rmbAmount, amount, currency, payType,
-            fromUser.getSystemCode());
+            ESystemCode.MISS.getCode());
 
         return weChatAO.getPrepayIdH5(fromUser.getUserId(),
             fromUser.getOpenId(), toUser, code, code, bizType.getCode(),
@@ -344,7 +344,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             throw new BizException("xn000000", "划转金额需大于零");
         }
         String transAmountBsValue = sysConfigBO.getSYSConfig(
-            SysConstant.TRANSAMOUNTBS, ESystemCode.ZHPAY.getCode());
+            SysConstant.TRANSAMOUNTBS, ESystemCode.MISS.getCode());
         if (StringUtils.isNotBlank(transAmountBsValue)) {
             // 转账金额倍数
             Long transAmountBs = AmountUtil.mul(1000L,
@@ -361,8 +361,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         if (!EUserKind.Customer.getCode().equals(fromUser.getKind())) {
             throw new BizException("xn000000", "当前划转用户不是C端用户，不能进行转账业务");
         }
-        String toUserId = userBO.isUserExist(toMobile, EUserKind.Customer,
-            fromUser.getSystemCode());
+        String toUserId = userBO.getUserByMobile(toMobile).getUserId();
         // 同一个用户不可以相互转账
         if (toUserId.equals(fromUser.getUserId())) {
             throw new BizException("xn000000", "不能给自己转账");

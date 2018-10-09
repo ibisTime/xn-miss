@@ -193,7 +193,7 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         }
         // 每月的转化次数是有限制的
         String exchangeTimes = sysConfigBO.getSYSConfig(
-            EExchangeTimes.EXCTIMES.getCode(), ESystemCode.ZHPAY.getCode());
+            EExchangeTimes.EXCTIMES.getCode(), ESystemCode.MISS.getCode());
         if (StringUtils.isBlank(exchangeTimes)) {
             throw new BizException("xn0000", "每月兑换最大次数未配置");
         }
