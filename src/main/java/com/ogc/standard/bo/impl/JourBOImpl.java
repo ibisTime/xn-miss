@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     @Override
     public String addJour(Account dbAccount, EChannelType channelType,
             String channelOrder, String payGroup, String refNo,
-            EJourBizType bizType, String bizNote, Long transAmount) {
+            EJourBizType bizType, String bizNote, BigDecimal transAmount) {
         if (!EChannelType.Offline.getCode().equals(channelType.getCode())
                 && !EChannelType.NBZ.getCode().equals(channelType.getCode())) {// 线下和内部帐可为空，线上必须有
             if (StringUtils.isBlank(payGroup)) {// 必须要有的判断。每一次流水新增，必有有对应业务分组
@@ -53,7 +54,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
             throw new BizException("xn000000", "新增流水流水分组不能为空");
         }
-        if (transAmount == 0) {
+        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "新增流水变动金额不能为0");
         }
         String code = OrderNoGenerater
@@ -76,7 +77,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
         data.setBizNote(bizNote);
         data.setPreAmount(dbAccount.getAmount());
-        data.setPostAmount(dbAccount.getAmount() + transAmount);
+        data.setPostAmount(dbAccount.getAmount().add(transAmount));
         data.setStatus(EJourStatus.todoCheck.getCode());
         data.setRemark("记得对账哦");
 
@@ -110,7 +111,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setTransAmount(order.getAmount());
         data.setPreAmount(dbAccount.getAmount());
 
-        data.setPostAmount(dbAccount.getAmount() + order.getAmount());
+        data.setPostAmount(dbAccount.getAmount().add(order.getAmount()));
         data.setStatus(EJourStatus.noAdjust.getCode());
         data.setCreateDatetime(new Date());
         data.setWorkDate(null);
@@ -122,8 +123,8 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     }
 
     @Override
-    public void doCheckJour(Jour jour, EBoolean checkResult, Long checkAmount,
-            String checkUser, String checkNote) {
+    public void doCheckJour(Jour jour, EBoolean checkResult,
+            BigDecimal checkAmount, String checkUser, String checkNote) {
         Jour data = new Jour();
         data.setCode(jour.getCode());
         EJourStatus eJourStatus = EJourStatus.Checked_YES;
@@ -132,7 +133,8 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         }
         data.setStatus(eJourStatus.getCode());
         data.setCheckUser(checkUser);
-        data.setCheckNote(checkNote + ":调整金额" + checkAmount / 1000);
+        data.setCheckNote(checkNote + ":调整金额"
+                + checkAmount.divide(new BigDecimal(1000)));
         data.setCheckDatetime(new Date());
         jourDAO.checkJour(data);
     }

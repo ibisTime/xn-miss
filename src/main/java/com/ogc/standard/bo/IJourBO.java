@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -22,11 +23,11 @@ public interface IJourBO extends IPaginableBO<Jour> {
     // 正常新增
     public String addJour(Account dbAccount, EChannelType channelType,
             String channelOrder, String payGroup, String refNo,
-            EJourBizType bizType, String bizNote, Long transAmount);
+            EJourBizType bizType, String bizNote, BigDecimal transAmount);
 
     // 对账结果录入
-    public void doCheckJour(Jour jour, EBoolean checkResult, Long checkAmount,
-            String checkUser, String checkNote);
+    public void doCheckJour(Jour jour, EBoolean checkResult,
+            BigDecimal checkAmount, String checkUser, String checkNote);
 
     // 当前流水，调整不通过。即账其实是平的
     public void adjustJourNO(Jour jour, String adjustUser, String adjustNote);

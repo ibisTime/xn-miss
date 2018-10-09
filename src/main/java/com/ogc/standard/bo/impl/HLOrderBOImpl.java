@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -26,9 +27,9 @@ public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
     private IHLOrderDAO hlOrderDAO;
 
     @Override
-    public String applyOrder(Account account, Jour jour, Long applyAmount,
-            String applyUser, String applyNote) {
-        if (applyAmount == 0) {
+    public String applyOrder(Account account, Jour jour,
+            BigDecimal applyAmount, String applyUser, String applyNote) {
+        if (applyAmount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "红蓝订单的变动金额不能为0");
         }
         String code = OrderNoGenerater.generate(EGeneratePrefix.HLORDER
@@ -41,7 +42,7 @@ public class HLOrderBOImpl extends PaginableBOImpl<HLOrder> implements
         data.setCurrency(account.getCurrency());
         data.setJourCode(jour.getCode());
         data.setChannelType(jour.getChannelType());
-        if (applyAmount > 0) {
+        if (applyAmount.compareTo(BigDecimal.ZERO) > 0) {
             data.setDirection(EDirection.PLUS.getCode());
         } else {
             data.setDirection(EDirection.MINUS.getCode());

@@ -17,6 +17,7 @@ import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.PropertiesUtil;
+import com.ogc.standard.common.UserUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.ExchangeCurrency;
 import com.ogc.standard.domain.User;

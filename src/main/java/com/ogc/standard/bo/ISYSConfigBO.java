@@ -38,4 +38,7 @@ public interface ISYSConfigBO extends IPaginableBO<SYSConfig> {
 
     public BigDecimal getBigDecimalValue(String key);
 
+    public SYSConfig getSYSConfigNotException(String key, String companyCode,
+            String systemCode);
+
 }

@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Jour extends ABaseDO {
     private String accountNumber;
 
     // 变动金额（有正负之分）---核心字段5
-    private Long transAmount;
+    private BigDecimal transAmount;
 
     // 流水所属用户编号
     private String userId;
@@ -54,10 +55,10 @@ public class Jour extends ABaseDO {
     private String bizNote;
 
     // 变动前金额
-    private Long preAmount;
+    private BigDecimal preAmount;
 
     // 变动后金额
-    private Long postAmount;
+    private BigDecimal postAmount;
 
     // 状态
     private String status;
@@ -204,27 +205,27 @@ public class Jour extends ABaseDO {
         this.bizNote = bizNote;
     }
 
-    public Long getTransAmount() {
+    public BigDecimal getTransAmount() {
         return transAmount;
     }
 
-    public void setTransAmount(Long transAmount) {
+    public void setTransAmount(BigDecimal transAmount) {
         this.transAmount = transAmount;
     }
 
-    public Long getPreAmount() {
+    public BigDecimal getPreAmount() {
         return preAmount;
     }
 
-    public void setPreAmount(Long preAmount) {
+    public void setPreAmount(BigDecimal preAmount) {
         this.preAmount = preAmount;
     }
 
-    public Long getPostAmount() {
+    public BigDecimal getPostAmount() {
         return postAmount;
     }
 
-    public void setPostAmount(Long postAmount) {
+    public void setPostAmount(BigDecimal postAmount) {
         this.postAmount = postAmount;
     }
 

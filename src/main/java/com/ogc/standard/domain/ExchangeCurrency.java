@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -21,7 +22,7 @@ public class ExchangeCurrency extends ABaseDO {
     private String toUserId;
 
     // 去方金额
-    private Long toAmount;
+    private BigDecimal toAmount;
 
     // 去方币种
     private String toCurrency;
@@ -30,7 +31,7 @@ public class ExchangeCurrency extends ABaseDO {
     private String fromUserId;
 
     // 来方金额
-    private Long fromAmount;
+    private BigDecimal fromAmount;
 
     // 来方币种
     private String fromCurrency;
@@ -60,7 +61,7 @@ public class ExchangeCurrency extends ABaseDO {
     private String payCode;
 
     // 支付金额
-    private Long payAmount;
+    private BigDecimal payAmount;
 
     // 支付时间
     private Date payDatetime;
@@ -136,11 +137,11 @@ public class ExchangeCurrency extends ABaseDO {
         this.fromUserId = fromUserId;
     }
 
-    public void setToAmount(Long toAmount) {
+    public void setToAmount(BigDecimal toAmount) {
         this.toAmount = toAmount;
     }
 
-    public Long getToAmount() {
+    public BigDecimal getToAmount() {
         return toAmount;
     }
 
@@ -152,11 +153,11 @@ public class ExchangeCurrency extends ABaseDO {
         return toCurrency;
     }
 
-    public void setFromAmount(Long fromAmount) {
+    public void setFromAmount(BigDecimal fromAmount) {
         this.fromAmount = fromAmount;
     }
 
-    public Long getFromAmount() {
+    public BigDecimal getFromAmount() {
         return fromAmount;
     }
 
@@ -208,11 +209,11 @@ public class ExchangeCurrency extends ABaseDO {
         return payCode;
     }
 
-    public void setPayAmount(Long payAmount) {
+    public void setPayAmount(BigDecimal payAmount) {
         this.payAmount = payAmount;
     }
 
-    public Long getPayAmount() {
+    public BigDecimal getPayAmount() {
         return payAmount;
     }
 

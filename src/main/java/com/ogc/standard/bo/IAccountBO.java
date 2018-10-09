@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -26,29 +27,29 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 变更账户余额：流水落地
     public void changeAmount(String accountNumber, EChannelType channelType,
             String channelOrder, String payGroup, String refNo,
-            EJourBizType bizType, String bizNote, Long transAmount);
+            EJourBizType bizType, String bizNote, BigDecimal transAmount);
 
     // 仅变更账户余额：流水不落地
-    public void changeAmountNotJour(String accountNumber, Long transAmount,
-            String lastOrder);
+    public void changeAmountNotJour(String accountNumber,
+            BigDecimal transAmount, String lastOrder);
 
     // 红冲蓝补导致的资金变动（落地流水不需要对账）
     public void changeAmountForHL(HLOrder order);
 
     // 冻结金额（余额变动）
-    public void frozenAmount(Account dbAccount, Long freezeAmount,
+    public void frozenAmount(Account dbAccount, BigDecimal freezeAmount,
             String withdrawCode);
 
     // 解冻账户(冻结金额原路返回)
-    public void unfrozenAmount(Account dbAccount, Long freezeAmount,
+    public void unfrozenAmount(Account dbAccount, BigDecimal freezeAmount,
             String withdrawCode);
 
     // 扣减冻结金额
-    public void cutFrozenAmount(Account dbAccount, Long amount);
+    public void cutFrozenAmount(Account dbAccount, BigDecimal amount);
 
     // 内部转账
     public void transAmountCZB(String fromUserId, String fromCurrency,
-            String toUserId, String toCurrency, Long transAmount,
+            String toUserId, String toCurrency, BigDecimal transAmount,
             EJourBizType bizType, String fromBizNote, String toBizNote,
             String refNo);
 

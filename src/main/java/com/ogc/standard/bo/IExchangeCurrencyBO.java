@@ -36,19 +36,19 @@ public interface IExchangeCurrencyBO extends IPaginableBO<ExchangeCurrency> {
     /*
      * 虚拟币划转兑换记录
      */
-    public String saveExchange(String fromUserId, Long fromAmount,
-            String fromCurrency, String toUserId, Long toAmount,
+    public String saveExchange(String fromUserId, BigDecimal fromAmount,
+            String fromCurrency, String toUserId, BigDecimal toAmount,
             String toCurrency, String remark, String companyCode,
             String systemCode);
 
     public void doCheckZH(String userId, String fromCurrency, String toCurrency);
 
     public String payExchange(String fromUserId, String toUserId,
-            Long rmbAmount, Long toAmount, String currency, String payType,
-            String systemCode);
+            BigDecimal rmbAmount, BigDecimal toAmount, String currency,
+            String payType, String systemCode);
 
     public int paySuccess(String code, String status, String payCode,
-            Long payAmount);
+            BigDecimal payAmount);
 
     public void updateGdStatus(ExchangeCurrency exchangeCurrency);
 

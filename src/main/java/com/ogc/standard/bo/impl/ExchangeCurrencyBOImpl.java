@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IExchangeCurrencyBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IExchangeCurrencyDAO;
@@ -23,7 +24,6 @@ import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.util.AmountUtil;
 
 @Component
 public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
@@ -67,46 +67,18 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
             return 1.0;
         }
 
-        if (ECurrency.CNY.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.ZH_GXZ.getCode().equalsIgnoreCase(toCurrency)) {
-            return sysConfigBO.getCNY2GXZ();
-        } else if (ECurrency.CNY.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.ZH_FRB.getCode().equalsIgnoreCase(toCurrency)) {
-            return sysConfigBO.getCNY2FRB();
-        } else if (ECurrency.CNY.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.CG_CGB.getCode().equalsIgnoreCase(toCurrency)) {
-            return sysConfigBO.getCNY2CGB();
-        } else if (ECurrency.CNY.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.CG_JF.getCode().equalsIgnoreCase(toCurrency)) {
-            Double a = sysConfigBO.getCNY2CGB();
-            Double b = sysConfigBO.getCGB2CGJF();
-            return a * b;
-        } else if (ECurrency.ZH_HBB.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.ZH_GXZ.getCode().equalsIgnoreCase(toCurrency)) {
-            return sysConfigBO.getHBB2GXZ();
-        } else if (ECurrency.ZH_HBYJ.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.ZH_GXZ.getCode().equalsIgnoreCase(toCurrency)) {
-            return sysConfigBO.getHBYJ2GXZ();
-        } else if (ECurrency.CG_CGB.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.CG_JF.getCode().equalsIgnoreCase(toCurrency)) {
-            return sysConfigBO.getCGB2CGJF();
-        } else if (ECurrency.CNY.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.YC_CB.getCode().equalsIgnoreCase(toCurrency)) {
-            return sysConfigBO.getCNY2CB();
-        } else if (ECurrency.CNY.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.HW_XJK.getCode().equalsIgnoreCase(toCurrency)) {
-            return sysConfigBO.getCNY2XJK();
-        } else if (ECurrency.JF.getCode().equalsIgnoreCase(fromCurrency)
-                && ECurrency.HW_XJK.getCode().equalsIgnoreCase(toCurrency)) {
-            return AmountUtil.div(1L, sysConfigBO.getXJK2JF());
-        } else {
-            throw new BizException("xn000000", "兑换比例不存在，请检查钱包汇率规则参数");
-        }
+        // if (ECurrency.CNY.getCode().equalsIgnoreCase(fromCurrency)
+        // && ECurrency.ZH_GXZ.getCode().equalsIgnoreCase(toCurrency)) {
+        // return sysConfigBO.getCNY2GXZ();
+        // } else {
+        // throw new BizException("xn000000", "兑换比例不存在，请检查钱包汇率规则参数");
+        // }
+        return null;
     }
 
     @Override
-    public String saveExchange(String fromUserId, Long fromAmount,
-            String fromCurrency, String toUserId, Long toAmount,
+    public String saveExchange(String fromUserId, BigDecimal fromAmount,
+            String fromCurrency, String toUserId, BigDecimal toAmount,
             String toCurrency, String remark, String companyCode,
             String systemCode) {
         String code = OrderNoGenerater
@@ -138,7 +110,7 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.EXCHANGE_CURRENCY.getCode());
         Double rate = this.getExchangeRate(fromCurrency, toCurrency);
-        Long toAmount = Double.valueOf(fromAmount * rate).longValue();
+        BigDecimal toAmount = AmountUtil.mul(fromAmount, rate);
         ExchangeCurrency data = new ExchangeCurrency();
         data.setCode(code);
 
@@ -152,8 +124,8 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         data.setCreateDatetime(new Date());
         data.setStatus(EExchangeCurrencyStatus.TO_PAY.getCode());
 
-        data.setSystemCode(user.getSystemCode());
-        data.setCompanyCode(user.getCompanyCode());
+        data.setSystemCode(ESystemCode.MISS.getCode());
+        data.setCompanyCode(ESystemCode.MISS.getCode());
         exchangeCurrencyDAO.applyExchange(data);
         return code;
     }
@@ -193,7 +165,7 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         }
         // 每月的转化次数是有限制的
         String exchangeTimes = sysConfigBO.getSYSConfig(
-            EExchangeTimes.EXCTIMES.getCode(), ESystemCode.ZHPAY.getCode());
+            EExchangeTimes.EXCTIMES.getCode(), ESystemCode.MISS.getCode());
         if (StringUtils.isBlank(exchangeTimes)) {
             throw new BizException("xn0000", "每月兑换最大次数未配置");
         }
@@ -210,8 +182,8 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
 
     @Override
     public String payExchange(String fromUserId, String toUserId,
-            Long rmbAmount, Long toAmount, String currency, String payType,
-            String systemCode) {
+            BigDecimal rmbAmount, BigDecimal toAmount, String currency,
+            String payType, String systemCode) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.EXCHANGE_CURRENCY.getCode());
         ExchangeCurrency data = new ExchangeCurrency();
@@ -237,7 +209,7 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
 
     @Override
     public int paySuccess(String code, String status, String payCode,
-            Long payAmount) {
+            BigDecimal payAmount) {
         int count = 0;
         if (StringUtils.isNotBlank(code)) {
             ExchangeCurrency data = new ExchangeCurrency();

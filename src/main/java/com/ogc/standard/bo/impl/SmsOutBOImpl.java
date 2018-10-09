@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ISmsOutBO;
+import com.ogc.standard.dto.req.XN001200Req;
 import com.ogc.standard.dto.req.XN804080Req;
 import com.ogc.standard.dto.req.XN804081Req;
 import com.ogc.standard.dto.req.XN804082Req;
@@ -13,7 +14,6 @@ import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.http.BizConnecter;
 import com.ogc.standard.http.JsonUtils;
-import com.std.account.dto.req.XN001200Req;
 
 /** 
  * @author: xieyj 
@@ -98,7 +98,7 @@ public class SmsOutBOImpl implements ISmsOutBO {
             logger.error("调用邮件发送验证码异常");
         }
     }
-    
+
     @Override
     public void sentContent(String ownerId, String content) {
         try {

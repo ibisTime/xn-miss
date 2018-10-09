@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class HLOrder extends ABaseDO {
     private String direction;
 
     // 金额(有正负)
-    private Long amount;
+    private BigDecimal amount;
 
     // 状态（待审批/审批通过/审批不通过）
     private String status;
@@ -175,11 +176,11 @@ public class HLOrder extends ABaseDO {
         this.direction = direction;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

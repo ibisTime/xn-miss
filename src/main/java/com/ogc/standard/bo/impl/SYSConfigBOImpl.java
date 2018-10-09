@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,8 +30,8 @@ import com.ogc.standard.http.JsonUtils;
  * @history:
  */
 @Component
-public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
-        implements ISYSConfigBO {
+public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig> implements
+        ISYSConfigBO {
 
     static Logger logger = Logger.getLogger(SYSConfigBOImpl.class);
 
@@ -102,8 +103,8 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         try {
             result = Double.valueOf(config.getCvalue());
         } catch (Exception e) {
-            logger.error(
-                "参数名为" + key + "的配置转换成Double类型发生错误, 原因：" + e.getMessage());
+            logger.error("参数名为" + key + "的配置转换成Double类型发生错误, 原因："
+                    + e.getMessage());
         }
         return result;
     }
@@ -127,9 +128,25 @@ public class SYSConfigBOImpl extends PaginableBOImpl<SYSConfig>
         try {
             result = new BigDecimal(config.getCvalue());
         } catch (Exception e) {
-            logger.error(
-                "参数名为" + key + "的配置转换成BigDecimal类型发生错误, 原因：" + e.getMessage());
+            logger.error("参数名为" + key + "的配置转换成BigDecimal类型发生错误, 原因："
+                    + e.getMessage());
         }
         return result;
+    }
+
+    @Override
+    public SYSConfig getSYSConfigNotException(String key, String companyCode,
+            String systemCode) {
+        SYSConfig sysConfig = null;
+        if (StringUtils.isNotBlank(key) && StringUtils.isNotBlank(systemCode)
+                && StringUtils.isNotBlank(companyCode)) {
+            SYSConfig condition = new SYSConfig();
+            condition.setCkey(key);
+            List<SYSConfig> sysConfigList = sysConfigDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(sysConfigList)) {
+                sysConfig = sysConfigList.get(0);
+            }
+        }
+        return sysConfig;
     }
 }
