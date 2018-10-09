@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -23,7 +24,7 @@ public interface IExchangeCurrencyBO extends IPaginableBO<ExchangeCurrency> {
     // 1fromCurrency=多少toCurrency
     public Double getExchangeRate(String fromCurrency, String toCurrency);
 
-    public String applyExchange(User user, Long fromAmount,
+    public String applyExchange(User user, BigDecimal fromAmount,
             String fromCurrency, String toCurrency);
 
     public void approveExchangeYes(ExchangeCurrency dbOrder, String approver,

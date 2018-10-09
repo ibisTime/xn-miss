@@ -95,7 +95,7 @@ public class ChargeAOImpl implements IChargeAO {
         if (CollectionUtils.isNotEmpty(page.getList())) {
             List<Charge> list = page.getList();
             for (Charge charge : list) {
-                User user = userBO.getRemoteUser(charge.getApplyUser());
+                User user = userBO.getUser(charge.getApplyUser());
                 charge.setUser(user);
             }
         }
@@ -107,7 +107,7 @@ public class ChargeAOImpl implements IChargeAO {
         List<Charge> list = chargeBO.queryChargeList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             for (Charge charge : list) {
-                User user = userBO.getRemoteUser(charge.getApplyUser());
+                User user = userBO.getUser(charge.getApplyUser());
                 charge.setUser(user);
             }
         }
@@ -117,7 +117,7 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Charge getCharge(String code, String systemCode) {
         Charge charge = chargeBO.getCharge(code, systemCode);
-        User user = userBO.getRemoteUser(charge.getApplyUser());
+        User user = userBO.getUser(charge.getApplyUser());
         charge.setUser(user);
         return charge;
     }

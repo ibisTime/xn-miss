@@ -9,7 +9,7 @@ import java.util.Map;
  * @history:
  */
 public enum ESystemCode {
-    BZ("CD-HPMN000024", "HappyMoney"), COIN("CD-COIN000017", "区块链货币");
+    BZ("CD-HPMN000024", "HappyMoney"), COIN("CD-COIN000017", "区块链货币"), ;
 
     public static Map<String, ESystemCode> getCurrencyMap() {
         Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();

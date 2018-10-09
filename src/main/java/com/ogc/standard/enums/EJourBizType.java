@@ -3,7 +3,7 @@ package com.ogc.standard.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.std.account.exception.BizException;
+import com.ogc.standard.exception.BizException;
 
 public enum EJourBizType {
     // 通用业务类型 每个系统的分布说明

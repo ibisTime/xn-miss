@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -16,8 +17,6 @@ import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.PropertiesUtil;
-import com.ogc.standard.common.SysConstant;
-import com.ogc.standard.common.UserUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.ExchangeCurrency;
 import com.ogc.standard.domain.User;
@@ -59,11 +58,10 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             start, limit, condition);
         if (page != null && CollectionUtils.isNotEmpty(page.getList())) {
             for (ExchangeCurrency exchangeCurrency : page.getList()) {
-                User fromUser = userBO.getRemoteUser(exchangeCurrency
-                    .getFromUserId());
+                User fromUser = userBO
+                    .getUser(exchangeCurrency.getFromUserId());
                 exchangeCurrency.setFromUser(fromUser);
-                User toUser = userBO.getRemoteUser(exchangeCurrency
-                    .getToUserId());
+                User toUser = userBO.getUser(exchangeCurrency.getToUserId());
                 exchangeCurrency.setToUser(toUser);
             }
         }
@@ -74,7 +72,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     public ExchangeCurrency getExchangeCurrency(String code) {
         ExchangeCurrency exchangeCurrency = exchangeCurrencyBO
             .getExchangeCurrency(code);
-        User fromUser = userBO.getRemoteUser(exchangeCurrency.getFromUserId());
+        User fromUser = userBO.getUser(exchangeCurrency.getFromUserId());
         exchangeCurrency.setFromUser(fromUser);
         return exchangeCurrency;
     }
@@ -85,11 +83,11 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     }
 
     @Override
-    public String applyExchange(String userId, Long fromAmount,
+    public String applyExchange(String userId, BigDecimal fromAmount,
             String fromCurrency, String toCurrency) {
-        User user = userBO.getRemoteUser(userId);
+        User user = userBO.getUser(userId);
         Account account = accountBO.getAccountByUser(userId, fromCurrency);
-        if (fromAmount > account.getAmount()) {
+        if (fromAmount.compareTo(account.getAmount()) > 0) {
             new BizException("xn000000", "余额不足");
         }
         // 判断是否生成条件是否满足
@@ -179,7 +177,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     public Object payExchange(String fromUserId, String toUserId, Long amount,
             String currency, String payType) {
         Object result = null;
-        User fromUser = userBO.getRemoteUser(fromUserId);
+        User fromUser = userBO.getUser(fromUserId);
         // 获取微信公众号支付prepayid
         if (EPayType.RMB_YE.getCode().equals(payType)) {
             result = rmbYePay(fromUser, toUserId, amount, currency, payType);
@@ -327,7 +325,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             throw new BizException("xn000000", "币种未识别或不支持购买");
         }
 
-        User fromUser = userBO.getRemoteUser(exchangeCurrency.getFromUserId());
+        User fromUser = userBO.getUser(exchangeCurrency.getFromUserId());
 
         // 购买的币种划转
         accountBO.transAmountCZB(exchangeCurrency.getToUserId(),
@@ -359,7 +357,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
         // 验证交易密码
         userBO.checkTradePwd(fromUserId, tradePwd);
         // 验证双方是否C端用户
-        User fromUser = userBO.getRemoteUser(fromUserId);
+        User fromUser = userBO.getUser(fromUserId);
         if (!EUserKind.Customer.getCode().equals(fromUser.getKind())) {
             throw new BizException("xn000000", "当前划转用户不是C端用户，不能进行转账业务");
         }

@@ -1,5 +1,7 @@
 package com.ogc.standard.ao;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.ExchangeCurrency;
 
@@ -9,7 +11,7 @@ public interface IExchangeCurrencyAO {
     // 获取虚拟币价值。1fromCurrency等于多少toCurrency
     public Double getExchangeRate(String fromCurrency, String toCurrency);
 
-    public String applyExchange(String userId, Long fromAmount,
+    public String applyExchange(String userId, BigDecimal fromAmount,
             String fromCurrency, String toCurrency);
 
     public void approveExchange(String code, String approveResult,

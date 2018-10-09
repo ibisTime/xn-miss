@@ -11,7 +11,7 @@ package com.ogc.standard.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.std.account.exception.BizException;
+import com.ogc.standard.exception.BizException;
 
 /**
  * @author: xieyj 
