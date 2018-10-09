@@ -20,6 +20,8 @@ public class User extends ABaseDO {
 
     // 用户编号
     private String userId;
+    
+    private String openId;
 
     // 登陆名
     private String loginName;
@@ -271,8 +273,17 @@ public class User extends ABaseDO {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+    
 
-    public String getLoginName() {
+    public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	public String getLoginName() {
         return loginName;
     }
 

@@ -53,7 +53,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         data.setPhoto(photo);
         data.setStatus(EUserStatus.NORMAL.getCode());
         data.setCreateDatetime(new Date());
-        data.setSystemCode(ESystemCode.BZ.getCode());
+        data.setSystemCode(ESystemCode.MISS.getCode());
         sysUserBO.doSaveSYSuser(data);
         return userId;
     }

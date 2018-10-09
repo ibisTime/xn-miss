@@ -21,7 +21,7 @@ public class XN630091 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new XN805951Res(
-            qnTokenImpl.getUploadToken(ESystemCode.BZ.getCode()));
+            qnTokenImpl.getUploadToken(ESystemCode.MISS.getCode()));
     }
 
     @Override

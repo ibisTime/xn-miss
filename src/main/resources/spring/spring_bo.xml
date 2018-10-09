@@ -41,9 +41,6 @@
 		<property name="paginableDAO" ref="sysUserDAOImpl"/>
 	</bean>
 	
-	<bean id="userSettingsBO" class="com.ogc.standard.bo.impl.UserSettingsBOImpl">
-		<property name="paginableDAO" ref="userSettingsDAOImpl"/>
-	</bean>
 	
 	<bean id="channelBankBO" class="com.ogc.standard.bo.impl.ChannelBankBOImpl">
 		<property name="paginableDAO" ref="channelBankDAOImpl"/>
@@ -62,14 +59,6 @@
 	
 	<bean id="userExtBO" class="com.ogc.standard.bo.impl.UserExtBOImpl">
 		<property name="paginableDAO" ref="userExtDAOImpl"/>
-	</bean>
-	
-	<bean id="userIdAuthBO" class="com.ogc.standard.bo.impl.UserIdAuthBOImpl">
-		<property name="paginableDAO" ref="userIdAuthDAOImpl"/>
-	</bean>
-	
-	<bean id="userFieldApproveBO" class="com.ogc.standard.bo.impl.UserFieldApproveBOImpl">
-		<property name="paginableDAO" ref="userFieldApproveDAOImpl"/>
 	</bean>
 	
 

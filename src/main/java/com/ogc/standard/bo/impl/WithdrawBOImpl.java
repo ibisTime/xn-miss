@@ -51,7 +51,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         if (amount == 0) {
             throw new BizException("xn000000", "取现金额不能为0");
         }
-        String code = OrderNoGenerater.generate(EGeneratePrefix.Withdraw
+        String code = OrderNoGenerater.generate(EGeneratePrefix.WITHDRAW
             .getCode());
         Withdraw data = new Withdraw();
         data.setCode(code);
