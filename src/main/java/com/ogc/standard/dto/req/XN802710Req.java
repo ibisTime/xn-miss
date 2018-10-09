@@ -1,12 +1,12 @@
 /**
  * @Title XN802710Req.java 
- * @Package com.std.account.dto.req 
+ * @Package com.ogc.standard.dto.req 
  * @Description 
  * @author leo(haiqing)  
  * @date 2017年5月18日 上午9:49:57 
  * @version V1.0   
  */
-package com.std.account.dto.req;
+package com.ogc.standard.dto.req;
 
 /** 
  * @author: haiqingzheng 

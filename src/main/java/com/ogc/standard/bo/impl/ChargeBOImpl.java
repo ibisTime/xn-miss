@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IChargeBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.core.OrderNoGenerater;
@@ -22,7 +24,6 @@ import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.util.AmountUtil;
 
 @Component
 public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
@@ -34,9 +35,9 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
     @Override
     public String applyOrderOffline(Account account, EJourBizType bizType,
-            Long amount, String payCardInfo, String payCardNo,
+            BigDecimal amount, String payCardInfo, String payCardNo,
             String applyUser, String applyNote) {
-        if (amount == 0) {
+        if (amount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
         String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
@@ -73,8 +74,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     @Override
     public String applyOrderOnline(Account account, String payGroup,
             String refNo, EJourBizType bizType, String bizNote,
-            Long transAmount, EChannelType channelType, String applyUser) {
-        if (transAmount == 0) {
+            BigDecimal transAmount, EChannelType channelType, String applyUser) {
+        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
         String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
@@ -154,7 +155,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     }
 
     @Override
-    public void doCheckTodayPayAmount(String applyUser, Long payAmount,
+    public void doCheckTodayPayAmount(String applyUser, BigDecimal payAmount,
             EChannelType channelType, String companyCode, String systemCode) {
         String dayMaxAmountKey = null;
         if (EChannelType.Alipay.getCode().equals(channelType.getCode())) {
@@ -167,7 +168,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             dayMaxAmountKey, companyCode, systemCode);
         if (null != sysConfig) {// 系统参数未配置，不做判断
             String dayMaxAmountValue = sysConfig.getCvalue();
-            Long dayMaxAmount = AmountUtil.mul(1000L,
+            BigDecimal dayMaxAmount = AmountUtil.mul(BigDecimal.valueOf(1000),
                 Double.valueOf(dayMaxAmountValue));
             if (dayMaxAmount.longValue() <= 0) {
                 throw new BizException("xn0000", "当前支付通道维护中，请使用其他支付方式。");
@@ -178,9 +179,10 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
             condition.setApplyUser(applyUser);
             condition.setPayDatetimeStart(DateUtil.getTodayStart());
             condition.setPayDatetimeEnd(DateUtil.getTodayEnd());
-            Long todayAmount = chargeDAO.selectTotalAmount(condition);
-            Long nowTodayAmount = todayAmount + payAmount;// 今日+本次支付是否超日限额
-            if (dayMaxAmount < nowTodayAmount) {
+            long todayAmount = chargeDAO.selectTotalAmount(condition);
+            BigDecimal todayAmountBigDecimal = new BigDecimal(todayAmount);
+            BigDecimal nowTodayAmount = todayAmountBigDecimal.add(payAmount);// 今日+本次支付是否超日限额
+            if (dayMaxAmount.compareTo(nowTodayAmount) < 0) {
                 throw new BizException("xn0000", "该渠道每日限额" + dayMaxAmountValue
                         + ",本次支付将超额，请明天再来");
             }

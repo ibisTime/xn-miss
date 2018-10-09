@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
+
 /** 
  * @author: haiqingzheng 
  * @since: 2017年2月27日 上午11:45:36 
@@ -27,7 +29,7 @@ public class CallbackResult {
     private String payGroup;
 
     // 发生金额
-    private Long transAmount;
+    private BigDecimal transAmount;
 
     // 系统编号
     private String systemCode;
@@ -39,7 +41,7 @@ public class CallbackResult {
     private String url;
 
     public CallbackResult(boolean isSuccess, String bizType, String jourCode,
-            String payGroup, Long transAmount, String systemCode,
+            String payGroup, BigDecimal transAmount, String systemCode,
             String companyCode, String url) {
         super();
         this.isSuccess = isSuccess;
@@ -84,11 +86,11 @@ public class CallbackResult {
         this.payGroup = payGroup;
     }
 
-    public Long getTransAmount() {
+    public BigDecimal getTransAmount() {
         return transAmount;
     }
 
-    public void setTransAmount(Long transAmount) {
+    public void setTransAmount(BigDecimal transAmount) {
         this.transAmount = transAmount;
     }
 

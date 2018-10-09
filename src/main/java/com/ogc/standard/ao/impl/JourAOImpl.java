@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +46,8 @@ public class JourAOImpl implements IJourAO {
      */
     @Override
     @Transactional
-    public void checkJour(String code, Long checkAmount, String checkUser,
-            String checkNote, String systemCode) {
+    public void checkJour(String code, BigDecimal checkAmount,
+            String checkUser, String checkNote, String systemCode) {
         Jour jour = jourBO.getJourNotException(code, systemCode);
         if (null != jour) {
             doCheckJourNow(code, checkAmount, checkUser, checkNote, jour);// 现在流水对账
@@ -56,12 +57,12 @@ public class JourAOImpl implements IJourAO {
         }
     }
 
-    private void doCheckJourNow(String code, Long checkAmount,
+    private void doCheckJourNow(String code, BigDecimal checkAmount,
             String checkUser, String checkNote, Jour jour) {
         if (!EJourStatus.todoCheck.getCode().equals(jour.getStatus())) {
             throw new BizException("xn000000", "该流水<" + code + ">不处于待对账状态");
         }
-        if (checkAmount != 0) {
+        if (checkAmount.compareTo(BigDecimal.ZERO) != 0) {
             Account account = accountBO.getAccount(jour.getAccountNumber());
             hlOrderBO.applyOrder(account, jour, checkAmount, checkUser,
                 checkNote);
@@ -73,12 +74,12 @@ public class JourAOImpl implements IJourAO {
         }
     }
 
-    private void doCheckJourHistory(String code, Long checkAmount,
+    private void doCheckJourHistory(String code, BigDecimal checkAmount,
             String checkUser, String checkNote, Jour jour) {
         if (!EJourStatus.todoCheck.getCode().equals(jour.getStatus())) {
             throw new BizException("xn000000", "该流水<" + code + ">不处于待对账状态");
         }
-        if (checkAmount != 0) {
+        if (checkAmount.compareTo(BigDecimal.ZERO) != 0) {
             Account account = accountBO.getAccount(jour.getAccountNumber());
             hlOrderBO.applyOrder(account, jour, checkAmount, checkUser,
                 checkNote);

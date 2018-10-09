@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -36,9 +37,9 @@ public class ChargeAOImpl implements IChargeAO {
 
     @Override
     public String applyOrder(String accountNumber, String jourBizType,
-            Long amount, String payCardInfo, String payCardNo,
+            BigDecimal amount, String payCardInfo, String payCardNo,
             String applyUser, String applyNote) {
-        if (amount <= 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BizException("xn000000", "充值金额需大于零");
         }
         // 业务类型为空，默认充值

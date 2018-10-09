@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
@@ -17,16 +18,16 @@ import java.util.TreeMap;
 
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.util.wechat.MD5;
-import com.ogc.standard.util.wechat.MD5Util;
-import com.ogc.standard.util.wechat.OrderUtil;
-import com.ogc.standard.util.wechat.WXPrepay;
 import com.ogc.standard.bo.IWechatBO;
 import com.ogc.standard.common.PropertiesUtil;
 import com.ogc.standard.domain.CompanyChannel;
 import com.ogc.standard.dto.res.XN002500Res;
 import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.EWeChatType;
+import com.ogc.standard.util.wechat.MD5;
+import com.ogc.standard.util.wechat.MD5Util;
+import com.ogc.standard.util.wechat.OrderUtil;
+import com.ogc.standard.util.wechat.WXPrepay;
 
 /** 
  * @author: haiqingzheng 
@@ -38,13 +39,13 @@ public class WechatBOImpl implements IWechatBO {
 
     @Override
     public String getPrepayIdApp(CompanyChannel companyChannel, String bizNote,
-            String code, Long transAmount, String ip, String backUrl) {
+            String code, BigDecimal transAmount, String ip, String backUrl) {
         WXPrepay prePay = new WXPrepay();
         prePay.setAppid(companyChannel.getPrivateKey2());// 微信开放平台审核通过的应用APPID
         prePay.setMch_id(companyChannel.getChannelCompany()); // 商户号
         prePay.setBody(companyChannel.getCompanyName() + "-" + bizNote); // 商品描述
         prePay.setOut_trade_no(code); // 订单号
-        prePay.setTotal_fee(Long.toString(transAmount / 10)); // 订单总金额，厘转化成分
+        prePay.setTotal_fee(transAmount.divide(BigDecimal.TEN).toString()); // 订单总金额，厘转化成分
         prePay.setSpbill_create_ip(ip); // 用户IP
         prePay.setTrade_type(EWeChatType.APP.getCode()); // 交易类型
         prePay.setNotify_url(PropertiesUtil.Config.WECHAT_APP_BACKURL);// 回调地址
@@ -85,14 +86,14 @@ public class WechatBOImpl implements IWechatBO {
 
     @Override
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
-            String bizNote, String code, Long transAmount, String ip,
+            String bizNote, String code, BigDecimal transAmount, String ip,
             String bizBackUrl) {
         WXPrepay prePay = new WXPrepay();
         prePay.setAppid(companyChannel.getPrivateKey2());// 微信支付分配的公众账号ID
         prePay.setMch_id(companyChannel.getChannelCompany()); // 商户号
         prePay.setBody(companyChannel.getCompanyName() + "-" + bizNote); // 商品描述
         prePay.setOut_trade_no(code); // 订单号
-        prePay.setTotal_fee(Long.toString(transAmount / 10)); // 订单总金额，厘转化成分
+        prePay.setTotal_fee(transAmount.divide(BigDecimal.TEN).toString()); // 订单总金额，厘转化成分
         prePay.setSpbill_create_ip(ip); // 用户IP
         prePay.setTrade_type(EWeChatType.JSAPI.getCode()); // 交易类型
         prePay.setNotify_url(PropertiesUtil.Config.WECHAT_H5_BACKURL);// 回调地址
@@ -133,14 +134,14 @@ public class WechatBOImpl implements IWechatBO {
 
     @Override
     public String getPrepayIdNative(CompanyChannel companyChannel,
-            String bizNote, String code, Long transAmount, String ip,
+            String bizNote, String code, BigDecimal transAmount, String ip,
             String backUrl) {
         WXPrepay prePay = new WXPrepay();
         prePay.setAppid(companyChannel.getPrivateKey2());// 微信支付分配的公众账号ID
         prePay.setMch_id(companyChannel.getChannelCompany()); // 商户号
         prePay.setBody(companyChannel.getCompanyName() + "-" + bizNote); // 商品描述
         prePay.setOut_trade_no(code); // 订单号
-        prePay.setTotal_fee(Long.toString(transAmount / 10)); // 订单总金额，厘转化成分
+        prePay.setTotal_fee(transAmount.divide(BigDecimal.TEN).toString()); // 订单总金额，厘转化成分
         prePay.setSpbill_create_ip(ip); // 用户IP
         prePay.setTrade_type(EWeChatType.NATIVE.getCode()); // 交易类型
         prePay.setNotify_url(PropertiesUtil.Config.WECHAT_NATIVE_BACKURL);// 回调地址

@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -9,9 +10,9 @@ import com.ogc.standard.enums.EWithdrawStatus;
 
 public interface IWithdrawBO extends IPaginableBO<Withdraw> {
 
-    Long doCheckAndGetFee(Account account, Long amount);
+    BigDecimal doCheckAndGetFee(Account account, BigDecimal amount);
 
-    String applyOrder(Account account, Long amount, Long fee,
+    String applyOrder(Account account, BigDecimal amount, BigDecimal fee,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote);
 

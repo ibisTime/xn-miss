@@ -24,25 +24,26 @@ public interface IExchangeCurrencyAO {
 
     // 不同用户间同币种或不同币种划转资金
     public void doTransfer(String fromUserId, String fromCurrency,
-            String toUserId, String toCurrency, Long amount);
+            String toUserId, String toCurrency, BigDecimal amount);
 
     // 给C端划转对等金额
     public void doTransferToC(String fromUserId, String toUserId,
-            String currency, Long amount);
+            String currency, BigDecimal amount);
 
     // 不同用户间同币种或不同币种划转资金
     public void doTransfer(String fromUserId, String fromCurrency,
-            String toUserId, String toCurrency, Long amount, Long tranAmount,
-            String remark);
+            String toUserId, String toCurrency, BigDecimal amount,
+            BigDecimal tranAmount, String remark);
 
-    public Object payExchange(String fromUserId, String toUserId, Long amount,
-            String currency, String payType);
+    public Object payExchange(String fromUserId, String toUserId,
+            BigDecimal amount, String currency, String payType);
 
-    public void paySuccess(String payGroup, String payCode, Long transAmount);
+    public void paySuccess(String payGroup, String payCode,
+            BigDecimal transAmount);
 
     // C端用户间分润划转资金()
     public void doTransferC2CByZhFR(String fromUserId, String toMobile,
-            Long amount, String tradePwd);
+            BigDecimal amount, String tradePwd);
 
     public void updateGdStatus(String code);
 }

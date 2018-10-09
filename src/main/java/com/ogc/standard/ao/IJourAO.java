@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.ao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.annotation.ServiceModule;
@@ -24,8 +25,8 @@ public interface IJourAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
     // 流水对账(包括现在和历史流水)
-    public void checkJour(String code, Long checkAmount, String checkUser,
-            String checkNote, String systemCode);
+    public void checkJour(String code, BigDecimal checkAmount,
+            String checkUser, String checkNote, String systemCode);
 
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition);
 

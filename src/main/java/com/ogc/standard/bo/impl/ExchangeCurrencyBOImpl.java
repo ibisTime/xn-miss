@@ -164,8 +164,9 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
             throw new BizException("xn0000", "已经有未审核转化订单，不能再次提交申请");
         }
         // 每月的转化次数是有限制的
-        String exchangeTimes = sysConfigBO.getSYSConfig(
-            EExchangeTimes.EXCTIMES.getCode(), ESystemCode.MISS.getCode());
+        String exchangeTimes = sysConfigBO.getSYSConfigNotException(
+            EExchangeTimes.EXCTIMES.getCode(), ESystemCode.MISS.getCode(),
+            ESystemCode.MISS.getCode()).getCvalue();
         if (StringUtils.isBlank(exchangeTimes)) {
             throw new BizException("xn0000", "每月兑换最大次数未配置");
         }

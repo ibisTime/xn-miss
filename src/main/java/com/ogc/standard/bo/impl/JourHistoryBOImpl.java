@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -36,8 +37,8 @@ public class JourHistoryBOImpl extends PaginableBOImpl<Jour> implements
     private IJourHistoryDAO jourHistoryDAO;
 
     @Override
-    public void doCheckJour(Jour jour, EBoolean checkResult, Long checkAmount,
-            String checkUser, String checkNote) {
+    public void doCheckJour(Jour jour, EBoolean checkResult,
+            BigDecimal checkAmount, String checkUser, String checkNote) {
         Jour data = new Jour();
         data.setCode(jour.getCode());
         EJourStatus eJourStatus = EJourStatus.Checked_YES;
@@ -46,7 +47,8 @@ public class JourHistoryBOImpl extends PaginableBOImpl<Jour> implements
         }
         data.setStatus(eJourStatus.getCode());
         data.setCheckUser(checkUser);
-        data.setCheckNote(checkNote + ":调整金额" + checkAmount / 1000);
+        data.setCheckNote(checkNote + ":调整金额"
+                + checkAmount.divide(BigDecimal.valueOf(1000)));
         data.setCheckDatetime(new Date());
         jourHistoryDAO.checkJour(data);
     }

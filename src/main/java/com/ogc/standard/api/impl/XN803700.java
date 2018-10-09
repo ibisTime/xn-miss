@@ -1,5 +1,7 @@
 package com.ogc.standard.api.impl;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -26,7 +28,7 @@ public class XN803700 extends AProcessor {
     */
     @Override
     public synchronized Object doBusiness() throws BizException {
-        Long amount = StringValidater.toLong(req.getAmount());
+        BigDecimal amount = StringValidater.toBigDecimal(req.getAmount());
         String code = chargeAO.applyOrder(req.getAccountNumber(),
             req.getBizType(), amount, req.getPayCardInfo(), req.getPayCardNo(),
             req.getApplyUser(), req.getApplyNote());
@@ -36,9 +38,9 @@ public class XN803700 extends AProcessor {
     /** 
     * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
     */
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802700Req.class);
         StringValidater.validateBlank(req.getAccountNumber(),
             req.getApplyUser());

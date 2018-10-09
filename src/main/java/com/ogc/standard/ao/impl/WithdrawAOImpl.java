@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -44,36 +45,36 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     @Override
     @Transactional
-    public String applyOrderTradePwd(String accountNumber, Long amount,
+    public String applyOrderTradePwd(String accountNumber, BigDecimal amount,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote, String tradePwd) {
         Account dbAccount = accountBO.getAccount(accountNumber);
         // 验证交易密码
         userBO.checkTradePwd(dbAccount.getUserId(), tradePwd);
         // 取现获取手续费
-        Long fee = withdrawBO.doCheckAndGetFee(dbAccount, amount);
+        BigDecimal fee = withdrawBO.doCheckAndGetFee(dbAccount, amount);
         // 产生取现订单
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
             payCardInfo, payCardNo, applyUser, applyNote);
         // 冻结取现金额
-        Long totalAmount = amount + fee;
+        BigDecimal totalAmount = amount.add(fee);
         accountBO.frozenAmount(dbAccount, totalAmount, withdrawCode);
         return withdrawCode;
     }
 
     @Override
     @Transactional
-    public String applyOrder(String accountNumber, Long amount,
+    public String applyOrder(String accountNumber, BigDecimal amount,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote) {
         Account dbAccount = accountBO.getAccount(accountNumber);
         // 取现前提检查
-        Long fee = withdrawBO.doCheckAndGetFee(dbAccount, amount);
+        BigDecimal fee = withdrawBO.doCheckAndGetFee(dbAccount, amount);
         // 产生取现订单
         String withdrawCode = withdrawBO.applyOrder(dbAccount, amount, fee,
             payCardInfo, payCardNo, applyUser, applyNote);
         // 冻结取现金额
-        Long totalAmount = amount + fee;
+        BigDecimal totalAmount = amount.add(fee);
         accountBO.frozenAmount(dbAccount, totalAmount, withdrawCode);
         return withdrawCode;
     }
@@ -123,7 +124,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         withdrawBO.approveOrder(data, EWithdrawStatus.Approved_NO, approveUser,
             approveNote);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
-        Long totalAmount = data.getAmount() + data.getFee();
+        BigDecimal totalAmount = data.getAmount().add(data.getFee());
         // 释放冻结流水
         accountBO.unfrozenAmount(dbAccount, totalAmount, data.getCode());
     }
@@ -133,7 +134,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         withdrawBO.payOrder(data, EWithdrawStatus.Pay_NO, payUser, payNote,
             payCode);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
-        Long totalAmount = data.getAmount() + data.getFee();
+        BigDecimal totalAmount = data.getAmount().add(data.getFee());
         // 释放冻结流水
         accountBO.unfrozenAmount(dbAccount, totalAmount, data.getCode());
     }
@@ -144,7 +145,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             payCode);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 扣减冻结流水
-        Long totalAmount = data.getAmount() + data.getFee();
+        BigDecimal totalAmount = data.getAmount().add(data.getFee());
         accountBO.cutFrozenAmount(dbAccount, totalAmount);
         Account account = accountBO.getAccount(data.getAccountNumber());
         if (ECurrency.CNY.getCode().equals(account.getCurrency())
@@ -153,7 +154,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
             // 托管账户减钱
             accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
                 null, null, data.getCode(), EJourBizType.AJ_QX, "线下取现",
-                -totalAmount);
+                totalAmount.negate());
         }
     }
 

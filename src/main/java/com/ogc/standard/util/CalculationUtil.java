@@ -1,5 +1,6 @@
 package com.ogc.standard.util;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
@@ -24,5 +25,11 @@ public class CalculationUtil {
         DecimalFormat df = new DecimalFormat("#0.00");
         df.setRoundingMode(RoundingMode.FLOOR);
         return df.format(money / 1000.0);
+    }
+
+    public static String divi(BigDecimal money) {
+        DecimalFormat df = new DecimalFormat("#0.00");
+        df.setRoundingMode(RoundingMode.FLOOR);
+        return df.format(money.divide(BigDecimal.valueOf(1000)));
     }
 }

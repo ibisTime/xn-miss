@@ -30,8 +30,8 @@ public class SmsOutBOImpl implements ISmsOutBO {
             XN804081Req req = new XN804081Req();
             req.setMobile(mobile);
             req.setBizType(bizType);
-            req.setSystemCode(ESystemCode.BZ.getCode());
-            req.setCompanyCode(ESystemCode.BZ.getCode());
+            req.setSystemCode(ESystemCode.MISS.getCode());
+            req.setCompanyCode(ESystemCode.MISS.getCode());
             BizConnecter.getBizData("804081", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {
@@ -45,8 +45,8 @@ public class SmsOutBOImpl implements ISmsOutBO {
         req.setMobile(mobile);
         req.setCaptcha(captcha);
         req.setBizType(bizType);
-        req.setSystemCode(ESystemCode.BZ.getCode());
-        req.setCompanyCode(ESystemCode.BZ.getCode());
+        req.setSystemCode(ESystemCode.MISS.getCode());
+        req.setCompanyCode(ESystemCode.MISS.getCode());
         BizConnecter.getBizData("804082", JsonUtils.object2Json(req),
             BooleanRes.class);
     }
@@ -58,8 +58,8 @@ public class SmsOutBOImpl implements ISmsOutBO {
             req.setMobile(mobile);
             req.setContent(content);
             req.setType("M");
-            req.setCompanyCode(ESystemCode.BZ.getCode());
-            req.setSystemCode(ESystemCode.BZ.getCode());
+            req.setCompanyCode(ESystemCode.MISS.getCode());
+            req.setSystemCode(ESystemCode.MISS.getCode());
             BizConnecter.getBizData("804080", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {
@@ -90,8 +90,8 @@ public class SmsOutBOImpl implements ISmsOutBO {
             XN804083Req req = new XN804083Req();
             req.setEmail(email);
             req.setBizType(bizType);
-            req.setSystemCode(ESystemCode.BZ.getCode());
-            req.setCompanyCode(ESystemCode.BZ.getCode());
+            req.setSystemCode(ESystemCode.MISS.getCode());
+            req.setCompanyCode(ESystemCode.MISS.getCode());
             BizConnecter.getBizData("804083", JsonUtils.object2Json(req),
                 PKCodeRes.class);
         } catch (Exception e) {

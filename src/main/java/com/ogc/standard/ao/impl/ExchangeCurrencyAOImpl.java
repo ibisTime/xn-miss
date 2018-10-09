@@ -16,7 +16,9 @@ import com.ogc.standard.bo.IExchangeCurrencyBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.PropertiesUtil;
+import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.common.UserUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.ExchangeCurrency;
@@ -31,7 +33,6 @@ import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.util.AmountUtil;
 import com.ogc.standard.util.CalculationUtil;
 
 @Service
@@ -92,9 +93,9 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             new BizException("xn000000", "余额不足");
         }
         // 判断是否生成条件是否满足
-//        if (ESystemCode.MISS.getCode().equals(user.getSystemCode())) {
-//            exchangeCurrencyBO.doCheckZH(userId, fromCurrency, toCurrency);
-//        }
+        // if (ESystemCode.MISS.getCode().equals(user.getSystemCode())) {
+        // exchangeCurrencyBO.doCheckZH(userId, fromCurrency, toCurrency);
+        // }
         return exchangeCurrencyBO.applyExchange(user, fromAmount, fromCurrency,
             toCurrency);
     }
@@ -122,8 +123,8 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
                 accountBO.changeAmount(fromAccount.getAccountNumber(),
                     EChannelType.NBZ, null, null, code,
                     EJourBizType.EXCHANGE_CURRENCY,
-                    EJourBizType.EXCHANGE_CURRENCY.getCode(),
-                    -dbOrder.getFromAmount());
+                    EJourBizType.EXCHANGE_CURRENCY.getCode(), dbOrder
+                        .getFromAmount().negate());
                 accountBO.changeAmount(toAccount.getAccountNumber(),
                     EChannelType.NBZ, null, null, code,
                     EJourBizType.EXCHANGE_CURRENCY, bizNote,
@@ -140,7 +141,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     @Override
     @Transactional
     public void doTransfer(String fromUserId, String fromCurrency,
-            String toUserId, String toCurrency, Long transAmount) {
+            String toUserId, String toCurrency, BigDecimal transAmount) {
         // 转化前提是否满足
         if (ECurrency.CNY.getCode().equals(toCurrency)) {
             throw new BizException("xn000000", "转化币种不能是人民币");
@@ -149,7 +150,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             fromCurrency);
         Account toAccount = accountBO.getAccountByUser(toUserId, toCurrency);
         Double rate = this.getExchangeRate(fromCurrency, toCurrency);
-        Long toAmount = AmountUtil.mul(transAmount, rate);
+        BigDecimal toAmount = AmountUtil.mul(transAmount, rate);
 
         // 开始资金划转
         String bizNote = CalculationUtil.divi(transAmount)
@@ -167,7 +168,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             fromAccount.getCompanyCode(), fromAccount.getSystemCode());
         accountBO.changeAmount(fromAccount.getAccountNumber(),
             EChannelType.NBZ, null, null, code, EJourBizType.Transfer_CURRENCY,
-            fromBizNote, -transAmount);
+            fromBizNote, transAmount.negate());
         accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
             null, null, code, EJourBizType.Transfer_CURRENCY, toBizNote,
             toAmount);
@@ -175,8 +176,8 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
 
     @Override
     @Transactional
-    public Object payExchange(String fromUserId, String toUserId, Long amount,
-            String currency, String payType) {
+    public Object payExchange(String fromUserId, String toUserId,
+            BigDecimal amount, String currency, String payType) {
         Object result = null;
         User fromUser = userBO.getUser(fromUserId);
         // 获取微信公众号支付prepayid
@@ -203,7 +204,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     * @create: 2017年4月20日 下午6:02:46 xieyj
     * @history:
     */
-    private Object rmbYePay(User fromUser, String toUser, Long amount,
+    private Object rmbYePay(User fromUser, String toUser, BigDecimal amount,
             String currency, String payType) {
         EJourBizType bizType = null;
         if (ECurrency.CG_CGB.getCode().equals(currency)) {
@@ -214,7 +215,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             throw new BizException("xn000000", "币种未识别或不支持购买");
         }
 
-        Long rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
+        BigDecimal rmbAmount = AmountUtil.mul(amount, 1 / exchangeCurrencyBO
             .getExchangeRate(ECurrency.CNY.getCode(), currency));
         // 产生记录
         String code = exchangeCurrencyBO.saveExchange(fromUser.getUserId(),
@@ -245,8 +246,8 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     * @create: 2017年4月20日 下午7:01:28 xieyj
     * @history:
     */
-    private Object weixinNativePay(User fromUser, String toUserId, Long amount,
-            String currency, String payType) {
+    private Object weixinNativePay(User fromUser, String toUserId,
+            BigDecimal amount, String currency, String payType) {
         EJourBizType bizType = null;
         if (ECurrency.CG_CGB.getCode().equals(currency)) {
             bizType = EJourBizType.CG_CGBGM;
@@ -256,7 +257,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             throw new BizException("xn000000", "币种未识别或不支持购买");
         }
 
-        Long rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
+        BigDecimal rmbAmount = AmountUtil.mul(amount, 1 / exchangeCurrencyBO
             .getExchangeRate(ECurrency.CNY.getCode(), currency));
         String code = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
             toUserId, rmbAmount, amount, currency, payType,
@@ -277,7 +278,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     * @create: 2017年4月20日 下午6:02:46 xieyj
     * @history:
     */
-    private Object weixinH5Pay(User fromUser, String toUser, Long amount,
+    private Object weixinH5Pay(User fromUser, String toUser, BigDecimal amount,
             String currency, String payType) {
         EJourBizType bizType = null;
         if (ECurrency.CG_CGB.getCode().equals(currency)) {
@@ -288,7 +289,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             throw new BizException("xn000000", "币种未识别或不支持购买");
         }
 
-        Long rmbAmount = AmountUtil.mulJinFen(amount, 1 / exchangeCurrencyBO
+        BigDecimal rmbAmount = AmountUtil.mul(amount, 1 / exchangeCurrencyBO
             .getExchangeRate(ECurrency.CNY.getCode(), currency));
         String code = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
             toUser, rmbAmount, amount, currency, payType,
@@ -302,7 +303,8 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
 
     @Override
     @Transactional
-    public void paySuccess(String payGroup, String payCode, Long transAmount) {
+    public void paySuccess(String payGroup, String payCode,
+            BigDecimal transAmount) {
         List<ExchangeCurrency> resultList = exchangeCurrencyBO
             .queryExchangeCurrencyList(payGroup);
         if (CollectionUtils.isEmpty(resultList)) {
@@ -340,17 +342,20 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
     @Override
     @Transactional
     public void doTransferC2CByZhFR(String fromUserId, String toMobile,
-            Long transAmount, String tradePwd) {
-        if (transAmount <= 0) {
+            BigDecimal transAmount, String tradePwd) {
+        if (transAmount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BizException("xn000000", "划转金额需大于零");
         }
-        String transAmountBsValue = sysConfigBO.getSYSConfig(
-            SysConstant.TRANSAMOUNTBS, ESystemCode.MISS.getCode());
+        String transAmountBsValue = sysConfigBO.getSYSConfigNotException(
+            SysConstant.TRANSAMOUNTBS, ESystemCode.MISS.getCode(),
+            ESystemCode.MISS.getCode()).getCvalue();
         if (StringUtils.isNotBlank(transAmountBsValue)) {
             // 转账金额倍数
-            Long transAmountBs = AmountUtil.mul(1000L,
+            BigDecimal transAmountBs = AmountUtil.mul(BigDecimal.valueOf(1000),
                 Double.valueOf(transAmountBsValue));
-            if (transAmountBs > 0 && transAmount % transAmountBs > 0) {
+            if (transAmountBs.compareTo(BigDecimal.ZERO) > 0
+                    && transAmount.divideAndRemainder(transAmountBs)[1]
+                        .compareTo(BigDecimal.ZERO) > 0) {
                 throw new BizException("xn000000", "请取" + transAmountBsValue
                         + "的倍数");
             }
@@ -381,7 +386,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
 
         accountBO.changeAmount(fromAccount.getAccountNumber(),
             EChannelType.NBZ, null, null, code,
-            EJourBizType.Transfer_CURRENCY_C2C, bizNote, -transAmount);
+            EJourBizType.Transfer_CURRENCY_C2C, bizNote, transAmount.negate());
         accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
             null, null, code, EJourBizType.Transfer_CURRENCY_C2C, bizNote,
             transAmount);
@@ -389,8 +394,8 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
 
     @Override
     public void doTransfer(String fromUserId, String fromCurrency,
-            String toUserId, String toCurrency, Long amount, Long tranAmount,
-            String remark) {
+            String toUserId, String toCurrency, BigDecimal amount,
+            BigDecimal tranAmount, String remark) {
         // 转化前提是否满足
         if (ECurrency.CNY.getCode().equals(toCurrency)) {
             throw new BizException("xn000000", "转化币种不能是人民币");
@@ -414,7 +419,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             fromAccount.getCompanyCode(), fromAccount.getSystemCode());
         accountBO.changeAmount(fromAccount.getAccountNumber(),
             EChannelType.NBZ, null, null, code, EJourBizType.Transfer_CURRENCY,
-            fromBizNote, -amount);
+            fromBizNote, amount.negate());
         accountBO
             .changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ, null,
                 null, code, EJourBizType.Transfer_CURRENCY, toBizNote, amount);
@@ -422,7 +427,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
 
     @Override
     public void doTransferToC(String fromUserId, String toUserId,
-            String currency, Long amount) {
+            String currency, BigDecimal amount) {
         Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
         Account toAccount = accountBO.getAccountByUser(toUserId, currency);
         ECurrency eCurrency = ECurrency.getECurrency(currency);
@@ -433,7 +438,7 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             fromAccount.getCompanyCode(), fromAccount.getSystemCode());
         accountBO.changeAmount(fromAccount.getAccountNumber(),
             EChannelType.NBZ, null, null, code, EJourBizType.Transfer_CURRENCY,
-            bizNote, -amount);
+            bizNote, amount.negate());
         accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
             null, null, code, EJourBizType.Transfer_CURRENCY, bizNote, amount);
     }

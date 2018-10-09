@@ -1,5 +1,6 @@
 package com.ogc.standard.ao;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.Paginable;
@@ -10,7 +11,7 @@ public interface IChargeAO {
     String DEFAULT_ORDER_COLUMN = "code";
 
     public String applyOrder(String accountNumber, String jourBizType,
-            Long amount, String payCardInfo, String payCardNo,
+            BigDecimal amount, String payCardInfo, String payCardNo,
             String applyUser, String applyNote);
 
     public void payOrder(String code, String payUser, String payResult,

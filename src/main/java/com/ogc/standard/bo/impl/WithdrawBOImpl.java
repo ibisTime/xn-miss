@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import com.ogc.standard.bo.IChannelBankBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IWithdrawBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.core.OrderNoGenerater;
@@ -27,7 +29,6 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
-import com.ogc.standard.util.AmountUtil;
 
 @Component
 public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
@@ -45,10 +46,10 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
     IChannelBankBO channelBankBO;
 
     @Override
-    public String applyOrder(Account account, Long amount, Long fee,
-            String payCardInfo, String payCardNo, String applyUser,
-            String applyNote) {
-        if (amount == 0) {
+    public String applyOrder(Account account, BigDecimal amount,
+            BigDecimal fee, String payCardInfo, String payCardNo,
+            String applyUser, String applyNote) {
+        if (amount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "取现金额不能为0");
         }
         String code = OrderNoGenerater.generate(EGeneratePrefix.WITHDRAW
@@ -132,8 +133,8 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
     }
 
     @Override
-    public Long doCheckAndGetFee(Account account, Long amount) {
-        if (amount <= 0) {
+    public BigDecimal doCheckAndGetFee(Account account, BigDecimal amount) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BizException("xn000000", "提现金额需大于零");
         }
         Withdraw condition = new Withdraw();
@@ -143,8 +144,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
             throw new BizException("xn000000", "上笔取现申请还未处理成功，不能再次申请");
         }
 
-        Map<String, String> argsMap = sysConfigBO.getConfigsMap(
-            account.getSystemCode(), account.getCompanyCode());
+        Map<String, String> argsMap = sysConfigBO.getConfigsMap(null);
 
         String monthTimesKey = null; // 本月申请次数是否达到上限
         String qxDbzdjeValue = null;// 取现单笔最大金额
@@ -155,7 +155,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
                 monthTimesKey = SysConstant.CUSERMONTIMES;
                 qxbs = SysConstant.CUSERQXBS;
                 qxfl = SysConstant.CUSERQXFL;
-            } else if (EAccountType.Business.getCode()
+            } else if (EAccountType.Merchant.getCode()
                 .equals(account.getType())) {
                 monthTimesKey = SysConstant.BUSERMONTIMES;
                 qxbs = SysConstant.BUSERQXBS;
@@ -186,9 +186,9 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         }
 
         if (StringUtils.isNotBlank(qxDbzdjeValue)) {
-            Long qxDbzdje = AmountUtil
-                .mul(1000L, Double.valueOf(qxDbzdjeValue));
-            if (amount > qxDbzdje) {
+            BigDecimal qxDbzdje = AmountUtil.mul(new BigDecimal(1000),
+                Double.valueOf(qxDbzdjeValue));
+            if (amount.compareTo(qxDbzdje) > 0) {
                 throw new BizException("xn000000", "取现单笔最大金额不能超过"
                         + qxDbzdjeValue + "元。");
             }
@@ -197,8 +197,11 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
         String qxBsValue = argsMap.get(qxbs);
         if (StringUtils.isNotBlank(qxBsValue)) {
             // 取现金额倍数
-            Long qxBs = AmountUtil.mul(1000L, Double.valueOf(qxBsValue));
-            if (qxBs > 0 && amount % qxBs > 0) {
+            BigDecimal qxBs = AmountUtil.mul(new BigDecimal(1000),
+                Double.valueOf(qxBsValue));
+            if (qxBs.compareTo(BigDecimal.ZERO) > 0
+                    && amount.divideAndRemainder(qxBs)[1]
+                        .compareTo(BigDecimal.ZERO) > 0) {
                 throw new BizException("xn000000", "金额请取" + qxBsValue + "的倍数");
             }
         }

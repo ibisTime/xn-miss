@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -24,13 +25,13 @@ public class Withdraw extends ABaseDO {
     private String type;
 
     // 取现金额
-    private Long amount;
+    private BigDecimal amount;
 
     // 取现币种
     private String currency;
 
     // 取现手续费
-    private Long fee;
+    private BigDecimal fee;
 
     // 支付渠道
     private String channelType;
@@ -199,19 +200,19 @@ public class Withdraw extends ABaseDO {
         this.type = type;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Long getFee() {
+    public BigDecimal getFee() {
         return fee;
     }
 
-    public void setFee(Long fee) {
+    public void setFee(BigDecimal fee) {
         this.fee = fee;
     }
 

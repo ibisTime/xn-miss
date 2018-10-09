@@ -1,5 +1,7 @@
 package com.ogc.standard.api.impl;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.ao.IJourAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
@@ -23,17 +25,16 @@ public class XN803800 extends AProcessor {
 
     @Override
     public synchronized Object doBusiness() throws BizException {
-        Long checkAmount = StringValidater.toLong(req.getCheckAmount());
+        BigDecimal checkAmount = StringValidater.toBigDecimal(req
+            .getCheckAmount());
         jourAO.checkJour(req.getCode(), checkAmount, req.getCheckUser(),
             req.getCheckNote(), req.getSystemCode());
         return new BooleanRes(true);
     }
 
-
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN802800Req.class);
         StringValidater.validateBlank(req.getCode(), req.getCheckNote(),
             req.getCheckUser(), req.getSystemCode());

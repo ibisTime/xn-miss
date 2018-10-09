@@ -1,4 +1,4 @@
-package com.std.account.dto.req;
+package com.ogc.standard.dto.req;
 
 /**
  * @author: xieyj 

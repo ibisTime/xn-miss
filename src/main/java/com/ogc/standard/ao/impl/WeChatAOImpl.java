@@ -9,6 +9,7 @@
 package com.ogc.standard.ao.impl;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Properties;
 
@@ -81,7 +82,7 @@ public class WeChatAOImpl implements IWeChatAO {
     @Override
     public XN002500Res getPrepayIdApp(String applyUser, String toUser,
             String payGroup, String refNo, String bizType, String bizNote,
-            Long transAmount, String backUrl) {
+            BigDecimal transAmount, String backUrl) {
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用微信支付");
         }
@@ -114,7 +115,7 @@ public class WeChatAOImpl implements IWeChatAO {
     @Transactional
     public XN002501Res getPrepayIdH5(String applyUser, String openId,
             String toUser, String payGroup, String refNo, String bizType,
-            String bizNote, Long transAmount, String backUrl) {
+            String bizNote, BigDecimal transAmount, String backUrl) {
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用微信支付");
         }
@@ -145,7 +146,7 @@ public class WeChatAOImpl implements IWeChatAO {
     @Transactional
     public String getPrepayIdNative(String applyUser, String toUser,
             String payGroup, String refNo, String bizType, String bizNote,
-            Long transAmount, String backUrl) {
+            BigDecimal transAmount, String backUrl) {
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用微信支付");
         }
