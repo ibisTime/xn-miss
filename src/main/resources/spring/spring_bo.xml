@@ -49,49 +49,16 @@
 		<property name="paginableDAO" ref="channelBankDAOImpl"/>
 	</bean>
 	
-	<bean id="companyBO" class="com.ogc.standard.bo.impl.CompanyBOImpl">
-		<property name="paginableDAO" ref="companyDAOImpl"/>
-	</bean>
-	
-	<bean id="departmentBO" class="com.ogc.standard.bo.impl.DepartmentBOImpl">
-		<property name="paginableDAO" ref="departmentDAOImpl"/>
-	</bean>
-	
-	<bean id="groupBO" class="com.ogc.standard.bo.impl.GroupBOImpl">
-		<property name="paginableDAO" ref="groupDAOImpl"/>
-	</bean>
-	
-	<bean id="groupCoinBO" class="com.ogc.standard.bo.impl.GroupCoinBOImpl">
-		<property name="paginableDAO" ref="groupCoinDAOImpl"/>
-	</bean>
-	
-	<bean id="groupCoinJourBO" class="com.ogc.standard.bo.impl.GroupCoinJourBOImpl">
-		<property name="paginableDAO" ref="groupCoinJourDAOImpl"/>
-	</bean>
-	
-	<bean id="attentionBO" class="com.ogc.standard.bo.impl.AttentionBOImpl">
-		<property name="paginableDAO" ref="attentionDAOImpl"/>
-	</bean>
-	
-	<bean id="dayBenefitBO" class="com.ogc.standard.bo.impl.DayBenefitBOImpl">
-		<property name="paginableDAO" ref="dayBenefitDAOImpl"/>
-	</bean>
 
-	<bean id="simuOrderBO" class="com.ogc.standard.bo.impl.SimuOrderBOImpl">
-		<property name="paginableDAO" ref="simuOrderDAOImpl"/>
-	</bean>
 	
-	<bean id="simuOrderDetailBO" class="com.ogc.standard.bo.impl.SimuOrderDetailBOImpl">
-		<property name="paginableDAO" ref="simuOrderDetailDAOImpl"/>
-	</bean>
+	
+	
 
 	<bean id="userBO" class="com.ogc.standard.bo.impl.UserBOImpl">
 		<property name="paginableDAO" ref="userDAOImpl"/>
 	</bean>
 	
-	<bean id="userRelationBO" class="com.ogc.standard.bo.impl.UserRelationBOImpl">
-		<property name="paginableDAO" ref="userRelationDAOImpl"/>
-	</bean>
+
 	
 	<bean id="userExtBO" class="com.ogc.standard.bo.impl.UserExtBOImpl">
 		<property name="paginableDAO" ref="userExtDAOImpl"/>
@@ -105,9 +72,7 @@
 		<property name="paginableDAO" ref="userFieldApproveDAOImpl"/>
 	</bean>
 	
-	<bean id="blacklistBO" class="com.ogc.standard.bo.impl.BlacklistBOImpl">
-		<property name="paginableDAO" ref="blacklistDAOImpl"/>
-	</bean>
+
 	
 	<bean id="signLogBO" class="com.ogc.standard.bo.impl.SignLogBOImpl">
 		<property name="paginableDAO" ref="signLogDAOImpl"/>
@@ -121,25 +86,15 @@
 		<property name="paginableDAO" ref="readDAOImpl"/>
 	</bean>
 	
-	<bean id="matchBO" class="com.ogc.standard.bo.impl.MatchBOImpl">
-		<property name="paginableDAO" ref="matchDAOImpl"/>
-	</bean>
+
 	
-	<bean id="matchApplyBO" class="com.ogc.standard.bo.impl.MatchApplyBOImpl">
-		<property name="paginableDAO" ref="matchApplyDAOImpl"/>
-	</bean>
 	
-	<bean id="teamBO" class="com.ogc.standard.bo.impl.TeamBOImpl">
-		<property name="paginableDAO" ref="teamDAOImpl"/>
-	</bean>
 	
 	<bean id="keywordBO" class="com.ogc.standard.bo.impl.KeywordBOImpl">
 		<property name="paginableDAO" ref="keywordDAOImpl"/>
 	</bean>
 	
-	<bean id="postBO" class="com.ogc.standard.bo.impl.PostBOImpl">
-		<property name="paginableDAO" ref="postDAOImpl"/>
-	</bean>
+
 	
 	<bean id="commentBO" class="com.ogc.standard.bo.impl.CommentBOImpl">
 		<property name="paginableDAO" ref="commentDAOImpl"/>
@@ -149,69 +104,17 @@
 		<property name="paginableDAO" ref="interactDAOImpl"/>
 	</bean>
 	
-	<bean id="adsBO" class="com.ogc.standard.bo.impl.AdsBOImpl">
-		<property name="paginableDAO" ref="adsDAOImpl"/>
-	</bean>
-	
-	<bean id="arbitrateBO" class="com.ogc.standard.bo.impl.ArbitrateBOImpl">
-		<property name="paginableDAO" ref="arbitrateDAOImpl"/>
-	</bean>
-	
-	<bean id="coinBO" class="com.ogc.standard.bo.impl.CoinBOImpl">
-		<property name="paginableDAO" ref="coinDAOImpl"/>
-	</bean>
-	
-	<bean id="awardBO" class="com.ogc.standard.bo.impl.AwardBOImpl">
-		<property name="paginableDAO" ref="awardDAOImpl"/>
-	</bean>
-	
-	<bean id="awardMonthBO" class="com.ogc.standard.bo.impl.AwardMonthBOImpl">
-		<property name="paginableDAO" ref="awardMonthDAOImpl"/>
-	</bean>
-	
-	<bean id="personalAddressBO" class="com.ogc.standard.bo.impl.PersonalAddressBOImpl">
-		<property name="paginableDAO" ref="personalAddressDAOImpl"/>
-	</bean>
-	
-	<bean id="currencyRateBO" class="com.ogc.standard.bo.impl.CurrencyRateBOImpl">
-		<property name="paginableDAO" ref="currencyRateDAOImpl"/>
-	</bean>
-	
+
+
+
 	<bean id="accountBO" class="com.ogc.standard.bo.impl.AccountBOImpl">
 		<property name="paginableDAO" ref="accountDAOImpl"/>
 	</bean>
 	
-	<bean id="ethXAddressBO" class="com.ogc.standard.bo.impl.EthXAddressBOImpl">
-		<property name="paginableDAO" ref="ethXAddressDAOImpl"/>
-	</bean>
+
 	
-	<bean id="ethMAddressBO" class="com.ogc.standard.bo.impl.EthMAddressBOImpl">
-		<property name="paginableDAO" ref="ethMAddressDAOImpl"/>
-	</bean>
 	
-	<bean id="ethWAddressBO" class="com.ogc.standard.bo.impl.EthWAddressBOImpl">
-		<property name="paginableDAO" ref="ethWAddressDAOImpl"/>
-	</bean>
-	
-	<bean id="ethTransactionBO" class="com.ogc.standard.bo.impl.EthTransactionBOImpl">
-		<property name="paginableDAO" ref="ethTransactionDAOImpl"/>
-	</bean>
-	
-	<bean id="btcXAddressBO" class="com.ogc.standard.bo.impl.BtcXAddressBOImpl">
-		<property name="paginableDAO" ref="btcXAddressDAOImpl"/>
-	</bean>
-	
-	<bean id="btcMAddressBO" class="com.ogc.standard.bo.impl.BtcMAddressBOImpl">
-		<property name="paginableDAO" ref="btcMAddressDAOImpl"/>
-	</bean>
-	
-	<bean id="btcWAddressBO" class="com.ogc.standard.bo.impl.BtcWAddressBOImpl">
-		<property name="paginableDAO" ref="btcWAddressDAOImpl"/>
-	</bean>
-	
-	<bean id="btcTransactionBO" class="com.ogc.standard.bo.impl.BtcTransactionBOImpl">
-		<property name="paginableDAO" ref="btcTransactionDAOImpl"/>
-	</bean>
+
 	
 	<bean id="jourBO" class="com.ogc.standard.bo.impl.JourBOImpl">
 		<property name="paginableDAO" ref="jourDAOImpl"/>
@@ -225,62 +128,16 @@
 		<property name="paginableDAO" ref="withdrawDAOImpl"/>
 	</bean>
 	
-	<bean id="collectBO" class="com.ogc.standard.bo.impl.CollectBOImpl">
-		<property name="paginableDAO" ref="collectDAOImpl"/>
-	</bean>
 	
-	<bean id="depositBO" class="com.ogc.standard.bo.impl.DepositBOImpl">
-		<property name="paginableDAO" ref="depositDAOImpl"/>
-	</bean>
 	
-	<bean id="tradeOrderBO" class="com.ogc.standard.bo.impl.TradeOrderBOImpl">
-		<property name="paginableDAO" ref="tradeOrderDAOImpl"/>
-	</bean>
-	
-	<bean id="acceptOrderBO" class="com.ogc.standard.bo.impl.AcceptOrderBOImpl">
-		<property name="paginableDAO" ref="acceptOrderDAOImpl"/>
-	</bean>
-	
-	<bean id="tokenEventBO" class="com.ogc.standard.bo.impl.TokenEventBOImpl">
-		<property name="paginableDAO" ref="tokenEventDAOImpl"/>
-	</bean>
+
 	<bean id="bankcardBO" class="com.ogc.standard.bo.impl.BankcardBOImpl">
 		<property name="paginableDAO" ref="bankcardDAOImpl"/>
 	</bean>
 	
-	<bean id="simuOrderHistoryBO" class="com.ogc.standard.bo.impl.SimuOrderHistoryBOImpl">
-		<property name="paginableDAO" ref="simuOrderHistoryDAOImpl"/>
-	</bean>
+
 	
-	<bean id="handicapBO" class="com.ogc.standard.bo.impl.HandicapBOImpl">
-		<property name="paginableDAO" ref="handicapDAOImpl"/>
-	</bean>
-	
-	<bean id="simuKLineBO" class="com.ogc.standard.bo.impl.SimuKLineBOImpl">
-		<property name="paginableDAO" ref="simuKLineDAOImpl"/>
-	</bean>
-	
-	<bean id="simuMatchResultBO" class="com.ogc.standard.bo.impl.SimuMatchResultBOImpl">
-		<property name="paginableDAO" ref="simuMatchResultDAOImpl"/>
-	</bean>
-	
-	<bean id="simuMatchResultHistoryBO" class="com.ogc.standard.bo.impl.SimuMatchResultHistoryBOImpl">
-		<property name="paginableDAO" ref="simuMatchResultHistoryDAOImpl"/>
-	</bean>
-	
-	<bean id="ethSAddressBO" class="com.ogc.standard.bo.impl.EthSAddressBOImpl">
-		<property name="paginableDAO" ref="ethSAddressDAOImpl"/>
-	</bean>
+
 		
-	<bean id="divideBO" class="com.ogc.standard.bo.impl.DivideBOImpl">
-		<property name="paginableDAO" ref="divideDAOImpl"/>
-	</bean>
-	
-	<bean id="divideDetailBO" class="com.ogc.standard.bo.impl.DivideDetailBOImpl">
-		<property name="paginableDAO" ref="divideDetailDAOImpl"/>
-	</bean>
-	
-	<bean id="btcUtxoBO" class="com.ogc.standard.bo.impl.BtcUtxoBOImpl">
-		<property name="paginableDAO" ref="btcUtxoDAOImpl"/>
-	</bean>
+
 </beans>

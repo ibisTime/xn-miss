@@ -8,7 +8,6 @@
  */
 package com.ogc.standard.bo.impl;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -26,10 +25,9 @@ import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.enums.EJourStatus;
-import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -44,97 +42,56 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
     @Override
     public String addJour(Account dbAccount, EChannelType channelType,
-            String channelOrder, String refNo, String bizType, String bizNote,
-            BigDecimal transAmount) {
-
-        if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
-            throw new BizException(
-                EErrorCode_main.groupjourcoin_NOTEMPTY.getCode());
+            String channelOrder, String payGroup, String refNo,
+            EJourBizType bizType, String bizNote, Long transAmount) {
+        if (!EChannelType.Offline.getCode().equals(channelType.getCode())
+                && !EChannelType.NBZ.getCode().equals(channelType.getCode())) {// 线下和内部帐可为空，线上必须有
+            if (StringUtils.isBlank(payGroup)) {// 必须要有的判断。每一次流水新增，必有有对应业务分组
+                throw new BizException("xn000000", "新增流水业务分组不能为空");
+            }
         }
-        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(
-                EErrorCode_main.groupjourcoin_NOTZERO.getCode());
+        if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
+            throw new BizException("xn000000", "新增流水流水分组不能为空");
+        }
+        if (transAmount == 0) {
+            throw new BizException("xn000000", "新增流水变动金额不能为0");
         }
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AJour.getCode());
 
         Jour data = new Jour();
-
         data.setCode(code);
-        data.setType(EJourType.BALANCE.getCode());
-        data.setUserId(dbAccount.getUserId());
-        data.setAccountNumber(dbAccount.getAccountNumber());
-        data.setAccountType(dbAccount.getType());
 
-        data.setCurrency(dbAccount.getCurrency());
-        data.setBizType(bizType);
-        data.setBizNote(bizNote);
-        data.setTransAmount(transAmount);
-        data.setPreAmount(dbAccount.getAmount());
-
-        data.setPostAmount(dbAccount.getAmount().add(transAmount));
-        data.setStatus(EJourStatus.todoCheck.getCode());
-        data.setChannelType(channelType.getCode());
-        data.setChannelOrder(channelOrder);// 内部转账时为空，外部转账时必定有
+        data.setPayGroup(payGroup);
         data.setRefNo(refNo);
+        data.setChannelOrder(channelOrder);// 内部转账时为空，外部转账时必定有
+        data.setAccountNumber(dbAccount.getAccountNumber());
+        data.setTransAmount(transAmount);
 
+        data.setUserId(dbAccount.getUserId());
+        data.setRealName(dbAccount.getRealName());
+        data.setType(dbAccount.getType());
+        data.setCurrency(dbAccount.getCurrency());
+        data.setBizType(bizType.getCode());
+
+        data.setBizNote(bizNote);
+        data.setPreAmount(dbAccount.getAmount());
+        data.setPostAmount(dbAccount.getAmount() + transAmount);
+        data.setStatus(EJourStatus.todoCheck.getCode());
         data.setRemark("记得对账哦");
-        data.setCreateDatetime(new Date());
-        data.setWorkDate(
-            DateUtil.dateToStr(new Date(), DateUtil.DB_DATE_FORMAT_STRING));
 
+        data.setCreateDatetime(new Date());
+        data.setWorkDate(DateUtil.dateToStr(new Date(),
+            DateUtil.DB_DATE_FORMAT_STRING));
+        data.setChannelType(channelType.getCode());
+        data.setSystemCode(dbAccount.getSystemCode());
+        data.setCompanyCode(dbAccount.getCompanyCode());
         jourDAO.insert(data);
         return code;
     }
 
     @Override
-    public String addFrozenJour(Account dbAccount, EChannelType channelType,
-            String channelOrder, String refNo, String bizType, String bizNote,
-            BigDecimal transAmount) {
-
-        if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
-            throw new BizException(
-                EErrorCode_main.groupjourcoin_NOTEMPTY.getCode());
-        }
-        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(
-                EErrorCode_main.groupjourcoin_NOTZERO.getCode());
-        }
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AJour.getCode());
-
-        Jour data = new Jour();
-
-        data.setCode(code);
-        data.setType(EJourType.FROZEN.getCode());
-        data.setUserId(dbAccount.getUserId());
-        data.setAccountNumber(dbAccount.getAccountNumber());
-        data.setAccountType(dbAccount.getType());
-
-        data.setCurrency(dbAccount.getCurrency());
-        data.setBizType(bizType);
-        data.setBizNote(bizNote);
-        data.setTransAmount(transAmount);
-        data.setPreAmount(dbAccount.getAmount());
-
-        data.setPostAmount(dbAccount.getAmount().add(transAmount));
-        data.setStatus(EJourStatus.todoCheck.getCode());
-        data.setChannelType(channelType.getCode());
-        data.setChannelOrder(channelOrder);// 内部转账时为空，外部转账时必定有
-        data.setRefNo(refNo);
-
-        data.setRemark("记得对账哦");
-        data.setCreateDatetime(new Date());
-        data.setWorkDate(
-            DateUtil.dateToStr(new Date(), DateUtil.DB_DATE_FORMAT_STRING));
-
-        jourDAO.insert(data);
-        return code;
-    }
-
-    @Override
-    public String addJourForHL(Account dbAccount, HLOrder order,
-            String bizType) {
+    public String addJourForHL(Account dbAccount, HLOrder order) {
         String code = OrderNoGenerater
             .generate(EGeneratePrefix.AJour.getCode());
 
@@ -142,28 +99,31 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setCode(code);
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setUserId(dbAccount.getUserId());
+        data.setRealName(dbAccount.getRealName());
         data.setType(dbAccount.getType());
         data.setCurrency(dbAccount.getCurrency());
         data.setChannelType(EChannelType.NBZ.getCode());
 
         data.setRefNo(order.getCode());
-        data.setBizType(bizType);
+        data.setBizType(EJourBizType.AJ_HCLB.getCode());
         data.setBizNote("根据红蓝订单《" + order.getCode() + "》变动资金");
         data.setTransAmount(order.getAmount());
         data.setPreAmount(dbAccount.getAmount());
 
-        data.setPostAmount(dbAccount.getAmount().add(order.getAmount()));
+        data.setPostAmount(dbAccount.getAmount() + order.getAmount());
         data.setStatus(EJourStatus.noAdjust.getCode());
         data.setCreateDatetime(new Date());
         data.setWorkDate(null);
+        data.setSystemCode(dbAccount.getSystemCode());
+        data.setCompanyCode(dbAccount.getCompanyCode());
         jourDAO.insert(data);
         return code;
 
     }
 
     @Override
-    public void doCheckJour(Jour jour, EBoolean checkResult,
-            BigDecimal checkAmount, String checkUser, String checkNote) {
+    public void doCheckJour(Jour jour, EBoolean checkResult, Long checkAmount,
+            String checkUser, String checkNote) {
         Jour data = new Jour();
         data.setCode(jour.getCode());
         EJourStatus eJourStatus = EJourStatus.Checked_YES;
@@ -172,7 +132,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         }
         data.setStatus(eJourStatus.getCode());
         data.setCheckUser(checkUser);
-        data.setCheckNote(checkNote + ":调整金额" + checkAmount.toString());
+        data.setCheckNote(checkNote + ":调整金额" + checkAmount / 1000);
         data.setCheckDatetime(new Date());
         jourDAO.checkJour(data);
     }
@@ -200,25 +160,27 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     }
 
     @Override
-    public Jour getJour(String code) {
+    public Jour getJour(String code, String systemCode) {
         Jour data = null;
         if (StringUtils.isNotBlank(code)) {
             Jour condition = new Jour();
             condition.setCode(code);
+            condition.setSystemCode(systemCode);
             data = jourDAO.select(condition);
             if (data == null) {
-                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
+                throw new BizException("xn000000", "单号不存在");
             }
         }
         return data;
     }
 
     @Override
-    public Jour getJourNotException(String code) {
+    public Jour getJourNotException(String code, String systemCode) {
         Jour data = null;
         if (StringUtils.isNotBlank(code)) {
             Jour condition = new Jour();
             condition.setCode(code);
+            condition.setSystemCode(systemCode);
             data = jourDAO.select(condition);
         }
         return data;
@@ -230,22 +192,13 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     }
 
     @Override
-    public BigDecimal getTotalAmount(String bizType, String channelType,
-            String accountNumber, String dateStart, String dateEnd) {
+    public Long getTotalAmount(String bizType, String channelType,
+            String accountNumber) {
         Jour jour = new Jour();
-        jour.setType(EJourType.BALANCE.getCode());
         jour.setBizType(bizType);
         jour.setChannelType(channelType);
         jour.setAccountNumber(accountNumber);
-        jour.setCreateDatetimeStart(DateUtil.getFrontDate(dateStart, false));
-        jour.setCreateDatetimeEnd(DateUtil.getFrontDate(dateEnd, true));
-        BigDecimal a = jourDAO.selectTotalAmount(jour);
-        return a;
-    }
-
-    @Override
-    public BigDecimal getTotalAmount(Jour condition) {
-
-        return jourDAO.selectTotalAmount(condition);
+        long a = jourDAO.selectTotalAmount(jour);
+        return Math.abs(a);
     }
 }

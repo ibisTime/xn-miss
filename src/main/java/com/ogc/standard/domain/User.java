@@ -266,7 +266,6 @@ public class User extends ABaseDO {
     // 自我介绍
     private String introduce;
 
-    private UserStatistics userStatistics;
 
     public String getUserId() {
         return userId;
@@ -748,12 +747,5 @@ public class User extends ABaseDO {
         this.introduce = introduce;
     }
 
-    public UserStatistics getUserStatistics() {
-        return userStatistics;
-    }
-
-    public void setUserStatistics(UserStatistics userStatistics) {
-        this.userStatistics = userStatistics;
-    }
 
 }

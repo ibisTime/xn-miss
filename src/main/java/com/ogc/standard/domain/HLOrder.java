@@ -1,6 +1,5 @@
 package com.ogc.standard.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +18,9 @@ public class HLOrder extends ABaseDO {
     // 针对账号
     private String accountNumber;
 
+    // 针对户名（手机号或其他）
+    private String accountName;
+
     // 针对币种
     private String currency;
 
@@ -32,7 +34,7 @@ public class HLOrder extends ABaseDO {
     private String direction;
 
     // 金额(有正负)
-    private BigDecimal amount;
+    private Long amount;
 
     // 状态（待审批/审批通过/审批不通过）
     private String status;
@@ -55,6 +57,12 @@ public class HLOrder extends ABaseDO {
     // 调账时间
     private Date approveDatetime;
 
+    // 系统编号
+    private String systemCode;
+
+    // 公司编号
+    private String companyCode;
+
     // **************************
     // 申请时间起
     private Date applyDatetimeStart;
@@ -70,6 +78,62 @@ public class HLOrder extends ABaseDO {
 
     // 流水列表(管理端详情展示表格)
     private List<Jour> jourList;
+
+    public List<Jour> getJourList() {
+        return jourList;
+    }
+
+    public void setJourList(List<Jour> jourList) {
+        this.jourList = jourList;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
+    }
+
+    public Date getApplyDatetimeStart() {
+        return applyDatetimeStart;
+    }
+
+    public void setApplyDatetimeStart(Date applyDatetimeStart) {
+        this.applyDatetimeStart = applyDatetimeStart;
+    }
+
+    public Date getApplyDatetimeEnd() {
+        return applyDatetimeEnd;
+    }
+
+    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
+        this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public Date getApproveDatetimeStart() {
+        return approveDatetimeStart;
+    }
+
+    public void setApproveDatetimeStart(Date approveDatetimeStart) {
+        this.approveDatetimeStart = approveDatetimeStart;
+    }
+
+    public Date getApproveDatetimeEnd() {
+        return approveDatetimeEnd;
+    }
+
+    public void setApproveDatetimeEnd(Date approveDatetimeEnd) {
+        this.approveDatetimeEnd = approveDatetimeEnd;
+    }
 
     public String getCode() {
         return code;
@@ -87,12 +151,12 @@ public class HLOrder extends ABaseDO {
         this.accountNumber = accountNumber;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public String getJourCode() {
@@ -103,14 +167,6 @@ public class HLOrder extends ABaseDO {
         this.jourCode = jourCode;
     }
 
-    public String getChannelType() {
-        return channelType;
-    }
-
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
-    }
-
     public String getDirection() {
         return direction;
     }
@@ -119,11 +175,11 @@ public class HLOrder extends ABaseDO {
         this.direction = direction;
     }
 
-    public BigDecimal getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
@@ -159,6 +215,10 @@ public class HLOrder extends ABaseDO {
         this.applyDatetime = applyDatetime;
     }
 
+    public void setApproveDatetime(Date approveDatetime) {
+        this.approveDatetime = approveDatetime;
+    }
+
     public String getApproveUser() {
         return approveUser;
     }
@@ -175,52 +235,23 @@ public class HLOrder extends ABaseDO {
         this.approveNote = approveNote;
     }
 
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public Date getApproveDatetime() {
         return approveDatetime;
     }
 
-    public void setApproveDatetime(Date approveDatetime) {
-        this.approveDatetime = approveDatetime;
+    public String getCurrency() {
+        return currency;
     }
 
-    public Date getApplyDatetimeStart() {
-        return applyDatetimeStart;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
-
-    public void setApplyDatetimeStart(Date applyDatetimeStart) {
-        this.applyDatetimeStart = applyDatetimeStart;
-    }
-
-    public Date getApplyDatetimeEnd() {
-        return applyDatetimeEnd;
-    }
-
-    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
-        this.applyDatetimeEnd = applyDatetimeEnd;
-    }
-
-    public Date getApproveDatetimeStart() {
-        return approveDatetimeStart;
-    }
-
-    public void setApproveDatetimeStart(Date approveDatetimeStart) {
-        this.approveDatetimeStart = approveDatetimeStart;
-    }
-
-    public Date getApproveDatetimeEnd() {
-        return approveDatetimeEnd;
-    }
-
-    public void setApproveDatetimeEnd(Date approveDatetimeEnd) {
-        this.approveDatetimeEnd = approveDatetimeEnd;
-    }
-
-    public List<Jour> getJourList() {
-        return jourList;
-    }
-
-    public void setJourList(List<Jour> jourList) {
-        this.jourList = jourList;
-    }
-
 }

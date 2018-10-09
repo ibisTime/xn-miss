@@ -1,27 +1,36 @@
 package com.ogc.standard.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
 //充值（2步骤）
 public class Charge extends ABaseDO {
-
-    private static final long serialVersionUID = 6959224049118889748L;
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
+    private static final long serialVersionUID = 340253581181024692L;
 
     // 充值编号
     private String code;
 
-    // 账户编号
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
+
+    // 流水分组组号（橙账本代表）---核心字段2
+    private String refNo;
+
+    // 针对账号---核心字段4
     private String accountNumber;
 
-    // 类别（C端账号/B端账号/P平台账号）
-    private String accountType;
+    // 充值金额---核心字段5
+    private Long amount;
 
-    // 充值金额
-    private BigDecimal amount;
+    // 针对户名
+    private String accountName;
+
+    // 类别（C端账号/B端账号/P平台账号）
+    private String type;
 
     // 币种
     private String currency;
@@ -31,9 +40,6 @@ public class Charge extends ABaseDO {
 
     // 业务类型说明（因为什么业务类型而充值）
     private String bizNote;
-
-    // 关联业务单号
-    private String bizNo;
 
     // 支付渠道账号信息（如开户支行）
     private String payCardInfo;
@@ -46,9 +52,6 @@ public class Charge extends ABaseDO {
 
     // 申请人
     private String applyUser;
-
-    // 申请说明
-    private String applyNote;
 
     // 申请时间
     private Date applyDatetime;
@@ -65,24 +68,13 @@ public class Charge extends ABaseDO {
     // 支付渠道
     private String channelType;
 
-    // 渠道订单号
-    private String channelOrder;
+    // 系统编号
+    private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     // *******************************
-    // 申请人
-    private User payer;
-
-    public User getPayer() {
-        return payer;
-    }
-
-    public void setPayer(User payer) {
-        this.payer = payer;
-    }
-
-    // 订单编号模糊查询
-    private String codeForQuery;
-
     // 申请时间起
     private Date applyDatetimeStart;
 
@@ -95,8 +87,8 @@ public class Charge extends ABaseDO {
     // 支付时间止
     private Date payDatetimeEnd;
 
-    // 币种列表
-    private List<String> currencyList;
+    // 用户信息
+    private User user;
 
     public String getCode() {
         return code;
@@ -104,6 +96,22 @@ public class Charge extends ABaseDO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getPayGroup() {
+        return payGroup;
+    }
+
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getRefNo() {
+        return refNo;
+    }
+
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 
     public String getAccountNumber() {
@@ -114,20 +122,28 @@ public class Charge extends ABaseDO {
         this.accountNumber = accountNumber;
     }
 
-    public String getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
-
-    public BigDecimal getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getCurrency() {
@@ -152,14 +168,6 @@ public class Charge extends ABaseDO {
 
     public void setBizNote(String bizNote) {
         this.bizNote = bizNote;
-    }
-
-    public String getBizNo() {
-        return bizNo;
-    }
-
-    public void setBizNo(String bizNo) {
-        this.bizNo = bizNo;
     }
 
     public String getPayCardInfo() {
@@ -192,14 +200,6 @@ public class Charge extends ABaseDO {
 
     public void setApplyUser(String applyUser) {
         this.applyUser = applyUser;
-    }
-
-    public String getApplyNote() {
-        return applyNote;
-    }
-
-    public void setApplyNote(String applyNote) {
-        this.applyNote = applyNote;
     }
 
     public Date getApplyDatetime() {
@@ -242,12 +242,20 @@ public class Charge extends ABaseDO {
         this.channelType = channelType;
     }
 
-    public String getCodeForQuery() {
-        return codeForQuery;
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setCodeForQuery(String codeForQuery) {
-        this.codeForQuery = codeForQuery;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
     public Date getApplyDatetimeStart() {
@@ -282,20 +290,11 @@ public class Charge extends ABaseDO {
         this.payDatetimeEnd = payDatetimeEnd;
     }
 
-    public List<String> getCurrencyList() {
-        return currencyList;
+    public User getUser() {
+        return user;
     }
 
-    public void setCurrencyList(List<String> currencyList) {
-        this.currencyList = currencyList;
+    public void setUser(User user) {
+        this.user = user;
     }
-
-    public String getChannelOrder() {
-        return channelOrder;
-    }
-
-    public void setChannelOrder(String channelOrder) {
-        this.channelOrder = channelOrder;
-    }
-
 }

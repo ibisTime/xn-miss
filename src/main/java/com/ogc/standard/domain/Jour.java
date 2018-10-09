@@ -1,35 +1,48 @@
 package com.ogc.standard.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
 /**
- * 账户流水
- * @author: haiqingzheng 
- * @since: 2018年8月26日 下午5:07:53 
+ * 账户流水订单
+ * @author: xieyj 
+ * @since: 2016年11月10日 下午5:48:27 
  * @history:
  */
 public class Jour extends ABaseDO {
-
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
     private static final long serialVersionUID = 1255747682967604091L;
 
     // 流水编号
     private String code;
 
-    // 流水类型（余额流水、冻结流水）
-    private String type;
+    // 订单分组组号（信息代表）---核心字段1
+    private String payGroup;
 
-    // 流水所属用户编号
-    private String userId;
+    // 流水分组组号（橙账本代表）---核心字段2
+    private String refNo;
+
+    // 支付渠道单号（支付渠道代表）---核心字段3
+    private String channelOrder;
 
     // 流水所属账号---核心字段4
     private String accountNumber;
 
+    // 变动金额（有正负之分）---核心字段5
+    private Long transAmount;
+
+    // 流水所属用户编号
+    private String userId;
+
+    // 流水所属真实姓名
+    private String realName;
+
     // 类型(B B端账号，C C端账号，P 平台账号)
-    private String accountType;
+    private String type;
 
     // 币种
     private String currency;
@@ -40,56 +53,14 @@ public class Jour extends ABaseDO {
     // 业务说明
     private String bizNote;
 
-    // 变动金额（有正负之分）
-    private transient BigDecimal transAmount;
-
-    private String transAmountString;
-
     // 变动前金额
-    private transient BigDecimal preAmount;
-
-    private String preAmountString;
+    private Long preAmount;
 
     // 变动后金额
-    private transient BigDecimal postAmount;
-
-    private String postAmountString;
-
-    // **************************db properties **************************
-
-    // 真实姓名
-    private String realName;
-
-    // 手机号
-    private String mobile;
-
-    public String getPreAmountString() {
-        return preAmountString;
-    }
-
-    public void setPreAmountString(String preAmountString) {
-        this.preAmountString = preAmountString;
-    }
-
-    public String getPostAmountString() {
-        return postAmountString;
-    }
-
-    public void setPostAmountString(String postAmountString) {
-        this.postAmountString = postAmountString;
-    }
+    private Long postAmount;
 
     // 状态
     private String status;
-
-    // 支付渠道（线下/招商代付/支付宝/内部转账）
-    private String channelType;
-
-    // 支付渠道单号
-    private String channelOrder;
-
-    // 系统内部参考订单号
-    private String refNo;
 
     // 备注
     private String remark;
@@ -118,6 +89,15 @@ public class Jour extends ABaseDO {
     // 调账时间
     private Date adjustDatetime;
 
+    // 支付渠道（线下/招商代付/支付宝/内部转账）
+    private String channelType;
+
+    // 系统编号
+    private String systemCode;
+
+    // 公司编号
+    private String companyCode;
+
     // ***********************db properties *************************
     // 业务类型列表
     private List<String> bizTypeList;
@@ -128,15 +108,20 @@ public class Jour extends ABaseDO {
     // 查询条件2：创建终止时间
     private Date createDatetimeEnd;
 
-    // 币种列表
-    private List<String> currencyList;
-
-    public String getCode() {
-        return code;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public List<String> getBizTypeList() {
+        return bizTypeList;
+    }
+
+    public void setBizTypeList(List<String> bizTypeList) {
+        this.bizTypeList = bizTypeList;
     }
 
     public String getType() {
@@ -147,6 +132,38 @@ public class Jour extends ABaseDO {
         this.type = type;
     }
 
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -155,28 +172,20 @@ public class Jour extends ABaseDO {
         this.userId = userId;
     }
 
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
     public String getAccountNumber() {
         return accountNumber;
     }
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
-    }
-
-    public String getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 
     public String getBizType() {
@@ -195,30 +204,27 @@ public class Jour extends ABaseDO {
         this.bizNote = bizNote;
     }
 
-    public BigDecimal getTransAmount() {
+    public Long getTransAmount() {
         return transAmount;
     }
 
-    public void setTransAmount(BigDecimal transAmount) {
-        setTransAmountString(transAmount.toString());
+    public void setTransAmount(Long transAmount) {
         this.transAmount = transAmount;
     }
 
-    public BigDecimal getPreAmount() {
+    public Long getPreAmount() {
         return preAmount;
     }
 
-    public void setPreAmount(BigDecimal preAmount) {
-        setPreAmountString(preAmount.toString());
+    public void setPreAmount(Long preAmount) {
         this.preAmount = preAmount;
     }
 
-    public BigDecimal getPostAmount() {
+    public Long getPostAmount() {
         return postAmount;
     }
 
-    public void setPostAmount(BigDecimal postAmount) {
-        setPostAmountString(postAmount.toString());
+    public void setPostAmount(Long postAmount) {
         this.postAmount = postAmount;
     }
 
@@ -228,38 +234,6 @@ public class Jour extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getChannelType() {
-        return channelType;
-    }
-
-    public void setChannelType(String channelType) {
-        this.channelType = channelType;
-    }
-
-    public String getChannelOrder() {
-        return channelOrder;
-    }
-
-    public void setChannelOrder(String channelOrder) {
-        this.channelOrder = channelOrder;
-    }
-
-    public String getRefNo() {
-        return refNo;
-    }
-
-    public void setRefNo(String refNo) {
-        this.refNo = refNo;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 
     public Date getCreateDatetime() {
@@ -286,14 +260,6 @@ public class Jour extends ABaseDO {
         this.checkUser = checkUser;
     }
 
-    public String getCheckNote() {
-        return checkNote;
-    }
-
-    public void setCheckNote(String checkNote) {
-        this.checkNote = checkNote;
-    }
-
     public Date getCheckDatetime() {
         return checkDatetime;
     }
@@ -310,14 +276,6 @@ public class Jour extends ABaseDO {
         this.adjustUser = adjustUser;
     }
 
-    public String getAdjustNote() {
-        return adjustNote;
-    }
-
-    public void setAdjustNote(String adjustNote) {
-        this.adjustNote = adjustNote;
-    }
-
     public Date getAdjustDatetime() {
         return adjustDatetime;
     }
@@ -326,60 +284,67 @@ public class Jour extends ABaseDO {
         this.adjustDatetime = adjustDatetime;
     }
 
-    public List<String> getBizTypeList() {
-        return bizTypeList;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setBizTypeList(List<String> bizTypeList) {
-        this.bizTypeList = bizTypeList;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
-    public Date getCreateDatetimeStart() {
-        return createDatetimeStart;
+    public String getPayGroup() {
+        return payGroup;
     }
 
-    public void setCreateDatetimeStart(Date createDatetimeStart) {
-        this.createDatetimeStart = createDatetimeStart;
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
     }
 
-    public Date getCreateDatetimeEnd() {
-        return createDatetimeEnd;
+    public String getRefNo() {
+        return refNo;
     }
 
-    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
-        this.createDatetimeEnd = createDatetimeEnd;
+    public void setRefNo(String refNo) {
+        this.refNo = refNo;
     }
 
-    public List<String> getCurrencyList() {
-        return currencyList;
+    public String getChannelOrder() {
+        return channelOrder;
     }
 
-    public void setCurrencyList(List<String> currencyList) {
-        this.currencyList = currencyList;
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
     }
 
-    public String getTransAmountString() {
-        return transAmountString;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setTransAmountString(String transAmountString) {
-        this.transAmountString = transAmountString;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
-    public String getRealName() {
-        return realName;
+    public String getCheckNote() {
+        return checkNote;
     }
 
-    public void setRealName(String realName) {
-        this.realName = realName;
+    public void setCheckNote(String checkNote) {
+        this.checkNote = checkNote;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getAdjustNote() {
+        return adjustNote;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setAdjustNote(String adjustNote) {
+        this.adjustNote = adjustNote;
     }
 
+    public String getChannelType() {
+        return channelType;
+    }
+
+    public void setChannelType(String channelType) {
+        this.channelType = channelType;
+    }
 }

@@ -8,8 +8,8 @@ import com.ogc.standard.dao.base.ABaseDO;
 
 /**
  * 账户
- * @author: haiqingzheng 
- * @since: 2018年8月26日 下午4:54:54 
+ * @author: xieyj 
+ * @since: 2016年12月23日 上午10:41:45 
  * @history:
  */
 public class Account extends ABaseDO {
@@ -22,17 +22,17 @@ public class Account extends ABaseDO {
     // 用户编号
     private String userId;
 
-    // 币种
-    private String currency;
-
-    // 区块链地址
-    private String address;
+    // 户名
+    private String realName;
 
     // 类别（C端账号/B端账号/P平台账号）
     private String type;
 
     // 状态（0正常/1程序冻结/2人工冻结）
     private String status;
+
+    // 币种
+    private String currency;
 
     // 余额
     private BigDecimal amount;
@@ -43,10 +43,13 @@ public class Account extends ABaseDO {
     // md5
     private String md5;
 
-    // 总充值金额（入金）
+    // 累计增加金额
+    private BigDecimal addAmount;
+
+    // 入金
     private BigDecimal inAmount;
 
-    // 总取现金额（出金）
+    // 出金
     private BigDecimal outAmount;
 
     // 创建时间
@@ -54,6 +57,12 @@ public class Account extends ABaseDO {
 
     // 最近一次变动对应的流水编号
     private String lastOrder;
+
+    // 系统编号
+    private String systemCode;
+
+    // 公司编号
+    private String companyCode;
 
     // **************************db properties **************************
 
@@ -63,117 +72,15 @@ public class Account extends ABaseDO {
     // 创建终止时间
     private Date createDatetimeEnd;
 
-    // 币种列表
+    // 币种
     private List<String> currencyList;
 
-    // 真实姓名
-    private String realName;
-
-    // 手机号
-    private String mobile;
-
-    public String getAccountNumber() {
-        return accountNumber;
+    public List<String> getCurrencyList() {
+        return currencyList;
     }
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public BigDecimal getFrozenAmount() {
-        return frozenAmount;
-    }
-
-    public void setFrozenAmount(BigDecimal frozenAmount) {
-        this.frozenAmount = frozenAmount;
-    }
-
-    public String getMd5() {
-        return md5;
-    }
-
-    public void setMd5(String md5) {
-        this.md5 = md5;
-    }
-
-    public BigDecimal getInAmount() {
-        return inAmount;
-    }
-
-    public void setInAmount(BigDecimal inAmount) {
-        this.inAmount = inAmount;
-    }
-
-    public BigDecimal getOutAmount() {
-        return outAmount;
-    }
-
-    public void setOutAmount(BigDecimal outAmount) {
-        this.outAmount = outAmount;
-    }
-
-    public Date getCreateDatetime() {
-        return createDatetime;
-    }
-
-    public void setCreateDatetime(Date createDatetime) {
-        this.createDatetime = createDatetime;
-    }
-
-    public String getLastOrder() {
-        return lastOrder;
-    }
-
-    public void setLastOrder(String lastOrder) {
-        this.lastOrder = lastOrder;
+    public void setCurrencyList(List<String> currencyList) {
+        this.currencyList = currencyList;
     }
 
     public Date getCreateDatetimeStart() {
@@ -192,12 +99,70 @@ public class Account extends ABaseDO {
         this.createDatetimeEnd = createDatetimeEnd;
     }
 
-    public List<String> getCurrencyList() {
-        return currencyList;
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setCurrencyList(List<String> currencyList) {
-        this.currencyList = currencyList;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+
+
+    public String getMd5() {
+        return md5;
+    }
+
+    public void setMd5(String md5) {
+        this.md5 = md5;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
+    }
+
+    public String getLastOrder() {
+        return lastOrder;
+    }
+
+    public void setLastOrder(String lastOrder) {
+        this.lastOrder = lastOrder;
     }
 
     public String getRealName() {
@@ -208,12 +173,64 @@ public class Account extends ABaseDO {
         this.realName = realName;
     }
 
-    public String getMobile() {
-        return mobile;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
+
+
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
+
+	public BigDecimal getFrozenAmount() {
+		return frozenAmount;
+	}
+
+	public void setFrozenAmount(BigDecimal frozenAmount) {
+		this.frozenAmount = frozenAmount;
+	}
+
+	public BigDecimal getAddAmount() {
+		return addAmount;
+	}
+
+	public void setAddAmount(BigDecimal addAmount) {
+		this.addAmount = addAmount;
+	}
+
+	public BigDecimal getInAmount() {
+		return inAmount;
+	}
+
+	public void setInAmount(BigDecimal inAmount) {
+		this.inAmount = inAmount;
+	}
+
+	public BigDecimal getOutAmount() {
+		return outAmount;
+	}
+
+	public void setOutAmount(BigDecimal outAmount) {
+		this.outAmount = outAmount;
+	}
+    
+    
 
 }

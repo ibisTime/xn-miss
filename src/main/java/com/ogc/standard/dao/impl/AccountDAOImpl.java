@@ -85,7 +85,7 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
     }
 
     /** 
-     * @see com.std.account.dao.IAccountDAO#updateRealName(com.std.account.domain.Account)
+     * @see com.ogc.standard.dao.IAccountDAO#updateRealName(com.ogc.standard.domain.Account)
      */
     @Override
     public int updateRealName(Account data) {
@@ -110,4 +110,8 @@ public class AccountDAOImpl extends AMybatisTemplate implements IAccountDAO {
         return super.update(NAMESPACE.concat("update_unfrozenAmount"), data);
     }
 
+    @Override
+    public int cutFrozenAmount(Account data) {
+        return super.update(NAMESPACE.concat("update_cutFrozenAmount"), data);
+    }
 }

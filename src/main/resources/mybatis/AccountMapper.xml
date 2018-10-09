@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ogc.standard.dao.IAccountDAO">
+<mapper namespace="com.std.account.dao.IAccountDAO">
 	<resultMap id="account_DB_Result" type="account">
-	
 		<result column="account_number" property="accountNumber" />
 		<result column="user_id" property="userId" />
-		<result column="currency" property="currency" />	
-		<result column="address" property="address" />	
+		<result column="real_name" property="realName" />
 		<result column="type" property="type" />
-		
 		<result column="status" property="status" />
+		
+		<result column="currency" property="currency" />	
 		<result column="amount" property="amount" />
 		<result column="frozen_amount" property="frozenAmount" />
-		<result column="md5" property="md5" />
-		<result column="in_amount" property="inAmount" />
+		<result column="md5" property="md5" />	
+		<result column="add_amount" property="addAmount" />
 		
+		<result column="in_amount" property="inAmount" />
 		<result column="out_amount" property="outAmount" />
 		<result column="create_datetime" property="createDatetime" />	
-		<result column="last_order" property="lastOrder" />
+		<result column="last_order" property="lastOrder" />	
+		<result column="system_code" property="systemCode" />
 		
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">	
@@ -28,6 +30,9 @@
 			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
+			</if>
+			<if test="realName != null and realName != '' ">
+				AND t.real_name like "%"#{realName}"%"
 			</if>
 			<choose>
 			     <when test='type == "NOT_P"'>
@@ -45,12 +50,12 @@
 			<if test="currency != null and currency != '' ">
 				AND t.currency = #{currency}
 			</if>
-			<if test="currencyList != null and currencyList != '' ">
-                AND t.currency in
+			<if test="currencyList != null and currencyList.size != 0">
+				AND t.currency in 
                 <foreach item="item" index="index" collection="currencyList" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
+	            	#{item}
+                </foreach> 
+			</if>
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
@@ -60,28 +65,36 @@
 			<if test="lastOrder != null and lastOrder != '' ">
 				AND t.last_order = #{lastOrder}
 			</if>
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
+			</if>
 		</trim>
 	</sql>
 	
 	<select id="select_account" parameterType="account" resultMap="account_DB_Result">
 		SELECT
-		
 		t.account_number
 		,t.user_id
-		,t.currency
-		,t.address
+		,t.real_name
 		,t.type
-		
 		,t.status
+		
+		,t.currency
 		,t.amount
 		,t.frozen_amount
 		,t.md5
-		,t.in_amount
+		,t.add_amount
 		
+		,t.in_amount
 		,t.out_amount
 		,t.create_datetime
-		,t.last_order
 		
+		,t.last_order
+		,t.system_code
+		,t.company_code
 		FROM
 		tstd_account t
 		<include refid="where_condition"/>
@@ -96,43 +109,45 @@
 		SELECT count(1) FROM tstd_account t 
 		<include refid="where_condition"/>
 	</select>
-	
+
 	<insert id="insert_account" parameterType="account">
 		INSERT INTO tstd_account(
-		
 		account_number
 		,user_id
-		,currency
-		,address
+		,real_name
 		,type
-		
 		,status
+		
+		,currency
 		,amount
 		,frozen_amount
 		,md5
-		,in_amount
+		,add_amount
 		
+		,in_amount
 		,out_amount
 		,create_datetime
-		
+		,system_code
+		,company_code
 		)
 		VALUES(
-		
 		#{accountNumber}
 		,#{userId}
-		,#{currency}
-		,#{address}
+		,#{realName}
 		,#{type}
-		
 		,#{status}
+		
+		,#{currency}
 		,#{amount}
 		,#{frozenAmount}
 		,#{md5}
-		,#{inAmount}
+		,#{addAmount}
 		
+		,#{inAmount}
 		,#{outAmount}
 		,#{createDatetime}
-		
+		,#{systemCode}
+		,#{companyCode}
 		)
 	</insert>
 	
@@ -141,10 +156,19 @@
 		SET
 		amount= #{amount}
 		,md5 = #{md5}
+		,add_amount= #{addAmount}
 		,in_amount = #{inAmount}
 		,last_order = #{lastOrder}
 		WHERE
 		account_number = #{accountNumber}
+	</update>
+	
+	<update id="update_account_realName" parameterType="account">
+		UPDATE tstd_account
+		SET
+		real_name= #{realName}
+		WHERE
+		user_id = #{userId}	
 	</update>
 	
 	<update id="update_account_status" parameterType="account">
@@ -158,7 +182,9 @@
 	<update id="update_frozenAmount" parameterType="account">
 		UPDATE tstd_account
 		SET
-		frozen_amount = #{frozenAmount}
+		amount= #{amount}
+		,frozen_amount = #{frozenAmount}
+		,md5 = #{md5}
 		,last_order = #{lastOrder}
 		WHERE
 		account_number = #{accountNumber}
@@ -167,10 +193,20 @@
 	<update id="update_unfrozenAmount" parameterType="account">
 		UPDATE tstd_account
 		SET
-		frozen_amount = #{frozenAmount}
+		amount= #{amount}
+		,frozen_amount = #{frozenAmount}
+		,md5 = #{md5}
 		,last_order = #{lastOrder}
 		WHERE
 		account_number = #{accountNumber}
 	</update>
 	
+	<update id="update_cutFrozenAmount" parameterType="account">
+		UPDATE tstd_account
+		SET
+		frozen_amount = #{frozenAmount}
+		,out_amount = #{outAmount}
+		WHERE
+		account_number = #{accountNumber}
+    </update>
 </mapper>

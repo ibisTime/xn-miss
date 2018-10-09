@@ -11,7 +11,7 @@ package com.ogc.standard.enums;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ogc.standard.exception.BizException;
+import com.std.account.exception.BizException;
 
 /**
  * @author: xieyj 
@@ -19,7 +19,16 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum ECurrency {
-    CNY("CNY", "人民币"), USD("USD", "美元"), HKD("HKD", "港币");
+    CNY("CNY", "人民币"), JF("JF", "积分"),
+
+    ZH_FRB("FRB", "分润币"), ZH_GXZ("GXJL", "贡献值"), ZH_QBB("QBB", "钱包币"), ZH_GWB(
+            "GWB", "购物币"), ZH_HBB("HBB", "红包币"), ZH_HBYJ("HBYJ", "红包业绩"),
+
+    CG_CGB("CGB", "菜狗币"), CG_JF("CGJF", "菜狗积分"),
+
+    YC_CB("CB", "橙券"),
+
+    HW_XJK("XJK", "小金库");
 
     public static Map<String, ECurrency> getCurrencyMap() {
         Map<String, ECurrency> map = new HashMap<String, ECurrency>();
@@ -29,13 +38,13 @@ public enum ECurrency {
         return map;
     }
 
-    public static ECurrency getCurrency(String code) {
+    public static ECurrency getECurrency(String code) {
         Map<String, ECurrency> map = getCurrencyMap();
-        ECurrency result = map.get(code);
-        if (result == null) {
-            throw new BizException("XN0000", code + "对应的currency不存在");
+        ECurrency currency = map.get(code);
+        if (null == currency) {
+            throw new BizException("xn0000", code + "对应币种不存在");
         }
-        return result;
+        return currency;
     }
 
     ECurrency(String code, String value) {

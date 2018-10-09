@@ -1,36 +1,36 @@
 package com.ogc.standard.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
 //取现（3步骤）
 public class Withdraw extends ABaseDO {
-
+    /** 
+     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+     */
     private static final long serialVersionUID = -6551310796135984342L;
 
     // 订单编号
     private String code;
 
-    // 账户编号
+    // 针对账号
     private String accountNumber;
 
-    // 账户类型
-    private String accountType;
+    // 针对户名（手机号或其他）
+    private String accountName;
 
-    // 币种
-    private String currency;
+    // 账户类型
+    private String type;
 
     // 取现金额
-    private BigDecimal amount;
+    private Long amount;
+
+    // 取现币种
+    private String currency;
 
     // 取现手续费
-    private BigDecimal fee;
-
-    // 实际到账金额
-    private BigDecimal actualAmount;
+    private Long fee;
 
     // 支付渠道
     private String channelType;
@@ -38,11 +38,11 @@ public class Withdraw extends ABaseDO {
     // 渠道银行代号
     private String channelBank;
 
-    // 支付渠道的订单编号（支付渠道代表）
-    private String channelOrder;
-
-    // 支付渠道账号信息（如开户支行）
+    // 支付渠道账号信息
     private String payCardInfo;
+
+    // 开户支行
+    private String subbranch;
 
     // 支付渠道账号（如银行卡号）
     private String payCardNo;
@@ -74,16 +74,22 @@ public class Withdraw extends ABaseDO {
     // 支付回录说明
     private String payNote;
 
-    // 支付手续费
-    private BigDecimal payFee;
+    // 支付组号（信息流代表）
+    private String payGroup;
+
+    // 支付渠道的订单编号（支付渠道代表）
+    private String channelOrder;
 
     // 支付回录时间
     private Date payDatetime;
 
-    // *******************************
-    // 订单编号模糊查询
-    private String codeForQuery;
+    // 系统编号
+    private String systemCode;
 
+    // 公司编号
+    private String companyCode;
+
+    // *******************************
     // 申请时间起
     private Date applyDatetimeStart;
 
@@ -103,13 +109,63 @@ public class Withdraw extends ABaseDO {
     private Date payDatetimeEnd;
 
     // 申请用户
-    private User applyUserInfo;
+    private User user;
 
-    // 申请用户
-    private User approveUserInfo;
+    public User getUser() {
+        return user;
+    }
 
-    // 币种列表
-    private List<String> currencyList;
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getApplyDatetimeStart() {
+        return applyDatetimeStart;
+    }
+
+    public void setApplyDatetimeStart(Date applyDatetimeStart) {
+        this.applyDatetimeStart = applyDatetimeStart;
+    }
+
+    public Date getApplyDatetimeEnd() {
+        return applyDatetimeEnd;
+    }
+
+    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
+        this.applyDatetimeEnd = applyDatetimeEnd;
+    }
+
+    public Date getApproveDatetimeStart() {
+        return approveDatetimeStart;
+    }
+
+    public void setApproveDatetimeStart(Date approveDatetimeStart) {
+        this.approveDatetimeStart = approveDatetimeStart;
+    }
+
+    public Date getApproveDatetimeEnd() {
+        return approveDatetimeEnd;
+    }
+
+    public void setApproveDatetimeEnd(Date approveDatetimeEnd) {
+        this.approveDatetimeEnd = approveDatetimeEnd;
+    }
+
+    public Date getPayDatetimeStart() {
+        return payDatetimeStart;
+    }
+
+    public void setPayDatetimeStart(Date payDatetimeStart) {
+        this.payDatetimeStart = payDatetimeStart;
+    }
+
+    public Date getPayDatetimeEnd() {
+        return payDatetimeEnd;
+    }
+
+    public void setPayDatetimeEnd(Date payDatetimeEnd) {
+        this.payDatetimeEnd = payDatetimeEnd;
+    }
 
     public String getCode() {
         return code;
@@ -127,44 +183,36 @@ public class Withdraw extends ABaseDO {
         this.accountNumber = accountNumber;
     }
 
-    public String getAccountType() {
-        return accountType;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getType() {
+        return type;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public BigDecimal getAmount() {
+    public Long getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
 
-    public BigDecimal getFee() {
+    public Long getFee() {
         return fee;
     }
 
-    public void setFee(BigDecimal fee) {
+    public void setFee(Long fee) {
         this.fee = fee;
-    }
-
-    public BigDecimal getActualAmount() {
-        return actualAmount;
-    }
-
-    public void setActualAmount(BigDecimal actualAmount) {
-        this.actualAmount = actualAmount;
     }
 
     public String getChannelType() {
@@ -181,14 +229,6 @@ public class Withdraw extends ABaseDO {
 
     public void setChannelBank(String channelBank) {
         this.channelBank = channelBank;
-    }
-
-    public String getChannelOrder() {
-        return channelOrder;
-    }
-
-    public void setChannelOrder(String channelOrder) {
-        this.channelOrder = channelOrder;
     }
 
     public String getPayCardInfo() {
@@ -279,12 +319,20 @@ public class Withdraw extends ABaseDO {
         this.payNote = payNote;
     }
 
-    public BigDecimal getPayFee() {
-        return payFee;
+    public String getPayGroup() {
+        return payGroup;
     }
 
-    public void setPayFee(BigDecimal payFee) {
-        this.payFee = payFee;
+    public void setPayGroup(String payGroup) {
+        this.payGroup = payGroup;
+    }
+
+    public String getChannelOrder() {
+        return channelOrder;
+    }
+
+    public void setChannelOrder(String channelOrder) {
+        this.channelOrder = channelOrder;
     }
 
     public Date getPayDatetime() {
@@ -295,84 +343,35 @@ public class Withdraw extends ABaseDO {
         this.payDatetime = payDatetime;
     }
 
-    public String getCodeForQuery() {
-        return codeForQuery;
+    public String getSystemCode() {
+        return systemCode;
     }
 
-    public void setCodeForQuery(String codeForQuery) {
-        this.codeForQuery = codeForQuery;
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
     }
 
-    public Date getApplyDatetimeStart() {
-        return applyDatetimeStart;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setApplyDatetimeStart(Date applyDatetimeStart) {
-        this.applyDatetimeStart = applyDatetimeStart;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 
-    public Date getApplyDatetimeEnd() {
-        return applyDatetimeEnd;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setApplyDatetimeEnd(Date applyDatetimeEnd) {
-        this.applyDatetimeEnd = applyDatetimeEnd;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
-    public Date getApproveDatetimeStart() {
-        return approveDatetimeStart;
+    public String getSubbranch() {
+        return subbranch;
     }
 
-    public void setApproveDatetimeStart(Date approveDatetimeStart) {
-        this.approveDatetimeStart = approveDatetimeStart;
+    public void setSubbranch(String subbranch) {
+        this.subbranch = subbranch;
     }
-
-    public Date getApproveDatetimeEnd() {
-        return approveDatetimeEnd;
-    }
-
-    public void setApproveDatetimeEnd(Date approveDatetimeEnd) {
-        this.approveDatetimeEnd = approveDatetimeEnd;
-    }
-
-    public Date getPayDatetimeStart() {
-        return payDatetimeStart;
-    }
-
-    public void setPayDatetimeStart(Date payDatetimeStart) {
-        this.payDatetimeStart = payDatetimeStart;
-    }
-
-    public Date getPayDatetimeEnd() {
-        return payDatetimeEnd;
-    }
-
-    public void setPayDatetimeEnd(Date payDatetimeEnd) {
-        this.payDatetimeEnd = payDatetimeEnd;
-    }
-
-    public User getApplyUserInfo() {
-        return applyUserInfo;
-    }
-
-    public void setApplyUserInfo(User applyUserInfo) {
-        this.applyUserInfo = applyUserInfo;
-    }
-
-    public User getApproveUserInfo() {
-        return approveUserInfo;
-    }
-
-    public void setApproveUserInfo(User approveUserInfo) {
-        this.approveUserInfo = approveUserInfo;
-    }
-
-    public List<String> getCurrencyList() {
-        return currencyList;
-    }
-
-    public void setCurrencyList(List<String> currencyList) {
-        this.currencyList = currencyList;
-    }
-
 }

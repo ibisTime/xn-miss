@@ -1,6 +1,5 @@
 package com.ogc.standard.bo.impl;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -8,121 +7,100 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IChargeBO;
-import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.DateUtil;
+import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IChargeDAO;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
-import com.ogc.standard.domain.EthWAddress;
-import com.ogc.standard.domain.User;
+import com.ogc.standard.domain.SYSConfig;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
-import com.ogc.standard.enums.EErrorCode_main;
+import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.util.AmountUtil;
 
 @Component
 public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
-
     @Autowired
     private IChargeDAO chargeDAO;
 
     @Autowired
-    private IAccountBO accountBO;
-
-    @Autowired
-    private IUserBO userBO;
+    private ISYSConfigBO sysConfigBO;
 
     @Override
-    public String applyOrderOffline(Account account, String bizType,
-            BigDecimal amount, String payCardInfo, String payCardNo,
+    public String applyOrderOffline(Account account, EJourBizType bizType,
+            Long amount, String payCardInfo, String payCardNo,
             String applyUser, String applyNote) {
-        if (amount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(EErrorCode_main.charge_AMOUNT.getCode());
+        if (amount == 0) {
+            throw new BizException("xn000000", "充值金额不能为0");
         }
-        String code = OrderNoGenerater.generate("CZ");
-
+        String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
+            .getCode());
         Charge data = new Charge();
-
         data.setCode(code);
+        data.setPayGroup(null);
+        data.setRefNo(null);
         data.setAccountNumber(account.getAccountNumber());
-        data.setAccountType(account.getType());
         data.setAmount(amount);
-        data.setCurrency(account.getCurrency());
 
-        data.setBizType(bizType);
-        data.setBizNote(applyNote);
+        data.setAccountName(account.getRealName());
+        data.setType(account.getType());
+        data.setCurrency(account.getCurrency());
+        data.setBizType(bizType.getCode());
+        if (StringUtils.isBlank(applyNote)) {
+            data.setBizNote(bizType.getValue());
+        } else {
+            data.setBizNote(applyNote);
+        }
         data.setPayCardInfo(payCardInfo);
         data.setPayCardNo(payCardNo);
-        data.setStatus(EChargeStatus.toPay.getCode());
 
+        data.setStatus(EChargeStatus.toPay.getCode());
         data.setApplyUser(applyUser);
-        data.setApplyNote(applyNote);
         data.setApplyDatetime(new Date());
         data.setChannelType(EChannelType.Offline.getCode());
-
-        chargeDAO.insert(data);
-        return code;
-    }
-
-    // @Override
-    public String applyOrderOnline(Account account, String payGroup,
-            String refNo, String bizType, String bizNote,
-            BigDecimal transAmount, EChannelType channelType, String applyUser,
-            String fromAddress) {
-        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(EErrorCode_main.charge_AMOUNT.getCode());
-        }
-        String code = OrderNoGenerater.generate("CZ");
-        Charge data = new Charge();
-
-        data.setCode(code);
-        data.setAccountNumber(account.getAccountNumber());
-        data.setAccountType(account.getType());
-        data.setAmount(transAmount);
-        data.setCurrency(account.getCurrency());
-
-        data.setBizType(bizType);
-        data.setBizNote(bizNote);
-        data.setPayCardInfo(account.getCurrency());
-        data.setPayCardNo(fromAddress);
-
-        data.setStatus(EChargeStatus.Pay_YES.getCode());
-        data.setApplyUser(applyUser);
-        data.setApplyNote("线上充值");
-        data.setApplyDatetime(new Date());
-        data.setChannelType(channelType.getCode());
+        data.setSystemCode(account.getSystemCode());
+        data.setCompanyCode(account.getCompanyCode());
         chargeDAO.insert(data);
         return code;
     }
 
     @Override
-    public String applyOrderOnline(Account account, String payCardInfo,
-            String fromAddress, BigDecimal transAmount,
-            EChannelType channelType, String channalOrder, String payNote,
-            String hash) {
-        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
-            throw new BizException(EErrorCode_main.charge_AMOUNT.getCode());
+    public String applyOrderOnline(Account account, String payGroup,
+            String refNo, EJourBizType bizType, String bizNote,
+            Long transAmount, EChannelType channelType, String applyUser) {
+        if (transAmount == 0) {
+            throw new BizException("xn000000", "充值金额不能为0");
         }
-        String code = OrderNoGenerater.generate("CZ");
+        String code = OrderNoGenerater.generate(EGeneratePrefix.Charge
+            .getCode());
         Charge data = new Charge();
-
         data.setCode(code);
+        data.setPayGroup(payGroup);
+        data.setRefNo(refNo);
         data.setAccountNumber(account.getAccountNumber());
-        data.setAccountType(account.getType());
         data.setAmount(transAmount);
+
+        data.setAccountName(account.getRealName());
+        data.setType(account.getType());
         data.setCurrency(account.getCurrency());
+        data.setBizType(bizType.getCode());
+        data.setBizNote(bizNote);
+        data.setPayCardInfo(null);
+        data.setPayCardNo(null);
 
-        data.setPayCardInfo(payCardInfo);
-        data.setStatus(EChargeStatus.Pay_YES.getCode());
-        data.setPayUser(fromAddress);
-        data.setPayNote(payNote);
-        data.setPayDatetime(new Date());
-
+        data.setStatus(EChargeStatus.toPay.getCode());
+        data.setApplyUser(applyUser);
+        data.setApplyDatetime(new Date());
         data.setChannelType(channelType.getCode());
-        data.setChannelOrder(hash);
+        data.setSystemCode(account.getSystemCode());
+
+        data.setCompanyCode(account.getCompanyCode());
         chargeDAO.insert(data);
         return code;
     }
@@ -161,53 +139,51 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     }
 
     @Override
-    public Charge getCharge(String code) {
-        Charge charge = null;
+    public Charge getCharge(String code, String systemCode) {
+        Charge order = null;
         if (StringUtils.isNotBlank(code)) {
             Charge condition = new Charge();
             condition.setCode(code);
-            charge = chargeDAO.select(condition);
-            if (null == charge) {
-                throw new BizException(
-                    EErrorCode_main.charge_NOTEXIST.getCode());
+            condition.setSystemCode(systemCode);
+            order = chargeDAO.select(condition);
+            if (null == order) {
+                throw new BizException("xn000000", "订单号[" + code + "]不存在");
             }
-
-            Account account = accountBO.getAccount(charge.getAccountNumber());
-            User user = userBO.getUser(account.getUserId());
-            charge.setPayer(user);
         }
-        return charge;
+        return order;
     }
 
     @Override
-    public EthWAddress getAddressUseInfo(String fromAddress, String currency) {
-        Charge condition = new Charge();
-        condition.setPayCardNo(fromAddress);
-        condition.setCurrency(currency);
-        condition.setChannelType(EChannelType.Online.getCode());
-        condition.setStatus(EChargeStatus.Pay_YES.getCode());
-        return chargeDAO.selectAddressUseInfo(condition);
-    }
-
-    @Override
-    public boolean isExistOfChannelOrder(String orderNo) {
-        boolean result = false;
-        Charge condition = new Charge();
-        condition.setChannelOrder(orderNo);
-        if (getTotalCount(condition) > 0) {
-            result = true;
+    public void doCheckTodayPayAmount(String applyUser, Long payAmount,
+            EChannelType channelType, String companyCode, String systemCode) {
+        String dayMaxAmountKey = null;
+        if (EChannelType.Alipay.getCode().equals(channelType.getCode())) {
+            dayMaxAmountKey = SysConstant.ZFB_DAY_MAX_AMOUNT;
+        } else if (EChannelType.WeChat_APP.getCode().equals(
+            channelType.getCode())) {
+            dayMaxAmountKey = SysConstant.WX_DAY_MAX_AMOUNT;
         }
-        return result;
-    }
-
-    @Override
-    public boolean isExistOfRefNo(String refNo) {
-        boolean result = false;
-        Charge condition = new Charge();
-        condition.setChannelOrder(refNo);
-        if (getTotalCount(condition) > 0) {
-            result = true;
+        SYSConfig sysConfig = sysConfigBO.getSYSConfigNotException(
+            dayMaxAmountKey, companyCode, systemCode);
+        if (null != sysConfig) {// 系统参数未配置，不做判断
+            String dayMaxAmountValue = sysConfig.getCvalue();
+            Long dayMaxAmount = AmountUtil.mul(1000L,
+                Double.valueOf(dayMaxAmountValue));
+            if (dayMaxAmount.longValue() <= 0) {
+                throw new BizException("xn0000", "当前支付通道维护中，请使用其他支付方式。");
+            }
+            Charge condition = new Charge();
+            condition.setChannelType(channelType.getCode());
+            condition.setStatus(EChargeStatus.Pay_YES.getCode());
+            condition.setApplyUser(applyUser);
+            condition.setPayDatetimeStart(DateUtil.getTodayStart());
+            condition.setPayDatetimeEnd(DateUtil.getTodayEnd());
+            Long todayAmount = chargeDAO.selectTotalAmount(condition);
+            Long nowTodayAmount = todayAmount + payAmount;// 今日+本次支付是否超日限额
+            if (dayMaxAmount < nowTodayAmount) {
+                throw new BizException("xn0000", "该渠道每日限额" + dayMaxAmountValue
+                        + ",本次支付将超额，请明天再来");
+            }
         }
-        return result;
     }
 }

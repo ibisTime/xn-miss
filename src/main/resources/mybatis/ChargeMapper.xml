@@ -1,65 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ogc.standard.dao.IChargeDAO">
+<mapper namespace="com.std.account.dao.IChargeDAO">
 	<resultMap id="charge_DB_Result" type="charge">
-	
 		<result column="code" property="code" />
+		<result column="pay_group" property="payGroup" />
+		<result column="ref_no" property="refNo" />
 		<result column="account_number" property="accountNumber" />
-		<result column="account_type" property="accountType" />
 		<result column="amount" property="amount" />
-		<result column="currency" property="currency" />
 		
+		<result column="account_name" property="accountName" />
+		<result column="type" property="type" />
+		<result column="currency" property="currency" />
 		<result column="biz_type" property="bizType" />
 		<result column="biz_note" property="bizNote" />
-		<result column="biz_no" property="bizNo" />
+		
 		<result column="pay_card_info" property="payCardInfo" />
 		<result column="pay_card_no" property="payCardNo" />
-		
 		<result column="status" property="status" />
 		<result column="apply_user" property="applyUser" />
 		<result column="apply_note" property="applyNote" />
+		
 		<result column="apply_datetime" property="applyDatetime" />
 		<result column="pay_user" property="payUser" />
-		
 		<result column="pay_note" property="payNote" />
 		<result column="pay_datetime" property="payDatetime" />
 		<result column="channel_type" property="channelType" />
-		<result column="channel_order" property="channelOrder" />
 		
-	</resultMap>
-	<resultMap id="addressUseInfo_DB_Result" type="ethXAddress">
-		<result column="use_count" property="useCount" />
-		<result column="use_amount" property="useAmount" />
+		<result column="system_code" property="systemCode" />
+		<result column="company_code" property="companyCode" />
 	</resultMap>
 	<sql id="where_condition">
 		<trim prefix="WHERE" prefixOverrides="AND | OR">
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="codeForQuery != null and codeForQuery != '' ">
-				AND t.code like "%"#{codeForQuery}"%"
+			<if test="payGroup != null and payGroup != '' ">
+				AND t.pay_group = #{payGroup}
+			</if>
+			<if test="refNo != null and refNo != '' ">
+				AND t.ref_no = #{refNo}
 			</if>
 			<if test="accountNumber != null and accountNumber != '' ">
 				AND t.account_number = #{accountNumber}
 			</if>
-			<if test="accountType != null and accountType != '' ">
-				AND t.account_type = #{accountType}
+			<if test="accountName != null and accountName != '' ">
+				AND t.account_name like "%"#{accountName}"%"
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
 			</if>
 			<if test="currency != null and currency != '' ">
 				AND t.currency = #{currency}
 			</if>
-			<if test="currencyList != null and currencyList != '' ">
-                AND t.currency in
-                <foreach item="item" index="index" collection="currencyList" open="(" separator="," close=")">
-                    #{item}
-                </foreach>
-            </if>
 			<if test="bizType != null and bizType != '' ">
 				AND t.biz_type = #{bizType}
-			</if>
-			<if test="bizNo != null and bizNo != '' ">
-				AND t.biz_no = #{bizNo}
 			</if>
 			<if test="payCardNo != null and payCardNo != '' ">
 				AND t.pay_card_no = #{payCardNo}
@@ -88,37 +83,41 @@
 			<if test="channelType != null and channelType != '' ">
 				AND t.channel_type = #{channelType}
 			</if>
-			<if test="channelOrder != null and channelOrder != '' ">
-				AND t.channel_order = #{channelOrder}
+			<if test="systemCode != null and systemCode != '' ">
+				AND t.system_code = #{systemCode}
+			</if>
+			<if test="companyCode != null and companyCode != '' ">
+				AND t.company_code = #{companyCode}
 			</if>
 		</trim>
 	</sql>
 	<select id="select_charge" parameterType="charge" resultMap="charge_DB_Result">
 		SELECT
-		
 		t.code
+		,t.pay_group
+		,t.ref_no
 		,t.account_number
-		,t.account_type
 		,t.amount
-		,t.currency
 		
+		,t.account_name
+		,t.type
+		,t.currency
 		,t.biz_type
 		,t.biz_note
-		,t.biz_no
+		
 		,t.pay_card_info
 		,t.pay_card_no
-		
 		,t.status
 		,t.apply_user
-		,t.apply_note
 		,t.apply_datetime
-		,t.pay_user
 		
+		,t.pay_user
 		,t.pay_note
 		,t.pay_datetime
 		,t.channel_type
-		,t.channel_order
+		,t.system_code
 		
+		,t.company_code
 		FROM
 		tstd_charge t
 		<include refid="where_condition" />
@@ -136,56 +135,50 @@
 	
 	<insert id="insert_charge" parameterType="charge" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO tstd_charge(
-		
 		code
+		,pay_group
+		,ref_no
 		,account_number
-		,account_type
 		,amount
-		,currency
 		
+		,account_name
+		,type
+		,currency
 		,biz_type
 		,biz_note
-		,biz_no
+		
 		,pay_card_info
 		,pay_card_no
-		
-		
 		,status
 		,apply_user
-		,apply_note
 		,apply_datetime
-		,pay_note
 		
-		,pay_datetime
 		,channel_type
-		,channel_order
-		
+		,system_code
+		,company_code
 		)
 		VALUES(
-		
 		#{code}
+		,#{payGroup}
+		,#{refNo}
 		,#{accountNumber}
-		,#{accountType}
 		,#{amount}
-		,#{currency}
 		
+		,#{accountName}
+		,#{type}
+		,#{currency}
 		,#{bizType}
 		,#{bizNote}
-		,#{bizNo}
+		
 		,#{payCardInfo}
 		,#{payCardNo}
-		
-		
 		,#{status}
 		,#{applyUser}
-		,#{applyNote}
 		,#{applyDatetime}
-		,#{payNote}
 		
-		,#{payDatetime}
 		,#{channelType}
-		,#{channelOrder}
-		
+		,#{systemCode}
+		,#{companyCode}
 		)
 	</insert>
 
@@ -198,13 +191,9 @@
 		WHERE code = #{code}
 	</update>
 	
-	<select id="select_addressUseInfo" parameterType="charge"
-		resultMap="addressUseInfo_DB_Result">
-		SELECT 
-		COUNT(*) as use_count, 
-		COALESCE(SUM(amount),0) as use_amount
-		FROM tstd_charge t
+	<select id="select_totalAmount" parameterType="charge"
+		resultType="java.lang.Long">
+		SELECT ifnull(sum(amount),0) FROM tstd_charge t 
 		<include refid="where_condition" />
 	</select>
-	
 </mapper>

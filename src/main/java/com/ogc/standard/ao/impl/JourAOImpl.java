@@ -1,6 +1,5 @@
 package com.ogc.standard.ao.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,13 +12,14 @@ import com.ogc.standard.ao.IJourAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IHLOrderBO;
 import com.ogc.standard.bo.IJourBO;
-import com.ogc.standard.bo.IUserBO;
+import com.ogc.standard.bo.IJourHistoryBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Jour;
-import com.ogc.standard.domain.User;
+import com.ogc.standard.dto.res.XN802901Res;
 import com.ogc.standard.enums.EBoolean;
-import com.ogc.standard.enums.EErrorCode_main;
+import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.enums.EJourStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -32,10 +32,10 @@ import com.ogc.standard.exception.BizException;
 public class JourAOImpl implements IJourAO {
 
     @Autowired
-    private IUserBO userBO;
+    private IJourBO jourBO;
 
     @Autowired
-    private IJourBO jourBO;
+    private IJourHistoryBO jourHistoryBO;
 
     @Autowired
     private IAccountBO accountBO;
@@ -48,21 +48,23 @@ public class JourAOImpl implements IJourAO {
      */
     @Override
     @Transactional
-    public void checkJour(String code, BigDecimal checkAmount, String checkUser,
+    public void checkJour(String code, Long checkAmount, String checkUser,
             String checkNote, String systemCode) {
-        Jour jour = jourBO.getJourNotException(code);
+        Jour jour = jourBO.getJourNotException(code, systemCode);
         if (null != jour) {
             doCheckJourNow(code, checkAmount, checkUser, checkNote, jour);// 现在流水对账
+        } else {
+            jour = jourHistoryBO.getJour(code, systemCode);
+            doCheckJourHistory(code, checkAmount, checkUser, checkNote, jour);// 历史流水对账
         }
     }
 
-    private void doCheckJourNow(String code, BigDecimal checkAmount,
+    private void doCheckJourNow(String code, Long checkAmount,
             String checkUser, String checkNote, Jour jour) {
         if (!EJourStatus.todoCheck.getCode().equals(jour.getStatus())) {
-            throw new BizException(
-                EErrorCode_main.jour_DUIZHANGSTATUS.getCode());
+            throw new BizException("xn000000", "该流水<" + code + ">不处于待对账状态");
         }
-        if (checkAmount.compareTo(BigDecimal.ZERO) != 0) {
+        if (checkAmount != 0) {
             Account account = accountBO.getAccount(jour.getAccountNumber());
             hlOrderBO.applyOrder(account, jour, checkAmount, checkUser,
                 checkNote);
@@ -71,6 +73,23 @@ public class JourAOImpl implements IJourAO {
         } else {
             jourBO.doCheckJour(jour, EBoolean.YES, checkAmount, checkUser,
                 checkNote);
+        }
+    }
+
+    private void doCheckJourHistory(String code, Long checkAmount,
+            String checkUser, String checkNote, Jour jour) {
+        if (!EJourStatus.todoCheck.getCode().equals(jour.getStatus())) {
+            throw new BizException("xn000000", "该流水<" + code + ">不处于待对账状态");
+        }
+        if (checkAmount != 0) {
+            Account account = accountBO.getAccount(jour.getAccountNumber());
+            hlOrderBO.applyOrder(account, jour, checkAmount, checkUser,
+                checkNote);
+            jourHistoryBO.doCheckJour(jour, EBoolean.NO, checkAmount,
+                checkUser, checkNote);
+        } else {
+            jourHistoryBO.doCheckJour(jour, EBoolean.YES, checkAmount,
+                checkUser, checkNote);
         }
     }
 
@@ -86,22 +105,7 @@ public class JourAOImpl implements IJourAO {
             condition.setBizType(null);
             condition.setBizTypeList(bizTypeList);
         }
-
-        Paginable<Jour> page = jourBO.getPaginable(start, limit, condition);
-
-        if (null != page) {
-            List<Jour> list = page.getList();
-            for (Jour jour : list) {
-                User user = userBO.getUserUnCheck(jour.getUserId());
-                if (null != user) {
-                    jour.setMobile(user.getMobile());
-                    jour.setRealName(user.getRealName());
-                }
-
-            }
-        }
-
-        return page;
+        return jourBO.getPaginable(start, limit, condition);
     }
 
     @Override
@@ -117,47 +121,46 @@ public class JourAOImpl implements IJourAO {
             condition.setBizTypeList(bizTypeList);
         }
         List<Jour> jourList = jourBO.queryJourList(condition);
+        List<Jour> jourHistoryList = jourHistoryBO.queryJourList(condition);
         List<Jour> result = new ArrayList<Jour>();
         result.addAll(jourList);
+        result.addAll(jourHistoryList);
         return result;
     }
 
     @Override
-    public Jour getJour(String code) {
-        return jourBO.getJour(code);
+    public Jour getJour(String code, String systemCode) {
+        return jourBO.getJour(code, systemCode);
     }
 
     @Override
-    public BigDecimal getTotalAmount(String bizType, String channelType,
-            String accountNumber, String dateStart, String dateEnd) {
-        return jourBO.getTotalAmount(bizType, channelType, accountNumber,
-            dateStart, dateEnd);
+    public Long getTotalAmount(String bizType, String channelType,
+            String accountNumber) {
+        return jourBO.getTotalAmount(bizType, channelType, accountNumber);
     }
 
-    // @Override
-    // public XN802901Res getTotalAmountByDate(String accountNumber,
-    // String dateStart, String dateEnd) {
-    // Jour condition = new Jour();
-    // condition.setAccountNumber(accountNumber);
-    // condition
-    // .setCreateDatetimeStart(DateUtil.getFrontDate(dateStart, false));
-    // condition.setCreateDatetimeEnd(DateUtil.getFrontDate(dateEnd, true));
-    //
-    // List<Jour> jourList = jourBO.queryJourList(condition);
-    // BigDecimal incomeAmount = BigDecimal.ZERO;// 收入金额
-    // BigDecimal withdrawAmount = BigDecimal.ZERO;// 取现金额
-    // for (Jour jour : jourList) {
-    // BigDecimal transAmount = jour.getTransAmount();
-    // if (transAmount.compareTo(BigDecimal.ZERO) == 1
-    // && !EJourBizTypeUser.AJ_WITHDRAW.getCode()
-    // .equals(jour.getBizType())) {// 取现解冻排除
-    // incomeAmount = incomeAmount.add(transAmount);
-    // }
-    // if (EJourBizTypeUser.AJ_WITHDRAW.getCode()
-    // .equals(jour.getBizType())) {
-    // withdrawAmount = withdrawAmount.add(transAmount);
-    // }
-    // }
-    // return new XN802901Res(incomeAmount, withdrawAmount.negate());
-    // }
+    @Override
+    public XN802901Res getTotalAmountByDate(String accountNumber,
+            String dateStart, String dateEnd) {
+        Jour condition = new Jour();
+        condition.setAccountNumber(accountNumber);
+        condition.setCreateDatetimeStart(DateUtil
+            .getFrontDate(dateStart, false));
+        condition.setCreateDatetimeEnd(DateUtil.getFrontDate(dateEnd, true));
+
+        List<Jour> jourList = jourBO.queryJourList(condition);
+        Long incomeAmount = 0L;// 收入金额
+        Long withdrawAmount = 0L;// 取现金额
+        for (Jour jour : jourList) {
+            Long transAmount = jour.getTransAmount();
+            if (transAmount > 0
+                    && !EJourBizType.AJ_QX.getCode().equals(jour.getBizType())) {// 取现解冻排除
+                incomeAmount += transAmount;
+            }
+            if (EJourBizType.AJ_QX.getCode().equals(jour.getBizType())) {
+                withdrawAmount += transAmount;
+            }
+        }
+        return new XN802901Res(incomeAmount, -withdrawAmount);
+    }
 }

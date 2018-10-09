@@ -50,4 +50,5 @@ public interface IAccountDAO extends IBaseDAO<Account> {
 
     public int unfrozenAmount(Account data);
 
+    public int cutFrozenAmount(Account data);
 }

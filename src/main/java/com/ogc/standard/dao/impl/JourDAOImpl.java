@@ -1,6 +1,5 @@
 package com.ogc.standard.dao.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -78,7 +77,7 @@ public class JourDAOImpl extends AMybatisTemplate implements IJourDAO {
     }
 
     /** 
-     * @see com.std.account.dao.IJourDAO#adjustJour(com.std.account.domain.Jour)
+     * @see com.ogc.standard.dao.IJourDAO#adjustJour(com.ogc.standard.domain.Jour)
      */
     @Override
     public int adjustJour(Jour data) {
@@ -86,8 +85,8 @@ public class JourDAOImpl extends AMybatisTemplate implements IJourDAO {
     }
 
     @Override
-    public BigDecimal selectTotalAmount(Jour data) {
-        return super.select(NAMESPACE.concat("select_totalAmount"), data,
-            BigDecimal.class);
+    public long selectTotalAmount(Jour data) {
+        return super.selectTotalCount(NAMESPACE.concat("select_totalAmount"),
+            data);
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.ogc.standard.dao.IChargeDAO;
 import com.ogc.standard.dao.base.support.AMybatisTemplate;
 import com.ogc.standard.domain.Charge;
-import com.ogc.standard.domain.EthWAddress;
 
 @Repository("chargeDAOImpl")
 public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
@@ -43,8 +42,8 @@ public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
 
     @Override
     public List<Charge> selectList(Charge condition, int start, int count) {
-        return super.selectList(NAMESPACE.concat("select_charge"), start, count,
-            condition, Charge.class);
+        return super.selectList(NAMESPACE.concat("select_charge"), start,
+            count, condition, Charge.class);
     }
 
     @Override
@@ -53,8 +52,8 @@ public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
     }
 
     @Override
-    public EthWAddress selectAddressUseInfo(Charge data) {
-        return super.select(NAMESPACE.concat("select_addressUseInfo"), data,
-            EthWAddress.class);
+    public long selectTotalAmount(Charge condition) {
+        return super.selectTotalCount(NAMESPACE.concat("select_totalAmount"),
+            condition);
     }
 }

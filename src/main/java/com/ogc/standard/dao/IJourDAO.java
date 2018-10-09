@@ -1,7 +1,5 @@
 package com.ogc.standard.dao;
 
-import java.math.BigDecimal;
-
 import com.ogc.standard.dao.base.IBaseDAO;
 import com.ogc.standard.domain.Jour;
 
@@ -31,5 +29,5 @@ public interface IJourDAO extends IBaseDAO<Jour> {
      */
     public int adjustJour(Jour data);
 
-    public BigDecimal selectTotalAmount(Jour data);
+    public long selectTotalAmount(Jour data);
 }

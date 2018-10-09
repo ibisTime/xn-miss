@@ -1,39 +1,27 @@
 package com.ogc.standard.bo;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.EthMAddress;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EWithdrawStatus;
 
 public interface IWithdrawBO extends IPaginableBO<Withdraw> {
 
-    public void doCheckTimes(Account account);
+    Long doCheckAndGetFee(Account account, Long amount);
 
-    String applyOrder(Account account, BigDecimal amount, BigDecimal fee,
+    String applyOrder(Account account, Long amount, Long fee,
             String payCardInfo, String payCardNo, String applyUser,
             String applyNote);
 
-    void approveOrder(Withdraw data, EWithdrawStatus status, String approveUser,
-            String approveNote);
+    void approveOrder(Withdraw data, EWithdrawStatus status,
+            String approveUser, String approveNote);
 
     void payOrder(Withdraw data, EWithdrawStatus status, String payUser,
-            String payNote, String channelOrder, BigDecimal payFee);
-
-    void broadcastOrder(Withdraw data, String txHash, String updater);
+            String payNote, String channelOrder);
 
     List<Withdraw> queryWithdrawList(Withdraw condition);
 
-    Withdraw getWithdraw(String code);
-
-    public Withdraw getWithdrawByChannelOrder(String hash);
-
-    public EthMAddress getAddressUseInfo(String fromAddress, String currency);
-
-    public BigDecimal getTotalWithdraw(String currency);
-
-    public void returnOrder(String code, String payUser, String payNote);
+    Withdraw getWithdraw(String code, String systemCode);
 }

@@ -1,13 +1,11 @@
 package com.ogc.standard.dao.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.ogc.standard.dao.IWithdrawDAO;
 import com.ogc.standard.dao.base.support.AMybatisTemplate;
-import com.ogc.standard.domain.EthMAddress;
 import com.ogc.standard.domain.Withdraw;
 
 @Repository("withdrawDAOImpl")
@@ -32,8 +30,8 @@ public class WithdrawDAOImpl extends AMybatisTemplate implements IWithdrawDAO {
 
     @Override
     public long selectTotalCount(Withdraw condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_withdraw_count"),
-            condition);
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_withdraw_count"), condition);
     }
 
     @Override
@@ -56,23 +54,6 @@ public class WithdrawDAOImpl extends AMybatisTemplate implements IWithdrawDAO {
     @Override
     public void payOrder(Withdraw data) {
         super.update(NAMESPACE.concat("pay_order"), data);
-    }
-
-    @Override
-    public void broadcastOrder(Withdraw data) {
-        super.update(NAMESPACE.concat("broadcast_order"), data);
-    }
-
-    @Override
-    public EthMAddress selectAddressUseInfo(Withdraw data) {
-        return super.select(NAMESPACE.concat("select_addressUseInfo"), data,
-            EthMAddress.class);
-    }
-
-    @Override
-    public BigDecimal selectTotalAmount(Withdraw data) {
-        return super.select(NAMESPACE.concat("select_totalAmount"), data,
-            BigDecimal.class);
     }
 
 }

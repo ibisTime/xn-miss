@@ -11,81 +11,41 @@
 		
 		<typeAlias alias="sysUser" type="com.ogc.standard.domain.SYSUser" />
 		<typeAlias alias="channelBank" type="com.ogc.standard.domain.ChannelBank" />
-		<typeAlias alias="company" type="com.ogc.standard.domain.Company" />
-		<typeAlias alias="department" type="com.ogc.standard.domain.Department" />
+	
 		<typeAlias alias="user" type="com.ogc.standard.domain.User" />
 		<typeAlias alias="userExt" type="com.ogc.standard.domain.UserExt" />
-		<typeAlias alias="blacklist" type="com.ogc.standard.domain.Blacklist" />
+		
 		<typeAlias alias="signLog" type="com.ogc.standard.domain.SignLog" />
 		<typeAlias alias="sms" type="com.ogc.standard.domain.Sms" />
 		<typeAlias alias="read" type="com.ogc.standard.domain.Read" />
 		
-		<typeAlias alias="group" type="com.ogc.standard.domain.Group" />
-		<typeAlias alias="groupCoin" type="com.ogc.standard.domain.GroupCoin" />
-		<typeAlias alias="groupCoinJour" type="com.ogc.standard.domain.GroupCoinJour" />
-		<typeAlias alias="attention" type="com.ogc.standard.domain.Attention" />
-		<typeAlias alias="dayBenefit" type="com.ogc.standard.domain.DayBenefit" />
-		<typeAlias alias="exchangePair" type="com.ogc.standard.domain.ExchangePair" />
-		<typeAlias alias="simuOrder" type="com.ogc.standard.domain.SimuOrder" />
-		<typeAlias alias="simuOrderDetail" type="com.ogc.standard.domain.SimuOrderDetail" />
 		
-		<typeAlias alias="match" type="com.ogc.standard.domain.Match" />
-		<typeAlias alias="matchApply" type="com.ogc.standard.domain.MatchApply" />
-		<typeAlias alias="team" type="com.ogc.standard.domain.Team" />
-		<typeAlias alias="teamMemberApply" type="com.ogc.standard.domain.TeamMemberApply" />
+		
+	
 		
 		<typeAlias alias="keyword" type="com.ogc.standard.domain.Keyword" />
-		<typeAlias alias="post" type="com.ogc.standard.domain.Post" />
+		
 		<typeAlias alias="comment" type="com.ogc.standard.domain.Comment" />
 		<typeAlias alias="interact" type="com.ogc.standard.domain.Interact" />
-		<typeAlias alias="ads" type="com.ogc.standard.domain.Ads" />
-		<typeAlias alias="adsDisplayTime" type="com.ogc.standard.domain.AdsDisplayTime" />
-		<typeAlias alias="arbitrate" type="com.ogc.standard.domain.Arbitrate" />
-		<typeAlias alias="tradeOrder" type="com.ogc.standard.domain.TradeOrder" />
-		<typeAlias alias="userRelation" type="com.ogc.standard.domain.UserRelation" />
+		
+		
 		<typeAlias alias="userFieldApprove" type="com.ogc.standard.domain.UserFieldApprove" />
-		<typeAlias alias="userStatistics" type="com.ogc.standard.domain.UserStatistics" />
+	
 		<typeAlias alias="userSettings" type="com.ogc.standard.domain.UserSettings" />	
 		<typeAlias alias="userIdAuth" type="com.ogc.standard.domain.UserIdAuth" />
-		<typeAlias alias="award" type="com.ogc.standard.domain.Award" />
-		<typeAlias alias="awardMonth" type="com.ogc.standard.domain.AwardMonth" />		
+		
 			
 		
-		<typeAlias alias="coin" type="com.ogc.standard.domain.Coin" />
 		<typeAlias alias="account" type="com.ogc.standard.domain.Account" />
 		<typeAlias alias="jour" type="com.ogc.standard.domain.Jour" />
 		<typeAlias alias="charge" type="com.ogc.standard.domain.Charge" />
 		<typeAlias alias="withdraw" type="com.ogc.standard.domain.Withdraw" />
-		<typeAlias alias="collect" type="com.ogc.standard.domain.Collect" />
-		<typeAlias alias="deposit" type="com.ogc.standard.domain.Deposit" />
-		<typeAlias alias="currencyRate" type="com.ogc.standard.domain.CurrencyRate" />
-		<typeAlias alias="personalAddress" type="com.ogc.standard.domain.PersonalAddress" />
+	
 		<typeAlias alias="hlOrder" type="com.ogc.standard.domain.HLOrder" />
-		<typeAlias alias="ethXAddress" type="com.ogc.standard.domain.EthXAddress" />
-		<typeAlias alias="ethMAddress" type="com.ogc.standard.domain.EthMAddress" />
-		<typeAlias alias="ethWAddress" type="com.ogc.standard.domain.EthWAddress" />
-		<typeAlias alias="ethTransaction" type="com.ogc.standard.domain.EthTransaction" />
-		<typeAlias alias="btcXAddress" type="com.ogc.standard.domain.BtcXAddress"/>
-		<typeAlias alias="btcMAddress" type="com.ogc.standard.domain.BtcMAddress"/>
-		<typeAlias alias="btcWAddress" type="com.ogc.standard.domain.BtcWAddress"/>
-		<typeAlias alias="btcTransaction" type="com.ogc.standard.domain.BtcTransaction"/>
-		<typeAlias alias="btcUtxo" type="com.ogc.standard.domain.BtcUtxo"/>
 		
-		<typeAlias alias="acceptOrder" type="com.ogc.standard.domain.AcceptOrder"/>
-		<typeAlias alias="tokenEvent" type="com.ogc.standard.domain.TokenEvent"/>
+	
 		<typeAlias alias="bankcard" type="com.ogc.standard.domain.Bankcard"/>
 		
-		<typeAlias alias="simuOrder" type="com.ogc.standard.domain.SimuOrder" />
-		<typeAlias alias="simuOrderHistory" type="com.ogc.standard.domain.SimuOrderHistory" />
-		<typeAlias alias="handicap" type="com.ogc.standard.domain.Handicap" />
-		<typeAlias alias="simuOrderDetail" type="com.ogc.standard.domain.SimuOrderDetail" />
-		<typeAlias alias="simuKLine" type="com.ogc.standard.domain.SimuKLine" />
-		<typeAlias alias="simuMatchResult" type="com.ogc.standard.domain.SimuMatchResult" />
-		<typeAlias alias="simuMatchResultHistory" type="com.ogc.standard.domain.SimuMatchResultHistory" />
-		<typeAlias alias="ethSAddress" type="com.ogc.standard.domain.EthSAddress"/>
-		
-		<typeAlias alias="market" type="com.ogc.standard.domain.Market" />
-		<typeAlias alias="divide" type="com.ogc.standard.domain.Divide" />
-		<typeAlias alias="divideDetail" type="com.ogc.standard.domain.DivideDetail" />
+
 	</typeAliases>
 </configuration>

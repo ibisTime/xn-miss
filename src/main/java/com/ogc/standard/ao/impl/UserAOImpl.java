@@ -12,37 +12,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.ao.IUserAO;
-import com.ogc.standard.bo.IAwardBO;
-import com.ogc.standard.bo.IGoogleAuthBO;
 import com.ogc.standard.bo.IIdentifyBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
 import com.ogc.standard.bo.ISmsOutBO;
-import com.ogc.standard.bo.ITencentBO;
-import com.ogc.standard.bo.ITradeOrderBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IUserExtBO;
-import com.ogc.standard.bo.IUserIdAuthBO;
-import com.ogc.standard.bo.IUserRelationBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
-import com.ogc.standard.domain.Award;
 import com.ogc.standard.domain.SignLog;
-import com.ogc.standard.domain.TradeOrder;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
-import com.ogc.standard.domain.UserStatistics;
-import com.ogc.standard.dto.req.XN802399Req;
-import com.ogc.standard.dto.req.XN802400Req;
-import com.ogc.standard.dto.req.XN805041Req;
-import com.ogc.standard.dto.req.XN805042Req;
-import com.ogc.standard.dto.req.XN805043Req;
-import com.ogc.standard.dto.req.XN805081Req;
 import com.ogc.standard.dto.res.XN625000Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
@@ -70,14 +55,6 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     private ISmsOutBO smsOutBO;
 
-    @Autowired
-    private ITradeOrderBO tradeOrderBO;
-
-    @Autowired
-    private IAwardBO awardBO;
-
-    @Autowired
-    private IGoogleAuthBO googleAuthBO;
 
     @Autowired
     private IUserBO userBO;
@@ -97,17 +74,11 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
-    @Autowired
-    private ITencentBO tencentBO;
 
     @Autowired
     private IIdentifyBO identifyBO;
 
-    @Autowired
-    private IUserRelationBO userRelationBO;
 
-    @Autowired
-    private IUserIdAuthBO userIdAuthBO;
 
     @Override
     public void doCheckMobile(String mobile, String language) {
@@ -131,8 +102,6 @@ public class UserAOImpl implements IUserAO {
             req.getArea());
         if (refereeUser != null) {
             // 推荐人分佣
-            awardBO.saveRegistAward(refereeUser.getUserId(),
-                refereeUser.getKind(), userId, "用户注册推荐人分佣");
         }
 
         // ext中添加数据
@@ -157,8 +126,6 @@ public class UserAOImpl implements IUserAO {
         String userId = userBO.doRegistByEmail(req);
         if (refereeUser != null) {
             // 推荐人分佣
-            awardBO.saveRegistAward(refereeUser.getUserId(),
-                refereeUser.getKind(), userId, "用户注册推荐人分佣");
         }
 
         // ext中添加数据

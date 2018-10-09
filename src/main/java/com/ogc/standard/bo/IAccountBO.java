@@ -1,17 +1,15 @@
 package com.ogc.standard.bo;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.Coin;
 import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.EJourBizType;
 
 /**
  * @author: xieyj
@@ -21,39 +19,41 @@ import com.ogc.standard.enums.ESysUser;
 public interface IAccountBO extends IPaginableBO<Account> {
 
     // 分配账户
-    public String distributeAccount(String userId, EAccountType accountType,
-            Coin coin, String address);
+    public String distributeAccount(String userId, String realName,
+            EAccountType accountType, String currency, String systemCode,
+            String companyCode);
 
     // 变更账户余额：流水落地
-    public Account changeAmount(Account dbAccount, BigDecimal transAmount,
-            EChannelType channelType, String channelOrder, String refNo,
-            String bizType, String bizNote);
+    public void changeAmount(String accountNumber, EChannelType channelType,
+            String channelOrder, String payGroup, String refNo,
+            EJourBizType bizType, String bizNote, Long transAmount);
 
     // 仅变更账户余额：流水不落地
-    public void changeAmountNotJour(String accountNumber,
-            BigDecimal transAmount, String lastOrder);
+    public void changeAmountNotJour(String accountNumber, Long transAmount,
+            String lastOrder);
 
     // 红冲蓝补导致的资金变动（落地流水不需要对账）
     public void changeAmountForHL(HLOrder order);
 
     // 冻结金额（余额变动）
-    public Account frozenAmount(Account dbAccount, BigDecimal freezeAmount,
-            String bizType, String bizNote, String refNo);
+    public void frozenAmount(Account dbAccount, Long freezeAmount,
+            String withdrawCode);
 
     // 解冻账户(冻结金额原路返回)
-    public Account unfrozenAmount(Account dbAccount, BigDecimal unfreezeAmount,
-            String bizType, String bizNote, String refNo);
+    public void unfrozenAmount(Account dbAccount, Long freezeAmount,
+            String withdrawCode);
+
+    // 扣减冻结金额
+    public void cutFrozenAmount(Account dbAccount, Long amount);
 
     // 内部转账
-    public void transAmount(String fromUserId, String fromCurrency,
-            String toUserId, String toCurrency, BigDecimal transAmount,
-            String fromBizType, String toBizType, String fromBizNote,
-            String toBizNote, String refNo);
+    public void transAmountCZB(String fromUserId, String fromCurrency,
+            String toUserId, String toCurrency, Long transAmount,
+            EJourBizType bizType, String fromBizNote, String toBizNote,
+            String refNo);
 
-    // 内部转账
-    public void transAmount(Account fromAccount, Account toAccount,
-            BigDecimal transAmount, String fromBizType, String toBizType,
-            String fromBizNote, String toBizNote, String refNo);
+    // 更新户名
+    public void refreshAccountName(String userId, String realName);
 
     // 更新账户状态
     public void refreshStatus(String accountNumber, EAccountStatus status);
@@ -70,13 +70,4 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     // 获取账户列表
     public List<Account> queryAccountList(Account data);
-
-    public boolean isAccountExist(String userId, String currency);
-
-    public List<Account> queryAccountList(String userId);
-
-    public void distributePlatAccount(String symbol);
-
-    public Account savePlatAccount(String accountNumber, ESysUser sysUser,
-            String accountName, String currency);
 }
