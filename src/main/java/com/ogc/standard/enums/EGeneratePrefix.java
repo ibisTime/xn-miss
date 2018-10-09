@@ -21,7 +21,7 @@ public enum EGeneratePrefix {
     Match("M", "赛事"), MatchApply("MA", "参赛申请"), Team("T", "战队"), TeamMemberApply(
             "TMA", "战队成员申请"), GROUP("GP", "组合"), ATTENTION("AT", "关注/提醒"), Post(
             "P", "帖子"), Comment("C", "评论"), Interact("I", "点赞"), ACCEPT_ORDER(
-            "AO", "承兑商订单"), BANK_CARD("BC", "银行卡");
+            "AO", "承兑商订单"), BANK_CARD("BC", "银行卡"),WITHDRAW("W","取现");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

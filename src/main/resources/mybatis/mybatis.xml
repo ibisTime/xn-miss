@@ -27,12 +27,8 @@
 		
 		<typeAlias alias="comment" type="com.ogc.standard.domain.Comment" />
 		<typeAlias alias="interact" type="com.ogc.standard.domain.Interact" />
-		
-		
-		<typeAlias alias="userFieldApprove" type="com.ogc.standard.domain.UserFieldApprove" />
 	
-		<typeAlias alias="userSettings" type="com.ogc.standard.domain.UserSettings" />	
-		<typeAlias alias="userIdAuth" type="com.ogc.standard.domain.UserIdAuth" />
+		
 		
 			
 		

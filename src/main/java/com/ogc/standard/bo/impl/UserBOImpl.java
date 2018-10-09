@@ -27,7 +27,6 @@ import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserDAO;
 import com.ogc.standard.domain.User;
-import com.ogc.standard.dto.req.XN805043Req;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserLevel;
@@ -167,40 +166,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         return userId;
     }
 
-    // 邮箱注册
-    @Override
-    public String doRegistByEmail(XN805043Req req) {
-        User data = new User();
-        String userId = OrderNoGenerater.generate("U");
-        data.setUserId(userId);
-        data.setLoginName(req.getEmail());
-        data.setEmail(req.getEmail());
-        data.setKind(EUserKind.Customer.getCode());
-        if (req.getNickname() == null) {
-            data.setNickname(
-                userId.substring(userId.length() - 8, userId.length()));
-        }
-        data.setNickname(req.getNickname());
-        if (StringUtils.isNotBlank(req.getLoginPwd())) {
-            data.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-            data.setLoginPwdStrength(
-                PwdUtil.calculateSecurityLevel(req.getLoginPwd()));
-        }
-        data.setUserReferee(req.getUserReferee());
-        data.setLevel(EUserLevel.ONE.getCode());
-        data.setStatus(EUserStatus.NORMAL.getCode());
-        data.setProvince(req.getProvince());
-        data.setCity(req.getCity());
-        data.setArea(req.getArea());
-        Date date = new Date();
-        data.setCreateDatetime(date);
-        data.setTradeRate(
-            sysConfigBO.getDoubleValue(SysConstants.TRADE_FEE_RATE));
-
-        userDAO.insert(data);
-        return userId;
-
-    }
 
     @Override
     public String saveUser(String mobile, String kind, String companyCode,
