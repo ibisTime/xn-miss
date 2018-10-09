@@ -18,4 +18,6 @@ public interface ISmsOutBO {
             String systemCode);
 
     public void sendEmailCaptcha(String mobile, String bizType);
+    
+    public void sentContent(String userId, String content);
 }

@@ -236,8 +236,6 @@ public class User extends ABaseDO {
     // 是否绑定邮箱
     private boolean emailBindFlag;
 
-    // 证件认证状态
-    private UserIdAuth userIdAuthInfo;
 
     // 用户推荐人
     private User refereeUser;
@@ -667,13 +665,7 @@ public class User extends ABaseDO {
         this.emailBindFlag = emailBindFlag;
     }
 
-    public UserIdAuth getUserIdAuthInfo() {
-        return userIdAuthInfo;
-    }
 
-    public void setUserIdAuthInfo(UserIdAuth userIdAuthInfo) {
-        this.userIdAuthInfo = userIdAuthInfo;
-    }
 
     public User getRefereeUser() {
         return refereeUser;

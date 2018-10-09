@@ -47,11 +47,6 @@ public interface IUserAO {
     // 修改头像
     public void modifyPhoto(String userId, String photo);
 
-    //  完善手机号和身份信息
-     public void doModfiyMobileAndIds(String userId, String mobile,
-     String realName, String idKind, String idNo);
-    
-
 
     // 注销/激活用户
     public void doCloseOpen(String userId, String updater, String remark,
@@ -65,13 +60,6 @@ public interface IUserAO {
     // 修改昵称
     public void doModifyNickname(String userId, String nickname);
 
-    
-     // 审核注册用户
-     public void doApproveUser(String userId, String approver,
-     String approveResult, String divRate, String remark);
-    
-
-
     public Paginable<User> queryUserPage(int start, int limit, User condition);
 
     // public List<User> queryUserList(User condition);
@@ -80,7 +68,6 @@ public interface IUserAO {
     public User doGetUser(String userId);
 
     
-
     //  校验支付密码
     // public void doCheckTradePwd(String userId, String tradePwd);
 

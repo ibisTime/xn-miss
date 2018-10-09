@@ -86,151 +86,11 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    @Transactional
-    public String doRegisterByMobile(XN805041Req req) {
-        // 验证手机号是否存在
-        userBO.isMobileExist(req.getMobile());
-
-        // 验证短信验证码
-        // smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
-        // ECaptchaType.C_REG.getCode());
-
-        User refereeUser = userBO.getUserUnCheck(req.getUserReferee());
-        // 注册用户
-        String userId = userBO.doRegister(req.getMobile(), req.getNickname(),
-            req.getLoginPwd(), refereeUser, req.getProvince(), req.getCity(),
-            req.getArea());
-        if (refereeUser != null) {
-            // 推荐人分佣
-        }
-
-        // ext中添加数据
-        userExtBO.addUserExt(userId);
-
-        // 分配账户
-        accountAO.distributeAccount(userId);
-        return userId;
-    }
-
-    @Override
-    @Transactional
-    public String doRegisterByEmail(XN805043Req req) {
-        // 验证邮箱是否存在
-        userBO.isEmailExist(req.getEmail());
-
-        // 验证邮箱验证码
-        smsOutBO.checkCaptcha(req.getEmail(), req.getCaptcha(), "805043");
-
-        User refereeUser = userBO.getUserUnCheck(req.getUserReferee());
-        // 注册用户
-        String userId = userBO.doRegistByEmail(req);
-        if (refereeUser != null) {
-            // 推荐人分佣
-        }
-
-        // ext中添加数据
-        userExtBO.addUserExt(userId);
-
-        // 分配账户
-        accountAO.distributeAccount(userId);
-        return userId;
-    }
-
-    @Override
-    @Transactional
-    public String doAddUser(XN805042Req req) {
-        String userId = null;
-        User user = new User();
-        user.setUserId(userId);
-        user.setKind(EUserKind.Customer.getCode());
-        user.setLoginName(req.getMobile());
-        user.setMobile(req.getMobile());
-        if (StringUtils.isBlank(req.getLoginPwd())) {
-            req.setLoginPwd(EUserPwd.InitPwd.getCode());
-        }
-        user.setLoginPwd(MD5Util.md5(req.getLoginPwd()));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(req
-            .getLoginPwd()));
-        user.setLevel(EUserLevel.ONE.getCode());
-        user.setUserReferee(req.getUserReferee());
-        user.setIdKind(req.getIdKind());
-        user.setIdNo(req.getIdNo());
-        user.setRealName(req.getRealName());
-        user.setStatus(EUserStatus.NORMAL.getCode());
-        user.setProvince(req.getProvince());
-        user.setCity(req.getCity());
-        user.setArea(req.getArea());
-        user.setLatitude(req.getLatitude());
-        user.setLongitude(req.getLongitude());
-        Date date = new Date();
-        user.setCreateDatetime(date);
-        user.setUpdater(req.getUpdater());
-        user.setRemark(req.getRemark());
-        double tradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.TRADE_FEE_RATE);
-        user.setTradeRate(tradeRate);
-        userId = userBO.doAddUser(user);
-
-        // 在userExt中添加一条数据
-        userExtBO.addUserExt(userId);
-        // 分配账户
-        accountAO.distributeAccount(userId);
-        return userId;
-    }
-
-    @Override
-    // 渠道商用户代注册
-    @Transactional
-    public String doAddQDS(String mobile, String idKind, String idNo,
-            String realName, String respArea, String language) {
-        // 检查手机号是否存在
-        userBO.isMobileExist(mobile);
-        // 注册
-        String loginPwd = (int) ((Math.random() * 9 + 1) * 100000) + "";
-        String userId = userBO.doAddQDS(mobile, idKind, idNo, realName,
-            respArea, loginPwd);
-        // ext中添加数据
-        userExtBO.addUserExt(userId);
-        // 分配账户
-        accountAO.distributeAccount(userId);
-        // 发送短信
-        String content = String.format(SysConstants.DO_ADD_USER_CN,
-            PhoneUtil.hideMobile(mobile), loginPwd);
-        smsOutBO.sendSmsOut(mobile, content, ESystemCode.BZ.getCode(),
-            ESystemCode.BZ.getCode());
-        return userId;
-    }
-
-    @Override
     public void lastLogin(String userId) {
         userBO.refreshLastLogin(userId);
     }
 
-    @Override
-    public void openGoogleAuth(String userId, String secret, String smsCaptcha,
-            String googleCaptcha) {
-        User user = this.doGetUser(userId);
-        // 校验谷歌验证码
-        googleAuthBO.checkCode(secret, googleCaptcha,
-            System.currentTimeMillis());
-        // 短信验证码是否正确
-        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805088");
-        // 修改谷歌验证秘钥
-        userBO.refreshGoogleSecret(userId, secret);
-    }
 
-    @Override
-    public void closeGoogleAuth(String userId, String smsCaptcha,
-            String googleCaptcha) {
-        User user = this.doGetUser(userId);
-        // 校验谷歌验证码
-        googleAuthBO.checkCode(user.getGoogleSecret(), googleCaptcha,
-            System.currentTimeMillis());
-        // 短信验证码是否正确
-        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805089");
-        // 修改谷歌验证秘钥
-        userBO.refreshGoogleSecret(userId, null);
-    }
 
     @Override
     @Transactional
@@ -335,80 +195,6 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     @Transactional
-    public void doChangeMoblie(String userId, String newMobile,
-            String smsCaptcha, String tradePwd, String language) {
-        User user = userBO.getUser(userId);
-
-        String oldMobile = user.getMobile();
-        if (newMobile.equals(oldMobile)) {
-            throw new BizException(EErrorCode_main.user_SAMEMOBILE.getCode());
-        }
-        userBO.isMobileExist(newMobile);
-        // 验证支付密码
-        if (StringUtils.isNotBlank(tradePwd)) {
-            userBO.checkTradePwd(userId, tradePwd);
-        }
-        // 短信验证码是否正确（往新手机号发送）
-        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "805062");
-        userBO.refreshMobile(userId, newMobile);
-
-        // 发送短信
-        smsOutBO.sendSmsOut(oldMobile, String.format(
-            SysConstants.DO_CHANGE_MOBILE_CN, PhoneUtil.hideMobile(oldMobile),
-            DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-            newMobile), ECaptchaType.MOBILE_CHANGE.getCode());
-    }
-
-    @Override
-    @Transactional
-    public void doResetLoginPwd(String mobile, String smsCaptcha,
-            String newLoginPwd) {
-        String userId = userBO.getUserId(mobile);
-        // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805063");
-        userBO.refreshLoginPwd(userId, newLoginPwd);
-        // 发送短信
-        smsOutBO.sendSmsOut(
-            mobile,
-            String.format(SysConstants.DO_RESET_LOGIN_PWD_CN,
-                PhoneUtil.hideMobile(mobile)),
-            ECaptchaType.LOGIN_PWD_RESET.getCode());
-    }
-
-    @Override
-    @Transactional
-    public void doModifyLoginPwd(String userId, String oldLoginPwd,
-            String newLoginPwd, String language) {
-        User user = userBO.getUser(userId);
-        // 验证当前登录密码是否正确
-        userBO.checkLoginPwd(userId, oldLoginPwd);
-        if (oldLoginPwd.equals(newLoginPwd)) {
-            throw new BizException(EErrorCode_main.user_SAMELOGINPWD.getCode());
-        }
-
-        // 重置
-        userBO.refreshLoginPwd(userId, newLoginPwd);
-        // 发送短信
-
-        smsOutBO.sendSmsOut(
-            user.getMobile(),
-            String.format(SysConstants.DO_MODIFY_LOGIN_PWD_CN,
-                PhoneUtil.hideMobile(user.getMobile())),
-            ECaptchaType.MODIFY_LOGIN_PWD.getCode());
-
-    }
-
-    @Override
-    @Transactional
-    public void doResetLoginPwdByOss(String userId, String loginPwd,
-            String adminUserId, String adminPwd) {
-        // 验证当前登录密码是否正确
-        sysUserBO.checkLoginPwd(adminUserId, adminPwd);
-        userBO.refreshLoginPwd(userId, loginPwd);
-    }
-
-    @Override
-    @Transactional
     public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha) {
         User user = userBO.getUser(userId);
         // 短信验证码是否正确
@@ -440,30 +226,6 @@ public class UserAOImpl implements IUserAO {
 
     }
 
-    @Override
-    @Transactional
-    public void doResetTradePwd(String userId, String newTradePwd,
-            String smsCaptcha, String idKind, String idNo, String language) {
-        User user = userBO.getUser(userId);
-        if (user.getIdKind() == null || user.getIdNo() == null) {
-            throw new BizException(EErrorCode_main.user_DOIDFIRST.getCode());
-        }
-        // 证件是否正确
-        if (!(user.getIdKind().equalsIgnoreCase(idKind) && user.getIdNo()
-            .equalsIgnoreCase(idNo))) {
-            throw new BizException(EErrorCode_main.user_IDWRONG.getCode());
-        }
-        // 短信验证码是否正确
-        String mobile = user.getMobile();
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805068");
-        userBO.refreshTradePwd(userId, newTradePwd);
-        // 发短信
-        smsOutBO.sendSmsOut(
-            mobile,
-            String.format(SysConstants.DO_RESET_TRADE_PWD_CN,
-                PhoneUtil.hideMobile(mobile)),
-            ECaptchaType.RESET_TRADE_PWD.getCode());
-    }
 
     @Override
     @Transactional
@@ -589,7 +351,7 @@ public class UserAOImpl implements IUserAO {
         }
 
         // 证件认证状态
-        user.setUserIdAuthInfo(userIdAuthBO.getApproveByUser(userId));
+        //user.setUserIdAuthInfo(userIdAuthBO.getApproveByUser(userId));
 
         // 拉取ext数据
         UserExt data = userExtBO.getUserExt(userId);
@@ -603,14 +365,6 @@ public class UserAOImpl implements IUserAO {
             user.setWorkTime(data.getWorkTime());
             user.setGradDatetime(data.getGradDatetime());
         }
-
-        // 用户统计信息
-        UserStatistics userStatistics = this.tradeOrderBO.obtainUserStatistics(
-            userId, "");
-        // 获取信任数量
-        userStatistics.setBeiXinRenCount(this.userRelationBO.getRelationCount(
-            userId, EUserReleationType.TRUST.getCode()));
-        user.setUserStatistics(userStatistics);
 
         return user;
     }
@@ -640,152 +394,12 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void doChangeLocation(XN805081Req req) {
-        User data = userBO.getUser(req.getUserId());
-
-        data.setAddress(req.getAdress());
-        data.setArea(req.getArea());
-        data.setCity(req.getCity());
-        data.setLatitude(req.getLatitude());
-        data.setLongitude(req.getLongitude());
-        data.setProvince(req.getProvince());
-        data.setRemark(req.getRemark());
-        data.setUpdater(req.getUpdater());
-        userBO.refreshLocation(data);
-    }
-
-    @Override
     public void doResetReferee(String userId, String userReferee, String updater) {
         User data = userBO.getUser(userId);
         userBO.refreshReferee(userId, userReferee, updater);
     }
 
-    @Override
-    public XN625000Res getTencentSign(String userId) {
 
-        return tencentBO.getSign(userId, ESystemCode.BZ.getCode(),
-            ESystemCode.BZ.getCode());
-    }
 
-    @Override
-    public void doIdentify(String userId, String idKind, String idNo,
-            String realName) {
-        // 更新用户表
-
-        userBO.refreshIdentity(userId, realName, EIDKind.ID_CARD.getCode(),
-            idNo);
-    }
-
-    @Override
-    public void doTwoIdentify(String userId, String idKind, String idNo,
-            String realName) {
-        User user = userBO.getUser(userId);
-        identifyBO.doTwoIdentify(ESystemCode.BZ.getCode(),
-            ESystemCode.BZ.getCode(), userId, realName, idKind, idNo);
-        // 更新用户表
-
-        userBO.refreshIdentity(userId, realName, EIDKind.ID_CARD.getCode(),
-            idNo);
-
-    }
-
-    @Override
-    public void doFourIdentify(String userId, String idKind, String idNo,
-            String realName, String cardNo, String bindMobile) {
-        // 三方认证
-        identifyBO.doFourIdentify(userId, realName, idKind, idNo, cardNo,
-            bindMobile);
-        // 更新用户表
-        userBO.refreshIdentity(userId, realName, EIDKind.ID_CARD.getCode(),
-            idNo);
-    }
-
-    @Override
-    public void editTradeRate(String userId, Double tradeRate) {
-        // 检验用户是否存在
-        userBO.getUser(userId);
-        // 更新手续费率
-        userBO.refreshTradeRate(userId, tradeRate);
-    }
-
-    @Override
-    public void bindEmail(String captcha, String email, String userId,
-            String language) {
-        smsOutBO.checkCaptcha(email, captcha, "805086");
-        User data = userBO.getUser(userId);
-        if (data.getEmail() != null) {
-            throw new BizException(
-                EErrorCode_main.user_HAVEBOUNDEMAIL.getCode());
-        }
-        userBO.isEmailExist(email);
-        userBO.refreshEmail(userId, email);
-    }
-
-    @Override
-    public void editRespArea(String userId, String respArea, String updater,
-            String language) {
-        // 判断用户是否存在
-        User user = userBO.getUser(userId);
-        // 判断是否为渠道商
-        if (!EUserKind.QDS.getCode().equals(user.getKind())) {
-            throw new BizException(EErrorCode_main.user_ISNOTQDS.getCode());
-        }
-        // 修改
-        userBO.refreshRespArea(userId, respArea, updater);
-    }
-
-    @Override
-    public Paginable<User> queryFirstRefPage(XN802399Req req, int start,
-            int limit) {
-        User user = userBO.getUser(req.getUserId());
-        User condition = new User();
-        condition.setUserReferee(user.getUserId());
-        Paginable<User> page = userBO.getPaginable(start, limit, condition);
-        // 落地数据
-        for (User refUser : page.getList()) {
-            Award regCondition = new Award();
-            regCondition.setUserId(user.getUserId());
-            regCondition.setRefType(ERefType.REGIST.getCode());
-            regCondition.setRefCode(refUser.getUserId());
-            refUser.setRegAwardCount(awardBO.count(regCondition));
-            TradeOrder tradeCondition = new TradeOrder();
-            tradeCondition.setBuyUser(refUser.getUserId());
-            tradeCondition.setTradeCoin(ECoin.X.getCode());
-            refUser.setTradeCount(tradeOrderBO.count(tradeCondition));
-            refUser.setTradeAwardCount(awardBO.tradeCount(tradeCondition));
-        }
-        return page;
-    }
-
-    @Override
-    public Paginable<User> querySecondRefPage(XN802400Req req, int start,
-            int limit) {
-        User user = userBO.getUser(req.getUserId());
-        User condition = new User();
-        condition.setUserReferee(user.getMobile());
-        List<User> userList = userBO.queryUserList(condition);
-        // 获得userRefereeList
-        List<String> userRefereeList = new ArrayList<String>();
-        for (User refUser : userList) {
-            userRefereeList.add(refUser.getMobile());
-        }
-        User refCondition = new User();
-        refCondition.setUserRefereeList(userRefereeList);
-        Paginable<User> page = userBO.getPaginable(start, limit, refCondition);
-        // 落地数据
-        for (User refUser : page.getList()) {
-            Award regCondition = new Award();
-            regCondition.setUserId(user.getUserId());
-            regCondition.setRefType(ERefType.REGIST.getCode());
-            regCondition.setRefCode(refUser.getUserId());
-            refUser.setRegAwardCount(awardBO.count(regCondition));
-            TradeOrder tradeCondition = new TradeOrder();
-            tradeCondition.setBuyUser(refUser.getUserId());
-            tradeCondition.setTradeCoin(ECoin.X.getCode());
-            refUser.setTradeCount(tradeOrderBO.count(tradeCondition));
-            refUser.setTradeAwardCount(awardBO.tradeCount(tradeCondition));
-        }
-        return page;
-    }
 
 }

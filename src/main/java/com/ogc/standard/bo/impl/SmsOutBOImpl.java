@@ -13,6 +13,7 @@ import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.http.BizConnecter;
 import com.ogc.standard.http.JsonUtils;
+import com.std.account.dto.req.XN001200Req;
 
 /** 
  * @author: xieyj 
@@ -95,6 +96,20 @@ public class SmsOutBOImpl implements ISmsOutBO {
                 PKCodeRes.class);
         } catch (Exception e) {
             logger.error("调用邮件发送验证码异常");
+        }
+    }
+    
+    @Override
+    public void sentContent(String ownerId, String content) {
+        try {
+            XN001200Req req = new XN001200Req();
+            req.setTokenId(ownerId);
+            req.setUserId(ownerId);
+            req.setContent(content);
+            BizConnecter.getBizData("001200", JsonUtils.object2Json(req),
+                Object.class);
+        } catch (Exception e) {
+            logger.error("调用短信发送服务异常, 原因：" + e.getMessage());
         }
     }
 }
