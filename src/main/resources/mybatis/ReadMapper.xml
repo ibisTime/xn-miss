@@ -5,12 +5,10 @@
 	<resultMap id="read_DB_Result" type="read">
 		<result column="id" property="id" />
 		<result column="user_id" property="userId" />
-		<result column="sms_code" property="smsCode" />
-		<result column="receive_way" property="receiveWay" />
+		<result column="to_type" property="toType" />
+		<result column="to_code" property="toCode" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
-		<result column="read_datetime" property="readDatetime" />
-		<result column="delete_datetime" property="deleteDatetime" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -18,56 +16,55 @@
 			<if test="id != null and id != '' ">
 				AND t.id = #{id}
 			</if>
+			<if test="toCode != null and toCode != '' ">
+				AND t.to_code = #{toCode}
+			</if>
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
-			<if test="receiveWay != null and receiveWay != '' ">
-				AND t.receive_way = #{receiveWay}
+			<if test="toType != null and toType != '' ">
+				AND t.to_type = #{toType}
 			</if>
 		</trim>
 	</sql>
 	
 	<insert id="insert_read" parameterType="read">
-		INSERT INTO tstd_read(
+		INSERT INTO thqxj_read(
 		user_id
-		,sms_code
-		,receive_way
+		,to_code
+		,to_type
 		,status
 		,create_datetime
-		,read_datetime
-		,delete_datetime
 		)
 		VALUES(
 		#{userId}
-		,#{smsCode}
-		,#{receiveWay}
+		,#{toType}
+		,#{toCode}
 		,#{status}
 		,#{createDatetime}
-		,#{readDatetime}
-		,#{deleteDatetime}
 		)
 	</insert>
 	
-	
+	<update id="updateBatch" parameterType="java.util.List">
+        UPDATE thqxj_read
+        set status=
+                <foreach collection="list" item="read" separator=",">
+                	#{read.status}
+                </foreach>
+        WHERE id=
+				<foreach collection="list" item="read" separator=",">
+                	#{read.id}
+                </foreach>
+    </update>
+
 	
 	<update id="update_status_read" parameterType="read">
-		UPDATE tstd_read
+		UPDATE thqxj_read
 		SET
 		status=#{status}
-		,read_datetime=#{readDatetime}
-		WHERE
-		id=#{id}
-	
-	</update>
-	
-	<update id="update_status_delete" parameterType="read">
-		UPDATE tstd_read
-		SET
-		status=#{status}
-		,delete_datetime=#{deleteDatetime}
 		WHERE
 		id=#{id}
 	
@@ -78,52 +75,40 @@
 		SELECT
 		t.id
 		,t.user_id
-		,t.sms_code
-		,t.receive_way
+		,t.to_type
+		,t.to_code
 		,t.status
 		,t.create_datetime
-		,t.read_datetime
-		,t.delete_datetime
 		FROM
-		tstd_read t 
+		thqxj_read t 
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_read_list" parameterType="java.util.List">
-		INSERT INTO tstd_read(
+		INSERT INTO thqxj_read(
 		user_id
-		,sms_code
-		,receive_way
+		,to_type
+		,to_code
 		,status
 		,create_datetime
-		,read_datetime
-		,delete_datetime
 		)
 		VALUES
 		
 		<foreach collection="list" item="read" separator=",">
 		(
 		#{read.userId}
-		,#{read.smsCode}
-		,#{read.receiveWay}
+		,#{read.toType}
+		,#{read.toCode}
 		,#{read.status}
 		,#{read.createDatetime}
-		,#{read.readDatetime}
-		,#{read.deleteDatetime}
 		)
 		</foreach>
 		
 	</insert>
 	
-	<delete id="delete_read" parameterType="read">
-		DELETE FROM tstd_read
-		WHERE
-		sms_code = #{smsCode}			
-	</delete>
-
 	<select id="select_read_count" parameterType="read"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_read t
+		SELECT count(1) FROM thqxj_read t
 		<include refid="where_condition" />
 	</select>
 </mapper>

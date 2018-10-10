@@ -67,15 +67,17 @@
 		<property name="paginableDAO" ref="signLogDAOImpl"/>
 	</bean>
 	
-	<bean id="smsBO" class="com.ogc.standard.bo.impl.SmsBOImpl">
-		<property name="paginableDAO" ref="smsDAOImpl"/>
+	<bean id="eventBO" class="com.ogc.standard.bo.impl.EventBOImpl">
+		<property name="paginableDAO" ref="eventDAOImpl"/>
 	</bean>
 	
 	<bean id="readBO" class="com.ogc.standard.bo.impl.ReadBOImpl">
 		<property name="paginableDAO" ref="readDAOImpl"/>
 	</bean>
 	
-
+	<bean id="missSessionBO" class="com.ogc.standard.bo.impl.MissSessionBOImpl">
+		<property name="paginableDAO" ref="missSessionDAOImpl"/>
+	</bean>
 	
 	
 	

@@ -14,10 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IReadAO;
+import com.ogc.standard.bo.IEventBO;
 import com.ogc.standard.bo.IReadBO;
-import com.ogc.standard.bo.ISmsBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Read;
+import com.ogc.standard.enums.EReadStatus;
 
 /** 
  * @author: dl 
@@ -31,17 +32,11 @@ public class ReadAOImpl implements IReadAO {
     private IReadBO readBO;
 
     @Autowired
-    private ISmsBO smsBO;
+    private IEventBO smsBO;
 
     @Override
-    public void editStatusRead(long id) {
-        readBO.refreshStatusRead(id);
-    }
-
-    @Override
-    public void editStatusDelete(long id) {
-        readBO.refreshStatusDelete(id);
-
+    public void readEvent(long id) {
+        readBO.refreshStatus(id, EReadStatus.READ.getCode());
     }
 
     @Override
@@ -50,7 +45,7 @@ public class ReadAOImpl implements IReadAO {
         Paginable<Read> page = readBO.getPaginable(start, limit, condition);
         List<Read> readList = page.getList();
         for (Read read : readList) {
-            read.setSmsInfo(smsBO.getSms(read.getSmsCode()));
+            read.setEventInfo(smsBO.getEvent(read.getToCode()));
         }
         return page;
     }
@@ -58,7 +53,7 @@ public class ReadAOImpl implements IReadAO {
     @Override
     public Read getRead(long id) {
         Read read = readBO.getRead(id);
-        read.setSmsInfo(smsBO.getSms(read.getSmsCode()));
+        read.setEventInfo(smsBO.getEvent(read.getToCode()));
         return read;
     }
 

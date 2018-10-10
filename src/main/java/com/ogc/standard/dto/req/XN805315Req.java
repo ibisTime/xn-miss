@@ -23,8 +23,8 @@ public class XN805315Req extends APageReq {
     @NotBlank
     private String userId;
 
-    // 接收方式
-    private String receiveWay;
+    // 对象类型
+    private String toType;
 
     // 状态
     private String status;
@@ -37,12 +37,12 @@ public class XN805315Req extends APageReq {
         this.userId = userId;
     }
 
-    public String getReceiveWay() {
-        return receiveWay;
+    public String getToType() {
+        return toType;
     }
 
-    public void setReceiveWay(String receiveWay) {
-        this.receiveWay = receiveWay;
+    public void setToType(String toType) {
+        this.toType = toType;
     }
 
     public String getStatus() {

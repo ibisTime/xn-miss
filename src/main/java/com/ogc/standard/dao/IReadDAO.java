@@ -21,12 +21,11 @@ import com.ogc.standard.domain.Read;
 public interface IReadDAO extends IBaseDAO<Read> {
     String NAMESPACE = IReadDAO.class.getName().concat(".");
 
-    // 状态改为已读
+    // 状态
     public int updateStatusRead(Read data);
 
-    // 状态改为已删除
-    public int updateStatusDelete(Read data);
-
     public void insert(List<Read> dataList);
+
+    public void updateBatch(List<Read> dataList);
 
 }

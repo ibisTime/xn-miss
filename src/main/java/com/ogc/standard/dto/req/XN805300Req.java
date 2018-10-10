@@ -26,16 +26,16 @@ public class XN805300Req {
     @NotBlank
     private String content;
 
-    // 消息类型
-    @NotBlank
-    private String type;
-
     // 更新人
     @NotBlank
     private String updater;
 
     // 备注
     private String remark;
+
+    // 发布类型
+    @NotBlank
+    private String bizType;
 
     public String getContent() {
         return content;
@@ -69,11 +69,12 @@ public class XN805300Req {
         this.remark = remark;
     }
 
-    public String getType() {
-        return type;
+    public String getBizType() {
+        return bizType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
     }
+
 }

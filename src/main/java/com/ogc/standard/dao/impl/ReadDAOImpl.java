@@ -31,7 +31,7 @@ public class ReadDAOImpl extends AMybatisTemplate implements IReadDAO {
 
     @Override
     public int delete(Read data) {
-        return super.delete(NAMESPACE.concat("delete_read"), data);
+        return 0;
     }
 
     @Override
@@ -58,11 +58,6 @@ public class ReadDAOImpl extends AMybatisTemplate implements IReadDAO {
     }
 
     @Override
-    public int updateStatusDelete(Read data) {
-        return super.update(NAMESPACE.concat("update_status_delete"), data);
-    }
-
-    @Override
     public List<Read> selectList(Read condition, int start, int count) {
         return super.selectList(NAMESPACE.concat("select_read"), start, count,
             condition, Read.class);
@@ -71,8 +66,14 @@ public class ReadDAOImpl extends AMybatisTemplate implements IReadDAO {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void insert(List<Read> dataList) {
-        super.insertBatch(NAMESPACE.concat("insert_read_list"),
-            (List) dataList);
+        super
+            .insertBatch(NAMESPACE.concat("insert_read_list"), (List) dataList);
+    }
+
+    @Override
+    public void updateBatch(List<Read> dataList) {
+        super.updateBatch(NAMESPACE.concat("updateBatch"), (List) dataList);
+
     }
 
 }

@@ -8,7 +8,7 @@
  */
 package com.ogc.standard.api.impl;
 
-import com.ogc.standard.ao.ISmsAO;
+import com.ogc.standard.ao.IEventAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
@@ -18,19 +18,19 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /** 
- * 详情查询黑名单
+ * 详情查询赛事信息
  * @author: dl 
  * @since: 2018年8月20日 下午1:36:41 
  * @history:
  */
 public class XN805307 extends AProcessor {
-    private ISmsAO smsAO = SpringContextHolder.getBean(ISmsAO.class);
+    private IEventAO eventAO = SpringContextHolder.getBean(IEventAO.class);
 
     private XN805307Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
-        return smsAO.getSms(req.getCode());
+        return eventAO.getSms(req.getCode());
     }
 
     @Override

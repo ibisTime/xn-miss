@@ -11,7 +11,7 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /** 
- * 详情查消息
+ * 详情查赛事信息
  * @author: dl 
  * @since: 2018年8月22日 下午3:05:56 
  * @history:

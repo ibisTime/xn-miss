@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ISessionDAO">
+	<resultMap id="session_DB_Result" type="session">
+		<result column="code" property="code" />
+		<result column="type" property="type" />
+		<result column="user1" property="user1" />
+		<result column="user2" property="user2" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="unread_sum" property="unreadSum" />
+	</resultMap>
+	
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="type != null and type != '' ">
+				AND t.type = #{type}
+			</if>
+			<if test="user1 != null and user1 != '' ">
+				AND t.user1 = #{user1}
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
+		</trim>
+	</sql>
+	
+	<insert id="insert_session" parameterType="session">
+		INSERT INTO thqxj_session(
+		code
+		,type
+		,user1
+		,user2
+		,create_datetime
+		,unread_sum
+		)
+		VALUES(
+		#{code}
+		,#{Type}
+		,#{user1}
+		,#{user2}
+		,#{createDatetime}
+		,#{unreadSum}
+		)
+	</insert>
+	
+
+	
+	<update id="update_unread_sum" parameterType="session">
+		UPDATE thqxj_session
+		SET
+		unread_sum=#{unreadSum}
+		WHERE
+		code=#{code}
+	
+	</update>
+	
+	
+	<select id="select_session" parameterType="session" resultMap="session_DB_Result">
+		SELECT
+		t.code
+		,t.type
+		,t.user1
+		,t.user2
+		,t.create_datetime
+		,t.unread_sum
+		FROM
+		thqxj_session t 
+		<include refid="where_condition" />
+	</select>
+
+	
+	<select id="select_session_count" parameterType="session"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM thqxj_session t
+		<include refid="where_condition" />
+	</select>
+</mapper>

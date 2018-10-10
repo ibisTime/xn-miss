@@ -16,9 +16,10 @@
 		<typeAlias alias="userExt" type="com.ogc.standard.domain.UserExt" />
 		
 		<typeAlias alias="signLog" type="com.ogc.standard.domain.SignLog" />
-		<typeAlias alias="sms" type="com.ogc.standard.domain.Sms" />
+		<typeAlias alias="event" type="com.ogc.standard.domain.Event" />
 		<typeAlias alias="read" type="com.ogc.standard.domain.Read" />
-		
+		<typeAlias alias="missSession" type="com.ogc.standard.domain.MissSession" />
+		<typeAlias alias="question" type="com.ogc.standard.domain.Question" />
 		
 		
 	

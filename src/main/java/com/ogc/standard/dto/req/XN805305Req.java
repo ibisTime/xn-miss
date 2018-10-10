@@ -9,7 +9,7 @@
 package com.ogc.standard.dto.req;
 
 /** 
- * 分页查消息
+ * 分页查赛事信息
  * @author: dl 
  * @since: 2018年8月22日 下午3:02:44 
  * @history:
@@ -22,9 +22,6 @@ public class XN805305Req extends APageReq {
 
     // 更新人
     private String updater;
-
-    // 类型
-    private String type;
 
     // 标题
     private String title;
@@ -43,14 +40,6 @@ public class XN805305Req extends APageReq {
 
     public void setUpdater(String updater) {
         this.updater = updater;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getTitle() {

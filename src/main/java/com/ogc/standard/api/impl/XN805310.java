@@ -33,7 +33,7 @@ public class XN805310 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        readAO.editStatusRead(StringValidater.toLong(req.getId()));
+        readAO.readEvent(StringValidater.toLong(req.getId()));
         return new BooleanRes(true);
     }
 

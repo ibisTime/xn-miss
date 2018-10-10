@@ -36,9 +36,9 @@ public class XN805315 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Read condition = new Read();
-        condition.setReceiveWay(req.getReceiveWay());
-        condition.setStatus(req.getStatus());
         condition.setUserId(req.getUserId());
+        condition.setToType(req.getToType());
+        condition.setStatus(req.getStatus());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IReadAO.DEFAULT_ORDER_COLUMN;

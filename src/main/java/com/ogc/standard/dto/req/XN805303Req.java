@@ -11,23 +11,19 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /** 
- * 审批赛事信息
+ * 上架赛事信息
  * @author: dl 
  * @since: 2018年8月22日 下午2:59:50 
  * @history:
  */
-public class XN805302Req {
+public class XN805303Req {
     // 消息编号
     @NotBlank
     private String code;
 
     // 审批人
     @NotBlank
-    private String approver;
-
-    // 审批结果
-    @NotBlank
-    private String approveResult;
+    private String updater;
 
     // 备注
     private String remark;
@@ -48,20 +44,12 @@ public class XN805302Req {
         this.remark = remark;
     }
 
-    public String getApprover() {
-        return approver;
+    public String getUpdater() {
+        return updater;
     }
 
-    public void setApprover(String approver) {
-        this.approver = approver;
-    }
-
-    public String getApproveResult() {
-        return approveResult;
-    }
-
-    public void setApproveResult(String approveResult) {
-        this.approveResult = approveResult;
+    public void setUpdater(String updater) {
+        this.updater = updater;
     }
 
 }

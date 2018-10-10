@@ -11,7 +11,7 @@ package com.ogc.standard.dto.req;
 import org.hibernate.validator.constraints.NotBlank;
 
 /** 
- * 发布消息
+ * 修改赛事信息
  * @author: dl 
  * @since: 2018年8月22日 下午2:58:04 
  * @history:
@@ -21,13 +21,13 @@ public class XN805301Req {
     // 消息编号
     private String code;
 
-    // 消息内容
-    @NotBlank
-    private String content;
-
     // 标题
     @NotBlank
     private String title;
+
+    // 消息内容
+    @NotBlank
+    private String content;
 
     // 更新人
     @NotBlank
@@ -36,9 +36,9 @@ public class XN805301Req {
     // 备注
     private String remark;
 
-    // 消息类型
+    // 发布类型
     @NotBlank
-    private String type;
+    private String bizType;
 
     public String getContent() {
         return content;
@@ -72,12 +72,12 @@ public class XN805301Req {
         this.remark = remark;
     }
 
-    public String getType() {
-        return type;
+    public String getBizType() {
+        return bizType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
     }
 
     public String getCode() {

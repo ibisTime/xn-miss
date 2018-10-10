@@ -24,7 +24,8 @@ public enum EGeneratePrefix {
             "AO", "承兑商订单"), BANK_CARD("BC", "银行卡"),
 
     Charge("CH", "充值"), WITHDRAW("WI", "取现"), HLORDER("HL", "红蓝订单"), EXCHANGE_CURRENCY(
-            "EC", "币种兑换"), CMB_BIZ_NO("CMB", "招商银行");
+            "EC", "币种兑换"), CMB_BIZ_NO("CMB", "招商银行"), EVENT("EV", "赛事信息"), session(
+            "SE", "会话");
 
     public static Map<String, EGeneratePrefix> getMap() {
         Map<String, EGeneratePrefix> map = new HashMap<String, EGeneratePrefix>();

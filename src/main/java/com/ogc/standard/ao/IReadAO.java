@@ -20,10 +20,7 @@ public interface IReadAO {
     String DEFAULT_ORDER_COLUMN = "id";
 
     // 阅读消息
-    public void editStatusRead(long id);
-
-    // 删除消息
-    public void editStatusDelete(long id);
+    public void readEvent(long id);
 
     // 分页查我的消息
     public Paginable<Read> queryReadPage(int start, int limit, Read condition);

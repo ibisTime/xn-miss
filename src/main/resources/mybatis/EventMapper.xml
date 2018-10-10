@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ogc.standard.dao.ISmsDAO">
-	<resultMap id="sms_DB_Result" type="sms">
+<mapper namespace="com.ogc.standard.dao.IEventDAO">
+	<resultMap id="event_DB_Result" type="event">
 		<result column="code" property="code" />
-		<result column="type" property="type" />
 		<result column="title" property="title" />
 		<result column="content" property="content" />
 		<result column="status" property="status" />
@@ -19,9 +18,6 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="type != null and type != '' ">
-				AND t.type = #{type}
-			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
@@ -34,10 +30,9 @@
 		</trim>
 	</sql>
 	
-	<insert id="insert_sms" parameterType="sms">
-		INSERT INTO tstd_sms(
+	<insert id="insert_event" parameterType="event">
+		INSERT INTO thqxj_event(
 		code
-		,type
 		,title
 		,content
 		,status
@@ -48,7 +43,6 @@
 		)
 		VALUES(
 		#{code}
-		,#{type}
 		,#{title}
 		,#{content}
 		,#{status}
@@ -59,22 +53,23 @@
 		)
 	</insert>
 	
-	<update id="update_status" parameterType="sms">
-		UPDATE tstd_sms
+	<update id="update_status" parameterType="event">
+		UPDATE thqxj_event
 		SET
 		status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
+		<if test="remark != null and remark != '' ">
 		,remark=#{remark}
+		</if>
 		WHERE
 		code=#{code}
 	</update>
 	
-	<update id="update_sms" parameterType="sms">
-		UPDATE tstd_sms
+	<update id="update_event" parameterType="event">
+		UPDATE thqxj_event
 		SET
-		type=#{type}
-		,title=#{title}
+		title=#{title}
 		,content=#{content}
 		,status=#{status}
 		,updater=#{updater}
@@ -84,10 +79,9 @@
 		code=#{code}
 	</update>
 	
-	<select id="select_sms" parameterType="sms" resultMap="sms_DB_Result">
+	<select id="select_event" parameterType="event" resultMap="event_DB_Result">
 		SELECT
 		t.code
-		,t.type
 		,t.title
 		,t.content
 		,t.status
@@ -96,13 +90,13 @@
 		,t.update_datetime
 		,t.remark
 		FROM
-		tstd_sms t 
+		thqxj_event t 
 		<include refid="where_condition" />
 	</select>
 
-	<select id="select_sms_count" parameterType="sms"
+	<select id="select_event_count" parameterType="event"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tstd_sms t
+		SELECT count(1) FROM thqxj_event t
 		<include refid="where_condition" />
 	</select>
 </mapper>

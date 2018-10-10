@@ -23,39 +23,34 @@ public class Read extends ABaseDO {
     private static final long serialVersionUID = -8738630231714278522L;
 
     // ***********db properties***********
-    // id主键
-    private long id;
+    // id
+    private Long id;
 
     // 用户编号
     private String userId;
 
-    // 消息编号
-    private String smsCode;
+    // 对象类型
+    private String toType;
 
-    // 接受方式(站内消息，APP推送,短信)
-    private String receiveWay;
+    // 对象编号
+    private String toCode;
 
-    // 状态 0-未阅读 1-已阅读 2-已删除
+    // 状态 0-未阅读 1-已阅读
     private String status;
 
     // 推送时间
     private Date createDatetime;
 
-    // 阅读时间
-    private Date readDatetime;
-
-    // 删除时间
-    private Date deleteDatetime;
     // ***********db properties***********
 
-    private Sms smsInfo;
+    private Event eventInfo;
 
-    public Sms getSmsInfo() {
-        return smsInfo;
+    public Event getEventInfo() {
+        return eventInfo;
     }
 
-    public void setSmsInfo(Sms smsInfo) {
-        this.smsInfo = smsInfo;
+    public void setEventInfo(Event eventInfo) {
+        this.eventInfo = eventInfo;
     }
 
     public Date getCreateDatetime() {
@@ -66,30 +61,6 @@ public class Read extends ABaseDO {
         this.createDatetime = createDatetime;
     }
 
-    public Date getReadDatetime() {
-        return readDatetime;
-    }
-
-    public void setReadDatetime(Date readDatetime) {
-        this.readDatetime = readDatetime;
-    }
-
-    public Date getDeleteDatetime() {
-        return deleteDatetime;
-    }
-
-    public void setDeleteDatetime(Date deleteDatetime) {
-        this.deleteDatetime = deleteDatetime;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getUserId() {
         return userId;
     }
@@ -98,20 +69,28 @@ public class Read extends ABaseDO {
         this.userId = userId;
     }
 
-    public String getSmsCode() {
-        return smsCode;
+    public Long getId() {
+        return id;
     }
 
-    public void setSmsCode(String smsCode) {
-        this.smsCode = smsCode;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getReceiveWay() {
-        return receiveWay;
+    public String getToType() {
+        return toType;
     }
 
-    public void setReceiveWay(String receiveWay) {
-        this.receiveWay = receiveWay;
+    public void setToType(String toType) {
+        this.toType = toType;
+    }
+
+    public String getToCode() {
+        return toCode;
+    }
+
+    public void setToCode(String toCode) {
+        this.toCode = toCode;
     }
 
     public String getStatus() {

@@ -1,5 +1,7 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
+
 import com.ogc.standard.dao.base.ABaseDO;
 
 public class CompanyChannel extends ABaseDO {
@@ -49,7 +51,7 @@ public class CompanyChannel extends ABaseDO {
     private String backUrl;
 
     // 手续费
-    private Long fee;
+    private BigDecimal fee;
 
     // 备注
     private String remark;
@@ -153,11 +155,11 @@ public class CompanyChannel extends ABaseDO {
         this.backUrl = backUrl;
     }
 
-    public Long getFee() {
+    public BigDecimal getFee() {
         return fee;
     }
 
-    public void setFee(Long fee) {
+    public void setFee(BigDecimal fee) {
         this.fee = fee;
     }
 

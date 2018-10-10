@@ -13,21 +13,18 @@ import java.util.Date;
 import com.ogc.standard.dao.base.ABaseDO;
 
 /** 
- * 消息
+ * 赛事消息
  * @author: dl 
  * @since: 2018年8月22日 下午12:54:19 
  * @history:
  */
-public class Sms extends ABaseDO {
+public class Event extends ABaseDO {
 
     private static final long serialVersionUID = -3821903316597198985L;
 
     // ***********db properties***********
     // 消息编号
     private String code;
-
-    // 消息类型
-    private String type;
 
     // 消息标题
     private String title;
@@ -49,6 +46,7 @@ public class Sms extends ABaseDO {
 
     // 备注
     private String remark;
+
     // ***********db properties***********
 
     public String getCode() {
@@ -57,14 +55,6 @@ public class Sms extends ABaseDO {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getTitle() {

@@ -23,18 +23,16 @@ public interface IReadBO extends IPaginableBO<Read> {
     public boolean isReadExit(long id);
 
     // 增加待阅读记录
-    public void saveToRead(List<Read> dataList);
+    public void saveToRead(String toCode);
+
+    // 批量删除消息记录
+    public void refereshDelete(String toCode);
 
     // 阅读消息
-    public void refreshStatusRead(long id);
-
-    // 删除消息
-    public void refreshStatusDelete(long id);
+    public void refreshStatus(long id, String status);
 
     // 分页查我的消息
     public List<Read> queryReadList(Read condition);
-
-    public void deleteRead(String smsCode);
 
     public Read getRead(long id);
 }
