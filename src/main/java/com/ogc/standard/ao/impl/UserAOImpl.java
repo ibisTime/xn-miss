@@ -1,6 +1,5 @@
 package com.ogc.standard.ao.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.ao.IUserAO;
-import com.ogc.standard.bo.IIdentifyBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
@@ -23,25 +21,15 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
-import com.ogc.standard.common.PwdUtil;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
-import com.ogc.standard.dto.res.XN625000Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
-import com.ogc.standard.enums.ECoin;
 import com.ogc.standard.enums.EErrorCode_main;
-import com.ogc.standard.enums.EIDKind;
-import com.ogc.standard.enums.ERefType;
 import com.ogc.standard.enums.ESignLogType;
-import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EUser;
-import com.ogc.standard.enums.EUserKind;
-import com.ogc.standard.enums.EUserLevel;
-import com.ogc.standard.enums.EUserPwd;
-import com.ogc.standard.enums.EUserReleationType;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -54,7 +42,6 @@ import com.ogc.standard.exception.BizException;
 public class UserAOImpl implements IUserAO {
     @Autowired
     private ISmsOutBO smsOutBO;
-
 
     @Autowired
     private IUserBO userBO;
@@ -74,12 +61,6 @@ public class UserAOImpl implements IUserAO {
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
-
-    @Autowired
-    private IIdentifyBO identifyBO;
-
-
-
     @Override
     public void doCheckMobile(String mobile, String language) {
         userBO.isMobileExist(mobile);
@@ -89,8 +70,6 @@ public class UserAOImpl implements IUserAO {
     public void lastLogin(String userId) {
         userBO.refreshLastLogin(userId);
     }
-
-
 
     @Override
     @Transactional
@@ -226,7 +205,6 @@ public class UserAOImpl implements IUserAO {
 
     }
 
-
     @Override
     @Transactional
     public void doModifyTradePwd(String userId, String oldTradePwd,
@@ -351,7 +329,7 @@ public class UserAOImpl implements IUserAO {
         }
 
         // 证件认证状态
-        //user.setUserIdAuthInfo(userIdAuthBO.getApproveByUser(userId));
+        // user.setUserIdAuthInfo(userIdAuthBO.getApproveByUser(userId));
 
         // 拉取ext数据
         UserExt data = userExtBO.getUserExt(userId);
@@ -398,8 +376,5 @@ public class UserAOImpl implements IUserAO {
         User data = userBO.getUser(userId);
         userBO.refreshReferee(userId, userReferee, updater);
     }
-
-
-
 
 }
