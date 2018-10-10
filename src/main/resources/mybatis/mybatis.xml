@@ -20,7 +20,6 @@
 		<typeAlias alias="read" type="com.ogc.standard.domain.Read" />
 		
 		
-		
 	
 		
 		<typeAlias alias="keyword" type="com.ogc.standard.domain.Keyword" />
@@ -28,9 +27,12 @@
 		<typeAlias alias="comment" type="com.ogc.standard.domain.Comment" />
 		<typeAlias alias="interact" type="com.ogc.standard.domain.Interact" />
 	
+		<typeAlias alias="companyChannel" type="com.ogc.standard.domain.CompanyChannel" />
+		
+		<typeAlias alias="exchangeCurrency" type="com.ogc.standard.domain.ExchangeCurrency" />
 		
 		
-			
+		
 		
 		<typeAlias alias="account" type="com.ogc.standard.domain.Account" />
 		<typeAlias alias="jour" type="com.ogc.standard.domain.Jour" />
