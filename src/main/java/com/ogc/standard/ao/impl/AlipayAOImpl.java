@@ -17,10 +17,10 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.WebUtils;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.internal.util.WebUtils;
 import com.ogc.standard.ao.IAlipayAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAlipayBO;
