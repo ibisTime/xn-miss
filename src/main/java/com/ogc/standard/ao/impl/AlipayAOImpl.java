@@ -8,6 +8,7 @@
  */
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,12 +17,10 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
-import com.alipay.api.internal.util.WebUtils;
-import com.ogc.standard.util.alipay.AlipayConfig;
-import com.ogc.standard.util.alipay.AlipayCore;
 import com.ogc.standard.ao.IAlipayAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IAlipayBO;
@@ -43,6 +42,8 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.util.CalculationUtil;
+import com.ogc.standard.util.alipay.AlipayConfig;
+import com.ogc.standard.util.alipay.AlipayCore;
 
 /** 
  * @author: haiqingzheng 
@@ -78,7 +79,7 @@ public class AlipayAOImpl implements IAlipayAO {
     @Override
     public Object getSignedOrder(String applyUser, String toUser,
             String payGroup, String refNo, String bizType, String bizNote,
-            Long transAmount, String backUrl) {
+            BigDecimal transAmount, String backUrl) {
         if (transAmount.longValue() == 0l) {
             throw new BizException("xn000000", "发生金额为零，不能使用支付宝支付");
         }
@@ -169,12 +170,13 @@ public class AlipayAOImpl implements IAlipayAO {
     }
 
     private String getBizContentJson(String fromBizNote, String jourCode,
-            Long transAmount, String backUrl, String systemCode,
+            BigDecimal transAmount, String backUrl, String systemCode,
             String companyCode) {
         Map<String, String> bizParams = new HashMap<String, String>();
         bizParams.put("subject", fromBizNote); // 商品的标题 例如：大乐透
         bizParams.put("out_trade_no", jourCode); // 商户网站唯一订单号
-        bizParams.put("total_amount", String.valueOf(transAmount / 1000.00)); // 订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]
+        bizParams.put("total_amount",
+            transAmount.divide(BigDecimal.valueOf(1000.00)).toString()); // 订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]
         bizParams.put("product_code", "QUICK_MSECURITY_PAY"); // 销售产品码，商家和支付宝签约的产品码，为固定值QUICK_MSECURITY_PAY
         bizParams.put("passback_params", backUrl);
         bizParams.put("timeout_express", "1m");

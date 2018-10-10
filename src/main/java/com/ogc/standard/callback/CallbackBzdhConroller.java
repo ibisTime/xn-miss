@@ -1,6 +1,7 @@
 package com.ogc.standard.callback;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ogc.standard.ao.IExchangeCurrencyAO;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.enums.EJourBizType;
 
 /**
@@ -35,7 +37,8 @@ public class CallbackBzdhConroller {
         boolean isSuccess = Boolean.valueOf(request.getParameter("isSuccess"));
         String payGroup = request.getParameter("payGroup");
         String payCode = request.getParameter("payCode");
-        Long amount = Long.valueOf(request.getParameter("transAmount"));
+        BigDecimal amount = StringValidater.toBigDecimal(request
+            .getParameter("transAmount"));
         String bizType = request.getParameter("bizType");
         // 支付成功，商户处理后同步返回给微信参数
         if (!isSuccess) {
