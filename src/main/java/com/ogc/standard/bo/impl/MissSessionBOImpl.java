@@ -67,4 +67,18 @@ public class MissSessionBOImpl extends PaginableBOImpl<MissSession> implements
         return code;
     }
 
+    @Override
+    public void addUnreadSum(String sessionCode) {
+        MissSession data = getSession(sessionCode);
+        data.setUnreadSum(data.getUnreadSum() + 1);
+        missSessionDAO.updateUnreadSum(data);
+    }
+
+    @Override
+    public void resetUnreadSum(String sessionCode) {
+        MissSession data = getSession(sessionCode);
+        data.setUnreadSum(Long.valueOf(0));
+        missSessionDAO.updateUnreadSum(data);
+    }
+
 }

@@ -41,7 +41,7 @@
 		,t.update_datetime
 		,t.remark
 		FROM
-		tforum_keyword t
+		thqxj_ keyword t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -52,13 +52,13 @@
 
 	<select id="select_keyword_count" parameterType="keyword"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tforum_keyword t
+		SELECT count(1) FROM thqxj_ keyword t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_keyword" parameterType="keyword">
 		INSERT INTO
-		tforum_keyword(
+		thqxj_ keyword(
 		word
 		,level
 		,reaction
@@ -79,7 +79,7 @@
 	</insert>
 
 	<update id="update_keyword" parameterType="keyword">
-		UPDATE tforum_keyword
+		UPDATE thqxj_ keyword
 		SET
 		word = #{word}
 		,level = #{level}
@@ -91,7 +91,7 @@
 	</update>
 
 	<delete id="delete_keyword" parameterType="keyword">
-		DELETE FROM tforum_keyword where id = #{id}
+		DELETE FROM thqxj_ keyword where id = #{id}
 	</delete>
 
 </mapper>

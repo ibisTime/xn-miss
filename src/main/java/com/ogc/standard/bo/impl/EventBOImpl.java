@@ -60,6 +60,7 @@ public class EventBOImpl extends PaginableBOImpl<Event> implements IEventBO {
         data.setCreateDatetime(now);
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(now);
+        data.setRemark(req.getRemark());
         eventDAO.insert(data);
         return data.getCode();
     }
@@ -81,12 +82,14 @@ public class EventBOImpl extends PaginableBOImpl<Event> implements IEventBO {
     @Override
     public int refreshStatus(String code, String status, String updater,
             String remark) {
+        int count = 0;
         Event data = getEvent(code);
         data.setStatus(status);
         data.setUpdater(updater);
         data.setRemark(remark);
         data.setUpdateDatetime(new Date());
-        return eventDAO.updateStatus(data);
+        count = eventDAO.updateStatus(data);
+        return count;
     }
 
     @Override

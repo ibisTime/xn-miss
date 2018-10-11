@@ -126,6 +126,14 @@
 		<property name="paginableDAO" ref="bankcardDAOImpl"/>
 	</bean>
 	
+	<bean id="questionBO" class="com.ogc.standard.bo.impl.QuestionBOImpl">
+		<property name="paginableDAO" ref="questionDAOImpl"/>
+	</bean>
+	
+	<bean id="answerBO" class="com.ogc.standard.bo.impl.AnswerBOImpl">
+		<property name="paginableDAO" ref="answerDAOImpl"/>
+	</bean>
+	
 
 	
 

@@ -35,7 +35,7 @@ public class XN805306 extends AProcessor {
         condition.setTitle(req.getTitle());
         condition.setUpdater(req.getUpdater());
         condition.setStatus(req.getStatus());
-        return smsAO.querySmsList(condition);
+        return smsAO.queryEventList(condition);
     }
 
     @Override

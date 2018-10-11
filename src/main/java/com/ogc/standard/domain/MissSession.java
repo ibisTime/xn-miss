@@ -9,6 +9,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -42,6 +43,16 @@ public class MissSession extends ABaseDO {
     private Date createDatetimeStart;
 
     private Date createDatetimeEnd;
+
+    private List<Question> dataList;
+
+    public List<Question> getDataList() {
+        return dataList;
+    }
+
+    public void setDataList(List<Question> dataList) {
+        this.dataList = dataList;
+    }
 
     public Date getCreateDatetimeStart() {
         return createDatetimeStart;

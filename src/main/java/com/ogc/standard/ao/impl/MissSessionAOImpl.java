@@ -15,8 +15,11 @@ import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IMissSessionAO;
 import com.ogc.standard.bo.IMissSessionBO;
+import com.ogc.standard.bo.IQuestionBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.MissSession;
+import com.ogc.standard.domain.Question;
 
 /** 
  * @author: taojian 
@@ -24,10 +27,16 @@ import com.ogc.standard.domain.MissSession;
  * @history:
  */
 @Service
-public class IMissSessionAOImpl implements IMissSessionAO {
+public class MissSessionAOImpl implements IMissSessionAO {
 
     @Autowired
     private IMissSessionBO missSessionBO;
+
+    @Autowired
+    private IQuestionBO questionBO;
+
+    @Autowired
+    private IUserBO userBO;
 
     @Override
     public String addMissSession(String type, String user1) {
@@ -39,18 +48,34 @@ public class IMissSessionAOImpl implements IMissSessionAO {
             MissSession condition) {
         Paginable<MissSession> page = missSessionBO.getPaginable(start, limit,
             condition);
+        for (MissSession missSession : page.getList()) {
+            missSession.setDataList(questionBO
+                .querySessionQuestions(missSession.getCode()));
+            missSession.setUser1Nickname(userBO.getUser(missSession.getUser1())
+                .getNickname());
+        }
         return page;
     }
 
     @Override
     public MissSession getSession(String code) {
-        return missSessionBO.getSession(code);
+        MissSession data = missSessionBO.getSession(code);
+        List<Question> dataList = questionBO.querySessionQuestions(code);
+        data.setDataList(dataList);
+        data.setUser1Nickname(userBO.getUser(data.getUser1()).getNickname());
+        return data;
     }
 
     @Override
     public List<MissSession> querySessionList(MissSession condition) {
         List<MissSession> missSessionList = missSessionBO
             .querySessionList(condition);
+        for (MissSession missSession : missSessionList) {
+            missSession.setDataList(questionBO
+                .querySessionQuestions(missSession.getCode()));
+            missSession.setUser1Nickname(userBO.getUser(missSession.getUser1())
+                .getNickname());
+        }
         return missSessionList;
     }
 

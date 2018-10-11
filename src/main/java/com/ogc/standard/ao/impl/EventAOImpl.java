@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IEventAO;
 import com.ogc.standard.bo.IEventBO;
@@ -22,6 +23,7 @@ import com.ogc.standard.dto.req.XN805300Req;
 import com.ogc.standard.dto.req.XN805301Req;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EEventStauts;
+import com.ogc.standard.enums.EPublishType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -42,7 +44,7 @@ public class EventAOImpl implements IEventAO {
     @Override
     public String addEvent(XN805300Req req) {
         String code = null;
-        if (EBoolean.NO.getCode().equals(req.getBizType())) {
+        if (EPublishType.SAVE.getCode().equals(req.getBizType())) {
             code = eventBO.saveEvent(req, EEventStauts.DRAFT.getCode());
         } else {
             code = eventBO.saveEvent(req, EEventStauts.TOAPPROVE.getCode());
@@ -60,7 +62,7 @@ public class EventAOImpl implements IEventAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该赛事信息不能修改");
         }
         // 落地数据
-        if (EBoolean.NO.getCode().equals(req.getBizType())) {
+        if (EPublishType.SAVE.getCode().equals(req.getBizType())) {
             eventBO.refreshEvent(req, EEventStauts.DRAFT.getCode());
         } else {
             eventBO.refreshEvent(req, EEventStauts.TOAPPROVE.getCode());
@@ -84,6 +86,7 @@ public class EventAOImpl implements IEventAO {
         }
     }
 
+    @Transactional
     @Override
     public void releaseEvent(String code, String updater, String remark) {
         String status = eventBO.getEvent(code).getStatus();
@@ -97,6 +100,7 @@ public class EventAOImpl implements IEventAO {
 
     }
 
+    @Transactional
     @Override
     public void obtainEvent(String code, String updater, String remark) {
         String status = eventBO.getEvent(code).getStatus();
@@ -112,17 +116,17 @@ public class EventAOImpl implements IEventAO {
     }
 
     @Override
-    public Paginable<Event> querySmsPage(int start, int limit, Event condition) {
+    public Paginable<Event> queryEventPage(int start, int limit, Event condition) {
         return eventBO.getPaginable(start, limit, condition);
     }
 
     @Override
-    public List<Event> querySmsList(Event condition) {
+    public List<Event> queryEventList(Event condition) {
         return eventBO.queryEventList(condition);
     }
 
     @Override
-    public Event getSms(String code) {
+    public Event getEvent(String code) {
         return eventBO.getEvent(code);
     }
 

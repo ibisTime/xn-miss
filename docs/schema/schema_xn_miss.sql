@@ -18,7 +18,7 @@ CREATE TABLE `thqxj_answer` (
   `status` varchar(4) NOT NULL COMMENT '状态（0 草稿，1 待审批，2 审批不通过，3 审批通过，4 已上架，5 已下架）',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
   `updater` varchar(32) DEFAULT NULL COMMENT '更新人',
-  `updater_datetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` text COMMENT '备注',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='回复模版';
