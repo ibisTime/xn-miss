@@ -71,7 +71,7 @@ CREATE TABLE `thqxj_player` (
   `match_play_code` varchar(32) NOT NULL COMMENT '选手编号',
   `cname` varchar(64) DEFAULT NULL COMMENT '中文名',
   `ename` varchar(64) DEFAULT NULL COMMENT '英文名',
-  `native` varchar(64) DEFAULT NULL COMMENT '户籍',
+  `native_place` varchar(64) DEFAULT NULL COMMENT '户籍',
   `height` varchar(64) DEFAULT NULL COMMENT '身高',
   `weight` varchar(64) DEFAULT NULL COMMENT '体重',
   `xwei` varchar(64) DEFAULT NULL COMMENT '胸围',
