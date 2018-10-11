@@ -9,7 +9,7 @@ import java.util.Map;
  * @history:
  */
 public enum ESystemCode {
-	 MISS("CD-MISS000026", "环球小姐");
+    MISS("CD-MISS000030", "环球小姐");
 
     public static Map<String, ESystemCode> getCurrencyMap() {
         Map<String, ESystemCode> map = new HashMap<String, ESystemCode>();
