@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ogc.standard.dao.ISessionDAO">
-	<resultMap id="session_DB_Result" type="session">
+<mapper namespace="com.ogc.standard.dao.IMissSessionDAO">
+	<resultMap id="missSession_DB_Result" type="missSession">
 		<result column="code" property="code" />
 		<result column="type" property="type" />
 		<result column="user1" property="user1" />
@@ -31,7 +31,7 @@
 		</trim>
 	</sql>
 	
-	<insert id="insert_session" parameterType="session">
+	<insert id="insert_session" parameterType="missSession">
 		INSERT INTO thqxj_session(
 		code
 		,type
@@ -52,7 +52,7 @@
 	
 
 	
-	<update id="update_unread_sum" parameterType="session">
+	<update id="update_unread_sum" parameterType="missSession">
 		UPDATE thqxj_session
 		SET
 		unread_sum=#{unreadSum}
@@ -62,7 +62,7 @@
 	</update>
 	
 	
-	<select id="select_session" parameterType="session" resultMap="session_DB_Result">
+	<select id="select_session" parameterType="missSession" resultMap="missSession_DB_Result">
 		SELECT
 		t.code
 		,t.type
@@ -76,7 +76,7 @@
 	</select>
 
 	
-	<select id="select_session_count" parameterType="session"
+	<select id="select_session_count" parameterType="missSession"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM thqxj_session t
 		<include refid="where_condition" />

@@ -13,10 +13,10 @@ package com.ogc.standard.enums;
  * @since: 2018年3月13日 上午11:30:16 
  * @history:
  */
-public enum ECoinStatus {
-    PUBLISHED("0", "已发布"), REVOKE("1", "已撤下");
+public enum EQuestionStatus {
+    toread("0", "未读"), read("1", "已读");
 
-    ECoinStatus(String code, String value) {
+    EQuestionStatus(String code, String value) {
         this.code = code;
         this.value = value;
     }

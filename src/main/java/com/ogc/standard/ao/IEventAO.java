@@ -39,9 +39,9 @@ public interface IEventAO {
     // 下架
     public void obtainEvent(String code, String updater, String remark);
 
-    public Paginable<Event> querySmsPage(int start, int limit, Event condition);
+    public Paginable<Event> queryEventPage(int start, int limit, Event condition);
 
-    public List<Event> querySmsList(Event condition);
+    public List<Event> queryEventList(Event condition);
 
-    public Event getSms(String code);
+    public Event getEvent(String code);
 }

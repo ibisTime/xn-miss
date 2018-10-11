@@ -40,7 +40,7 @@ public class Question extends ABaseDO {
     private String status;
 
     // 说话时间
-    private Date createDatetiem;
+    private Date createDatetime;
 
     // ***********db properties***********
 
@@ -84,12 +84,12 @@ public class Question extends ABaseDO {
         this.status = status;
     }
 
-    public Date getCreateDatetiem() {
-        return createDatetiem;
+    public Date getCreateDatetime() {
+        return createDatetime;
     }
 
-    public void setCreateDatetiem(Date createDatetiem) {
-        this.createDatetiem = createDatetiem;
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
 }

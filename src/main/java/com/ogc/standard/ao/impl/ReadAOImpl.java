@@ -32,7 +32,7 @@ public class ReadAOImpl implements IReadAO {
     private IReadBO readBO;
 
     @Autowired
-    private IEventBO smsBO;
+    private IEventBO eventBO;
 
     @Override
     public void readEvent(long id) {
@@ -45,7 +45,7 @@ public class ReadAOImpl implements IReadAO {
         Paginable<Read> page = readBO.getPaginable(start, limit, condition);
         List<Read> readList = page.getList();
         for (Read read : readList) {
-            read.setEventInfo(smsBO.getEvent(read.getToCode()));
+            read.setEventInfo(eventBO.getEvent(read.getToCode()));
         }
         return page;
     }
@@ -53,7 +53,7 @@ public class ReadAOImpl implements IReadAO {
     @Override
     public Read getRead(long id) {
         Read read = readBO.getRead(id);
-        read.setEventInfo(smsBO.getEvent(read.getToCode()));
+        read.setEventInfo(eventBO.getEvent(read.getToCode()));
         return read;
     }
 

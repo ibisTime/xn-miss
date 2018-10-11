@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ogc.standard.dao.IEventDAO">
-	<resultMap id="event_DB_Result" type="event">
+<mapper namespace="com.ogc.standard.dao.IAnswerDAO">
+	<resultMap id="answer_DB_Result" type="answer">
 		<result column="code" property="code" />
-		<result column="title" property="title" />
-		<result column="content" property="content" />
+		<result column="question" property="question" />
+		<result column="answer" property="answer" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />
 		<result column="updater" property="updater" />
@@ -24,17 +24,23 @@
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
-			<if test="title != null and title != '' ">
-				AND t.title like "%"#{title}"%"
+			<if test="question != null and question != '' ">
+				AND t.question like "%"#{question}"%"
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>
 	
-	<insert id="insert_event" parameterType="event">
-		INSERT INTO thqxj_event(
+	<insert id="insert_answer" parameterType="answer">
+		INSERT INTO thqxj_answer(
 		code
-		,title
-		,content
+		,question
+		,answer
 		,status
 		,create_datetime
 		,updater
@@ -43,8 +49,8 @@
 		)
 		VALUES(
 		#{code}
-		,#{title}
-		,#{content}
+		,#{question}
+		,#{answer}
 		,#{status}
 		,#{createDatetime}
 		,#{updater}
@@ -53,8 +59,8 @@
 		)
 	</insert>
 	
-	<update id="update_status" parameterType="event">
-		UPDATE thqxj_event
+	<update id="update_status" parameterType="answer">
+		UPDATE thqxj_answer
 		SET
 		status=#{status}
 		,updater=#{updater}
@@ -64,13 +70,14 @@
 		</if>
 		WHERE
 		code=#{code}
+	
 	</update>
 	
-	<update id="update_event" parameterType="event">
-		UPDATE thqxj_event
+	<update id="update_answer" parameterType="answer">
+		UPDATE thqxj_answer
 		SET
-		title=#{title}
-		,content=#{content}
+		question=#{question}
+		,answer=#{answer}
 		,status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
@@ -79,26 +86,29 @@
 		</if>
 		WHERE
 		code=#{code}
+	
 	</update>
 	
-	<select id="select_event" parameterType="event" resultMap="event_DB_Result">
+	
+	
+	<select id="select_answer" parameterType="answer" resultMap="answer_DB_Result">
 		SELECT
 		t.code
-		,t.title
-		,t.content
+		,t.question
+		,t.answer
 		,t.status
 		,t.create_datetime
 		,t.updater
 		,t.update_datetime
 		,t.remark
 		FROM
-		thqxj_event t 
+		thqxj_answer t 
 		<include refid="where_condition" />
 	</select>
-
-	<select id="select_event_count" parameterType="event"
+		
+	<select id="select_answer_count" parameterType="answer"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM thqxj_event t
+		SELECT count(1) FROM thqxj_answer t
 		<include refid="where_condition" />
 	</select>
 </mapper>

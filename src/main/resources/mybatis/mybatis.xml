@@ -20,6 +20,7 @@
 		<typeAlias alias="read" type="com.ogc.standard.domain.Read" />
 		<typeAlias alias="missSession" type="com.ogc.standard.domain.MissSession" />
 		<typeAlias alias="question" type="com.ogc.standard.domain.Question" />
+		<typeAlias alias="answer" type="com.ogc.standard.domain.Answer" />
 		
 	
 		

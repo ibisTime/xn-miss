@@ -30,7 +30,7 @@ public class XN805307 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return eventAO.getSms(req.getCode());
+        return eventAO.getEvent(req.getCode());
     }
 
     @Override

@@ -45,7 +45,7 @@ public class XN805305 extends AProcessor {
         condition.setOrder(column, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
-        return eventAO.querySmsPage(start, limit, condition);
+        return eventAO.queryEventPage(start, limit, condition);
     }
 
     @Override
