@@ -46,6 +46,8 @@
 	
 		<typeAlias alias="bankcard" type="com.ogc.standard.domain.Bankcard"/>
 		
+		<typeAlias alias="player" type="com.ogc.standard.domain.Player"/>
+		
 
 	</typeAliases>
 </configuration>

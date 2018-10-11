@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.IPlayerDAO">
+	<resultMap id="player_DB_Result" type="player">
+		<result column="code" property="code" />
+		<result column="match" property="match" />
+		<result column="match_play_code" property="matchPlayCode" />
+		<result column="cname" property="cname" />
+		<result column="ename" property="ename" />
+		<result column="native_place" property="nativePlace" />
+		<result column="height" property="height" />
+		<result column="weight" property="weight" />
+		<result column="xwei" property="xwei" />
+		<result column="ywei" property="ywei" />
+		<result column="twei" property="twei" />
+		<result column="description" property="description" />
+		<result column="list_pic" property="listPic" />
+		<result column="banner_pics" property="bannerPics" />
+		<result column="pics" property="pics" />
+		<result column="location" property="location" />
+		<result column="order_no" property="orderNo" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="updater" property="updater" />
+		<result column="update_datetime" property="updateDatetime" />
+		<result column="remark" property="remark" />
+		<result column="ticket_sum" property="ticketSum" />
+		<result column="attention_sum" property="attentionSum" />
+		<result column="share_sum" property="shareSum" />
+		<result column="scan_sum" property="scanSum" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+			<if test="match != null and match != '' ">
+				AND t.match = #{match}
+			</if>
+			<if test="matchPlayCode != null and matchPlayCode != '' ">
+				AND t.matchPlayCode = #{matchPlayCode}
+			</if>
+			<if test="cnameQuery != null and cnameQuery != '' ">
+				AND t.cname like "%"#{cnameQuery}"%"
+			</if>
+			<if test="enameQuery != null and enameQuery != '' ">
+				AND t.ename = #{enameQuery}
+			</if>
+			<if test="nativePlaceQuery != null and nativePlaceQuery != '' ">
+				AND t.nativePlace = #{nativePlaceQuery}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
+		</trim>
+	</sql>
+	<select id="select_player" parameterType="player" resultMap="player_DB_Result">
+		SELECT
+		t.code
+		,t.match
+		,t.match_play_code
+		,t.cname
+		,t.ename
+		,t.native_place
+		,t.height
+		,t.weight
+		,t.xwei
+		,t.ywei
+		,t.twei
+		,t.description
+		,t.list_pic
+		,t.banner_pics
+		,t.pics
+		,t.location
+		,t.order_no
+		,t.status
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.ticket_sum
+		,t.attention_sum
+		,t.share_sum
+		,t.scan_sum
+		FROM
+		thqxj_player t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_player_count" parameterType="player"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM thqxj_player t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_player" parameterType="player">
+		INSERT INTO
+		thqxj_player(
+		code
+		,match
+		,match_play_code
+		,cname
+		,ename
+		,native_place
+		,height
+		,weight
+		,xwei
+		,ywei
+		,twei
+		,description
+		,list_pic
+		,banner_pics
+		,pics
+		,location
+		,order_no
+		,status
+		,create_datetime
+		,updater
+		,update_datetime
+		,remark
+		,ticket_sum
+		,attention_sum
+		,share_sum
+		,scan_sum
+		)
+		VALUES(
+		#{code}
+		,#{match}
+		,#{matchPlayCode}
+		,#{cname}
+		,#{ename}
+		,#{nativePlace}
+		,#{height}
+		,#{weight}
+		,#{xwei}
+		,#{ywei}
+		,#{twei}
+		,#{description}
+		,#{listPic}
+		,#{bannerPics}
+		,#{pics}
+		,#{location}
+		,#{orderNo}
+		,#{status}
+		,#{createDatetime}
+		,#{updater}
+		,#{updateDatetime}
+		,#{remark}
+		,#{ticketSum}
+		,#{attentionSum}
+		,#{shareSum}
+		,#{scanSum}
+		)
+	</insert>
+
+	<update id="update_player" parameterType="player">
+		UPDATE thqxj_player
+		SET
+		match = #{match}
+		,match_play_code = #{matchPlayCode}
+		,cname = #{cname}
+		,ename = #{ename}
+		,native_place = #{nativePlace}
+		,height = #{height}
+		,weight = #{weight}
+		,xwei = #{xwei}
+		,ywei = #{ywei}
+		,twei = #{twei}
+		,description = #{description}
+		,list_pic = #{listPic}
+		,banner_pics = #{bannerPics}
+		,pics = #{pics}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,status = #{status}
+		,create_datetime = #{createDatetime}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		,remark = #{remark}
+		,ticket_sum = #{ticketSum}
+		,attention_sum = #{attentionSum}
+		,share_sum = #{shareSum}
+		,scan_sum = #{scanSum}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_approve" parameterType="player">
+		UPDATE thqxj_player
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		<if test="remark != null and remark != ''">
+		,remark = #{remark}
+		</if>
+		WHERE code = #{code}
+	</update>
+
+	<update id="update_up_player" parameterType="player">
+		UPDATE thqxj_player
+		SET
+		status = #{status}
+		,location = #{location}
+		,order_no = #{orderNo}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
+	
+	
+	<update id="update_down_player" parameterType="player">
+		UPDATE thqxj_player
+		SET
+		status = #{status}
+		,updater = #{updater}
+		,update_datetime = #{updateDatetime}
+		WHERE code = #{code}
+	</update>
+
+</mapper>
