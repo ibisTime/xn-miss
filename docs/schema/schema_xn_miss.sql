@@ -109,7 +109,7 @@ CREATE TABLE `thqxj_question` (
 DROP TABLE IF EXISTS `thqxj_rank`;
 CREATE TABLE `thqxj_rank` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `type` varchar(4) NOT NULL COMMENT '类型（0 日榜，1 总榜）',
+  `type` varchar(4) NOT NULL COMMENT '类型（1 日榜 2 总榜）',
   `batch` varchar(32) DEFAULT NULL COMMENT '批次',
   `player_code` varchar(32) DEFAULT NULL COMMENT '选手编号',
   `rank` int(11) DEFAULT NULL COMMENT '排名',

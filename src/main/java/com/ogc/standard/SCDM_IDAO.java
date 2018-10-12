@@ -9,29 +9,25 @@ import com.ogc.standard.common.DateUtil;
 
 public class SCDM_IDAO {
     // 实体
-    private static String key = "player";
+    private static String key = "rank";
 
     // 实体名称
-    private static String keyName = "选手";
+    private static String keyName = "榜单";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
 
     // 表名
-    private static String dbname = "thqxj_player";
+    private static String dbname = "thqxj_rank";
 
-    private static String[] DBwords = { "code", "match", "match_play_code",
-            "cname", "ename", "native_place", "height", "weight", "xwei",
-            "ywei", "twei", "description", "list_pic", "banner_pics", "pics",
-            "location", "order_no", "status", "create_datetime", "updater",
-            "update_datetime", "remark", "ticket_sum", "attention_sum",
+    private static String[] DBwords = { "code", "type", "batch", "player_code",
+            "rank", "match", "create_datetime", "updater", "update_datetime",
+            "remark", "ticket_sum", "fake_ticket_sum", "attention_sum",
             "share_sum", "scan_sum" };
 
-    private static String[] DBwordsName = { "编号", "赛区", "选手编号", "中文名", "英文名",
-            "户籍", "身高", "体重", "胸围", "腰围", "臀围", "文字描述", "列表图", "banner图",
-            "详情图", "UI位置", "UI次序",
-            "状态（0 草稿，1 已提交待审批，2 审批不通过，3 已审批待上架，4 已上架，5 已下架）", "创建时间", "更新人",
-            "更新时间", "备注", "加油总数", "关注总数", "分享总数", "足迹总数" };
+    private static String[] DBwordsName = { "编号", "类型（0 日榜，1 总榜）", "批次",
+            "选手编号", "排名", "赛区", "创建时间", "更新人", "更新时间", "备注", "实际加油总数",
+            "虚拟加油总数", "关注总数", "分享总数", "足迹总数" };
 
     public void testname() throws Exception {
     }

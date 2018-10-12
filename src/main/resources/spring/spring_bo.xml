@@ -139,7 +139,9 @@
 		<property name="paginableDAO" ref="playerDAOImpl"/>
 	</bean>
 	
-
+	<bean id="rankBO" class="com.ogc.standard.bo.impl.RankBOImpl">
+		<property name="paginableDAO" ref="rankDAOImpl"/>
+	</bean>
 		
 
 </beans>
