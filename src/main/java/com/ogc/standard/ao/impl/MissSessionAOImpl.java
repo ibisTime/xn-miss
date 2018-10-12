@@ -40,6 +40,7 @@ public class MissSessionAOImpl implements IMissSessionAO {
 
     @Override
     public String addMissSession(String type, String user1) {
+        userBO.getUser(user1);
         return missSessionBO.saveSession(type, user1);
     }
 
