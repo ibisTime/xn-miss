@@ -151,7 +151,7 @@ CREATE TABLE `thqxj_session` (
 DROP TABLE IF EXISTS `thqxj_ticket`;
 CREATE TABLE `thqxj_ticket` (
   `code` varchar(32) NOT NULL COMMENT '编号',
-  `player_code` varchar(32) DEFAULT NULL COMMENT '选手编号',
+  `player_code` varchar(32) DEFAULT NULL COMMENT '选手表编号',
   `ticket` bigint(20) DEFAULT NULL COMMENT '票数',
   `amount` decimal(64,0) DEFAULT NULL COMMENT '下单金额',
   `apply_user` varchar(32) DEFAULT NULL COMMENT '下单人',

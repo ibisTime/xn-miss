@@ -36,10 +36,10 @@
 				AND t.code = #{code}
 			</if>
 			<if test="match != null and match != '' ">
-				AND t.match = #{match}
+				AND t.`match` = #{match}
 			</if>
 			<if test="matchPlayCode != null and matchPlayCode != '' ">
-				AND t.matchPlayCode = #{matchPlayCode}
+				AND t.match_play_code = #{matchPlayCode}
 			</if>
 			<if test="cnameQuery != null and cnameQuery != '' ">
 				AND t.cname like "%"#{cnameQuery}"%"
@@ -48,7 +48,7 @@
 				AND t.ename = #{enameQuery}
 			</if>
 			<if test="nativePlaceQuery != null and nativePlaceQuery != '' ">
-				AND t.nativePlace = #{nativePlaceQuery}
+				AND t.native_place = #{nativePlaceQuery}
 			</if>
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
@@ -64,7 +64,7 @@
 	<select id="select_player" parameterType="player" resultMap="player_DB_Result">
 		SELECT
 		t.code
-		,t.match
+		,t.`match`
 		,t.match_play_code
 		,t.cname
 		,t.ename
@@ -109,7 +109,7 @@
 		INSERT INTO
 		thqxj_player(
 		code
-		,match
+		,`match`
 		,match_play_code
 		,cname
 		,ename
@@ -168,7 +168,7 @@
 	<update id="update_player" parameterType="player">
 		UPDATE thqxj_player
 		SET
-		match = #{match}
+		`match` = #{match}
 		,match_play_code = #{matchPlayCode}
 		,cname = #{cname}
 		,ename = #{ename}

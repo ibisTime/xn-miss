@@ -12,10 +12,9 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum EChannelType {
-    TRADE("TRD", "模拟交易"), NBZ("0", "内部账"), Online("1", "线上"), Offline("90",
-            "人工线下"), Divide("91", "分红"), Alipay("30", "支付宝APP支付"), WeChat_H5(
-            "35", "微信公众号支付"), WeChat_APP("36", "微信APP支付"), WeChat_NATIVE("37",
-            "微信扫码支付");
+    NBZ("0", "内部账"), Online("1", "线上"), Offline("90", "人工线下"), Alipay("30",
+            "支付宝APP支付"), WeChat_H5("35", "微信公众号支付"), WeChat_APP("36", "微信APP支付"), WeChat_NATIVE(
+            "37", "微信扫码支付");
 
     public static Map<String, EChannelType> getChannelTypeResultMap() {
         Map<String, EChannelType> map = new HashMap<String, EChannelType>();

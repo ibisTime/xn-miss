@@ -2,14 +2,14 @@ package com.ogc.standard.enums;
 
 /**
  * @author: xieyj 
- * @since: 2016年11月11日 上午10:09:32 
+ * @since: 2016年11月11日 上午10:54:16 
  * @history:
  */
-public enum EPayType {
-    RMB_YE("1", "余额支付"), WEIXIN_APP("2", "微信APP"), ALIPAY("3", "支付宝"), WEIXIN_H5(
-            "5", "微信h5"), WEIXIN_NATIVE("6", "微信扫码");
+public enum ETicketStatus {
 
-    EPayType(String code, String value) {
+    TO_PAY("0", "待支付"), PAYED("1", "已支付"), CANCEL("2", "超时取消");
+
+    ETicketStatus(String code, String value) {
         this.code = code;
         this.value = value;
     }
@@ -25,4 +25,5 @@ public enum EPayType {
     public String getValue() {
         return value;
     }
+
 }

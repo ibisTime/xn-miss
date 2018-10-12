@@ -48,6 +48,7 @@
 		
 		<typeAlias alias="player" type="com.ogc.standard.domain.Player"/>
 		<typeAlias alias="rank" type="com.ogc.standard.domain.Rank"/>
+		<typeAlias alias="ticket" type="com.ogc.standard.domain.Ticket"/>
 
 	</typeAliases>
 </configuration>

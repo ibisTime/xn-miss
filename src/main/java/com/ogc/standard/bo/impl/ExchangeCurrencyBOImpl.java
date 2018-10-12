@@ -21,7 +21,6 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EExchangeCurrencyStatus;
 import com.ogc.standard.enums.EExchangeTimes;
 import com.ogc.standard.enums.EGeneratePrefix;
-import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 
@@ -95,7 +94,7 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
 
         data.setCreateDatetime(new Date());
         data.setStatus(EExchangeCurrencyStatus.PAYED.getCode());
-        data.setPayType(EPayType.DBHZ.getCode());
+        // data.setPayType(EPayType.DBHZ.getCode());
         data.setPayGroup(code);
         data.setSystemCode(systemCode);
 

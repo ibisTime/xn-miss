@@ -162,11 +162,6 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
                 qxfl = SysConstant.BUSERQXFL;
             }
             qxDbzdjeValue = argsMap.get(SysConstant.QXDBZDJE);
-        } else if (ECurrency.HW_XJK.getCode().equals(account.getCurrency())) {
-            monthTimesKey = SysConstant.CUSERMONTIMES_XJK;
-            qxDbzdjeValue = argsMap.get(SysConstant.QXDBZDJE_XJK);
-            qxbs = SysConstant.CUSERQXBS_XJK;
-            qxfl = SysConstant.CUSERQXFL_XJK;
         } else {
             throw new BizException("xn0000", "币种不支持");
         }
