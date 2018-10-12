@@ -15,7 +15,4 @@ public interface ICommentDAO extends IBaseDAO<Comment> {
     // 审核评论
     public int updateApproveComment(Comment data);
 
-    // 点赞/取消评论
-    public int updatePointComment(Comment data);
-
 }

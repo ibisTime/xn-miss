@@ -21,6 +21,7 @@
 		<typeAlias alias="missSession" type="com.ogc.standard.domain.MissSession" />
 		<typeAlias alias="question" type="com.ogc.standard.domain.Question" />
 		<typeAlias alias="answer" type="com.ogc.standard.domain.Answer" />
+		<typeAlias alias="action" type="com.ogc.standard.domain.Action" />
 		
 	
 		

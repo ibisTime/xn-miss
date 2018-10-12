@@ -4,17 +4,14 @@
 <mapper namespace="com.ogc.standard.dao.ICommentDAO">
 	<resultMap id="comment_DB_Result" type="comment">
 		<result column="code" property="code" />
-		<result column="type" property="type" />
-		<result column="content" property="content" />
-		<result column="user_id" property="userId" />
-		<result column="comment_datetime" property="commentDatetime" />
-		
-		<result column="point_count" property="pointCount" />
 		<result column="parent_code" property="parentCode" />
-		<result column="parent_user_id" property="parentUserId" />
-		<result column="object_code" property="objectCode" />
-		<result column="status" property="status" />
+		<result column="type" property="type" />
+		<result column="creater" property="creater" />
+		<result column="to_code" property="toCode" />
 		
+		<result column="content" property="content" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="status" property="status" />
 		<result column="approver" property="approver" />
 		<result column="approve_datetime" property="approveDatetime" />
 		<result column="remark" property="remark" />
@@ -28,17 +25,14 @@
 			<if test="type != null and type != '' ">
 				AND t.type = #{type}
 			</if>
-			<if test="userId != null and userId != '' ">
-				AND t.user_id = #{userId}
+			<if test="creater != null and creater != '' ">
+				AND t.creater = #{creater}
 			</if>
 			<if test="parentCode != null and parentCode != '' ">
 				AND t.parent_code = #{parentCode}
 			</if>
-			<if test="parentUserId != null and parentUserId != '' ">
-				AND t.parent_user_id = #{parentUserId}
-			</if>
-			<if test="objectCode != null and objectCode != '' ">
-				AND t.object_code = #{objectCode}
+			<if test="toCode != null and toCode != '' ">
+				AND t.to_code = #{toCode}
 			</if>
 			<if test="content != null and content != '' ">
 				AND t.content like "%"#{content}#"%"
@@ -56,11 +50,11 @@
 				</when>
 			</choose>
 			
-			<if test="commentDateStart != null and commentDateStart != '' ">
-				<![CDATA[AND t.comment_datetime >= #{commentDateStart}]]>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
-			<if test="commentDateEnd != null and commentDateEnd != '' ">
-				<![CDATA[AND t.comment_datetime < #{commentDateEnd}]]>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime < #{createDatetimeEnd}]]>
 			</if>
 		</trim>
 	</sql>
@@ -68,22 +62,19 @@
 	<select id="select_comment" parameterType="comment" resultMap="comment_DB_Result">
 		SELECT
 		t.code
-		,t.type
-		,t.content
-		,t.user_id
-		,t.comment_datetime
-		
-		,t.point_count
 		,t.parent_code
-		,t.parent_user_id
-		,t.object_code
-		,t.status
+		,t.type
+		,t.creater
+		,t.to_code
 		
+		,t.content
+		,t.create_datetime
+		,t.status
 		,t.approver
 		,t.approve_datetime
 		,t.remark
 		FROM
-		tforum_comment t
+		thqxj_comment t
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -94,44 +85,38 @@
 
 	<select id="select_comment_count" parameterType="comment"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM tforum_comment t
+		SELECT count(1) FROM thqxj_comment t
 		<include refid="where_condition" />
 	</select>
 
 	<insert id="insert_comment" parameterType="comment">
 		INSERT INTO
-		tforum_comment(
+		thqxj_comment(
 		code
-		,type
-		,content
-		,user_id
-		,comment_datetime
-		
-		,point_count
 		,parent_code
-		,parent_user_id
-		,object_code
+		,type
+		,creater
+		,to_code
+		,content
+		,create_datetime
 		,status
 		,remark
 		)
 		VALUES(
 		#{code}
-		,#{type}
-		,#{content}
-		,#{userId}
-		,#{commentDatetime}
-		
-		,#{pointCount}
 		,#{parentCode}
-		,#{parentUserId}
-		,#{objectCode}
+		,#{type}
+		,#{creater}
+		,#{toCode}
+		,#{content}
+		,#{createDatetime}
 		,#{status}
 		,#{remark}
 		)
 	</insert>
 
 	<update id="update_approveComment" parameterType="comment">
-		UPDATE tforum_comment
+		UPDATE thqxj_comment
 		SET
 		status = #{status}
 		,approver = #{approver}
@@ -139,16 +124,9 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
-	<update id="update_pointCount" parameterType="comment">
-		UPDATE tforum_comment
-		SET
-		point_count = #{pointCount}
-		WHERE code = #{code}
-	</update>
 	
 	<update id="update_deleteComment" parameterType="comment">
-		UPDATE tforum_comment
+		UPDATE thqxj_comment
 		SET
 		status = #{status}
 		WHERE code = #{code}

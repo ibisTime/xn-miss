@@ -95,8 +95,8 @@ public class EventAOImpl implements IEventAO {
         }
 
         eventBO.refreshStatus(code, EEventStauts.ON.getCode(), updater, remark);
-        // 批量添加read数据
-        readBO.saveToRead(code);
+        // // 批量添加read数据
+        // readBO.saveToRead(code);
 
     }
 
@@ -111,8 +111,8 @@ public class EventAOImpl implements IEventAO {
         eventBO
             .refreshStatus(code, EEventStauts.OFF.getCode(), updater, remark);
 
-        // 批量删除read数据
-        readBO.refereshDelete(code);
+        // // 批量删除read数据
+        // readBO.refereshDelete(code);
     }
 
     @Override

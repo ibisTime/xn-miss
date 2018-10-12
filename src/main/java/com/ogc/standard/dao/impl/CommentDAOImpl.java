@@ -33,11 +33,6 @@ public class CommentDAOImpl extends AMybatisTemplate implements ICommentDAO {
     }
 
     @Override
-    public int updatePointComment(Comment data) {
-        return super.update(NAMESPACE.concat("update_pointCount"), data);
-    }
-
-    @Override
     public Comment select(Comment condition) {
         return super.select(NAMESPACE.concat("select_comment"), condition,
             Comment.class);

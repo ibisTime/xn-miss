@@ -18,29 +18,23 @@ public class Comment extends ABaseDO {
     // 编号
     private String code;
 
+    // 父级编号（帖子/评论编号）
+    private String parentCode;
+
     // 类型（1=帖子 2=帖子评论）
     private String type;
+
+    // 评论人
+    private String creater;
+
+    // 对象编号
+    private String toCode;
 
     // 评论内容
     private String content;
 
-    // 评论人
-    private String userId;
-
     // 评论时间
-    private Date commentDatetime;
-
-    // 点赞量
-    private Integer pointCount;
-
-    // 父级编号（帖子/评论编号）
-    private String parentCode;
-
-    // 父级评论编号（评论帖子用户）
-    private String parentUserId;
-
-    // 对象编号（帖子编号）
-    private String objectCode;
+    private Date createDatetime;
 
     // 状态(A=待审核 B=审核通过 C=审核不通过 D=已发布 G=已删除)
     private String status;
@@ -56,10 +50,10 @@ public class Comment extends ABaseDO {
 
     /************DB Properties***************/
     // 开始时间
-    private Date commentDateStart;
+    private Date createDatetimeStart;
 
     // 结束时间
-    private Date commentDateEnd;
+    private Date createDatetimeEnd;
 
     // 状态列表
     private List<String> statusList;
@@ -85,29 +79,11 @@ public class Comment extends ABaseDO {
     // 关键字过滤状态（0=未过滤，1=关键字被替换，2=待审核）
     private String filterFlag;
 
-
     // 父级别评论
     private Comment parentComment;
 
     // 子集评论
     private List<Comment> nextCommentList;
-
-    public List<Comment> getNextCommentList() {
-        return nextCommentList;
-    }
-
-    public void setNextCommentList(List<Comment> nextCommentList) {
-        this.nextCommentList = nextCommentList;
-    }
-
-    public Comment getParentComment() {
-        return parentComment;
-    }
-
-    public void setParentComment(Comment parentComment) {
-        this.parentComment = parentComment;
-    }
-
 
     public String getCode() {
         return code;
@@ -115,46 +91,6 @@ public class Comment extends ABaseDO {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Date getCommentDatetime() {
-        return commentDatetime;
-    }
-
-    public void setCommentDatetime(Date commentDatetime) {
-        this.commentDatetime = commentDatetime;
-    }
-
-    public Integer getPointCount() {
-        return pointCount;
-    }
-
-    public void setPointCount(Integer pointCount) {
-        this.pointCount = pointCount;
     }
 
     public String getParentCode() {
@@ -165,20 +101,44 @@ public class Comment extends ABaseDO {
         this.parentCode = parentCode;
     }
 
-    public String getParentUserId() {
-        return parentUserId;
+    public String getType() {
+        return type;
     }
 
-    public void setParentUserId(String parentUserId) {
-        this.parentUserId = parentUserId;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getObjectCode() {
-        return objectCode;
+    public String getCreater() {
+        return creater;
     }
 
-    public void setObjectCode(String objectCode) {
-        this.objectCode = objectCode;
+    public void setCreater(String creater) {
+        this.creater = creater;
+    }
+
+    public String getToCode() {
+        return toCode;
+    }
+
+    public void setToCode(String toCode) {
+        this.toCode = toCode;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Date getCreateDatetime() {
+        return createDatetime;
+    }
+
+    public void setCreateDatetime(Date createDatetime) {
+        this.createDatetime = createDatetime;
     }
 
     public String getStatus() {
@@ -213,20 +173,20 @@ public class Comment extends ABaseDO {
         this.remark = remark;
     }
 
-    public Date getCommentDateStart() {
-        return commentDateStart;
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
     }
 
-    public void setCommentDateStart(Date commentDateStart) {
-        this.commentDateStart = commentDateStart;
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
     }
 
-    public Date getCommentDateEnd() {
-        return commentDateEnd;
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
     }
 
-    public void setCommentDateEnd(Date commentDateEnd) {
-        this.commentDateEnd = commentDateEnd;
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
     }
 
     public List<String> getStatusList() {
@@ -291,6 +251,22 @@ public class Comment extends ABaseDO {
 
     public void setFilterFlag(String filterFlag) {
         this.filterFlag = filterFlag;
+    }
+
+    public Comment getParentComment() {
+        return parentComment;
+    }
+
+    public void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    public List<Comment> getNextCommentList() {
+        return nextCommentList;
+    }
+
+    public void setNextCommentList(List<Comment> nextCommentList) {
+        this.nextCommentList = nextCommentList;
     }
 
 }

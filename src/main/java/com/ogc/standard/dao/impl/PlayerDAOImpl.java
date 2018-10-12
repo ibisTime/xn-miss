@@ -65,4 +65,19 @@ public class PlayerDAOImpl extends AMybatisTemplate implements IPlayerDAO {
         super.update(NAMESPACE.concat("update_down_player"), data);
     }
 
+    @Override
+    public void updateAttention(Player data) {
+        super.update(NAMESPACE.concat("update_attention"), data);
+    }
+
+    @Override
+    public void updateScan(Player data) {
+        super.update(NAMESPACE.concat("update_scan"), data);
+    }
+
+    @Override
+    public void updateShare(Player data) {
+        super.update(NAMESPACE.concat("update_share"), data);
+    }
+
 }

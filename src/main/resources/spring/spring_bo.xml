@@ -102,6 +102,10 @@
 		<property name="paginableDAO" ref="accountDAOImpl"/>
 	</bean>
 	
+	<bean id="actionBO" class="com.ogc.standard.bo.impl.ActionBOImpl">
+		<property name="paginableDAO" ref="actionDAOImpl"/>
+	</bean>
+	
 
 	
 	

@@ -81,16 +81,16 @@ public class Player extends ABaseDO {
     private String remark;
 
     // 加油总数
-    private String ticketSum;
+    private Long ticketSum;
 
     // 关注总数
-    private String attentionSum;
+    private Long attentionSum;
 
     // 分享总数
-    private String shareSum;
+    private Long shareSum;
 
     // 足迹总数
-    private String scanSum;
+    private Long scanSum;
 
     /************DB properties************/
 
@@ -287,35 +287,35 @@ public class Player extends ABaseDO {
         return remark;
     }
 
-    public void setTicketSum(String ticketSum) {
+    public void setTicketSum(Long ticketSum) {
         this.ticketSum = ticketSum;
     }
 
-    public String getTicketSum() {
+    public Long getTicketSum() {
         return ticketSum;
     }
 
-    public void setAttentionSum(String attentionSum) {
+    public void setAttentionSum(Long attentionSum) {
         this.attentionSum = attentionSum;
     }
 
-    public String getAttentionSum() {
+    public Long getAttentionSum() {
         return attentionSum;
     }
 
-    public void setShareSum(String shareSum) {
+    public void setShareSum(Long shareSum) {
         this.shareSum = shareSum;
     }
 
-    public String getShareSum() {
+    public Long getShareSum() {
         return shareSum;
     }
 
-    public void setScanSum(String scanSum) {
+    public void setScanSum(Long scanSum) {
         this.scanSum = scanSum;
     }
 
-    public String getScanSum() {
+    public Long getScanSum() {
         return scanSum;
     }
 

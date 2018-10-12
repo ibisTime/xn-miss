@@ -162,4 +162,31 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
         return data;
     }
 
+    @Override
+    public void addAttention(Player data) {
+        if (null == data.getAttentionSum()) {
+            data.setAttentionSum(Long.valueOf(1));
+        } else {
+            data.setAttentionSum(data.getAttentionSum() + 1);
+        }
+    }
+
+    @Override
+    public void addShare(Player data) {
+        if (null == data.getShareSum()) {
+            data.setShareSum(Long.valueOf(1));
+        } else {
+            data.setShareSum(data.getShareSum() + 1);
+        }
+    }
+
+    @Override
+    public void addScan(Player data) {
+        if (null == data.getScanSum()) {
+            data.setScanSum(Long.valueOf(1));
+        } else {
+            data.setScanSum(data.getScanSum() + 1);
+        }
+    }
+
 }
