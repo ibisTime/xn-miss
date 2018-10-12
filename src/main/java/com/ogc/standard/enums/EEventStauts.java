@@ -9,6 +9,7 @@
 package com.ogc.standard.enums;
 
 /** 
+ * 赛事信息状态
  * @author: dl 
  * @since: 2018年8月22日 下午2:38:20 
  * @history:

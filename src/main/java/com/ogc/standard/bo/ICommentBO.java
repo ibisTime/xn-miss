@@ -16,8 +16,8 @@ public interface ICommentBO extends IPaginableBO<Comment> {
     public boolean isCommentExist(String code);
 
     // 添加评论
-    public String saveComment(String type, String parentCode,
-            String parentUserId, String content, String status, String userId);
+    public String saveComment(String creater, String content,
+            String playerCode, String status);
 
     // 删除评论
     public void removeComment(String code);
@@ -26,12 +26,8 @@ public interface ICommentBO extends IPaginableBO<Comment> {
     public void refreshApproveComment(String code, String status,
             String approver, String approveNote);
 
-    // 更新点赞量
-    public void refreshPointComment(String code, Integer pointCount);
-
     public List<Comment> queryCommentList(Comment condition);
 
-    // 获取帖子评论列表
     public List<Comment> queryCommentListByObjectCode(String objectCode,
             String userId);
 

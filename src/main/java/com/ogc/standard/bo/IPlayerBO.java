@@ -29,4 +29,10 @@ public interface IPlayerBO extends IPaginableBO<Player> {
 
     public void refreshDownPlayer(Player data, String updater);
 
+    public void addAttention(Player data);
+
+    public void addShare(Player data);
+
+    public void addScan(Player data);
+
 }

@@ -228,5 +228,26 @@
 		,update_datetime = #{updateDatetime}
 		WHERE code = #{code}
 	</update>
+	
+	<update id="update_attention" parameterType="player">
+		UPDATE thqxj_player
+		SET
+		attention_sum = #{attentionSum}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_share" parameterType="player">
+		UPDATE thqxj_player
+		SET
+		share_sum = #{shareSum}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_scan" parameterType="player">
+		UPDATE thqxj_player
+		SET
+		scan_sum = #{scanSum}
+		WHERE code = #{code}
+	</update>
 
 </mapper>

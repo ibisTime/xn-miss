@@ -202,7 +202,7 @@ public enum EErrorCode_main {
     // 评论
     comm_KEYWORD("000079", "评论内容存在关键字：【%s】,请删除后再评论！"),
 
-    comm_STATUS("000080", "评论不处于可以进行此操作的状态状态！"),
+    comm_STATUS("000080", "评论不处于可以进行此操作的状态！"),
 
     comm_USERRIGHTS("000081", "当前用户没有权限删除该评论！"),
 
@@ -261,8 +261,7 @@ public enum EErrorCode_main {
 
     simucount_COUNT("000105", "委托数量应在%s和%s之间"),
 
-    simuorder_MINCOUNT("000106",
-            "委托数量应当" + SysConstants.minCountLimit + "的整数倍"),
+    simuorder_MINCOUNT("000106", "委托数量应当" + SysConstants.minCountLimit + "的整数倍"),
 
     simuorder_PRICELESSTHAN("000107", "委托价格不得高于前收盘价的900%"),
 
