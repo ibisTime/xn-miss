@@ -10,4 +10,6 @@ public interface ITicketDAO extends IBaseDAO<Ticket> {
     int update(Ticket data);
 
     void updateCancelTicket(Ticket data);
+
+    void updatePayYueSuccess(Ticket data);
 }

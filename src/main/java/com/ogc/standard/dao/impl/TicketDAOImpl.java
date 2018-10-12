@@ -55,4 +55,9 @@ public class TicketDAOImpl extends AMybatisTemplate implements ITicketDAO {
         super.update(NAMESPACE.concat("update_cancel_ticket"), data);
     }
 
+    @Override
+    public void updatePayYueSuccess(Ticket data) {
+        super.update(NAMESPACE.concat("update_pay_yue_success"), data);
+    }
+
 }

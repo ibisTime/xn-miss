@@ -189,4 +189,19 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
         }
     }
 
+    @Override
+    public void refreshPlayerTicketSum(String playerCode, Long ticket) {
+        Player data = getPlayer(playerCode);
+        data.setTicketSum(getLong(data.getTicketSum()) + ticket);
+        playerDAO.updatePlayerTicketSum(data);
+    }
+
+    private Long getLong(Object obj) {
+        if (null == obj) {
+            return 0L;
+        } else {
+            return (Long) obj;
+        }
+    }
+
 }

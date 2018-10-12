@@ -20,4 +20,6 @@ public interface IPlayerDAO extends IBaseDAO<Player> {
     void updateScan(Player data);
 
     void updateShare(Player data);
+
+    void updatePlayerTicketSum(Player data);
 }

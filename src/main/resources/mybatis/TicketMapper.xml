@@ -25,6 +25,33 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="playerCode != null and playerCode != '' ">
+				AND t.player_code = #{playerCode}
+			</if>
+			<if test="applyUser != null and applyUser != '' ">
+				AND t.apply_user = #{applyUser}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
+			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
+				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
+			</if>
+			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
+				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
+			<if test="payDatetimeStart != null and payDatetimeStart != '' ">
+				<![CDATA[AND t.pay_datetime >= #{payDatetimeStart}]]>
+			</if>
+			<if test="payDatetimeEnd != null and payDatetimeEnd != '' ">
+				<![CDATA[AND t.pay_datetime >= #{payDatetimeEnd}]]>
+			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 		</trim>
 	</sql>
 	<select id="select_ticket" parameterType="ticket" resultMap="ticket_DB_Result">
@@ -128,6 +155,17 @@
 		status = #{status}
 		,canceler = #{canceler}
 		,cancel_datetime = #{cancelDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_pay_yue_success" parameterType="ticket">
+		UPDATE thqxj_ticket
+		SET
+		status = #{status}
+		,pay_type = #{payType}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>

@@ -1,5 +1,7 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.IRankDAO;
+import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.Rank;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
@@ -34,8 +37,46 @@ public class RankBOImpl extends PaginableBOImpl<Rank> implements IRankBO {
     }
 
     @Override
-    public void refreshRanking(Rank data) {
-        rankDAO.updateRanking(data);
+    public void refreshRanking(String type, String code) {
+        Rank rank = getRank(code);
+        Rank condition = new Rank();
+        condition.setType(type);
+        condition.setBatch(rank.getBatch());
+        condition.setMatch(rank.getMatch());
+        List<Rank> list = rankDAO.selectList(condition);
+        sort(list);
+        for (Rank r1 : list) {
+            r1.setRank(list.indexOf(r1) + 1);
+            rankDAO.updateRanking(r1);
+        }
+    }
+
+    public void sort(List<Rank> list) {
+        Collections.sort(list, new Comparator<Rank>() {
+            public int compare(Rank r1, Rank r2) {
+                if (r1.getTicketSum() + r1.getFakeTicketSum() < r2
+                    .getTicketSum() + r2.getFakeTicketSum()) {
+                    return 1;
+                }
+                if (r1.getTicketSum() + r1.getFakeTicketSum() == r2
+                    .getTicketSum() + r2.getFakeTicketSum()) {
+                    return 0;
+                }
+                return -1;
+            }
+        });
+    }
+
+    @Override
+    public Rank getRankByPlayerCodeAndType(String playerCode, String type) {
+        Rank data = null;
+        if (StringUtils.isNotBlank(playerCode) && StringUtils.isNotBlank(type)) {
+            Rank condition = new Rank();
+            condition.setPlayerCode(playerCode);
+            condition.setType(type);
+            data = rankDAO.select(condition);
+        }
+        return data;
     }
 
     @Override
@@ -96,6 +137,24 @@ public class RankBOImpl extends PaginableBOImpl<Rank> implements IRankBO {
             }
         }
         return data;
+    }
+
+    @Override
+    public String saveRank(Player player, String type, Long ticket) {
+        String code = null;
+        if (player != null) {
+            Rank data = new Rank();
+            code = OrderNoGenerater.generate(EGeneratePrefix.RANK.getCode());
+            data.setCode(code);
+            data.setType(type);
+            data.setBatch("1");// TODO
+            data.setPlayerCode(player.getCode());
+            data.setMatch(player.getMatch());
+            data.setCreateDatetime(new Date());
+            data.setTicketSum(ticket);
+            rankDAO.insert(data);
+        }
+        return code;
     }
 
 }

@@ -249,5 +249,11 @@
 		scan_sum = #{scanSum}
 		WHERE code = #{code}
 	</update>
-
+	
+	<update id="update_player_ticket_sum" parameterType="player">
+		UPDATE thqxj_player
+		SET
+		ticket_sum = #{ticketSum}
+		WHERE code = #{code}
+	</update>
 </mapper>

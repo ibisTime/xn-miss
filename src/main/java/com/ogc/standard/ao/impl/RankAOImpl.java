@@ -1,7 +1,5 @@
 package com.ogc.standard.ao.impl;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -35,10 +33,9 @@ public class RankAOImpl implements IRankAO {
         // 增加虚拟加油数
         rankBO.refreshManualAdjustment(data, fakeTicket, updater, remark);
         // 更新日榜排名
-        updateRanking(ERankType.DAY.getCode(), data.getBatch(), data.getMatch());
+        rankBO.refreshRanking(ERankType.DAY.getCode(), data.getCode());
         // 更新总榜排名
-        updateRanking(ERankType.TOTAL.getCode(), data.getBatch(),
-            data.getMatch());
+        rankBO.refreshRanking(ERankType.TOTAL.getCode(), data.getCode());
     }
 
     @Override
@@ -87,35 +84,6 @@ public class RankAOImpl implements IRankAO {
         Rank data = rankBO.getRank(code);
         init(data);
         return data;
-    }
-
-    public void updateRanking(String type, String batch, String match) {
-        Rank condition = new Rank();
-        condition.setType(type);
-        condition.setBatch(batch);
-        condition.setMatch(match);
-        List<Rank> list = rankBO.queryRankList(condition);
-        sort(list);
-        for (Rank r1 : list) {
-            r1.setRank(list.indexOf(r1) + 1);
-            rankBO.refreshRanking(r1);
-        }
-    }
-
-    public void sort(List<Rank> list) {
-        Collections.sort(list, new Comparator<Rank>() {
-            public int compare(Rank r1, Rank r2) {
-                if (r1.getTicketSum() + r1.getFakeTicketSum() < r2
-                    .getTicketSum() + r2.getFakeTicketSum()) {
-                    return 1;
-                }
-                if (r1.getTicketSum() + r1.getFakeTicketSum() == r2
-                    .getTicketSum() + r2.getFakeTicketSum()) {
-                    return 0;
-                }
-                return -1;
-            }
-        });
     }
 
     public void init(Rank data) {

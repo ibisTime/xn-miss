@@ -35,4 +35,6 @@ public interface IPlayerBO extends IPaginableBO<Player> {
 
     public void addScan(Player data);
 
+    public void refreshPlayerTicketSum(String playerCode, Long ticket);
+
 }

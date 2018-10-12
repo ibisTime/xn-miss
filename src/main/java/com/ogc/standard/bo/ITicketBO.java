@@ -22,4 +22,6 @@ public interface ITicketBO extends IPaginableBO<Ticket> {
 
     public void refreshCancelTicket(Ticket data, String remark);
 
+    public void payYueSuccess(Ticket data);
+
 }

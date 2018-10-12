@@ -80,4 +80,9 @@ public class PlayerDAOImpl extends AMybatisTemplate implements IPlayerDAO {
         super.update(NAMESPACE.concat("update_share"), data);
     }
 
+    @Override
+    public void updatePlayerTicketSum(Player data) {
+        super.update(NAMESPACE.concat("update_player_ticket_sum"), data);
+    }
+
 }

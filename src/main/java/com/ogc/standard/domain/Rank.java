@@ -12,7 +12,7 @@ import com.ogc.standard.dao.base.ABaseDO;
 */
 public class Rank extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 6228778064706149267L;
 
     // 编号
     private String code;
@@ -23,7 +23,7 @@ public class Rank extends ABaseDO {
     // 批次
     private String batch;
 
-    // 选手编号
+    // 选手表编号
     private String playerCode;
 
     // 排名
@@ -45,19 +45,19 @@ public class Rank extends ABaseDO {
     private String remark;
 
     // 实际加油总数
-    private Integer ticketSum;
+    private Long ticketSum;
 
     // 虚拟加油总数
-    private Integer fakeTicketSum;
+    private Long fakeTicketSum;
 
     // 关注总数
-    private Integer attentionSum;
+    private Long attentionSum;
 
     // 分享总数
-    private Integer shareSum;
+    private Long shareSum;
 
     // 足迹总数
-    private Integer scanSum;
+    private Long scanSum;
 
     /**********DB properties**********/
 
@@ -155,43 +155,43 @@ public class Rank extends ABaseDO {
         this.updateDatetime = updateDatetime;
     }
 
-    public Integer getTicketSum() {
+    public Long getTicketSum() {
         return ticketSum;
     }
 
-    public void setTicketSum(Integer ticketSum) {
+    public void setTicketSum(Long ticketSum) {
         this.ticketSum = ticketSum;
     }
 
-    public Integer getFakeTicketSum() {
+    public Long getFakeTicketSum() {
         return fakeTicketSum;
     }
 
-    public void setFakeTicketSum(Integer fakeTicketSum) {
+    public void setFakeTicketSum(Long fakeTicketSum) {
         this.fakeTicketSum = fakeTicketSum;
     }
 
-    public Integer getAttentionSum() {
+    public Long getAttentionSum() {
         return attentionSum;
     }
 
-    public void setAttentionSum(Integer attentionSum) {
+    public void setAttentionSum(Long attentionSum) {
         this.attentionSum = attentionSum;
     }
 
-    public Integer getShareSum() {
+    public Long getShareSum() {
         return shareSum;
     }
 
-    public void setShareSum(Integer shareSum) {
+    public void setShareSum(Long shareSum) {
         this.shareSum = shareSum;
     }
 
-    public Integer getScanSum() {
+    public Long getScanSum() {
         return scanSum;
     }
 
-    public void setScanSum(Integer scanSum) {
+    public void setScanSum(Long scanSum) {
         this.scanSum = scanSum;
     }
 

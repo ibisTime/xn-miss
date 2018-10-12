@@ -16,6 +16,7 @@ import com.ogc.standard.dao.ITicketDAO;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.Ticket;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ETicketStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -111,6 +112,18 @@ public class TicketBOImpl extends PaginableBOImpl<Ticket> implements ITicketBO {
         date = cal.getTime();
         cal = null;
         return date;
+    }
+
+    @Override
+    public void payYueSuccess(Ticket data) {
+        if (null != data) {
+            data.setStatus(ETicketStatus.PAYED.getCode());
+            data.setPayType(EPayType.RMB_YE.getCode());
+            data.setPayAmount(data.getAmount());
+            data.setPayDatetime(new Date());
+            data.setRemark("余额支付成功");
+            ticketDAO.updatePayYueSuccess(data);
+        }
     }
 
 }

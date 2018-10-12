@@ -2,6 +2,7 @@ package com.ogc.standard.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -13,7 +14,7 @@ import com.ogc.standard.dao.base.ABaseDO;
 */
 public class Ticket extends ABaseDO {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 7319255110950881689L;
 
     // 编号
     private String code;
@@ -66,6 +67,27 @@ public class Ticket extends ABaseDO {
     /************db properties************/
 
     /***********辅助字段************/
+
+    // 中文名
+    private String cname;
+
+    // 英文名
+    private String ename;
+
+    // 下单时间起
+    private Date createDatetimeStart;
+
+    // 下单时间止
+    private Date createDatetimeEnd;
+
+    // 支付时间起
+    private Date payDatetimeStart;
+
+    // 支付时间止
+    private Date payDatetimeEnd;
+
+    // 支付时间止
+    private List<String> statusList;
 
     public String getCode() {
         return code;
@@ -193,6 +215,62 @@ public class Ticket extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getCreateDatetimeStart() {
+        return createDatetimeStart;
+    }
+
+    public void setCreateDatetimeStart(Date createDatetimeStart) {
+        this.createDatetimeStart = createDatetimeStart;
+    }
+
+    public Date getCreateDatetimeEnd() {
+        return createDatetimeEnd;
+    }
+
+    public void setCreateDatetimeEnd(Date createDatetimeEnd) {
+        this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public Date getPayDatetimeStart() {
+        return payDatetimeStart;
+    }
+
+    public void setPayDatetimeStart(Date payDatetimeStart) {
+        this.payDatetimeStart = payDatetimeStart;
+    }
+
+    public Date getPayDatetimeEnd() {
+        return payDatetimeEnd;
+    }
+
+    public void setPayDatetimeEnd(Date payDatetimeEnd) {
+        this.payDatetimeEnd = payDatetimeEnd;
+    }
+
+    public String getCname() {
+        return cname;
+    }
+
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
+
+    public String getEname() {
+        return ename;
+    }
+
+    public void setEname(String ename) {
+        this.ename = ename;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }
