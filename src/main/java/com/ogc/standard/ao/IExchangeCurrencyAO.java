@@ -35,15 +35,8 @@ public interface IExchangeCurrencyAO {
             String toUserId, String toCurrency, BigDecimal amount,
             BigDecimal tranAmount, String remark);
 
-    public Object payExchange(String fromUserId, String toUserId,
-            BigDecimal amount, String currency, String payType);
-
     public void paySuccess(String payGroup, String payCode,
             BigDecimal transAmount);
-
-    // C端用户间分润划转资金()
-    public void doTransferC2CByZhFR(String fromUserId, String toMobile,
-            BigDecimal amount, String tradePwd);
 
     public void updateGdStatus(String code);
 }

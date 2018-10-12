@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ogc.standard.dao.ITicketDAO">
+	<resultMap id="ticket_DB_Result" type="ticket">
+		<result column="code" property="code" />
+		<result column="player_code" property="playerCode" />
+		<result column="ticket" property="ticket" />
+		<result column="amount" property="amount" />
+		<result column="apply_user" property="applyUser" />
+		<result column="status" property="status" />
+		<result column="create_datetime" property="createDatetime" />
+		<result column="invalid_datetime" property="invalidDatetime" />
+		<result column="pay_type" property="payType" />
+		<result column="pay_group" property="payGroup" />
+		<result column="pay_code" property="payCode" />
+		<result column="pay_amount" property="payAmount" />
+		<result column="pay_datetime" property="payDatetime" />
+		<result column="canceler" property="canceler" />
+		<result column="cancel_datetime" property="cancelDatetime" />
+		<result column="remark" property="remark" />
+	</resultMap>
+	<sql id="where_condition">
+		<trim prefix="WHERE" prefixOverrides="AND | OR">
+			<if test="code != null and code != '' ">
+				AND t.code = #{code}
+			</if>
+		</trim>
+	</sql>
+	<select id="select_ticket" parameterType="ticket" resultMap="ticket_DB_Result">
+		SELECT
+		t.code
+		,t.player_code
+		,t.ticket
+		,t.amount
+		,t.apply_user
+		,t.status
+		,t.create_datetime
+		,t.invalid_datetime
+		,t.pay_type
+		,t.pay_group
+		,t.pay_code
+		,t.pay_amount
+		,t.pay_datetime
+		,t.canceler
+		,t.cancel_datetime
+		,t.remark
+		FROM
+		thqxj_ticket t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
+
+	<select id="select_ticket_count" parameterType="ticket"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM thqxj_ticket t
+		<include refid="where_condition" />
+	</select>
+
+	<insert id="insert_ticket" parameterType="ticket">
+		INSERT INTO
+		thqxj_ticket(
+		code
+		,player_code
+		,ticket
+		,amount
+		,apply_user
+		,status
+		,create_datetime
+		,invalid_datetime
+		,pay_type
+		,pay_group
+		,pay_code
+		,pay_amount
+		,pay_datetime
+		,canceler
+		,cancel_datetime
+		,remark
+		)
+		VALUES(
+		#{code}
+		,#{playerCode}
+		,#{ticket}
+		,#{amount}
+		,#{applyUser}
+		,#{status}
+		,#{createDatetime}
+		,#{invalidDatetime}
+		,#{payType}
+		,#{payGroup}
+		,#{payCode}
+		,#{payAmount}
+		,#{payDatetime}
+		,#{canceler}
+		,#{cancelDatetime}
+		,#{remark}
+		)
+	</insert>
+
+	<update id="update_ticket" parameterType="ticket">
+		UPDATE thqxj_ticket
+		SET
+		player_code = #{playerCode}
+		,ticket = #{ticket}
+		,amount = #{amount}
+		,apply_user = #{applyUser}
+		,status = #{status}
+		,create_datetime = #{createDatetime}
+		,invalid_datetime = #{invalidDatetime}
+		,pay_type = #{payType}
+		,pay_group = #{payGroup}
+		,pay_code = #{payCode}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
+		,canceler = #{canceler}
+		,cancel_datetime = #{cancelDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_cancel_ticket" parameterType="ticket">
+		UPDATE thqxj_ticket
+		SET
+		status = #{status}
+		,canceler = #{canceler}
+		,cancel_datetime = #{cancelDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+
+</mapper>

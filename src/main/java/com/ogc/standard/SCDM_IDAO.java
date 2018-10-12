@@ -9,25 +9,26 @@ import com.ogc.standard.common.DateUtil;
 
 public class SCDM_IDAO {
     // 实体
-    private static String key = "rank";
+    private static String key = "ticket";
 
     // 实体名称
-    private static String keyName = "榜单";
+    private static String keyName = "加油订单";
 
     // 包路径
     private static String packge = "com.ogc.standard.";
 
     // 表名
-    private static String dbname = "thqxj_rank";
+    private static String dbname = "thqxj_ticket";
 
-    private static String[] DBwords = { "code", "type", "batch", "player_code",
-            "rank", "match", "create_datetime", "updater", "update_datetime",
-            "remark", "ticket_sum", "fake_ticket_sum", "attention_sum",
-            "share_sum", "scan_sum" };
+    private static String[] DBwords = { "code", "player_code", "ticket",
+            "amount", "apply_user", "status", "create_datetime",
+            "invalid_datetime", "pay_type", "pay_group", "pay_code",
+            "pay_amount", "pay_datetime", "canceler", "cancel_datetime",
+            "remark" };
 
-    private static String[] DBwordsName = { "编号", "类型（0 日榜，1 总榜）", "批次",
-            "选手编号", "排名", "赛区", "创建时间", "更新人", "更新时间", "备注", "实际加油总数",
-            "虚拟加油总数", "关注总数", "分享总数", "足迹总数" };
+    private static String[] DBwordsName = { "编号", "选手编号", "票数", "下单金额", "下单人",
+            "状态（0 待支付，1 已支付，2 超时取消）", "下单时间", "失效时间", "支付方式", "支付组号", "支付渠道单号",
+            "支付金额", "支付时间", "取消人", "取消时间", "备注" };
 
     public void testname() throws Exception {
     }

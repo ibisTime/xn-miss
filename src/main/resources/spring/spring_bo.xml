@@ -146,6 +146,10 @@
 	<bean id="rankBO" class="com.ogc.standard.bo.impl.RankBOImpl">
 		<property name="paginableDAO" ref="rankDAOImpl"/>
 	</bean>
+	
+	<bean id="ticketBO" class="com.ogc.standard.bo.impl.TicketBOImpl">
+		<property name="paginableDAO" ref="ticketDAOImpl"/>
+	</bean>
 		
 
 </beans>

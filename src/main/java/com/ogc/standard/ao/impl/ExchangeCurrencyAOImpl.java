@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,21 +16,15 @@ import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
-import com.ogc.standard.common.PropertiesUtil;
-import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.common.UserUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.ExchangeCurrency;
 import com.ogc.standard.domain.User;
-import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EExchangeCurrencyStatus;
 import com.ogc.standard.enums.EJourBizType;
-import com.ogc.standard.enums.EPayType;
-import com.ogc.standard.enums.ESystemCode;
-import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.util.CalculationUtil;
 
@@ -176,133 +169,6 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
 
     @Override
     @Transactional
-    public Object payExchange(String fromUserId, String toUserId,
-            BigDecimal amount, String currency, String payType) {
-        Object result = null;
-        User fromUser = userBO.getUser(fromUserId);
-        // 获取微信公众号支付prepayid
-        if (EPayType.RMB_YE.getCode().equals(payType)) {
-            result = rmbYePay(fromUser, toUserId, amount, currency, payType);
-        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
-            result = weixinH5Pay(fromUser, toUserId, amount, currency, payType);
-        } else if (EPayType.WEIXIN_NATIVE.getCode().equals(payType)) {
-            result = weixinNativePay(fromUser, toUserId, amount, currency,
-                payType);
-        } else {
-            throw new BizException("XN000000", "现只支持微信H5和微信二维码，其他方式不支持");
-        }
-        return result;
-    }
-
-    /**
-    * 人民币余额购买虚拟币
-    * @param user
-    * @param amount
-    * @param currency
-    * @param payType
-    * @return
-    * @create: 2017年4月20日 下午6:02:46 xieyj
-    * @history:
-    */
-    private Object rmbYePay(User fromUser, String toUser, BigDecimal amount,
-            String currency, String payType) {
-        EJourBizType bizType = null;
-        if (ECurrency.CG_CGB.getCode().equals(currency)) {
-            bizType = EJourBizType.CG_CGBGM;
-        } else if (ECurrency.YC_CB.getCode().equals(currency)) {
-            bizType = EJourBizType.YC_CBGM;
-        } else {
-            throw new BizException("xn000000", "币种未识别或不支持购买");
-        }
-
-        BigDecimal rmbAmount = AmountUtil.mul(amount, 1 / exchangeCurrencyBO
-            .getExchangeRate(ECurrency.CNY.getCode(), currency));
-        // 产生记录
-        String code = exchangeCurrencyBO.saveExchange(fromUser.getUserId(),
-            rmbAmount, ECurrency.CNY.getCode(), toUser, amount, currency, null,
-            null, ESystemCode.MISS.getCode());
-        // 人民币划转
-        accountBO.transAmountCZB(fromUser.getUserId(), ECurrency.CNY.getCode(),
-            toUser, ECurrency.CNY.getCode(), rmbAmount, bizType,
-            bizType.getValue(), UserUtil.getUserMobile(fromUser.getMobile())
-                    + bizType.getValue(), code);
-        // 购买的币种划转
-        accountBO.transAmountCZB(toUser, currency, fromUser.getUserId(),
-            currency, amount, bizType,
-            UserUtil.getUserMobile(fromUser.getMobile()) + bizType.getValue(),
-            bizType.getValue(), code);
-        return new BooleanRes(true);
-    }
-
-    /**
-    * 二维码扫描购买虚拟币
-    * @param fromUserId
-    * @param toUserId
-    * @param amount
-    * @param currency
-    * @param payType
-    * @param systemCode
-    * @return
-    * @create: 2017年4月20日 下午7:01:28 xieyj
-    * @history:
-    */
-    private Object weixinNativePay(User fromUser, String toUserId,
-            BigDecimal amount, String currency, String payType) {
-        EJourBizType bizType = null;
-        if (ECurrency.CG_CGB.getCode().equals(currency)) {
-            bizType = EJourBizType.CG_CGBGM;
-        } else if (ECurrency.YC_CB.getCode().equals(currency)) {
-            bizType = EJourBizType.YC_CBGM;
-        } else {
-            throw new BizException("xn000000", "币种未识别或不支持购买");
-        }
-
-        BigDecimal rmbAmount = AmountUtil.mul(amount, 1 / exchangeCurrencyBO
-            .getExchangeRate(ECurrency.CNY.getCode(), currency));
-        String code = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
-            toUserId, rmbAmount, amount, currency, payType,
-            ESystemCode.MISS.getCode());
-
-        return weChatAO.getPrepayIdNative(fromUser.getUserId(), toUserId, code,
-            code, bizType.getCode(), bizType.getValue(), rmbAmount,
-            PropertiesUtil.Config.SELF_PAY_BACKURL);
-    }
-
-    /**
-    * 微信H5支付购买虚拟币
-    * @param user
-    * @param amount
-    * @param currency
-    * @param payType
-    * @return
-    * @create: 2017年4月20日 下午6:02:46 xieyj
-    * @history:
-    */
-    private Object weixinH5Pay(User fromUser, String toUser, BigDecimal amount,
-            String currency, String payType) {
-        EJourBizType bizType = null;
-        if (ECurrency.CG_CGB.getCode().equals(currency)) {
-            bizType = EJourBizType.CG_CGBGM;
-        } else if (ECurrency.YC_CB.getCode().equals(currency)) {
-            bizType = EJourBizType.YC_CBGM;
-        } else {
-            throw new BizException("xn000000", "币种未识别或不支持购买");
-        }
-
-        BigDecimal rmbAmount = AmountUtil.mul(amount, 1 / exchangeCurrencyBO
-            .getExchangeRate(ECurrency.CNY.getCode(), currency));
-        String code = exchangeCurrencyBO.payExchange(fromUser.getUserId(),
-            toUser, rmbAmount, amount, currency, payType,
-            ESystemCode.MISS.getCode());
-
-        return weChatAO.getPrepayIdH5(fromUser.getUserId(),
-            fromUser.getOpenId(), toUser, code, code, bizType.getCode(),
-            bizType.getValue(), rmbAmount,
-            PropertiesUtil.Config.SELF_PAY_BACKURL);
-    }
-
-    @Override
-    @Transactional
     public void paySuccess(String payGroup, String payCode,
             BigDecimal transAmount) {
         List<ExchangeCurrency> resultList = exchangeCurrencyBO
@@ -319,14 +185,16 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             EExchangeCurrencyStatus.PAYED.getCode(), payCode, transAmount);
 
         EJourBizType bizType = null;
-        if (ECurrency.CG_CGB.getCode().equals(exchangeCurrency.getToCurrency())) {
-            bizType = EJourBizType.CG_CGBGM;
-        } else if (ECurrency.YC_CB.getCode().equals(
-            exchangeCurrency.getToCurrency())) {
-            bizType = EJourBizType.YC_CBGM;
-        } else {
-            throw new BizException("xn000000", "币种未识别或不支持购买");
-        }
+        // if
+        // (ECurrency.CG_CGB.getCode().equals(exchangeCurrency.getToCurrency()))
+        // {
+        // bizType = EJourBizType.CG_CGBGM;
+        // } else if (ECurrency.YC_CB.getCode().equals(
+        // exchangeCurrency.getToCurrency())) {
+        // bizType = EJourBizType.YC_CBGM;
+        // } else {
+        // throw new BizException("xn000000", "币种未识别或不支持购买");
+        // }
 
         User fromUser = userBO.getUser(exchangeCurrency.getFromUserId());
 
@@ -337,59 +205,6 @@ public class ExchangeCurrencyAOImpl implements IExchangeCurrencyAO {
             bizType,
             UserUtil.getUserMobile(fromUser.getMobile()) + bizType.getValue(),
             bizType.getValue(), exchangeCurrency.getCode());
-    }
-
-    @Override
-    @Transactional
-    public void doTransferC2CByZhFR(String fromUserId, String toMobile,
-            BigDecimal transAmount, String tradePwd) {
-        if (transAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BizException("xn000000", "划转金额需大于零");
-        }
-        String transAmountBsValue = sysConfigBO.getSYSConfigNotException(
-            SysConstant.TRANSAMOUNTBS, ESystemCode.MISS.getCode(),
-            ESystemCode.MISS.getCode()).getCvalue();
-        if (StringUtils.isNotBlank(transAmountBsValue)) {
-            // 转账金额倍数
-            BigDecimal transAmountBs = AmountUtil.mul(BigDecimal.valueOf(1000),
-                Double.valueOf(transAmountBsValue));
-            if (transAmountBs.compareTo(BigDecimal.ZERO) > 0
-                    && transAmount.divideAndRemainder(transAmountBs)[1]
-                        .compareTo(BigDecimal.ZERO) > 0) {
-                throw new BizException("xn000000", "请取" + transAmountBsValue
-                        + "的倍数");
-            }
-        }
-        // 验证交易密码
-        userBO.checkTradePwd(fromUserId, tradePwd);
-        // 验证双方是否C端用户
-        User fromUser = userBO.getUser(fromUserId);
-        if (!EUserKind.Customer.getCode().equals(fromUser.getKind())) {
-            throw new BizException("xn000000", "当前划转用户不是C端用户，不能进行转账业务");
-        }
-        String toUserId = userBO.getUserByMobile(toMobile).getUserId();
-        // 同一个用户不可以相互转账
-        if (toUserId.equals(fromUser.getUserId())) {
-            throw new BizException("xn000000", "不能给自己转账");
-        }
-
-        // 开始资金划转
-        String currency = ECurrency.ZH_FRB.getCode();
-        Account fromAccount = accountBO.getAccountByUser(fromUserId, currency);
-        Account toAccount = accountBO.getAccountByUser(toUserId, currency);
-        String bizNote = fromUser.getMobile() + "用户转账" + toMobile + "用户分润"
-                + CalculationUtil.divi(transAmount);
-
-        String code = exchangeCurrencyBO.saveExchange(fromUserId, transAmount,
-            currency, toUserId, transAmount, currency, null,
-            fromAccount.getCompanyCode(), fromAccount.getSystemCode());
-
-        accountBO.changeAmount(fromAccount.getAccountNumber(),
-            EChannelType.NBZ, null, null, code,
-            EJourBizType.Transfer_CURRENCY_C2C, bizNote, transAmount.negate());
-        accountBO.changeAmount(toAccount.getAccountNumber(), EChannelType.NBZ,
-            null, null, code, EJourBizType.Transfer_CURRENCY_C2C, bizNote,
-            transAmount);
     }
 
     @Override
