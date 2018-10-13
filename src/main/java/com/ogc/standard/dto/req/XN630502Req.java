@@ -22,17 +22,6 @@ public class XN630502Req {
     // 图片（选填）
     private String pic;
 
-    // 状态（必填）
-    @NotBlank
-    private String status;
-
-    // 位置（选填）
-    private String location;
-
-    // 相对位置编号（必填）
-    @NotBlank
-    private String orderNo;
-
     // 父编号（选填）
     private String parentCode;
 
@@ -77,30 +66,6 @@ public class XN630502Req {
 
     public void setPic(String pic) {
         this.pic = pic;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
     }
 
     public String getParentCode() {

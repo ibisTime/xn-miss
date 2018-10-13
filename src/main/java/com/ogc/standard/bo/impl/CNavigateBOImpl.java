@@ -11,13 +11,14 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICNavigateDAO;
 import com.ogc.standard.domain.CNavigate;
+import com.ogc.standard.enums.ECnavigateStauts;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class CNavigateBOImpl extends PaginableBOImpl<CNavigate>
-        implements ICNavigateBO {
+public class CNavigateBOImpl extends PaginableBOImpl<CNavigate> implements
+        ICNavigateBO {
 
     @Autowired
     private ICNavigateDAO cNavigateDAO;
@@ -40,6 +41,7 @@ public class CNavigateBOImpl extends PaginableBOImpl<CNavigate>
                 code = OrderNoGenerater.generate(EGeneratePrefix.DH.getCode());
                 data.setCode(code);
             }
+            data.setStatus(ECnavigateStauts.DRAFT.getCode());
             cNavigateDAO.insert(data);
         }
         return code;
@@ -82,5 +84,18 @@ public class CNavigateBOImpl extends PaginableBOImpl<CNavigate>
             }
         }
         return data;
+    }
+
+    @Override
+    public int refreshStatus(String code, String status, String location,
+            Integer orderNo, String remark) {
+        int count = 0;
+        CNavigate data = getCNavigate(code);
+        data.setStatus(status);
+        data.setOrderNo(orderNo);
+        data.setLocation(location);
+        data.setRemark(remark);
+        count = cNavigateDAO.updateStatus(data);
+        return count;
     }
 }

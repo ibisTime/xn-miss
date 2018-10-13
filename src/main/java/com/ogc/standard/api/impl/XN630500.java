@@ -4,7 +4,6 @@ import com.ogc.standard.ao.ICNavigateAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
-import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.CNavigate;
 import com.ogc.standard.dto.req.XN630500Req;
 import com.ogc.standard.dto.res.PKCodeRes;
@@ -31,9 +30,6 @@ public class XN630500 extends AProcessor {
         result.setType(req.getType());
         result.setUrl(req.getUrl());
         result.setPic(req.getPic());
-        result.setStatus(req.getStatus());
-        result.setLocation(req.getLocation());
-        result.setOrderNo(StringValidater.toInteger(req.getOrderNo()));
         result.setParentCode(req.getParentCode());
         result.setRemark(req.getRemark());
         String code = cNavigateAO.addCNavigate(result);
