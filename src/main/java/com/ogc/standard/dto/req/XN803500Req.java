@@ -31,12 +31,6 @@ public class XN803500Req extends APageReq {
     // 最近一次变动对应的流水编号
     private String lastOrder;
 
-    // 系统编号(必填)
-    private String systemCode;
-
-    // 公司编号(必填)
-    private String companyCode;
-
     public List<String> getCurrencyList() {
         return currencyList;
     }
@@ -85,19 +79,4 @@ public class XN803500Req extends APageReq {
         this.lastOrder = lastOrder;
     }
 
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
 }

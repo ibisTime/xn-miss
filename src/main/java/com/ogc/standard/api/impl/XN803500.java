@@ -41,8 +41,6 @@ public class XN803500 extends AProcessor {
             req.getDateStart(), false));
         condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
             true));
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IAccountAO.DEFAULT_ORDER_COLUMN;
@@ -62,8 +60,6 @@ public class XN803500 extends AProcessor {
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN803500Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater
-            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 
 }
