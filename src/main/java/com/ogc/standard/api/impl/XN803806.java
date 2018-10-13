@@ -4,7 +4,7 @@ import com.ogc.standard.ao.IHLOrderAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.dto.req.XN802806Req;
+import com.ogc.standard.dto.req.XN803806Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -19,19 +19,17 @@ public class XN803806 extends AProcessor {
     private IHLOrderAO hlOrderAO = SpringContextHolder
         .getBean(IHLOrderAO.class);
 
-    private XN802806Req req = null;
+    private XN803806Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
         return hlOrderAO.getHLOrder(req.getCode(), req.getSystemCode());
     }
 
-
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802806Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803806Req.class);
         StringValidater.validateBlank(req.getCode(), req.getSystemCode());
     }
 }

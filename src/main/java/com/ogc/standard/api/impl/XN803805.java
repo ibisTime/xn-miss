@@ -8,7 +8,7 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.HLOrder;
-import com.ogc.standard.dto.req.XN802805Req;
+import com.ogc.standard.dto.req.XN803805Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -23,7 +23,7 @@ public class XN803805 extends AProcessor {
     private IHLOrderAO hlOrderAO = SpringContextHolder
         .getBean(IHLOrderAO.class);
 
-    private XN802805Req req = null;
+    private XN803805Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -60,12 +60,10 @@ public class XN803805 extends AProcessor {
         return hlOrderAO.queryHLOrderPage(start, limit, condition);
     }
 
-
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802805Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803805Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
         StringValidater
             .validateBlank(req.getSystemCode(), req.getCompanyCode());

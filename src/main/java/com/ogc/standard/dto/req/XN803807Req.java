@@ -1,11 +1,6 @@
 package com.ogc.standard.dto.req;
 
-public class XN802805Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 1L;
-
+public class XN803807Req {
     // 针对账号
     private String accountNumber;
 
@@ -57,14 +52,6 @@ public class XN802805Req extends APageReq {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
     }
 
     public String getAccountNumber() {
@@ -123,14 +110,6 @@ public class XN802805Req extends APageReq {
         this.jourCode = jourCode;
     }
 
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
     public String getApplyDateStart() {
         return applyDateStart;
     }
@@ -163,11 +142,27 @@ public class XN802805Req extends APageReq {
         this.approveDateEnd = approveDateEnd;
     }
 
+    public String getSystemCode() {
+        return systemCode;
+    }
+
+    public void setSystemCode(String systemCode) {
+        this.systemCode = systemCode;
+    }
+
     public String getChannelType() {
         return channelType;
     }
 
     public void setChannelType(String channelType) {
         this.channelType = channelType;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

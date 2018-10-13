@@ -6,7 +6,7 @@ package com.ogc.standard.dto.req;
  * @since: 2016年12月25日 下午3:25:44 
  * @history:
  */
-public class XN802751Req {
+public class XN803750Req {
 
     // 针对账号（必填）
     private String accountNumber;
@@ -25,6 +25,17 @@ public class XN802751Req {
 
     // 申请说明（选填）
     private String applyNote;
+
+    // 交易密码（必填）
+    private String tradePwd;
+
+    public String getTradePwd() {
+        return tradePwd;
+    }
+
+    public void setTradePwd(String tradePwd) {
+        this.tradePwd = tradePwd;
+    }
 
     public String getAccountNumber() {
         return accountNumber;

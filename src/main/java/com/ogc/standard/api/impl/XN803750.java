@@ -6,7 +6,7 @@ import com.ogc.standard.ao.IWithdrawAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.dto.req.XN802750Req;
+import com.ogc.standard.dto.req.XN803750Req;
 import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -23,7 +23,7 @@ public class XN803750 extends AProcessor {
     private IWithdrawAO withdrawAO = SpringContextHolder
         .getBean(IWithdrawAO.class);
 
-    private XN802750Req req = null;
+    private XN803750Req req = null;
 
     @Override
     public synchronized Object doBusiness() throws BizException {
@@ -37,7 +37,7 @@ public class XN803750 extends AProcessor {
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802750Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN803750Req.class);
         StringValidater.validateBlank(req.getAccountNumber(),
             req.getPayCardInfo(), req.getPayCardNo(), req.getApplyUser(),
             req.getTradePwd());

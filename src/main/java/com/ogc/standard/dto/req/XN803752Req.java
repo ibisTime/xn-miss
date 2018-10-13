@@ -8,7 +8,7 @@ import java.util.List;
  * @since: 2017年5月12日 上午10:02:19 
  * @history:
  */
-public class XN802752Req {
+public class XN803752Req {
     // 系统编号(必填)
     private String systemCode;
 
