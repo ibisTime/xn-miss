@@ -6,7 +6,7 @@ import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
-import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.dto.req.XN803501Req;
 import com.ogc.standard.exception.BizException;
@@ -26,9 +26,6 @@ public class XN803501 extends AProcessor {
 
     private XN803501Req req = null;
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doBusiness()
-    */
     @Override
     public Object doBusiness() throws BizException {
         Account condition = new Account();
@@ -42,8 +39,6 @@ public class XN803501 extends AProcessor {
             req.getDateStart(), false));
         condition.setCreateDatetimeEnd(DateUtil.getFrontDate(req.getDateEnd(),
             true));
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
@@ -53,14 +48,10 @@ public class XN803501 extends AProcessor {
         return accountAO.queryAccountList(condition);
     }
 
-    /** 
-    * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
-    */
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN803501Req.class);
-        StringValidater
-            .validateBlank(req.getSystemCode(), req.getCompanyCode());
+        ObjValidater.validateReq(req);
     }
 }

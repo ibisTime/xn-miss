@@ -3,7 +3,7 @@ package com.ogc.standard.api.impl;
 import com.ogc.standard.ao.IJourAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
-import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.dto.req.XN803523Req;
 import com.ogc.standard.exception.BizException;
@@ -34,6 +34,6 @@ public class XN803523 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN803523Req.class);
-        StringValidater.validateBlank(req.getRefNo(), req.getSystemCode());
+        ObjValidater.validateReq(req);
     }
 }

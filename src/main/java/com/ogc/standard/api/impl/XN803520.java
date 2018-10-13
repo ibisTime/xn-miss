@@ -48,8 +48,6 @@ public class XN803520 extends AProcessor {
 
         condition.setCheckUser(req.getCheckUser());
         condition.setAdjustUser(req.getAdjustUser());
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
@@ -66,7 +64,5 @@ public class XN803520 extends AProcessor {
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN803520Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater
-            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 }

@@ -6,7 +6,7 @@ import com.ogc.standard.ao.IJourAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
-import com.ogc.standard.core.StringValidater;
+import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.domain.Jour;
 import com.ogc.standard.dto.req.XN803521Req;
 import com.ogc.standard.exception.BizException;
@@ -49,8 +49,6 @@ public class XN803521 extends AProcessor {
 
         condition.setCheckUser(req.getCheckUser());
         condition.setAdjustUser(req.getAdjustUser());
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
 
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
@@ -65,7 +63,6 @@ public class XN803521 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN803521Req.class);
-        StringValidater
-            .validateBlank(req.getSystemCode(), req.getCompanyCode());
+        ObjValidater.validateReq(req);
     }
 }

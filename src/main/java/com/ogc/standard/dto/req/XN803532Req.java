@@ -1,7 +1,10 @@
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class XN803532Req {
     // 编号
+    @NotBlank
     private String code;
 
     // 系统编号

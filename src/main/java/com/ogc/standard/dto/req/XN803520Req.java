@@ -54,20 +54,6 @@ public class XN803520Req extends APageReq {
     // 调账人
     private String adjustUser;
 
-    // 系统编号
-    private String systemCode;
-
-    // 公司编号
-    private String companyCode;
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
-    }
-
     public String getPayGroup() {
         return payGroup;
     }
@@ -196,11 +182,4 @@ public class XN803520Req extends APageReq {
         this.adjustUser = adjustUser;
     }
 
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 }

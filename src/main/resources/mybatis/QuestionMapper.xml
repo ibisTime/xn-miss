@@ -5,7 +5,7 @@
 	<resultMap id="question_DB_Result" type="question">
 		<result column="id" property="id" />
 		<result column="session_code" property="sessionCode" />
-		<result column="user_id" property="user_id" />
+		<result column="user_id" property="userId" />
 		<result column="content" property="content" />
 		<result column="status" property="status" />
 		<result column="create_datetime" property="createDatetime" />

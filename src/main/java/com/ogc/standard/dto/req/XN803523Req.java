@@ -1,7 +1,10 @@
 package com.ogc.standard.dto.req;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class XN803523Req {
     // 参考订单号
+    @NotBlank
     private String refNo;
 
     // 系统编号
