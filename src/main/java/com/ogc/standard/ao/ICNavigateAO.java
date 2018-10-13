@@ -26,4 +26,9 @@ public interface ICNavigateAO {
 
     // 详情查询
     public CNavigate getCNavigate(String code);
+
+    public void Release(String code, String location, Integer orderNo,
+            String remark);
+
+    public void obtain(String code, String remark);
 }

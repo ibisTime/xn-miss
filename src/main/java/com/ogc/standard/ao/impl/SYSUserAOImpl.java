@@ -99,8 +99,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
         sysUserBO.refreshStatus(userId, userStatus, updater, remark);
         if (PhoneUtil.isMobile(mobile)) {
             // 发送短信
-            smsOutBO.sendSmsOut(mobile,
-                "尊敬的" + PhoneUtil.hideMobile(mobile) + smsContent, "805091");
+            smsOutBO.sendSmsOut(mobile, "尊敬的" + PhoneUtil.hideMobile(mobile)
+                    + smsContent, "805091");
         }
 
     }
@@ -137,18 +137,20 @@ public class SYSUserAOImpl implements ISYSUserAO {
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "630053");
         sysUserBO.resetSelfPwd(user, newLoginPwd);
         // 发送短信
-        smsOutBO.sendSmsOut(mobile,
-            "尊敬的" + PhoneUtil.hideMobile(mobile) + "用户，您于"
+        smsOutBO.sendSmsOut(
+            mobile,
+            "尊敬的"
+                    + PhoneUtil.hideMobile(mobile)
+                    + "用户，您于"
                     + DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1)
-                    + "已更改登录密码" + "，请妥善保管您的账户相关信息。",
-            "631072");
+                        DateUtil.DATA_TIME_PATTERN_1) + "已更改登录密码"
+                    + "，请妥善保管您的账户相关信息。", "631072");
     }
 
     @Override
     public void editPwd(String userId, String oldPwd, String newPwd) {
         SYSUser user = sysUserBO.getSYSUser(userId);
-        if (!user.getLoginPwd().equals(oldPwd)) {
+        if (!user.getLoginPwd().equals(MD5Util.md5(oldPwd))) {
             throw new BizException(
                 EErrorCode_main.user_OLDLOGINPWDWRONG.getCode());
         }
@@ -175,16 +177,17 @@ public class SYSUserAOImpl implements ISYSUserAO {
         // 判断手机号是否存在
         sysUserBO.isMobileExist(newMobile);
         // 新手机号验证
-        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "630052");
+        // smsOutBO.checkCaptcha(newMobile, smsCaptcha, "630052");
         sysUserBO.resetBindMobile(user, newMobile);
         // 发送短信
-        smsOutBO.sendSmsOut(oldMobile,
-            "尊敬的" + PhoneUtil.hideMobile(oldMobile) + "用户，您于"
+        smsOutBO.sendSmsOut(
+            oldMobile,
+            "尊敬的"
+                    + PhoneUtil.hideMobile(oldMobile)
+                    + "用户，您于"
                     + DateUtil.dateToStr(new Date(),
-                        DateUtil.DATA_TIME_PATTERN_1)
-                    + "已将手机号码改为" + newMobile + "，您的登录名更改为" + newMobile
-                    + "，请妥善保管您的账户相关信息。",
-            "631072");
+                        DateUtil.DATA_TIME_PATTERN_1) + "已将手机号码改为" + newMobile
+                    + "，您的登录名更改为" + newMobile + "，请妥善保管您的账户相关信息。", "631072");
 
     }
 
@@ -195,8 +198,8 @@ public class SYSUserAOImpl implements ISYSUserAO {
 
         if (condition.getCreateDatetimeStart() != null
                 && condition.getCreateDatetimeEnd() != null
-                && condition.getCreateDatetimeStart()
-                    .after(condition.getCreateDatetimeEnd())) {
+                && condition.getCreateDatetimeStart().after(
+                    condition.getCreateDatetimeEnd())) {
             throw new BizException(EErrorCode_main.page_STARTENDTIME.getCode());
         }
 

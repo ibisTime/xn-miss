@@ -102,10 +102,25 @@
 		,type = #{type}
 		,url = #{url}
 		,pic = #{pic}
-		,status = #{status}
 		,location = #{location}
 		,order_no = #{orderNo}
 		,parent_code = #{parentCode}
+		<if test="remark != null and remark != '' ">
+			,remark = #{remark}
+		</if>
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_status" parameterType="cNavigate">
+		UPDATE tsys_cnavigate
+		SET
+		status = #{status}
+		<if test="orderNo != null and orderNo != '' ">
+			,order_no = #{orderNo}
+		</if>
+		<if test="location != null and location != '' ">
+			,location = #{location}
+		</if>
 		<if test="remark != null and remark != '' ">
 			,remark = #{remark}
 		</if>

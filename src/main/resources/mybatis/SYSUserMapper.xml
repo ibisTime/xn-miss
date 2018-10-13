@@ -201,6 +201,7 @@
 		UPDATE tsys_user
 		SET
 		mobile = #{mobile}
+		,login_name=#{loginName}
 		WHERE user_id = #{userId}
 	</update>
 	

@@ -9,8 +9,10 @@ import com.ogc.standard.ao.ICNavigateAO;
 import com.ogc.standard.bo.ICNavigateBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.CNavigate;
+import com.ogc.standard.enums.ECnavigateStauts;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class CNavigateAOImpl implements ICNavigateAO {
@@ -34,12 +36,11 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public void editCNavigate(CNavigate data) {
         CNavigate navigate = cNavigateBO.getCNavigate(data.getCode());
-
+        if (!ECnavigateStauts.DRAFT.equals(navigate.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "处于无法修改的状态");
+        }
         navigate.setName(data.getName());
-        navigate.setStatus(data.getStatus());
         navigate.setParentCode(data.getParentCode());
-        navigate.setLocation(data.getLocation());
-        navigate.setOrderNo(data.getOrderNo());
         navigate.setRemark(data.getRemark());
         navigate.setUrl(data.getUrl());
         navigate.setPic(data.getPic());
@@ -60,5 +61,26 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public CNavigate getCNavigate(String code) {
         return cNavigateBO.getCNavigate(code);
+    }
+
+    @Override
+    public void Release(String code, String location, Integer orderNo,
+            String remark) {
+        CNavigate data = cNavigateBO.getCNavigate(code);
+        if (!ECnavigateStauts.DRAFT.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "处于无法上架的状态");
+        }
+        cNavigateBO.refreshStatus(code, ECnavigateStauts.ON.getCode(),
+            location, orderNo, remark);
+    }
+
+    @Override
+    public void obtain(String code, String remark) {
+        CNavigate data = cNavigateBO.getCNavigate(code);
+        if (!ECnavigateStauts.ON.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "处于无法下架的状态");
+        }
+        cNavigateBO.refreshStatus(code, ECnavigateStauts.OFF.getCode(), null,
+            null, remark);
     }
 }

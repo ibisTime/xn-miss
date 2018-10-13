@@ -19,4 +19,7 @@ public interface ICNavigateBO extends IPaginableBO<CNavigate> {
 
     public CNavigate getCNavigate(String code);
 
+    public int refreshStatus(String code, String status, String location,
+            Integer orderNo, String remark);
+
 }
