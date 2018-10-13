@@ -1,23 +1,26 @@
 package com.ogc.standard.dto.req;
 
 /**
- * 线下取现申请
+ * 线下充值申请
  * @author: xieyj 
- * @since: 2016年12月25日 下午3:25:44 
+ * @since: 2017年5月12日 上午9:58:02 
  * @history:
  */
-public class XN802750Req {
+public class XN803700Req {
 
     // 针对账号（必填）
     private String accountNumber;
 
-    // 取现金额（必填）
+    // 业务类型（选填）
+    private String bizType;
+
+    // 充值金额（必填）
     private String amount;
 
-    // 支付渠道账号信息（如开户支行）（必填）
+    // 支付渠道账号信息（如开户支行）（选填）
     private String payCardInfo;
 
-    // 支付渠道账号（如银行卡号）（必填）
+    // 支付渠道账号（如银行卡号）（选填）
     private String payCardNo;
 
     // 申请人（必填）
@@ -26,23 +29,20 @@ public class XN802750Req {
     // 申请说明（选填）
     private String applyNote;
 
-    // 交易密码（必填）
-    private String tradePwd;
-
-    public String getTradePwd() {
-        return tradePwd;
-    }
-
-    public void setTradePwd(String tradePwd) {
-        this.tradePwd = tradePwd;
-    }
-
     public String getAccountNumber() {
         return accountNumber;
     }
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+
+    public String getBizType() {
+        return bizType;
+    }
+
+    public void setBizType(String bizType) {
+        this.bizType = bizType;
     }
 
     public String getAmount() {

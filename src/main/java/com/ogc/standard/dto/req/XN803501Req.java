@@ -5,7 +5,7 @@ package com.ogc.standard.dto.req;
  * @since: 2016年12月23日 下午7:48:53 
  * @history:
  */
-public class XN802501Req extends AListReq {
+public class XN803501Req extends AListReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */

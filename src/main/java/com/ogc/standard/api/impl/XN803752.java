@@ -6,7 +6,7 @@ import com.ogc.standard.ao.IWithdrawAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.dto.req.XN802752Req;
+import com.ogc.standard.dto.req.XN803752Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -22,7 +22,7 @@ public class XN803752 extends AProcessor {
     private IWithdrawAO withdrawAO = SpringContextHolder
         .getBean(IWithdrawAO.class);
 
-    private XN802752Req req = null;
+    private XN803752Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -34,11 +34,10 @@ public class XN803752 extends AProcessor {
         return new BooleanRes(true);
     }
 
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802752Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803752Req.class);
         if (CollectionUtils.isEmpty(req.getCodeList())) {
             throw new BizException("订单列表不能为空");
         }

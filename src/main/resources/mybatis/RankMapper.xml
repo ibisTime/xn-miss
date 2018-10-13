@@ -141,7 +141,7 @@
 	<update id="update_manual_adjustment" parameterType="rank">
 		UPDATE thqxj_rank
 		SET
-		,updater = #{updater}
+		updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
 		,fake_ticket_sum = #{fakeTicketSum}
@@ -151,7 +151,7 @@
 	<update id="update_ranking" parameterType="rank">
 		UPDATE thqxj_rank
 		SET
-		,rank = #{rank}
+		rank = #{rank}
 		WHERE code = #{code}
 	</update>
 

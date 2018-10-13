@@ -8,7 +8,7 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Charge;
-import com.ogc.standard.dto.req.XN802707Req;
+import com.ogc.standard.dto.req.XN803707Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -22,7 +22,7 @@ import com.ogc.standard.spring.SpringContextHolder;
 public class XN803707 extends AProcessor {
     private IChargeAO chargeAO = SpringContextHolder.getBean(IChargeAO.class);
 
-    private XN802707Req req = null;
+    private XN803707Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -61,11 +61,10 @@ public class XN803707 extends AProcessor {
         return chargeAO.queryChargeList(condition);
     }
 
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802707Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803707Req.class);
         StringValidater
             .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }

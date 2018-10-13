@@ -4,7 +4,7 @@ import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.dto.req.XN802706Req;
+import com.ogc.standard.dto.req.XN803706Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -18,19 +18,17 @@ import com.ogc.standard.spring.SpringContextHolder;
 public class XN803706 extends AProcessor {
     private IChargeAO chargeAO = SpringContextHolder.getBean(IChargeAO.class);
 
-    private XN802706Req req = null;
+    private XN803706Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
         return chargeAO.getCharge(req.getCode(), req.getSystemCode());
     }
 
-
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802706Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803706Req.class);
         StringValidater.validateBlank(req.getCode(), req.getSystemCode());
 
     }

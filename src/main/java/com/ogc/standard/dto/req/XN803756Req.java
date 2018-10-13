@@ -6,7 +6,7 @@ package com.ogc.standard.dto.req;
  * @since: 2017年5月12日 上午10:03:42 
  * @history:
  */
-public class XN802756Req {
+public class XN803756Req {
     private String code;
 
     // 系统编号

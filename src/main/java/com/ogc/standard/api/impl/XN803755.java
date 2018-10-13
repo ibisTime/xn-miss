@@ -12,7 +12,7 @@ import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Withdraw;
-import com.ogc.standard.dto.req.XN802755Req;
+import com.ogc.standard.dto.req.XN803755Req;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -31,7 +31,7 @@ public class XN803755 extends AProcessor {
     private IAccountAO accountAO = SpringContextHolder
         .getBean(IAccountAO.class);
 
-    private XN802755Req req = null;
+    private XN803755Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -86,12 +86,10 @@ public class XN803755 extends AProcessor {
         return withdrawAO.queryWithdrawPage(start, limit, condition);
     }
 
-
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802755Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803755Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
         StringValidater
             .validateBlank(req.getSystemCode(), req.getCompanyCode());

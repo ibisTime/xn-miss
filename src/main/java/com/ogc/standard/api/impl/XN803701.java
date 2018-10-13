@@ -6,7 +6,7 @@ import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.dto.req.XN802701Req;
+import com.ogc.standard.dto.req.XN803701Req;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -21,7 +21,7 @@ import com.ogc.standard.spring.SpringContextHolder;
 public class XN803701 extends AProcessor {
     private IChargeAO chargeAO = SpringContextHolder.getBean(IChargeAO.class);
 
-    private XN802701Req req = null;
+    private XN803701Req req = null;
 
     /** 
     * @see com.xnjr.base.api.IProcessor#doBusiness()
@@ -38,10 +38,10 @@ public class XN803701 extends AProcessor {
     /** 
     * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
     */
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802701Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803701Req.class);
         if (CollectionUtils.isEmpty(req.getCodeList())) {
             throw new BizException("订单列表不能为空");
         }

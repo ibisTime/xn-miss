@@ -6,7 +6,7 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Withdraw;
-import com.ogc.standard.dto.req.XN802757Req;
+import com.ogc.standard.dto.req.XN803757Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -21,7 +21,7 @@ public class XN803757 extends AProcessor {
     private IWithdrawAO withdrawAO = SpringContextHolder
         .getBean(IWithdrawAO.class);
 
-    private XN802757Req req = null;
+    private XN803757Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -55,12 +55,10 @@ public class XN803757 extends AProcessor {
         return withdrawAO.queryWithdrawList(condition);
     }
 
-
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802757Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803757Req.class);
         StringValidater
             .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }

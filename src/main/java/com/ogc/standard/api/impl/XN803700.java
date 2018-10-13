@@ -6,7 +6,7 @@ import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.dto.req.XN802700Req;
+import com.ogc.standard.dto.req.XN803700Req;
 import com.ogc.standard.dto.res.PKCodeRes;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
@@ -21,7 +21,7 @@ import com.ogc.standard.spring.SpringContextHolder;
 public class XN803700 extends AProcessor {
     private IChargeAO chargeAO = SpringContextHolder.getBean(IChargeAO.class);
 
-    private XN802700Req req = null;
+    private XN803700Req req = null;
 
     /** 
     * @see com.xnjr.base.api.IProcessor#doBusiness()
@@ -41,7 +41,7 @@ public class XN803700 extends AProcessor {
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802700Req.class);
+        req = JsonUtil.json2Bean(inputparams, XN803700Req.class);
         StringValidater.validateBlank(req.getAccountNumber(),
             req.getApplyUser());
         StringValidater.validateAmount(req.getAmount());

@@ -1,6 +1,6 @@
 package com.ogc.standard.dto.req;
 
-public class XN802532Req {
+public class XN803532Req {
     // 编号
     private String code;
 

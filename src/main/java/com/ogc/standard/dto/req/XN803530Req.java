@@ -1,6 +1,6 @@
 package com.ogc.standard.dto.req;
 
-public class XN802520Req extends APageReq {
+public class XN803530Req extends APageReq {
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
