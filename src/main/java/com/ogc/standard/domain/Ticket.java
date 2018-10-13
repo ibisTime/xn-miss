@@ -86,7 +86,7 @@ public class Ticket extends ABaseDO {
     // 支付时间止
     private Date payDatetimeEnd;
 
-    // 支付时间止
+    // 状态list
     private List<String> statusList;
 
     public String getCode() {

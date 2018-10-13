@@ -8,7 +8,7 @@ package com.ogc.standard.enums;
  */
 public enum EBizType {
 
-    SAVE("0", "保存"), PUBLISH("1", "保存");
+    SAVE("0", "保存"), PUBLISH("1", "发布");
 
     EBizType(String code, String value) {
         this.code = code;

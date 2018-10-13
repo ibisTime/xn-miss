@@ -22,15 +22,12 @@ public class PlayerAOImpl implements IPlayerAO {
 
     @Override
     public String addPlayer(XN640000Req req) {
-        if (playerBO.isMatchPlayCodeExist(req.getMatchPlayCode())) {
-            throw new BizException("xn0000", "选手编号已存在");
-        }
         return playerBO.savePlayer(req);
     }
 
     @Override
-    public void approve(String code, String approveResult, String approver,
-            String remark) {
+    public void approvePlayer(String code, String approveResult,
+            String approver, String remark) {
         Player data = playerBO.getPlayer(code);
         if (!EPlayerStatus.TO_APPROVE.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "选手不是待审核状态");

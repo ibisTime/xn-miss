@@ -116,6 +116,7 @@ public class TicketAOImpl implements ITicketAO {
     // 3、更新选手票数和排名
     @Transactional
     private Object toPayTicketYue(Ticket data) {
+        Player player = playerBO.getPlayer(data.getPlayerCode());
         BigDecimal payAmount = data.getAmount();
         // 人民币余额划转
         accountBO.transAmountCZB(data.getApplyUser(), ECurrency.CNY.getCode(),
@@ -126,9 +127,8 @@ public class TicketAOImpl implements ITicketAO {
         // 更新业务订单
         ticketBO.payYueSuccess(data);
         // 更新选手票数
-        playerBO.refreshPlayerTicketSum(data.getPlayerCode(), data.getTicket());
+        playerBO.addPlayerTicket(player, data.getTicket());
         // 更新日版榜排名
-        Player player = playerBO.getPlayer(data.getPlayerCode());
         String rankDayCode = null;
         Rank rankDay = rankBO.getRankByPlayerCodeAndType(player.getCode(),
             ERankType.DAY.getCode());

@@ -37,7 +37,7 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
     }
 
     @Override
-    public boolean isMatchPlayCodeExist(String code) {
+    public boolean isPlayerExistByMatchPlayCode(String code) {
         Player condition = new Player();
         condition.setMatchPlayCode(code);
         if (playerDAO.selectTotalCount(condition) > 0) {
@@ -48,6 +48,9 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
 
     @Override
     public String savePlayer(XN640000Req req) {
+        if (isPlayerExistByMatchPlayCode(req.getMatchPlayCode())) {
+            throw new BizException("xn0000", "选手编号已存在");
+        }
         Player data = new Player();
         String code = OrderNoGenerater.generate(EGeneratePrefix.PLAYER
             .getCode());
@@ -190,8 +193,7 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
     }
 
     @Override
-    public void refreshPlayerTicketSum(String playerCode, Long ticket) {
-        Player data = getPlayer(playerCode);
+    public void addPlayerTicket(Player data, Long ticket) {
         data.setTicketSum(getLong(data.getTicketSum()) + ticket);
         playerDAO.updatePlayerTicketSum(data);
     }

@@ -23,7 +23,7 @@ public class XN640001 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        playerAO.approve(req.getCode(), req.getApproveResult(),
+        playerAO.approvePlayer(req.getCode(), req.getApproveResult(),
             req.getApprover(), req.getRemark());
         return new BooleanRes(true);
     }

@@ -11,7 +11,7 @@ public interface IPlayerBO extends IPaginableBO<Player> {
 
     public boolean isPlayerExist(String code);
 
-    public boolean isMatchPlayCodeExist(String code);
+    public boolean isPlayerExistByMatchPlayCode(String MatchPlayCode);
 
     public String savePlayer(XN640000Req req);
 
@@ -20,14 +20,12 @@ public interface IPlayerBO extends IPaginableBO<Player> {
 
     public int refreshPlayer(Player data, XN640002Req req);
 
-    public List<Player> queryPlayerList(Player condition);
-
-    public Player getPlayer(String code);
-
     public void refreshUpPlayer(Player data, String location, String orderNo,
             String updater);
 
     public void refreshDownPlayer(Player data, String updater);
+
+    public void addPlayerTicket(Player player, Long ticket);
 
     public void addAttention(Player data);
 
@@ -35,6 +33,8 @@ public interface IPlayerBO extends IPaginableBO<Player> {
 
     public void addScan(Player data);
 
-    public void refreshPlayerTicketSum(String playerCode, Long ticket);
+    public List<Player> queryPlayerList(Player condition);
+
+    public Player getPlayer(String code);
 
 }
