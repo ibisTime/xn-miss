@@ -4,7 +4,7 @@ import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
-import com.ogc.standard.dto.req.XN802502Req;
+import com.ogc.standard.dto.req.XN803502Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -20,7 +20,7 @@ public class XN803502 extends AProcessor {
     private IAccountAO accountAO = SpringContextHolder
         .getBean(IAccountAO.class);
 
-    private XN802502Req req = null;
+    private XN803502Req req = null;
 
     /** 
     * @see com.xnjr.base.api.IProcessor#doBusiness()
@@ -33,10 +33,10 @@ public class XN803502 extends AProcessor {
     /** 
     * @see com.xnjr.base.api.IProcessor#doCheck(java.lang.String)
     */
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802502Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803502Req.class);
         StringValidater.validateBlank(req.getAccountNumber());
     }
 }

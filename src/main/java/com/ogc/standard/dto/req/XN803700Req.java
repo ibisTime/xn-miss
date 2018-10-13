@@ -6,7 +6,7 @@ package com.ogc.standard.dto.req;
  * @since: 2017年5月12日 上午9:58:02 
  * @history:
  */
-public class XN802700Req {
+public class XN803700Req {
 
     // 针对账号（必填）
     private String accountNumber;

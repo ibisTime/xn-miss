@@ -8,7 +8,7 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Jour;
-import com.ogc.standard.dto.req.XN802521Req;
+import com.ogc.standard.dto.req.XN803521Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -23,7 +23,7 @@ public class XN803521 extends AProcessor {
 
     private IJourAO jourAO = SpringContextHolder.getBean(IJourAO.class);
 
-    private XN802521Req req = null;
+    private XN803521Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -61,11 +61,10 @@ public class XN803521 extends AProcessor {
         return jourAO.queryJourList(condition);
     }
 
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802521Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803521Req.class);
         StringValidater
             .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }

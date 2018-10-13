@@ -1,6 +1,6 @@
 package com.ogc.standard.dto.req;
 
-public class XN802523Req {
+public class XN803523Req {
     // 参考订单号
     private String refNo;
 

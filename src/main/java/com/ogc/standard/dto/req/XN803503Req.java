@@ -1,6 +1,6 @@
 package com.ogc.standard.dto.req;
 
-public class XN802503Req {
+public class XN803503Req {
 
     // 账户编号(必填)
     private String userId;

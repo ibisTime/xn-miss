@@ -1,17 +1,17 @@
 package com.ogc.standard.dto.req;
 
 /**
- * 充值订单分页查询
+ * 列表查询充值订单
  * @author: xieyj 
- * @since: 2017年5月12日 上午9:59:55 
+ * @since: 2017年5月12日 上午10:01:08 
  * @history:
  */
-public class XN802705Req extends APageReq {
+public class XN803707Req extends AListReq {
 
     /** 
      * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
      */
-    private static final long serialVersionUID = -8656333710276407945L;
+    private static final long serialVersionUID = 1L;
 
     // 支付组号（信息流代表）
     private String payGroup;
@@ -97,6 +97,22 @@ public class XN802705Req extends APageReq {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public String getBizType() {
@@ -193,21 +209,5 @@ public class XN802705Req extends APageReq {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

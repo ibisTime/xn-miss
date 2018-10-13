@@ -9,7 +9,7 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Jour;
-import com.ogc.standard.dto.req.XN802531Req;
+import com.ogc.standard.dto.req.XN803531Req;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -24,7 +24,7 @@ public class XN803531 extends AProcessor {
     private IJourHistoryAO jourHistoryAO = SpringContextHolder
         .getBean(IJourHistoryAO.class);
 
-    private XN802531Req req = null;
+    private XN803531Req req = null;
 
     @Override
     public Object doBusiness() throws BizException {
@@ -47,12 +47,10 @@ public class XN803531 extends AProcessor {
         return jourHistoryAO.queryFrontJourPage(start, limit, condition);
     }
 
-  
-
-	@Override
-	public void doCheck(String inputparams, String operator)
-			throws ParaException {
-        req = JsonUtil.json2Bean(inputparams, XN802531Req.class);
+    @Override
+    public void doCheck(String inputparams, String operator)
+            throws ParaException {
+        req = JsonUtil.json2Bean(inputparams, XN803531Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
         StringValidater.validateBlank(req.getAccountNumber(),
             req.getDateStart(), req.getDateEnd());
