@@ -47,8 +47,9 @@ public class QuestionAOImpl implements IQuestionAO {
             // 如果上一个消息不是sys_user的，for循环改状态为已读直到sys_user为止
             if (!questionList.get(i).getUserId()
                 .equals(ESysUser.SYS_USER.getCode())) {
-                for (i = 0; !questionList.get(i).getUserId()
-                    .equals(ESysUser.SYS_USER.getCode()); i++) {
+                for (i = 0; i < questionList.size()
+                        && !questionList.get(i).getUserId()
+                            .equals(ESysUser.SYS_USER.getCode()); i++) {
                     questionBO.refreshStatus(questionList.get(i).getId());
                 }
             }

@@ -44,6 +44,8 @@ public class MissSession extends ABaseDO {
 
     private Date createDatetimeEnd;
 
+    private String mobile;
+
     private List<Question> dataList;
 
     public List<Question> getDataList() {
@@ -124,6 +126,14 @@ public class MissSession extends ABaseDO {
 
     public void setUser1Nickname(String user1Nickname) {
         this.user1Nickname = user1Nickname;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
 }

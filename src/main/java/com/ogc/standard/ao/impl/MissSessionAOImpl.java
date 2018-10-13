@@ -54,6 +54,8 @@ public class MissSessionAOImpl implements IMissSessionAO {
                 .querySessionQuestions(missSession.getCode()));
             missSession.setUser1Nickname(userBO.getUser(missSession.getUser1())
                 .getNickname());
+            missSession.setMobile(userBO.getUser(missSession.getUser1())
+                .getMobile());
         }
         return page;
     }
@@ -64,6 +66,7 @@ public class MissSessionAOImpl implements IMissSessionAO {
         List<Question> dataList = questionBO.querySessionQuestions(code);
         data.setDataList(dataList);
         data.setUser1Nickname(userBO.getUser(data.getUser1()).getNickname());
+        data.setMobile(userBO.getUser(data.getUser1()).getMobile());
         return data;
     }
 
@@ -76,6 +79,8 @@ public class MissSessionAOImpl implements IMissSessionAO {
                 .querySessionQuestions(missSession.getCode()));
             missSession.setUser1Nickname(userBO.getUser(missSession.getUser1())
                 .getNickname());
+            missSession.setMobile(userBO.getUser(missSession.getUser1())
+                .getMobile());
         }
         return missSessionList;
     }

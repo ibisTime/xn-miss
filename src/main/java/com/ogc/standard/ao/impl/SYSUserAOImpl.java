@@ -177,7 +177,7 @@ public class SYSUserAOImpl implements ISYSUserAO {
         // 判断手机号是否存在
         sysUserBO.isMobileExist(newMobile);
         // 新手机号验证
-        // smsOutBO.checkCaptcha(newMobile, smsCaptcha, "630052");
+        smsOutBO.checkCaptcha(newMobile, smsCaptcha, "630052");
         sysUserBO.resetBindMobile(user, newMobile);
         // 发送短信
         smsOutBO.sendSmsOut(
