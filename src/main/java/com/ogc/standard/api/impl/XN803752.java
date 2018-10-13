@@ -8,6 +8,7 @@ import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN803752Req;
 import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -29,7 +30,7 @@ public class XN803752 extends AProcessor {
         for (String code : req.getCodeList()) {
             withdrawAO.approveOrder(code, req.getApproveUser(),
                 req.getApproveResult(), req.getApproveNote(),
-                req.getSystemCode());
+                ESystemCode.MISS.getCode());
         }
         return new BooleanRes(true);
     }
@@ -42,6 +43,6 @@ public class XN803752 extends AProcessor {
             throw new BizException("订单列表不能为空");
         }
         StringValidater.validateBlank(req.getApproveUser(),
-            req.getApproveResult(), req.getApproveNote(), req.getSystemCode());
+            req.getApproveResult(), req.getApproveNote());
     }
 }
