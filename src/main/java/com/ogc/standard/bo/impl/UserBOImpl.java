@@ -465,32 +465,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public String doAddQDS(String mobile, String idKind, String idNo,
-            String realName, String respArea, String loginPwd) {
-        String userId = OrderNoGenerater.generate("U");
-        User user = new User();
-        user.setKind(EUserKind.QDS.getCode());
-        user.setUserId(userId);
-        user.setCreateDatetime(new Date());
-        user.setMobile(mobile);
-        user.setLoginName(mobile);
-        user.setIdKind(idKind);
-        user.setIdNo(idNo);
-        user.setRealName(realName);
-        user.setStatus(EUserStatus.NORMAL.getCode());
-        double tradeRate = sysConfigBO
-            .getDoubleValue(SysConstants.TRADE_FEE_RATE);
-        user.setTradeRate(tradeRate);
-        user.setCreateDatetime(new Date());
-        user.setRespArea(respArea);
-        user.setLoginPwd(MD5Util.md5(loginPwd));
-        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
-        user.setNickname(userId.substring(userId.length() - 8, userId.length()));
-        userDAO.insert(user);
-        return userId;
-    }
-
-    @Override
     public void refreshRespArea(String userId, String respArea, String updater) {
         User data = new User();
         data.setUserId(userId);
