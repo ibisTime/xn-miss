@@ -9,8 +9,6 @@ import java.util.List;
  * @history:
  */
 public class XN803752Req {
-    // 系统编号(必填)
-    private String systemCode;
 
     // 取现订单编号(必填)
     private List<String> codeList;
@@ -23,14 +21,6 @@ public class XN803752Req {
 
     // 审核说明(必填)
     private String approveNote;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public List<String> getCodeList() {
         return codeList;

@@ -24,26 +24,34 @@ public class MissSession extends ABaseDO {
     private static final long serialVersionUID = 7540253521864819742L;
 
     // ***********db properties***********
+    // 编号
     private String code;
 
+    // 类型
     private String type;
 
+    // 说话人1
     private String user1;
 
+    // 说话人2
     private String user2;
 
+    // 创建时间
     private Date createDatetime;
 
+    // 未读消息数
     private Long unreadSum;
 
     // ***********db properties***********
 
+    // 昵称
     private String user1Nickname;
 
     private Date createDatetimeStart;
 
     private Date createDatetimeEnd;
 
+    // 用户手机
     private String mobile;
 
     private List<Question> dataList;

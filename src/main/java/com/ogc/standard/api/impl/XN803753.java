@@ -8,6 +8,7 @@ import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dto.req.XN803753Req;
 import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -28,7 +29,8 @@ public class XN803753 extends AProcessor {
     public Object doBusiness() throws BizException {
         for (String code : req.getCodeList()) {
             withdrawAO.payOrder(code, req.getPayUser(), req.getPayResult(),
-                req.getPayNote(), req.getChannelOrder(), req.getSystemCode());
+                req.getPayNote(), req.getChannelOrder(),
+                ESystemCode.MISS.getCode());
         }
         return new BooleanRes(true);
     }
@@ -41,7 +43,7 @@ public class XN803753 extends AProcessor {
             throw new BizException("订单列表不能为空");
         }
         StringValidater.validateBlank(req.getPayUser(), req.getPayResult(),
-            req.getPayNote(), req.getSystemCode());
+            req.getPayNote());
     }
 
 }

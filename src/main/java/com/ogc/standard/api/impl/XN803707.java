@@ -6,7 +6,6 @@ import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.JsonUtil;
-import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.dto.req.XN803707Req;
 import com.ogc.standard.exception.BizException;
@@ -50,8 +49,6 @@ public class XN803707 extends AProcessor {
             true));
 
         condition.setChannelType(req.getChannelType());
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IChargeAO.DEFAULT_ORDER_COLUMN;
@@ -65,7 +62,5 @@ public class XN803707 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN803707Req.class);
-        StringValidater
-            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 }
