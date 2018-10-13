@@ -25,6 +25,7 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -73,6 +74,36 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
             data.setSystemCode(systemCode);
             data.setCompanyCode(companyCode);
+            accountDAO.insert(data);
+        }
+        return accountNumber;
+    }
+
+    @Override
+    public String distributeAccount(String userId, String mobile, String type,
+            String currency) {
+        String accountNumber = null;
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(currency)) {
+            accountNumber = OrderNoGenerater.generate(EGeneratePrefix.Account
+                .getCode());
+            Account data = new Account();
+            data.setAccountNumber(accountNumber);
+            data.setUserId(userId);
+            data.setRealName(mobile);// TODO
+
+            data.setType(type);
+            data.setCurrency(currency);
+            data.setStatus(EAccountStatus.NORMAL.getCode());
+            data.setAmount(BigDecimal.ZERO);
+            data.setFrozenAmount(BigDecimal.ZERO);
+
+            data.setMd5(AccountUtil.md5(data.getAmount()));
+            data.setAddAmount(BigDecimal.ZERO);
+            data.setInAmount(BigDecimal.ZERO);
+            data.setOutAmount(BigDecimal.ZERO);
+            data.setCreateDatetime(new Date());
+
+            data.setSystemCode(ESystemCode.MISS.getCode());
             accountDAO.insert(data);
         }
         return accountNumber;
@@ -332,4 +363,5 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         this.changeAmount(toAccountNumber, EChannelType.NBZ, null, null, refNo,
             bizType, toBizNote, AmountUtil.mul(transAmount, rate));
     }
+
 }

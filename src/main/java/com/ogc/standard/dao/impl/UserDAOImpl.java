@@ -26,6 +26,11 @@ import com.ogc.standard.domain.User;
 public class UserDAOImpl extends AMybatisTemplate implements IUserDAO {
 
     @Override
+    public int updateWxInfo(User data) {
+        return super.update(NAMESPACE.concat("update_wx_info"), data);
+    }
+
+    @Override
     public int insert(User data) {
         return super.insert(NAMESPACE.concat("insert_user"), data);
     }

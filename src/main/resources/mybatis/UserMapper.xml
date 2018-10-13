@@ -4,6 +4,8 @@
 <mapper namespace="com.ogc.standard.dao.IUserDAO">
 	<resultMap id="user_DB_Result" type="user">
 		<result column="user_id" property="userId" />
+		<result column="union_id" property="unionId" />
+		<result column="h5_open_id" property="h5OpenId" />
 		<result column="login_name" property="loginName" />
 		<result column="mobile" property="mobile" />
 		<result column="email" property="email" />
@@ -198,6 +200,8 @@
 	<insert id="insert_user" parameterType="user">
 		INSERT INTO tstd_user(
 		user_id
+		,union_id
+		,h5_open_id
 		,login_name
 		,mobile
 		,email
@@ -239,6 +243,8 @@
 		)
 		VALUES(
 		#{userId}
+		,#{unionId}
+		,#{h5OpenId}
 		,#{loginName}
 		,#{mobile}
 		,#{email}
@@ -482,6 +488,16 @@
 		UPDATE tstd_user
 		SET
 		last_login = #{lastLogin}
+		WHERE
+		user_id = #{userId}		
+	</update>
+	
+	<update id="update_wx_info" parameterType="user">
+		UPDATE tstd_user
+		SET
+		union_id =#{unionId}
+		,h5_open_id =#{h5OpenId}
+		,nickname = #{nickname}
 		WHERE
 		user_id = #{userId}		
 	</update>

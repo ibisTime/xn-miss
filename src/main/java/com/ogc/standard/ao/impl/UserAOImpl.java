@@ -1,16 +1,22 @@
 package com.ogc.standard.ao.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ogc.standard.ao.IAccountAO;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ogc.standard.ao.IUserAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
@@ -21,17 +27,28 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
+import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.common.SysConstants;
+import com.ogc.standard.common.WechatConstant;
 import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
+import com.ogc.standard.dto.req.XN805170Req;
+import com.ogc.standard.dto.res.XN805170Res;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECaptchaType;
+import com.ogc.standard.enums.EConfigType;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EErrorCode_main;
+import com.ogc.standard.enums.ESex;
 import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.EUser;
+import com.ogc.standard.enums.EUserKind;
+import com.ogc.standard.enums.EUserPwd;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.http.PostSimulater;
 
 /** 
  * @author: dl 
@@ -40,6 +57,9 @@ import com.ogc.standard.exception.BizException;
  */
 @Service
 public class UserAOImpl implements IUserAO {
+
+    private static Logger logger = Logger.getLogger(UserAOImpl.class);
+
     @Autowired
     private ISmsOutBO smsOutBO;
 
@@ -56,13 +76,191 @@ public class UserAOImpl implements IUserAO {
     private ISYSUserBO sysUserBO;
 
     @Autowired
-    private IAccountAO accountAO;
+    private IAccountBO accountBO;
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
     @Override
-    public void doCheckMobile(String mobile, String language) {
+    @Transactional
+    public XN805170Res doLoginWeChat(XN805170Req req) {
+        // Step1：获取密码参数信息
+        Map<String, String> configPwd = sysConfigBO
+            .getConfigsMap(EConfigType.WEIXIN_H5.getCode());
+        String appId = null;
+        String appSecret = null;
+        if (EConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
+            appId = configPwd.get(SysConstant.WX_H5_ACCESS_KEY);
+            appSecret = configPwd.get(SysConstant.WX_H5_SECRET_KEY);
+        } else {
+            throw new BizException("XN000000", "登录类型不支持");
+        }
+        if (StringUtils.isBlank(appId)) {
+            throw new BizException("XN000000", "参数appId配置获取失败，请检查配置");
+        }
+        if (StringUtils.isBlank(appSecret)) {
+            throw new BizException("XN000000", "参数appSecret配置获取失败，请检查配置");
+        }
+
+        // Step2：通过Authorization Code获取Access Token
+        String accessToken = "";
+        Map<String, String> res = new HashMap<>();
+        Properties fromProperties = new Properties();
+        fromProperties.put("grant_type", "authorization_code");
+        fromProperties.put("appid", appId);
+        fromProperties.put("secret", appSecret);
+        fromProperties.put("code", req.getCode());
+        logger.info("appId:" + appId + ",appSecret:" + appSecret + ",code:"
+                + req.getCode());
+        XN805170Res result = null;
+        try {
+            String response = PostSimulater.requestPostForm(
+                WechatConstant.WX_TOKEN_URL, fromProperties);
+            res = getMapFromResponse(response);
+            accessToken = (String) res.get("access_token");
+            if (res.get("error") != null) {
+                throw new BizException("XN000000", "微信登录失败原因："
+                        + res.get("error"));
+            }
+            if (StringUtils.isBlank(accessToken)) {
+                throw new BizException("XN000000", "accessToken不能为空");
+            }
+            // Step3：使用Access Token来获取用户的OpenID
+            String openId = (String) res.get("openid");
+            // 获取unionid
+            Map<String, String> wxRes = new HashMap<>();
+            Properties queryParas = new Properties();
+            queryParas.put("access_token", accessToken);
+            queryParas.put("openid", openId);
+            queryParas.put("lang", "zh_CN");
+            wxRes = getMapFromResponse(PostSimulater.requestPostForm(
+                WechatConstant.WX_USER_INFO_URL, queryParas));
+            String unionId = (String) wxRes.get("unionid");
+            String h5OpenId = null;
+            if (EConfigType.WEIXIN_H5.getCode().equals(req.getType())) {
+                h5OpenId = (String) wxRes.get("openid");
+            }
+            // Step4：根据openId，unionId从数据库中查询用户信息
+            User dbUser = userBO.doGetUserByOpenId(h5OpenId);
+            if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
+                result = new XN805170Res(dbUser.getUserId());
+            } else {
+                String nickname = (String) wxRes.get("nickname");
+                String photo = (String) wxRes.get("headimgurl");
+                String gender = ESex.UNKNOWN.getCode();
+                if (String.valueOf(wxRes.get("sex")).equals("1.0")) {
+                    gender = ESex.MEN.getCode();
+                } else if (String.valueOf(wxRes.get("sex")).equals("2.0")) {
+                    gender = ESex.WOMEN.getCode();
+                }
+                // Step5：判断注册是否传手机号，有则注册，无则反馈
+                if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
+                    result = doWxLoginRegMobile(req, unionId, h5OpenId,
+                        nickname, photo, gender);
+                } else {
+                    result = doWxLoginReg(req, unionId, h5OpenId, nickname,
+                        photo, gender);
+                }
+            }
+        } catch (Exception e) {
+            throw new BizException("xn000000", e.getMessage());
+        }
+        return result;
+    }
+
+    private XN805170Res doWxLoginReg(XN805170Req req, String unionId,
+            String h5OpenId, String nickname, String photo, String gender) {
+        XN805170Res result;
+        userBO.doCheckOpenId(unionId, h5OpenId);
+
+        // 插入用户信息
+        String userId = userBO.doRegister(unionId, h5OpenId, null,
+            EUserKind.Customer.getCode(), EUserPwd.InitPwd.getCode(), nickname,
+            photo, gender);
+
+        String accountNumber = distributeAccount(userId, nickname,
+            EUserKind.Customer.getCode());
+        result = new XN805170Res(userId, accountNumber, EBoolean.NO.getCode());
+        return result;
+    }
+
+    /**
+     * @param response  可能是Json & Jsonp字符串 & urlParas
+     *          eg：urlParas：access_token=xxx&expires_in=7776000&refresh_token=xxx
+     * @return
+     */
+    public Map<String, String> getMapFromResponse(String response) {
+        if (StringUtils.isBlank(response)) {
+            return new HashMap<>();
+        }
+
+        Map<String, String> result = new HashMap<>();
+        int begin = response.indexOf("{");
+        int end = response.lastIndexOf("}") + 1;
+
+        if (begin >= 0 && end > 0) {
+            result = new Gson().fromJson(response.substring(begin, end),
+                new TypeToken<Map<String, Object>>() {
+                }.getType());
+        } else {
+            String[] paras = response.split("&");
+            for (String para : paras) {
+                result.put(para.split("=")[0], para.split("=")[1]);
+            }
+        }
+
+        return result;
+    }
+
+    private XN805170Res doWxLoginRegMobile(XN805170Req req, String unionId,
+            String h5OpenId, String nickname, String photo, String gender) {
+        XN805170Res result = null;
+        if (StringUtils.isNotBlank(req.getMobile())) {
+            // 判断是否需要验证码验证码,登录前一定要验证
+            if (!EBoolean.YES.getCode().equals(req.getIsLoginStatus())) {
+                if (StringUtils.isBlank(req.getSmsCaptcha())) {
+                    throw new BizException("xn702002", "请输入短信验证码");
+                }
+                // 短信验证码是否正确
+                smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
+                    "805170");
+            }
+            String mobileUserId = userBO.getUserId(req.getMobile());
+            if (StringUtils.isBlank(mobileUserId)) {
+                userBO.doCheckOpenId(unionId, h5OpenId);
+
+                // 插入用户信息
+                String userId = userBO.doRegister(unionId, h5OpenId,
+                    req.getMobile(), EUserKind.Customer.getCode(),
+                    EUserPwd.InitPwd.getCode(), nickname, photo, gender);
+                // 分配账户
+                String accountNumber = distributeAccount(userId,
+                    req.getMobile(), EUserKind.Customer.getCode());
+                result = new XN805170Res(userId, accountNumber);
+            } else {
+                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, nickname,
+                    photo, gender);
+                result = new XN805170Res(mobileUserId);
+            }
+        } else {
+            result = new XN805170Res(null, null, EBoolean.YES.getCode());
+        }
+        return result;
+    }
+
+    // 分配账号
+    private String distributeAccount(String userId, String mobile, String kind) {
+        String currency = null;
+        String type = null;
+        if (EUserKind.Customer.getCode().equals(kind)) {
+            currency = ECurrency.CNY.getCode();
+            type = EAccountType.Customer.getCode();
+        }
+        return accountBO.distributeAccount(userId, mobile, type, currency);
+    }
+
+    @Override
+    public void doCheckMobile(String mobile) {
         userBO.isMobileExist(mobile);
     }
 

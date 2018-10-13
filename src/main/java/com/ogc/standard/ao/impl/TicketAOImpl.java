@@ -12,18 +12,24 @@ import com.ogc.standard.ao.ITicketAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IPlayerBO;
 import com.ogc.standard.bo.IRankBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ITicketBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.domain.Account;
+import com.ogc.standard.common.SysConstant;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.Rank;
 import com.ogc.standard.domain.Ticket;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizType;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EPlayerStatus;
 import com.ogc.standard.enums.ERankType;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ETicketStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -46,6 +52,9 @@ public class TicketAOImpl implements ITicketAO {
     @Autowired
     private IRankBO rankBO;
 
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
     @Override
     public String orderTicket(String playerCode, Long ticket, String applyUser) {
         Player player = playerBO.getPlayer(playerCode);
@@ -53,8 +62,15 @@ public class TicketAOImpl implements ITicketAO {
             throw new BizException("xn0000", "选手:" + player.getCname() + " 编号:"
                     + player.getMatchPlayCode() + " 不是可加油状态");
         }
-        String code = ticketBO.saveTicket(player, ticket, applyUser);
-        return code;
+
+        BigDecimal price = StringValidater.toBigDecimal(sysConfigBO
+            .getConfigValue(SysConstant.PRICE).getCvalue());
+
+        Integer invalidTime = StringValidater.toInteger(sysConfigBO
+            .getConfigValue(SysConstant.INVALID_TIME).getCvalue());
+
+        return ticketBO.saveTicket(player, ticket, applyUser, price,
+            invalidTime);
     }
 
     @Override
@@ -87,33 +103,25 @@ public class TicketAOImpl implements ITicketAO {
         Object result = null;
         if (EPayType.RMB_YE.getCode().equals(payType)) {// 余额支付
             result = toPayTicketYue(data);
+        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
+            result = toPayTicketWeChat(data);
         } else if (EPayType.ALIPAY.getCode().equals(payType)) {// 支付宝支付
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持支付宝支付");
-        } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持微信支付");
         }
         return result;
     }
 
-    // 1、判断余额是否足够，并扣除账户余额
+    // 1、C端账户转账给平台账户
     // 2、更新订单
     // 3、更新选手票数和排名
     @Transactional
     private Object toPayTicketYue(Ticket data) {
-        Account userCnyAccount = accountBO.getAccountByUser(
-            data.getApplyUser(), ECurrency.CNY.getCode());
         BigDecimal payAmount = data.getAmount();
-        if (userCnyAccount.getAmount().compareTo(payAmount) < 0) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "人民币账户余额不足");
-        }
-
         // 人民币余额划转
-        // Account sysCnyAccount = accountBO
-        // .getAccount(ESystemAccount.SYS_ACOUNT_CNY.getCode());
-        // accountBO.transAmount(userCnyAccount, sysCnyAccount, payAmount,
-        // EJourBizTypeUser.ADOPT.getCode(), EJourBizTypePlat.ADOPT.getCode(),
-        // EJourBizTypeUser.ADOPT.getValue(),
-        // EJourBizTypePlat.ADOPT.getValue(), data.getCode());
+        accountBO.transAmountCZB(data.getApplyUser(), ECurrency.CNY.getCode(),
+            ESystemAccount.SYS_ACOUNT_CNY.getCode(), ECurrency.CNY.getCode(),
+            payAmount, EJourBizType.TICKET, EJourBizTypeUser.TICKET.getValue(),
+            EJourBizTypePlat.TICKET.getValue(), data.getCode());
 
         // 更新业务订单
         ticketBO.payYueSuccess(data);
@@ -143,6 +151,12 @@ public class TicketAOImpl implements ITicketAO {
         }
         rankBO.refreshRanking(ERankType.TOTAL.getCode(), rankTotalCode);
         return new BooleanRes(true);
+    }
+
+    @Transactional
+    private Object toPayTicketWeChat(Ticket data) {
+        return null;
+
     }
 
     @Override

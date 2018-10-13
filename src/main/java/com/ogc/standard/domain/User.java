@@ -20,8 +20,12 @@ public class User extends ABaseDO {
 
     // 用户编号
     private String userId;
-    
-    private String openId;
+
+    // 开放平台和公众平台唯一号
+    private String unionId;
+
+    // 微信h5第三方登录开放编号
+    private String h5OpenId;
 
     // 登陆名
     private String loginName;
@@ -273,17 +277,8 @@ public class User extends ABaseDO {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-    
 
-    public String getOpenId() {
-		return openId;
-	}
-
-	public void setOpenId(String openId) {
-		this.openId = openId;
-	}
-
-	public String getLoginName() {
+    public String getLoginName() {
         return loginName;
     }
 
@@ -745,6 +740,22 @@ public class User extends ABaseDO {
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce;
+    }
+
+    public String getH5OpenId() {
+        return h5OpenId;
+    }
+
+    public void setH5OpenId(String h5OpenId) {
+        this.h5OpenId = h5OpenId;
+    }
+
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
     }
 
 }

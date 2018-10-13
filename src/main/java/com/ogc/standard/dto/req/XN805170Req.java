@@ -11,7 +11,7 @@ public class XN805170Req {
     // 开放编号（必填）
     private String code;
 
-    // 类型(必填 微信h5=3 微信APP=4)
+    // 类型(必填 微信h5=3)
     private String type;
 
     // 是否强制绑定手机号
@@ -25,12 +25,6 @@ public class XN805170Req {
 
     // 是否(非微信登录)登录状态，是则无需验证手机号，否则传验证验证手机
     private String isLoginStatus;
-
-    // 推荐人（选填）
-    private String userReferee;
-
-    // 推荐人类型（选填）
-    private String userRefereeKind;
 
     public String getCode() {
         return code;
@@ -78,21 +72,5 @@ public class XN805170Req {
 
     public void setIsLoginStatus(String isLoginStatus) {
         this.isLoginStatus = isLoginStatus;
-    }
-
-    public String getUserReferee() {
-        return userReferee;
-    }
-
-    public void setUserReferee(String userReferee) {
-        this.userReferee = userReferee;
-    }
-
-    public String getUserRefereeKind() {
-        return userRefereeKind;
-    }
-
-    public void setUserRefereeKind(String userRefereeKind) {
-        this.userRefereeKind = userRefereeKind;
     }
 }

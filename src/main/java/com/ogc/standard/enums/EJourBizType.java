@@ -6,6 +6,7 @@ import java.util.Map;
 import com.ogc.standard.exception.BizException;
 
 public enum EJourBizType {
+    TICKET("t", "加油订单"),
     // 通用业务类型 每个系统的分布说明
     AJ_REG("01", "注册送积分"), AJ_SIGN("02", "每日签到"), AJ_REG_REF("RF", "推荐注册送积分"), AJ_CZ(
             "11", "充值"), AJ_QX("-11", "取现"), AJ_HCLB("HL", "红冲蓝补"), Transfer_CURRENCY(
@@ -65,6 +66,7 @@ public enum EJourBizType {
             "HD_CTJL", "活动成团奖励"), HD_CTFY("HD_CTFY", "活动成团费用"), ORDER_ONE_BACK(
             "41", "一级推客返点"), ORDER_TWO_BACK("42", "二级推客返点"), ORDER_LEAD_BACK(
             "43", "领队推客返点");
+    ;
 
     public static EJourBizType getBizType(String code) {
         Map<String, EJourBizType> map = getBizTypeMap();

@@ -55,4 +55,33 @@ public class SysConstant {
     public static final String WX_DAY_MAX_AMOUNT = "WX_DAY_MAX_AMOUNT"; // 微信日支付累计最大金额
 
     public static final String ZFB_DAY_MAX_AMOUNT = "ZFB_DAY_MAX_AMOUNT"; // 支付宝日支付累计最大金额
+
+    /**************************环球小姐**************************/
+
+    // 微信公众号配置
+    public static String WX_H5_ACCESS_KEY = "wx_h5_access_key";
+
+    public static String WX_H5_SECRET_KEY = "wx_h5_secret_key";
+
+    // 微信APP配置
+    public static String WX_APP_ACCESS_KEY = "wx_app_access_key";
+
+    public static String WX_APP_SECRET_KEY = "wx_app_secret_key";
+
+    // 七牛云图片配置
+    public static String QINIU_ACCESS_KEY = "qiniu_access_key";
+
+    public static String QINIU_SECRET_KEY = "qiniu_secret_key";
+
+    public static String QINIU_BUCKET = "qiniu_bucket";
+
+    public static String QINIU_DOMAIN = "qiniu_domain";
+
+    // 订单加油票价格
+    public static String PRICE = "price";
+
+    // 订单失效时间（分钟）
+    public static String INVALID_TIME = "invalid_time";
+
+    /**************************环球小姐**************************/
 }

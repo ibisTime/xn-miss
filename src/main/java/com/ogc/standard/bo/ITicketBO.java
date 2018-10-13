@@ -1,5 +1,6 @@
 package com.ogc.standard.bo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
@@ -8,7 +9,8 @@ import com.ogc.standard.domain.Ticket;
 
 public interface ITicketBO extends IPaginableBO<Ticket> {
 
-    public String saveTicket(Player player, Long ticket, String applyUser);
+    public String saveTicket(Player player, Long ticket, String applyUser,
+            BigDecimal price, int invalidTime);
 
     public boolean isTicketExist(String code);
 

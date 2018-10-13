@@ -286,7 +286,8 @@ CREATE TABLE `tsys_channel_bank` (
 DROP TABLE IF EXISTS `tstd_user`;
 CREATE TABLE `tstd_user` (
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
-  `open_id` varchar(32) DEFAULT NULL COMMENT '微信编号',
+  `union_id` varchar(32) DEFAULT NULL COMMENT '开放平台和公众平台唯一号',
+  `h5_open_id` varchar(32) DEFAULT NULL COMMENT '微信h5编号',
   `login_name` varchar(64) DEFAULT NULL COMMENT '登陆名',
   `mobile` varchar(32) DEFAULT NULL COMMENT '手机号',
   `email` varchar(32) DEFAULT NULL COMMENT '邮箱',

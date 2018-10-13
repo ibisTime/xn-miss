@@ -21,6 +21,14 @@ import com.ogc.standard.enums.EUserStatus;
  */
 public interface IUserBO extends IPaginableBO<User> {
 
+    public User doGetUserByOpenId(String h5OpenId);
+
+    // 查询openId
+    public void doCheckOpenId(String unionId, String h5OpenId);
+
+    public void refreshWxInfo(String userId, String unionId, String h5OpenId,
+            String nickname, String photo, String gender);
+
     // 根据手机号和类型判断手机号是否存在
     public void isMobileExist(String mobile);
 
@@ -38,6 +46,11 @@ public interface IUserBO extends IPaginableBO<User> {
     // 前端用户注册
     public String doRegister(String mobile, String nickname, String loginPwd,
             User refereeUser, String province, String city, String area);
+
+    // 微信初次登录自动注册用户
+    public String doRegister(String unionId, String h5OpenId, String mobile,
+            String kind, String loginPwd, String nickname, String photo,
+            String gender);
 
     public String doAddUser(User data);
 

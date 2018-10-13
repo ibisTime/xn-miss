@@ -13,7 +13,7 @@ import com.ogc.standard.exception.BizException;
  */
 public enum EJourBizTypeUser {
 
-    TICKET("t", "加油"),
+    TICKET("t", "加油订单"),
 
     AJ_HC("hc", "红冲"), AJ_LB("lb", "蓝补");
 

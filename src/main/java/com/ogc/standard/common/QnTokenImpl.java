@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ISYSConfigBO;
-import com.ogc.standard.enums.ESysConfigType;
+import com.ogc.standard.enums.EConfigType;
 import com.ogc.standard.exception.BizException;
 import com.qiniu.util.Auth;
 
@@ -34,7 +34,7 @@ public class QnTokenImpl {
     // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
     public String getUploadToken(String systemCode) {
         Map<String, String> resultMap = sysConfigBO
-            .getConfigsMap(ESysConfigType.QINIU.getCode());
+            .getConfigsMap(EConfigType.QINIU.getCode());
         if (resultMap == null) {
             throw new BizException("xn000000", "七牛云图片参数异常");
         }

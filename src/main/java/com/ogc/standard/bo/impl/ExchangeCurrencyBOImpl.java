@@ -65,13 +65,6 @@ public class ExchangeCurrencyBOImpl extends PaginableBOImpl<ExchangeCurrency>
         if (fromCurrency != null && fromCurrency.equalsIgnoreCase(toCurrency)) {
             return 1.0;
         }
-
-        // if (ECurrency.CNY.getCode().equalsIgnoreCase(fromCurrency)
-        // && ECurrency.ZH_GXZ.getCode().equalsIgnoreCase(toCurrency)) {
-        // return sysConfigBO.getCNY2GXZ();
-        // } else {
-        // throw new BizException("xn000000", "兑换比例不存在，请检查钱包汇率规则参数");
-        // }
         return null;
     }
 

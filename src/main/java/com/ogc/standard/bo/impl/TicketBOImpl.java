@@ -27,18 +27,20 @@ public class TicketBOImpl extends PaginableBOImpl<Ticket> implements ITicketBO {
     private ITicketDAO ticketDAO;
 
     @Override
-    public String saveTicket(Player player, Long ticket, String applyUser) {
+    public String saveTicket(Player player, Long ticket, String applyUser,
+            BigDecimal price, int invalidTime) {
         String code = null;
         if (null != player) {
             code = OrderNoGenerater.generate(EGeneratePrefix.TICKET.getCode());
             Ticket data = new Ticket();
             data.setPlayerCode(player.getCode());
             data.setTicket(ticket);
-            data.setAmount(BigDecimal.valueOf(ticket * 1));// TODO
+            data.setAmount(price.multiply(new BigDecimal(ticket)));
             data.setApplyUser(applyUser);
             data.setStatus(ETicketStatus.TO_PAY.getCode());
             data.setCreateDatetime(new Date());
-            Date invalidDatetime = addDate(data.getCreateDatetime(), 30);// TODO
+            Date invalidDatetime = addDate(data.getCreateDatetime(),
+                invalidTime);
             data.setInvalidDatetime(invalidDatetime);
             ticketDAO.insert(data);
         }

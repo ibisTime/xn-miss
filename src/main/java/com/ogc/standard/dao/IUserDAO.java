@@ -20,6 +20,9 @@ import com.ogc.standard.domain.User;
 public interface IUserDAO extends IBaseDAO<User> {
     String NAMESPACE = IUserDAO.class.getName().concat(".");
 
+    // 微信登录更新用户信息
+    public int updateWxInfo(User data);
+
     // 更改姓名
     public int updateRealName(User data);
 

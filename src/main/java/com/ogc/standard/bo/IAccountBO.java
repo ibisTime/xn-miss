@@ -24,6 +24,10 @@ public interface IAccountBO extends IPaginableBO<Account> {
             EAccountType accountType, String currency, String systemCode,
             String companyCode);
 
+    // 分配C端用户的账户
+    public String distributeAccount(String userId, String mobile, String type,
+            String currency);
+
     // 变更账户余额：流水落地
     public void changeAmount(String accountNumber, EChannelType channelType,
             String channelOrder, String payGroup, String refNo,

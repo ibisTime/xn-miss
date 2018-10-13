@@ -47,6 +47,20 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     private ISYSConfigBO sysConfigBO;
 
     @Override
+    public void refreshWxInfo(String userId, String unionId, String h5OpenId,
+            String nickname, String photo, String gender) {
+        User dbUser = getUser(userId);
+        dbUser.setUnionId(unionId);
+        if (StringUtils.isNotBlank(h5OpenId)) {
+            dbUser.setH5OpenId(h5OpenId);
+        }
+        dbUser.setNickname(nickname);
+        dbUser.setPhoto(photo);
+        dbUser.setGender(gender);
+        userDAO.updateWxInfo(dbUser);
+    }
+
+    @Override
     public void isMobileExist(String mobile) {
         if (StringUtils.isNotBlank(mobile)) {
             // 判断格式
@@ -161,6 +175,33 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setCreateDatetime(date);
         user.setTradeRate(sysConfigBO
             .getDoubleValue(SysConstants.TRADE_FEE_RATE));
+        userDAO.insert(user);
+        return userId;
+    }
+
+    @Override
+    public String doRegister(String unionId, String h5OpenId, String mobile,
+            String kind, String loginPwd, String nickname, String photo,
+            String gender) {
+        String userId = OrderNoGenerater.generate("U");
+        User user = new User();
+        user.setUserId(userId);
+        user.setUnionId(unionId);
+        user.setH5OpenId(h5OpenId);
+
+        user.setLoginName(mobile);
+        user.setMobile(mobile);
+        user.setKind(kind);
+        user.setLoginPwd(MD5Util.md5(loginPwd));
+        user.setLoginPwdStrength(PwdUtil.calculateSecurityLevel(loginPwd));
+
+        user.setNickname(nickname);
+        user.setPhoto(photo);
+        user.setGender(gender);
+        user.setLevel(EUserLevel.ONE.getCode());
+        user.setStatus(EUserStatus.NORMAL.getCode());
+
+        user.setCreateDatetime(new Date());
         userDAO.insert(user);
         return userId;
     }
@@ -472,6 +513,36 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         userDAO.updateRespArea(data);
+    }
+
+    @Override
+    public User doGetUserByOpenId(String h5OpenId) {
+        User user = null;
+        if (StringUtils.isNotBlank(h5OpenId)) {
+            User condition = new User();
+            condition.setH5OpenId(h5OpenId);
+            List<User> userList = userDAO.selectList(condition);
+            if (CollectionUtils.isNotEmpty(userList)) {
+                user = userList.get(0);
+                if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
+                    throw new BizException("user_lock", "用户状态异常");
+                }
+            }
+        } else {
+            throw new BizException("li01004", "第三方登录异常");
+        }
+        return user;
+    }
+
+    @Override
+    public void doCheckOpenId(String unionId, String h5OpenId) {
+        User condition = new User();
+        condition.setUnionId(unionId);
+        condition.setH5OpenId(h5OpenId);
+        long count = getTotalCount(condition);
+        if (count > 0) {
+            throw new BizException("xn702002", "微信编号已存在");
+        }
     }
 
 }
