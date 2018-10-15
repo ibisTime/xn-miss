@@ -18,6 +18,8 @@ import com.ogc.standard.domain.Action;
  */
 public interface IActionBO extends IPaginableBO<Action> {
 
+    public boolean isActionExist(String userId, String toCode, String actionType);
+
     public String saveAction(String type, String toType, String toCode,
             String creater);
 

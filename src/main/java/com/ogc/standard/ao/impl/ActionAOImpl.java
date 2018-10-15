@@ -8,18 +8,28 @@
  */
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IActionAO;
+import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IActionBO;
 import com.ogc.standard.bo.IPlayerBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Action;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.enums.EActionType;
+import com.ogc.standard.enums.EChannelType;
+import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPlayerStatus;
+import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -40,6 +50,10 @@ public class ActionAOImpl implements IActionAO {
     @Autowired
     private IPlayerBO playerBO;
 
+    @Autowired
+    private IAccountBO accountBO;
+
+    @Transactional
     @Override
     public String addAction(String type, String toType, String toCode,
             String creater) {
@@ -51,9 +65,30 @@ public class ActionAOImpl implements IActionAO {
                 "该选手无法进行此操作");
         }
         if (EActionType.ATTENTION.getCode().equals(type)) {
+            if (actionBO.isActionExist(creater, toCode, type)) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                    "已关注无需重复关注");
+            }
             playerBO.addAttention(player);
         } else if (EActionType.SHARE.getCode().equals(type)) {
+            if (!actionBO.isActionExist(creater, toCode, type)) {
+                // 用户账户加钱
+                Account account = accountBO.getAccountByUser(creater,
+                    ECurrency.CNY.getCode());
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.NBZ, null, null, creater,
+                    EJourBizTypeUser.AJ_FX.getCode(),
+                    EJourBizTypeUser.AJ_FX.getValue(), BigDecimal.ONE);
+                // 系统用户减钱
+                account = accountBO.getAccountByUser(
+                    ESysUser.SYS_USER.getCode(), ECurrency.CNY.getCode());
+                accountBO.changeAmount(account.getAccountNumber(),
+                    EChannelType.NBZ, null, null, creater,
+                    EJourBizTypePlat.AJ_FX.getCode(),
+                    EJourBizTypePlat.AJ_FX.getValue(), BigDecimal.ONE.negate());
+            }
             playerBO.addShare(player);
+            // TODO
         } else if (EActionType.FOOT.getCode().equals(type)) {
             playerBO.addScan(player);
         } else {
