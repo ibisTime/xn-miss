@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ogc.standard.ao.IAlipayAO;
 import com.ogc.standard.ao.IWeChatAO;
 
 /** 
@@ -30,9 +29,6 @@ public class CallbackConroller {
 
     @Autowired
     IWeChatAO weChatAO;
-
-    @Autowired
-    IAlipayAO alipayAO;
 
     // 微信H5支付回调
     @RequestMapping("/wechat/H5/callback")

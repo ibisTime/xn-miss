@@ -60,12 +60,11 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 获取账户
     public Account getAccount(String accountNumber);
 
-    // 通过用户编号和币种获取币种
+    // 通过用户编号和币种获取账户
     public Account getAccountByUser(String userId, String currency);
 
     // 根据系统编号,公司编号和币种获取对应的系统账户(账户类型确定为系统账户)
-    public Account getSysAccountNumber(String systemCode, String companyCode,
-            ECurrency currency);
+    public Account getSysAccountNumber(ECurrency currency);
 
     // 获取账户列表
     public List<Account> queryAccountList(Account data);

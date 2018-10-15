@@ -151,8 +151,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (ECurrency.CNY.getCode().equals(account.getCurrency())) {
             // 托管账户减钱
             accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
-                null, null, data.getCode(), EJourBizType.AJ_QX, "线下取现",
-                totalAmount.negate());
+                null, null, data.getCode(), EJourBizType.BALANCE.getCode(),
+                "线下取现", totalAmount.negate());
         }
     }
 

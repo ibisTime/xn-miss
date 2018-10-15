@@ -298,13 +298,10 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
      * @see com.ogc.standard.bo.IAccountBO#getSysAccount(java.lang.String, java.lang.String)
      */
     @Override
-    public Account getSysAccountNumber(String systemCode, String companyCode,
-            ECurrency currency) {
+    public Account getSysAccountNumber(ECurrency currency) {
         Account condition = new Account();
-        // 平台账户只有一类,类型+币种+公司+系统=唯一系统账户
+        // 平台账户只有一类,类型+币种=唯一系统账户
         condition.setType(EAccountType.Plat.getCode());
-        condition.setSystemCode(systemCode);
-        condition.setCompanyCode(companyCode);
         condition.setCurrency(currency.getCode());
         return accountDAO.select(condition);
     }

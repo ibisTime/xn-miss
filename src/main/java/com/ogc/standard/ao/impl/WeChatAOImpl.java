@@ -133,14 +133,12 @@ public class WeChatAOImpl implements IWeChatAO {
                 accountBO.changeAmount(order.getAccountNumber(),
                     EChannelType.getEChannelType(order.getChannelType()),
                     wechatOrderNo, order.getPayGroup(), order.getRefNo(),
-                    EJourBizType.getBizType(order.getBizType()),
-                    order.getBizNote(), order.getAmount());
+                    order.getBizType(), order.getBizNote(), order.getAmount());
                 // 托管账户加钱
                 accountBO.changeAmount(order.getCompanyCode(),
                     EChannelType.getEChannelType(order.getChannelType()),
                     wechatOrderNo, order.getPayGroup(), order.getRefNo(),
-                    EJourBizType.getBizType(order.getBizType()),
-                    order.getBizNote(), order.getAmount());
+                    order.getBizType(), order.getBizNote(), order.getAmount());
             } else {
                 // 更新充值订单状态
                 chargeBO.callBackChange(order, false);
