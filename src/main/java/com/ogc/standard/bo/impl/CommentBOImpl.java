@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ICommentBO;
-import com.ogc.standard.bo.IInteractBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
@@ -38,9 +37,6 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
 
     @Autowired
     private IUserBO userBO;
-
-    @Autowired
-    private IInteractBO interactBO;
 
     @Override
     public boolean isCommentExist(String code) {

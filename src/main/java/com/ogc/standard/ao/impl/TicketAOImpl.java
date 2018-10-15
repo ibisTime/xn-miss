@@ -23,7 +23,6 @@ import com.ogc.standard.domain.Rank;
 import com.ogc.standard.domain.Ticket;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
@@ -105,8 +104,8 @@ public class TicketAOImpl implements ITicketAO {
             result = toPayTicketYue(data);
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
             result = toPayTicketWeChat(data);
-        } else if (EPayType.ALIPAY.getCode().equals(payType)) {// 支付宝支付
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持支付宝支付");
+        } else {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "");
         }
         return result;
     }
@@ -121,8 +120,9 @@ public class TicketAOImpl implements ITicketAO {
         // 人民币余额划转
         accountBO.transAmountCZB(data.getApplyUser(), ECurrency.CNY.getCode(),
             ESystemAccount.SYS_ACOUNT_CNY.getCode(), ECurrency.CNY.getCode(),
-            payAmount, EJourBizType.TICKET, EJourBizTypeUser.TICKET.getValue(),
-            EJourBizTypePlat.TICKET.getValue(), data.getCode());
+            payAmount, EJourBizTypeUser.TICKET.getCode(),
+            EJourBizTypeUser.TICKET.getValue(),
+            EJourBizTypePlat.AJ_JYFC.getValue(), data.getCode());// TODO
 
         // 更新业务订单
         ticketBO.payYueSuccess(data);

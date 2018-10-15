@@ -22,12 +22,9 @@ import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IJourDAO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.domain.Jour;
-import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EGeneratePrefix;
-import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.enums.EJourStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -43,8 +40,8 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
     @Override
     public String addJour(Account dbAccount, EChannelType channelType,
-            String channelOrder, String payGroup, String refNo,
-            EJourBizType bizType, String bizNote, BigDecimal transAmount) {
+            String channelOrder, String payGroup, String refNo, String bizType,
+            String bizNote, BigDecimal transAmount) {
         if (!EChannelType.Offline.getCode().equals(channelType.getCode())
                 && !EChannelType.NBZ.getCode().equals(channelType.getCode())) {// 线下和内部帐可为空，线上必须有
             if (StringUtils.isBlank(payGroup)) {// 必须要有的判断。每一次流水新增，必有有对应业务分组
@@ -73,7 +70,7 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setRealName(dbAccount.getRealName());
         data.setType(dbAccount.getType());
         data.setCurrency(dbAccount.getCurrency());
-        data.setBizType(bizType.getCode());
+        data.setBizType(bizType);
 
         data.setBizNote(bizNote);
         data.setPreAmount(dbAccount.getAmount());
@@ -89,76 +86,6 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
         data.setCompanyCode(dbAccount.getCompanyCode());
         jourDAO.insert(data);
         return code;
-    }
-
-    @Override
-    public String addJourForHL(Account dbAccount, HLOrder order) {
-        String code = OrderNoGenerater
-            .generate(EGeneratePrefix.AJour.getCode());
-
-        Jour data = new Jour();
-        data.setCode(code);
-        data.setAccountNumber(dbAccount.getAccountNumber());
-        data.setUserId(dbAccount.getUserId());
-        data.setRealName(dbAccount.getRealName());
-        data.setType(dbAccount.getType());
-        data.setCurrency(dbAccount.getCurrency());
-        data.setChannelType(EChannelType.NBZ.getCode());
-
-        data.setRefNo(order.getCode());
-        data.setBizType(EJourBizType.AJ_HCLB.getCode());
-        data.setBizNote("根据红蓝订单《" + order.getCode() + "》变动资金");
-        data.setTransAmount(order.getAmount());
-        data.setPreAmount(dbAccount.getAmount());
-
-        data.setPostAmount(dbAccount.getAmount().add(order.getAmount()));
-        data.setStatus(EJourStatus.noAdjust.getCode());
-        data.setCreateDatetime(new Date());
-        data.setWorkDate(null);
-        data.setSystemCode(dbAccount.getSystemCode());
-        data.setCompanyCode(dbAccount.getCompanyCode());
-        jourDAO.insert(data);
-        return code;
-
-    }
-
-    @Override
-    public void doCheckJour(Jour jour, EBoolean checkResult,
-            BigDecimal checkAmount, String checkUser, String checkNote) {
-        Jour data = new Jour();
-        data.setCode(jour.getCode());
-        EJourStatus eJourStatus = EJourStatus.Checked_YES;
-        if (EBoolean.NO.equals(checkResult)) {
-            eJourStatus = EJourStatus.Checked_NO;
-        }
-        data.setStatus(eJourStatus.getCode());
-        data.setCheckUser(checkUser);
-        data.setCheckNote(checkNote + ":调整金额"
-                + checkAmount.divide(new BigDecimal(1000)));
-        data.setCheckDatetime(new Date());
-        jourDAO.checkJour(data);
-    }
-
-    @Override
-    public void adjustJourNO(Jour jour, String adjustUser, String adjustNote) {
-        Jour data = new Jour();
-        data.setCode(jour.getCode());
-        data.setStatus(EJourStatus.Checked_YES.getCode());
-        data.setAdjustUser(adjustUser);
-        data.setAdjustNote(adjustNote);
-        data.setAdjustDatetime(new Date());
-        jourDAO.adjustJour(data);
-    }
-
-    @Override
-    public void adjustJourYES(Jour jour, String adjustUser, String adjustNote) {
-        Jour data = new Jour();
-        data.setCode(jour.getCode());
-        data.setStatus(EJourStatus.Adjusted.getCode());
-        data.setAdjustUser(adjustUser);
-        data.setAdjustNote(adjustNote);
-        data.setAdjustDatetime(new Date());
-        jourDAO.adjustJour(data);
     }
 
     @Override
@@ -194,13 +121,13 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     }
 
     @Override
-    public Long getTotalAmount(String bizType, String channelType,
+    public BigDecimal getTotalAmount(String bizType, String channelType,
             String accountNumber) {
         Jour jour = new Jour();
         jour.setBizType(bizType);
         jour.setChannelType(channelType);
         jour.setAccountNumber(accountNumber);
-        long a = jourDAO.selectTotalAmount(jour);
-        return Math.abs(a);
+        BigDecimal a = jourDAO.selectTotalAmount(jour);
+        return BigDecimal.abs(a);
     }
 }

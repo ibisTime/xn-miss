@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IAccountBO;
-import com.ogc.standard.bo.IExchangeCurrencyBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.AmountUtil;
@@ -17,13 +16,12 @@ import com.ogc.standard.core.AccountUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAccountDAO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGeneratePrefix;
-import com.ogc.standard.enums.EJourBizType;
+import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
@@ -41,9 +39,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
     @Autowired
     private IJourBO jourBO;
-
-    @Autowired
-    private IExchangeCurrencyBO exchangeCurrencyBO;
 
     @Override
     public String distributeAccount(String userId, String realName,
@@ -111,8 +106,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
     @Override
     public void changeAmount(String accountNumber, EChannelType channelType,
-            String channelOrder, String payGroup, String refNo,
-            EJourBizType bizType, String bizNote, BigDecimal transAmount) {
+            String channelOrder, String payGroup, String refNo, String bizType,
+            String bizNote, BigDecimal transAmount) {
         Account dbAccount = this.getAccount(accountNumber);
         BigDecimal nowAmount = dbAccount.getAmount().add(transAmount);
         // 特定账户余额可为负
@@ -137,7 +132,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
         // 统计累计充值金额
         data.setInAmount(dbAccount.getInAmount());
-        if (EJourBizType.AJ_CZ.getCode().equals(bizType.getCode())) {
+        if (EJourBizTypeUser.AJ_CZ.getCode().equals(bizType)) {
             data.setInAmount(dbAccount.getInAmount().add(transAmount));
         }
         data.setLastOrder(lastOrder);
@@ -171,29 +166,6 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     }
 
     @Override
-    public void changeAmountForHL(HLOrder order) {
-        Account dbAccount = this.getAccount(order.getAccountNumber());
-        BigDecimal nowAmount = dbAccount.getAmount().add(order.getAmount());
-        // 记录流水
-        String lastOrder = jourBO.addJourForHL(dbAccount, order);
-        // 更改余额
-        Account data = new Account();
-        data.setAccountNumber(dbAccount.getAccountNumber());
-        data.setAmount(nowAmount);
-        data.setMd5(AccountUtil.md5(dbAccount.getMd5(), dbAccount.getAmount(),
-            nowAmount));
-        // 更新统计金额
-        data.setAddAmount(dbAccount.getAddAmount());
-        BigDecimal amount = order.getAmount();
-        if (amount.compareTo(BigDecimal.ZERO) > 0) {
-            data.setAddAmount(dbAccount.getAddAmount().add(amount));
-        }
-        data.setInAmount(dbAccount.getInAmount());
-        data.setLastOrder(lastOrder);
-        accountDAO.updateAmount(data);
-    }
-
-    @Override
     public void frozenAmount(Account dbAccount, BigDecimal freezeAmount,
             String withdrawCode) {
         if (freezeAmount.compareTo(BigDecimal.ZERO) <= 0) {
@@ -205,7 +177,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            null, null, withdrawCode, EJourBizType.AJ_QX, "线下取现",
+            null, null, withdrawCode, EJourBizTypeUser.AJ_QX.getCode(), "线下取现",
             freezeAmount.negate());
         BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount().add(
             freezeAmount);
@@ -233,8 +205,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
 
         // 记录流水
         String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            null, null, withdrawCode, EJourBizType.AJ_QX, "线下取现失败退回",
-            freezeAmount);
+            null, null, withdrawCode, EJourBizTypeUser.AJ_QX.getCode(),
+            "线下取现失败退回", freezeAmount);
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());
         data.setAmount(dbAccount.getAmount().add(freezeAmount));
@@ -340,8 +312,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, BigDecimal transAmount,
-            EJourBizType bizType, String fromBizNote, String toBizNote,
-            String refNo) {
+            String bizType, String fromBizNote, String toBizNote, String refNo) {
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
         transAmountCZB(fromAccount, toAccount, transAmount, bizType,
@@ -349,19 +320,17 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     }
 
     private void transAmountCZB(Account fromAccount, Account toAccount,
-            BigDecimal transAmount, EJourBizType bizType, String fromBizNote,
+            BigDecimal transAmount, String bizType, String fromBizNote,
             String toBizNote, String refNo) {
         String fromAccountNumber = fromAccount.getAccountNumber();
         String toAccountNumber = toAccount.getAccountNumber();
         if (fromAccountNumber.equals(toAccountNumber)) {
             new BizException("XN0000", "来去双方账号一致，无需内部划转");
         }
-        Double rate = exchangeCurrencyBO.getExchangeRate(
-            fromAccount.getCurrency(), toAccount.getCurrency());
         this.changeAmount(fromAccountNumber, EChannelType.NBZ, null, null,
             refNo, bizType, fromBizNote, transAmount.negate());
         this.changeAmount(toAccountNumber, EChannelType.NBZ, null, null, refNo,
-            bizType, toBizNote, AmountUtil.mul(transAmount, rate));
+            bizType, toBizNote, AmountUtil.mul(transAmount, 1));// TODO
     }
 
 }

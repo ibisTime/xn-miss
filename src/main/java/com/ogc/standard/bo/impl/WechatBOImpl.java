@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IWechatBO;
 import com.ogc.standard.common.PropertiesUtil;
 import com.ogc.standard.domain.CompanyChannel;
-import com.ogc.standard.dto.res.XN002500Res;
 import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.EWeChatType;
 import com.ogc.standard.util.wechat.MD5;
@@ -36,53 +35,6 @@ import com.ogc.standard.util.wechat.WXPrepay;
  */
 @Component
 public class WechatBOImpl implements IWechatBO {
-
-    @Override
-    public String getPrepayIdApp(CompanyChannel companyChannel, String bizNote,
-            String code, BigDecimal transAmount, String ip, String backUrl) {
-        WXPrepay prePay = new WXPrepay();
-        prePay.setAppid(companyChannel.getPrivateKey2());// 微信开放平台审核通过的应用APPID
-        prePay.setMch_id(companyChannel.getChannelCompany()); // 商户号
-        prePay.setBody(companyChannel.getCompanyName() + "-" + bizNote); // 商品描述
-        prePay.setOut_trade_no(code); // 订单号
-        prePay.setTotal_fee(transAmount.divide(BigDecimal.TEN).toString()); // 订单总金额，厘转化成分
-        prePay.setSpbill_create_ip(ip); // 用户IP
-        prePay.setTrade_type(EWeChatType.APP.getCode()); // 交易类型
-        prePay.setNotify_url(PropertiesUtil.Config.WECHAT_APP_BACKURL);// 回调地址
-        prePay.setPartnerKey(companyChannel.getPrivateKey1()); // 商户秘钥
-        prePay.setAttach(companyChannel.getSystemCode() + "||"
-                + companyChannel.getCompanyCode() + "||" + backUrl); // 附加字段，回调时返回
-        return prePay.submitXmlGetPrepayId();
-    }
-
-    @Override
-    public XN002500Res getPayInfoApp(CompanyChannel companyChannel,
-            String payCode, String prepayId) {
-        SortedMap<String, String> nativeObj = new TreeMap<String, String>();
-        nativeObj.put("appid", companyChannel.getPrivateKey2());
-        nativeObj.put("partnerid", companyChannel.getChannelCompany());
-        nativeObj.put("prepayid", prepayId);
-        nativeObj.put("package", "Sign=WXPay");
-        Random random = new Random();
-        String randomStr = MD5.GetMD5String(String.valueOf(random
-            .nextInt(10000)));
-        nativeObj.put("noncestr", MD5Util.MD5Encode(randomStr, "utf-8")
-            .toLowerCase());
-        nativeObj.put("timestamp", OrderUtil.GetTimestamp());
-        nativeObj.put("sign",
-            createSign(nativeObj, companyChannel.getPrivateKey1()));
-
-        XN002500Res res = new XN002500Res();
-        res.setAppId(nativeObj.get("appid"));
-        res.setPayCode(payCode);
-        res.setPartnerid(nativeObj.get("partnerid"));
-        res.setPrepayId(nativeObj.get("prepayid"));
-        res.setWechatPackage(nativeObj.get("package"));
-        res.setNonceStr(nativeObj.get("noncestr"));
-        res.setTimeStamp(nativeObj.get("timestamp"));
-        res.setSign(nativeObj.get("sign"));
-        return res;
-    }
 
     @Override
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
@@ -130,26 +82,6 @@ public class WechatBOImpl implements IWechatBO {
         res.setSignType(nativeObj.get("signType"));
         res.setPaySign(nativeObj.get("paySign"));
         return res;
-    }
-
-    @Override
-    public String getPrepayIdNative(CompanyChannel companyChannel,
-            String bizNote, String code, BigDecimal transAmount, String ip,
-            String backUrl) {
-        WXPrepay prePay = new WXPrepay();
-        prePay.setAppid(companyChannel.getPrivateKey2());// 微信支付分配的公众账号ID
-        prePay.setMch_id(companyChannel.getChannelCompany()); // 商户号
-        prePay.setBody(companyChannel.getCompanyName() + "-" + bizNote); // 商品描述
-        prePay.setOut_trade_no(code); // 订单号
-        prePay.setTotal_fee(transAmount.divide(BigDecimal.TEN).toString()); // 订单总金额，厘转化成分
-        prePay.setSpbill_create_ip(ip); // 用户IP
-        prePay.setTrade_type(EWeChatType.NATIVE.getCode()); // 交易类型
-        prePay.setNotify_url(PropertiesUtil.Config.WECHAT_NATIVE_BACKURL);// 回调地址
-        prePay.setPartnerKey(companyChannel.getPrivateKey1()); // 商户秘钥
-        prePay.setProduct_id(code);
-        prePay.setAttach(companyChannel.getSystemCode() + "||"
-                + companyChannel.getCompanyCode() + "||" + backUrl); // 附加字段，回调时返回
-        return prePay.submitXmlGetCodeUrl();
     }
 
     /**

@@ -14,10 +14,10 @@ import com.ogc.standard.dao.IPlayerDAO;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.dto.req.XN640000Req;
 import com.ogc.standard.dto.req.XN640002Req;
-import com.ogc.standard.enums.EBizType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EPlayerStatus;
+import com.ogc.standard.enums.EPublishType;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -69,7 +69,7 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
         data.setListPic(req.getListPic());
         data.setBannerPics(req.getBannerPics());
         data.setPics(req.getPics());
-        if (EBizType.SAVE.getCode().equals(req.getBizType())) {
+        if (EPublishType.SAVE.getCode().equals(req.getBizType())) {
             data.setStatus(EPlayerStatus.DRAFT.getCode());
         } else {
             data.setStatus(EPlayerStatus.TO_APPROVE.getCode());
@@ -114,7 +114,7 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
             data.setListPic(req.getListPic());
             data.setBannerPics(req.getBannerPics());
             data.setPics(req.getPics());
-            if (EBizType.SAVE.getCode().equals(req.getBizType())) {
+            if (EPublishType.SAVE.getCode().equals(req.getBizType())) {
                 data.setStatus(EPlayerStatus.DRAFT.getCode());
             } else {
                 data.setStatus(EPlayerStatus.TO_APPROVE.getCode());

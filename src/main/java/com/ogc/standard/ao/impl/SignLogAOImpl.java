@@ -32,8 +32,8 @@ public class SignLogAOImpl implements ISignLogAO {
         data.setIp(req.getIp());
         data.setLocation(req.getLocation());
         data.setUserId(req.getUserId());
-        data.setType(ESignLogType.SIGN_IN.getCode());
-        data.setClient(ESignLogClient.ANDROID.getCode());
+        data.setType(ESignLogType.LOGIN.getCode());
+        data.setClient(ESignLogClient.H5.getCode());
         return signLogBO.saveSignLog(data);
     }
 

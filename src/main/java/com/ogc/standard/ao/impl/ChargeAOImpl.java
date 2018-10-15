@@ -22,6 +22,8 @@ import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizType;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -44,7 +46,7 @@ public class ChargeAOImpl implements IChargeAO {
         }
         // 业务类型为空，默认充值
         if (StringUtils.isBlank(jourBizType)) {
-            jourBizType = EJourBizType.AJ_CZ.getCode();
+            jourBizType = EJourBizTypeUser.AJ_CZ.getCode();
         }
         Account account = accountBO.getAccount(accountNumber);
         // 生成充值订单
@@ -77,14 +79,14 @@ public class ChargeAOImpl implements IChargeAO {
         chargeBO.payOrder(data, true, payUser, payNote);
         // 账户加钱
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
-            null, null, data.getCode(), EJourBizType.AJ_CZ, "线下充值",
-            data.getAmount());
+            null, null, data.getCode(), EJourBizTypeUser.AJ_CZ.getCode(),
+            "线下充值", data.getAmount());// TODO
         Account account = accountBO.getAccount(data.getAccountNumber());
         if (ECurrency.CNY.getCode().equals(account.getCurrency())) {
             // 托管账户加钱
             accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
-                null, null, data.getCode(), EJourBizType.AJ_CZ, "线下充值",
-                data.getAmount());
+                null, null, data.getCode(), EJourBizTypePlat.AJ_BJ.getCode(),
+                "线下充值", data.getAmount());// TODO
         }
     }
 

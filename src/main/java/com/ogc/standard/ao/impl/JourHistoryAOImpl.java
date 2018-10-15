@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IJourHistoryAO;
 import com.ogc.standard.bo.IAccountBO;
-import com.ogc.standard.bo.IHLOrderBO;
 import com.ogc.standard.bo.IJourHistoryBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
@@ -29,9 +28,6 @@ public class JourHistoryAOImpl implements IJourHistoryAO {
 
     @Autowired
     private IAccountBO accountBO;
-
-    @Autowired
-    private IHLOrderBO hlOrderBO;
 
     @Override
     public Paginable<Jour> queryJourPage(int start, int limit, Jour condition) {

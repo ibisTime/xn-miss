@@ -11,14 +11,10 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IChargeBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
-import com.ogc.standard.common.AmountUtil;
-import com.ogc.standard.common.DateUtil;
-import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IChargeDAO;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
-import com.ogc.standard.domain.SYSConfig;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
@@ -154,38 +150,4 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         return order;
     }
 
-    @Override
-    public void doCheckTodayPayAmount(String applyUser, BigDecimal payAmount,
-            EChannelType channelType, String companyCode, String systemCode) {
-        String dayMaxAmountKey = null;
-        if (EChannelType.Alipay.getCode().equals(channelType.getCode())) {
-            dayMaxAmountKey = SysConstant.ZFB_DAY_MAX_AMOUNT;
-        } else if (EChannelType.WeChat_APP.getCode().equals(
-            channelType.getCode())) {
-            dayMaxAmountKey = SysConstant.WX_DAY_MAX_AMOUNT;
-        }
-        SYSConfig sysConfig = sysConfigBO.getSYSConfigNotException(
-            dayMaxAmountKey, companyCode, systemCode);
-        if (null != sysConfig) {// 系统参数未配置，不做判断
-            String dayMaxAmountValue = sysConfig.getCvalue();
-            BigDecimal dayMaxAmount = AmountUtil.mul(BigDecimal.valueOf(1000),
-                Double.valueOf(dayMaxAmountValue));
-            if (dayMaxAmount.longValue() <= 0) {
-                throw new BizException("xn0000", "当前支付通道维护中，请使用其他支付方式。");
-            }
-            Charge condition = new Charge();
-            condition.setChannelType(channelType.getCode());
-            condition.setStatus(EChargeStatus.Pay_YES.getCode());
-            condition.setApplyUser(applyUser);
-            condition.setPayDatetimeStart(DateUtil.getTodayStart());
-            condition.setPayDatetimeEnd(DateUtil.getTodayEnd());
-            long todayAmount = chargeDAO.selectTotalAmount(condition);
-            BigDecimal todayAmountBigDecimal = new BigDecimal(todayAmount);
-            BigDecimal nowTodayAmount = todayAmountBigDecimal.add(payAmount);// 今日+本次支付是否超日限额
-            if (dayMaxAmount.compareTo(nowTodayAmount) < 0) {
-                throw new BizException("xn0000", "该渠道每日限额" + dayMaxAmountValue
-                        + ",本次支付将超额，请明天再来");
-            }
-        }
-    }
 }

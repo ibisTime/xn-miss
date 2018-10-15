@@ -11,7 +11,6 @@ package com.ogc.standard.bo;
 import java.math.BigDecimal;
 
 import com.ogc.standard.domain.CompanyChannel;
-import com.ogc.standard.dto.res.XN002500Res;
 import com.ogc.standard.dto.res.XN002501Res;
 
 /** 
@@ -20,11 +19,6 @@ import com.ogc.standard.dto.res.XN002501Res;
  * @history:
  */
 public interface IWechatBO {
-    public String getPrepayIdApp(CompanyChannel companyChannel, String bizNote,
-            String code, BigDecimal transAmount, String ip, String backUrl);
-
-    public XN002500Res getPayInfoApp(CompanyChannel companyChannel,
-            String payCode, String prepayId);
 
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
             String bizNote, String code, BigDecimal transAmount, String ip,
@@ -32,9 +26,5 @@ public interface IWechatBO {
 
     public XN002501Res getPayInfoH5(CompanyChannel companyChannel,
             String payCode, String prepayId);
-
-    public String getPrepayIdNative(CompanyChannel companyChannel,
-            String bizNote, String code, BigDecimal transAmount, String ip,
-            String backUrl);
 
 }

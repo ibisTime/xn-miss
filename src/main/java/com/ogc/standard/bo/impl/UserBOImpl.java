@@ -29,7 +29,6 @@ import com.ogc.standard.dao.IUserDAO;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EUserKind;
-import com.ogc.standard.enums.EUserLevel;
 import com.ogc.standard.enums.EUserStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -166,7 +165,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (refereeUser != null) {
             user.setUserReferee(refereeUser.getUserId());
         }
-        user.setLevel(EUserLevel.ONE.getCode());
+        user.setLevel(null);
         user.setStatus(EUserStatus.NORMAL.getCode());
         user.setProvince(province);
         user.setCity(city);
@@ -198,7 +197,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setNickname(nickname);
         user.setPhoto(photo);
         user.setGender(gender);
-        user.setLevel(EUserLevel.ONE.getCode());
+        user.setLevel(null);
         user.setStatus(EUserStatus.NORMAL.getCode());
 
         user.setCreateDatetime(new Date());

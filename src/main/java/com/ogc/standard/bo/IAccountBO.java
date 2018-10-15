@@ -5,12 +5,10 @@ import java.util.List;
 
 import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Account;
-import com.ogc.standard.domain.HLOrder;
 import com.ogc.standard.enums.EAccountStatus;
 import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.EJourBizType;
 
 /**
  * @author: xieyj
@@ -30,15 +28,12 @@ public interface IAccountBO extends IPaginableBO<Account> {
 
     // 变更账户余额：流水落地
     public void changeAmount(String accountNumber, EChannelType channelType,
-            String channelOrder, String payGroup, String refNo,
-            EJourBizType bizType, String bizNote, BigDecimal transAmount);
+            String channelOrder, String payGroup, String refNo, String bizType,
+            String bizNote, BigDecimal transAmount);
 
     // 仅变更账户余额：流水不落地
     public void changeAmountNotJour(String accountNumber,
             BigDecimal transAmount, String lastOrder);
-
-    // 红冲蓝补导致的资金变动（落地流水不需要对账）
-    public void changeAmountForHL(HLOrder order);
 
     // 冻结金额（余额变动）
     public void frozenAmount(Account dbAccount, BigDecimal freezeAmount,
@@ -54,8 +49,7 @@ public interface IAccountBO extends IPaginableBO<Account> {
     // 内部转账
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, BigDecimal transAmount,
-            EJourBizType bizType, String fromBizNote, String toBizNote,
-            String refNo);
+            String bizType, String fromBizNote, String toBizNote, String refNo);
 
     // 更新户名
     public void refreshAccountName(String userId, String realName);

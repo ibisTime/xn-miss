@@ -1,5 +1,6 @@
 package com.ogc.standard.dao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -85,8 +86,8 @@ public class JourDAOImpl extends AMybatisTemplate implements IJourDAO {
     }
 
     @Override
-    public long selectTotalAmount(Jour data) {
-        return super.selectTotalCount(NAMESPACE.concat("select_totalAmount"),
-            data);
+    public BigDecimal selectTotalAmount(Jour data) {
+        return super.select(NAMESPACE.concat("select_totalAmount"), data,
+            BigDecimal.class);
     }
 }
