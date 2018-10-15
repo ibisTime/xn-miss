@@ -135,6 +135,7 @@
 		,t.user_id
 		,t.real_name
 		,t.type
+		,t.account_type
 		
 		,t.currency
 		,t.biz_type
@@ -186,6 +187,7 @@
 		,user_id
 		,real_name
 		,type
+		,account_type
 		
 		,currency
 		,biz_type
@@ -213,6 +215,7 @@
 		,#{userId}
 		,#{realName}
 		,#{type}
+		,#{accountType}
 		
 		,#{currency}
 		,#{bizType}
