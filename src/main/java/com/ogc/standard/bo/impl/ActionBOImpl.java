@@ -1,5 +1,7 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,19 @@ public class ActionBOImpl extends PaginableBOImpl<Action> implements IActionBO {
 
     @Autowired
     private IActionDAO actionDAO;
+
+    @Override
+    public boolean isActionExist(String userId, String toCode, String actionType) {
+        Action condition = new Action();
+        condition.setCreater(userId);
+        condition.setToCode(toCode);
+        condition.setType(actionType);
+        List<Action> dataList = actionDAO.selectList(condition);
+        if (dataList.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public String saveAction(String type, String toType, String toCode,
