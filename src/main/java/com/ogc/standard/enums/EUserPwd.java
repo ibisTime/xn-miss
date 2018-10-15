@@ -6,8 +6,7 @@ package com.ogc.standard.enums;
  * @history:
  */
 public enum EUserPwd {
-    InitPwd("888888", "初始化密码1"), InitPwd16("123456", "初始化密码2"), Beicoin(
-            "bei123coin", "初始化密码3");
+    InitPwd("888888", "初始化密码1"), InitPwd16("123456", "初始化密码2");
 
     EUserPwd(String code, String value) {
         this.code = code;

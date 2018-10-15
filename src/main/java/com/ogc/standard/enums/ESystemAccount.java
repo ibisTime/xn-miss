@@ -16,7 +16,8 @@ public enum ESystemAccount {
 
     , SYS_ACOUNT_WEIXIN("SYS_ACOUNT_WEIXIN_TG", "平台微信托管账户")
 
-    , SYS_ACOUNT_ALIPAY("SYS_ACOUNT_ALIPAY_TG", "平台支付宝托管账户");
+    ;
+    // C端用户总账户 商家账户
 
     public static Map<String, ESystemAccount> getMap() {
         Map<String, ESystemAccount> map = new HashMap<String, ESystemAccount>();

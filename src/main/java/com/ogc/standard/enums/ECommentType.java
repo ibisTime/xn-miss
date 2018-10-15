@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public enum ECommentType {
 
-    POST("1", "帖子"), COMMENT("2", "评论");
+    COMMENT("2", "评论");
 
     ECommentType(String code, String value) {
         this.code = code;

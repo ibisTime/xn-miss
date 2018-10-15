@@ -11,29 +11,28 @@ import com.ogc.standard.exception.BizException;
  * @since: 2018年8月23日 下午10:04:20 
  * @history:
  */
-public enum EJourBizTypeUser {
+public enum EJourBizTypeBusiness {
 
-    TICKET("T", "加油订单"), AJ_FX("FX", "首次分享送钱"), AJ_CZ("11", "充值"), AJ_QX("-11",
-            "取现");
+    AJ_JYFC("+10", "加油分成"), AJ_QX("-11", "取现");
 
-    public static EJourBizTypeUser getBizType(String code) {
-        Map<String, EJourBizTypeUser> map = getBizTypeMap();
-        EJourBizTypeUser result = map.get(code);
+    public static EJourBizTypeBusiness getBizType(String code) {
+        Map<String, EJourBizTypeBusiness> map = getBizTypeMap();
+        EJourBizTypeBusiness result = map.get(code);
         if (result == null) {
             throw new BizException("XN0000", code + "对应的jourBizType不存在");
         }
         return result;
     }
 
-    public static Map<String, EJourBizTypeUser> getBizTypeMap() {
-        Map<String, EJourBizTypeUser> map = new HashMap<String, EJourBizTypeUser>();
-        for (EJourBizTypeUser bizType : EJourBizTypeUser.values()) {
+    public static Map<String, EJourBizTypeBusiness> getBizTypeMap() {
+        Map<String, EJourBizTypeBusiness> map = new HashMap<String, EJourBizTypeBusiness>();
+        for (EJourBizTypeBusiness bizType : EJourBizTypeBusiness.values()) {
             map.put(bizType.getCode(), bizType);
         }
         return map;
     }
 
-    EJourBizTypeUser(String code, String value) {
+    EJourBizTypeBusiness(String code, String value) {
         this.code = code;
         this.value = value;
     }

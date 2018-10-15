@@ -16,7 +16,7 @@ package com.ogc.standard.enums;
  */
 public enum ESignLogType {
 
-    LOGIN("1", "登陆日志"), SIGN_IN("2", "签到日志");
+    LOGIN("1", "登陆日志");
 
     ESignLogType(String code, String value) {
         this.code = code;

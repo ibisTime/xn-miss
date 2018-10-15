@@ -16,7 +16,7 @@ package com.ogc.standard.enums;
  */
 public enum ESignLogClient {
 
-    ANDROID("0", "Android"), IOS("1", "iOS"), H5("2", "H5");
+    H5("2", "H5");
 
     ESignLogClient(String code, String value) {
         this.code = code;

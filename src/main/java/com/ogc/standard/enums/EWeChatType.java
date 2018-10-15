@@ -17,7 +17,7 @@ import java.util.Map;
  * @history:
  */
 public enum EWeChatType {
-    JSAPI("JSAPI", "公众号支付"), APP("APP", "APP支付"), NATIVE("NATIVE", "扫码支付");
+    JSAPI("JSAPI", "H5支付");
     public static Map<String, EWeChatType> getFromTypeMap() {
         Map<String, EWeChatType> map = new HashMap<String, EWeChatType>();
         for (EWeChatType direction : EWeChatType.values()) {

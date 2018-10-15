@@ -15,7 +15,6 @@ package com.ogc.standard.enums;
  */
 public enum ESmsType {
 
-    // SYS("0", "系统公告"), APP("1", "APP推送"), MES("2", "短信"),
     EVENT("0", "赛事信息");
 
     ESmsType(String code, String value) {

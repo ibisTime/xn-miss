@@ -11,20 +11,14 @@ import java.util.Map;
 public enum EGeneratePrefix {
 
     DH("DH", "导航"), JS("JS", "角色"), CD("CD", "菜单"), BM("BM", "部门"), GS("GS",
-            "公司"), XX("XX", "信息"), RZ("RZ", "日志"), ARBITRATE("ZC", "仲裁工单"), TRADE_ORDER(
-            "JY", "交易订单"), PAY_GROUP("PG", "组号"),
+            "公司"), XX("XX", "信息"), RZ("RZ", "日志"),
 
-    SIMU_ORDER("SO", "币币交易委托单"), SIMU_ORDER_DETAIL("SOMX", "币币交易委托单明细"), SIMU_ORDER_HISTORY(
-            "SOT", "币币交易历史委托单"), Account("A", "账户"), AJour("AJ", "账户流水"), DEPOSIT(
-            "DT", "定存记录"), Collect("GJ", "归集订单"),
+    Account("A", "账户"), AJour("AJ", "账户流水"),
 
-    Match("M", "赛事"), MatchApply("MA", "参赛申请"), TeamMemberApply("TMA", "战队成员申请"), GROUP(
-            "GP", "组合"), ATTENTION("AT", "关注/提醒"), Comment("C", "评论"), Interact(
-            "I", "点赞"), ACCEPT_ORDER("AO", "承兑商订单"), BANK_CARD("BC", "银行卡"),
+    ATTENTION("AT", "关注/提醒"), Comment("C", "评论"), BANK_CARD("BC", "银行卡"),
 
-    Charge("CH", "充值"), WITHDRAW("WI", "取现"), HLORDER("HL", "红蓝订单"), EXCHANGE_CURRENCY(
-            "EC", "币种兑换"), CMB_BIZ_NO("CMB", "招商银行"), EVENT("EV", "赛事信息"), session(
-            "SE", "会话"), answer("AN", "回复模版"),
+    Charge("CH", "充值"), WITHDRAW("WI", "取现"), HLORDER("HL", "红蓝订单"), EVENT(
+            "EV", "赛事信息"), session("SE", "会话"), answer("AN", "回复模版"),
 
     PLAYER("P", "选手"), RANK("R", "榜单"), TICKET("T", "加油订单"), ACTION("AC",
             "用户行为");

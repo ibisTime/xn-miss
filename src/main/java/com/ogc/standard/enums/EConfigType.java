@@ -7,8 +7,7 @@ package com.ogc.standard.enums;
  */
 public enum EConfigType {
 
-    QINIU("qiniu", "七牛"), WEIXIN_H5("wx_h5", "微信h5"), WEIXIN_APP("wx_app",
-            "微信APP"), TICKET("ticket", "加油订单");
+    QINIU("qiniu", "七牛"), WEIXIN_H5("wx_h5", "微信h5"), TICKET("ticket", "加油订单");
 
     EConfigType(String code, String value) {
         this.code = code;

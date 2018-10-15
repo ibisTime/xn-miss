@@ -11,14 +11,8 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum ECaptchaType {
-    C_REG("805041", "C端会员注册"), BIND_EMAIL("805081", "绑定邮箱"), ADDRESS_ADD(
-            "802170",
-            "地址新增"), MOBILE_CHANGE("805061", "更换手机验证码"), LOGIN_PWD_RESET(
-                    "805063", "重置登录密码"), MODIFY_LOGIN_PWD("805064",
-                            "修改登录密码"), RESET_TRADE_PWD("805067",
-                                    "重置支付密码"), MODIFY_TRADE_PWD("805068",
-                                            "修改支付密码"), ACTIVATE_OR_LOGOFF(
-                                                    "805084", "注销/激活用户");
+    MOBILE_CHANGE("805061", "更换手机验证码"), RESET_TRADE_PWD("805067", "重置支付密码"), MODIFY_TRADE_PWD(
+            "805068", "修改支付密码"), ACTIVATE_OR_LOGOFF("805084", "注销/激活用户");
 
     public static ECaptchaType getBizType(String code) {
         Map<String, ECaptchaType> map = getBizTypeMap();
