@@ -155,7 +155,7 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
                 monthTimesKey = SysConstant.CUSERMONTIMES;
                 qxbs = SysConstant.CUSERQXBS;
                 qxfl = SysConstant.CUSERQXFL;
-            } else if (EAccountType.B.getCode().equals(account.getType())) {
+            } else if (EAccountType.Business.getCode().equals(account.getType())) {
                 monthTimesKey = SysConstant.BUSERMONTIMES;
                 qxbs = SysConstant.BUSERQXBS;
                 qxfl = SysConstant.BUSERQXFL;

@@ -10,14 +10,15 @@ import java.util.Map;
  */
 public enum ESystemAccount {
 
-    SYS_ACOUNT_CNY("SYS_ACOUNT_CNY", "平台人民币盈亏账户")
+    SYS_ACOUNT_CNY("SYS_ACOUNT_CNY", "平台人民币盈亏账户"),
 
-    , SYS_ACOUNT_OFFLINE("SYS_ACOUNT_OFFLINE_TG", "平台线下托管账户")
+    SYS_ACOUNT_OFFLINE("SYS_ACOUNT_OFFLINE_TG", "平台线下托管账户"),
 
-    , SYS_ACOUNT_WEIXIN("SYS_ACOUNT_WEIXIN_TG", "平台微信托管账户")
+    SYS_ACOUNT_WEIXIN("SYS_ACOUNT_WEIXIN_TG", "平台微信托管账户"),
 
-    ;
-    // C端用户总账户 商家账户
+    SYS_ACOUNT_C("SYS_ACOUNT_C", "C端用户总账户"),
+
+    SYS_ACOUNT_B("SYS_ACOUNT_B", "商家账户");
 
     public static Map<String, ESystemAccount> getMap() {
         Map<String, ESystemAccount> map = new HashMap<String, ESystemAccount>();

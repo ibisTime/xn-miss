@@ -12,7 +12,7 @@ import com.ogc.standard.exception.BizException;
  */
 public enum EJourBizTypePlat {
 
-    AJ_JYFC("+10", "加油分成"), AJ_BJ("+11", "补给"), AJ_FX("-10", "首次分享送钱"), AJ_QX(
+    AJ_JYFC("+10", "加油分成"), AJ_FX("-10", "首次分享送钱"), AJ_BJ("+11", "补给"), AJ_QX(
             "-11", "取现"), AJ_QXSXF("+12", "取现手续费"), AJ_ZFTDF("-12", "支付通道费");
 
     public static EJourBizTypePlat getBizType(String code) {

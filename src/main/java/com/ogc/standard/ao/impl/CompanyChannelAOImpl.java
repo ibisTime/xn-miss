@@ -33,7 +33,7 @@ public class CompanyChannelAOImpl implements ICompanyChannelAO {
         companyChannelBO.saveCompanyChannel(data);
         // 创建商户账户
         accountBO.distributeAccount(data.getCompanyCode(),
-            data.getCompanyName(), EAccountType.B, ECurrency.CNY.getCode(),
+            data.getCompanyName(), EAccountType.Business, ECurrency.CNY.getCode(),
             data.getSystemCode(), data.getCompanyCode());
     }
 

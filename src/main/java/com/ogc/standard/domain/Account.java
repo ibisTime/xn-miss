@@ -46,10 +46,10 @@ public class Account extends ABaseDO {
     // 累计增加金额
     private BigDecimal addAmount;
 
-    // 入金
+    // 总充值金额（入金）
     private BigDecimal inAmount;
 
-    // 出金
+    // 总取现金额（出金）
     private BigDecimal outAmount;
 
     // 创建时间
@@ -139,8 +139,6 @@ public class Account extends ABaseDO {
         this.currency = currency;
     }
 
-
-
     public String getMd5() {
         return md5;
     }
@@ -181,8 +179,6 @@ public class Account extends ABaseDO {
         this.userId = userId;
     }
 
-
-
     public String getCompanyCode() {
         return companyCode;
     }
@@ -191,46 +187,44 @@ public class Account extends ABaseDO {
         this.companyCode = companyCode;
     }
 
-	public BigDecimal getAmount() {
-		return amount;
-	}
+    public BigDecimal getAmount() {
+        return amount;
+    }
 
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
 
-	public BigDecimal getFrozenAmount() {
-		return frozenAmount;
-	}
+    public BigDecimal getFrozenAmount() {
+        return frozenAmount;
+    }
 
-	public void setFrozenAmount(BigDecimal frozenAmount) {
-		this.frozenAmount = frozenAmount;
-	}
+    public void setFrozenAmount(BigDecimal frozenAmount) {
+        this.frozenAmount = frozenAmount;
+    }
 
-	public BigDecimal getAddAmount() {
-		return addAmount;
-	}
+    public BigDecimal getAddAmount() {
+        return addAmount;
+    }
 
-	public void setAddAmount(BigDecimal addAmount) {
-		this.addAmount = addAmount;
-	}
+    public void setAddAmount(BigDecimal addAmount) {
+        this.addAmount = addAmount;
+    }
 
-	public BigDecimal getInAmount() {
-		return inAmount;
-	}
+    public BigDecimal getInAmount() {
+        return inAmount;
+    }
 
-	public void setInAmount(BigDecimal inAmount) {
-		this.inAmount = inAmount;
-	}
+    public void setInAmount(BigDecimal inAmount) {
+        this.inAmount = inAmount;
+    }
 
-	public BigDecimal getOutAmount() {
-		return outAmount;
-	}
+    public BigDecimal getOutAmount() {
+        return outAmount;
+    }
 
-	public void setOutAmount(BigDecimal outAmount) {
-		this.outAmount = outAmount;
-	}
-    
-    
+    public void setOutAmount(BigDecimal outAmount) {
+        this.outAmount = outAmount;
+    }
 
 }

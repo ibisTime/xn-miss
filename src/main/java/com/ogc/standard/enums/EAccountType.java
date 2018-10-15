@@ -11,7 +11,7 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum EAccountType {
-    Customer("C", "C端账号"), B("B", "B端账户"), Plat("P", "平台账号");
+    Customer("C", "C端账号"), Business("B", "B端账号"), Plat("P", "平台账号");
 
     public static Map<String, EAccountType> getAccountTypeResultMap() {
         Map<String, EAccountType> map = new HashMap<String, EAccountType>();
