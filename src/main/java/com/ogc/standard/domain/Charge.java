@@ -7,9 +7,7 @@ import com.ogc.standard.dao.base.ABaseDO;
 
 //充值（2步骤）
 public class Charge extends ABaseDO {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = 340253581181024692L;
 
     // 充值编号
