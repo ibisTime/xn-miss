@@ -91,9 +91,6 @@
 		<property name="paginableDAO" ref="commentDAOImpl"/>
 	</bean>
 	
-	<bean id="interactBO" class="com.ogc.standard.bo.impl.InteractBOImpl">
-		<property name="paginableDAO" ref="interactDAOImpl"/>
-	</bean>
 	
 
 

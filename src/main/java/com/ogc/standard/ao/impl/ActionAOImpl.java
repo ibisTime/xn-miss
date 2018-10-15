@@ -29,7 +29,7 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPlayerStatus;
-import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -80,8 +80,8 @@ public class ActionAOImpl implements IActionAO {
                     EJourBizTypeUser.AJ_FX.getCode(),
                     EJourBizTypeUser.AJ_FX.getValue(), BigDecimal.ONE);
                 // 系统用户减钱
-                account = accountBO.getAccountByUser(
-                    ESysUser.SYS_USER.getCode(), ECurrency.CNY.getCode());
+                account = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_CNY
+                    .getCode());
                 accountBO.changeAmount(account.getAccountNumber(),
                     EChannelType.NBZ, null, null, creater,
                     EJourBizTypePlat.AJ_FX.getCode(),
