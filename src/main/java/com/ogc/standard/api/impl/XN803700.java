@@ -29,9 +29,9 @@ public class XN803700 extends AProcessor {
     @Override
     public synchronized Object doBusiness() throws BizException {
         BigDecimal amount = StringValidater.toBigDecimal(req.getAmount());
-        String code = chargeAO.applyOrder(req.getAccountNumber(),
-            req.getBizType(), amount, req.getPayCardInfo(), req.getPayCardNo(),
-            req.getApplyUser(), req.getApplyNote());
+        String code = chargeAO.applyOrder(req.getAccountNumber(), amount,
+            req.getPayCardInfo(), req.getPayCardNo(), req.getApplyUser(),
+            req.getApplyNote());
         return new PKCodeRes(code);
     }
 

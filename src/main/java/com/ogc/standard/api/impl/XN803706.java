@@ -22,7 +22,7 @@ public class XN803706 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return chargeAO.getCharge(req.getCode(), req.getSystemCode());
+        return chargeAO.getCharge(req.getCode());
     }
 
     @Override

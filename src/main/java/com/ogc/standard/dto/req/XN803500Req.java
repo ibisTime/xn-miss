@@ -8,21 +8,19 @@ import java.util.List;
  * @history:
  */
 public class XN803500Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = 1L;
 
     // 户名
     private String realName;
 
-    // 类别（B端账号，C端账号，平台账号）
+    // 类别（B端账号，C端账号，P平台账号）
     private String type;
 
     // 状态（正常/程序冻结/人工冻结）
     private String status;
 
-    // 币种
+    // 币种 (CNY 人民币)
     private String currency;
 
     // 币种列表

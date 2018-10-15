@@ -5,6 +5,7 @@ import com.ogc.standard.api.AProcessor;
 import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.dto.req.XN803522Req;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -23,7 +24,7 @@ public class XN803522 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return jourAO.getJour(req.getCode(), req.getSystemCode());
+        return jourAO.getJour(req.getCode(), ESystemCode.MISS.getCode());
     }
 
     @Override

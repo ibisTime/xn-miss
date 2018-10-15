@@ -118,7 +118,7 @@ public class WeChatAOImpl implements IWeChatAO {
             String wechatOrderNo = map.get("transaction_id");
             String outTradeNo = map.get("out_trade_no");
             // 取到订单信息
-            Charge order = chargeBO.getCharge(outTradeNo, systemCode);
+            Charge order = chargeBO.getCharge(outTradeNo);
             if (!EChargeStatus.toPay.getCode().equals(order.getStatus())) {
                 throw new BizException("xn000000", "充值订单不处于待支付状态，重复回调");
             }

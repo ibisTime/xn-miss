@@ -14,7 +14,7 @@ import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
 /**
- * 我的流水查询
+ * 分页查询我的账户流水
  * @author: xieyj 
  * @since: 2016年12月24日 上午7:59:19 
  * @history:

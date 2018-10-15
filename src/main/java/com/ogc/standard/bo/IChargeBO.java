@@ -16,7 +16,7 @@ public interface IChargeBO extends IPaginableBO<Charge> {
 
     void callBackChange(Charge dbCharge, boolean booleanFlag);
 
-    String applyOrderOffline(Account account, EJourBizType bizType,
+    String applyOrderOffline(Account account, String bizType,
             BigDecimal amount, String payCardInfo, String payCardNo,
             String applyUser, String applyNote);
 
@@ -25,6 +25,6 @@ public interface IChargeBO extends IPaginableBO<Charge> {
 
     List<Charge> queryChargeList(Charge condition);
 
-    Charge getCharge(String code, String systemCode);
+    Charge getCharge(String code);
 
 }

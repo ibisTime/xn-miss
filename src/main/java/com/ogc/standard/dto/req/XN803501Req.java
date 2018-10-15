@@ -6,9 +6,7 @@ package com.ogc.standard.dto.req;
  * @history:
  */
 public class XN803501Req extends AListReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
+
     private static final long serialVersionUID = 1L;
 
     // 户名
@@ -20,7 +18,7 @@ public class XN803501Req extends AListReq {
     // 状态（正常/程序冻结/人工冻结）
     private String status;
 
-    // 币种
+    // 币种 （CNY 人民币）
     private String currency;
 
     // 最近一次变动对应的流水编号

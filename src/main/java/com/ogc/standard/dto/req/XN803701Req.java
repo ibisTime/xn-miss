@@ -10,9 +10,6 @@ import java.util.List;
  */
 public class XN803701Req {
 
-    // 系统编号(必填)
-    private String systemCode;
-
     // 充值订单编号(必填)
     private List<String> codeList;
 
@@ -24,14 +21,6 @@ public class XN803701Req {
 
     // 支付渠道的说明(必填)
     private String payNote;
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
 
     public List<String> getCodeList() {
         return codeList;

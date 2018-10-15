@@ -30,7 +30,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     private ISYSConfigBO sysConfigBO;
 
     @Override
-    public String applyOrderOffline(Account account, EJourBizType bizType,
+    public String applyOrderOffline(Account account, String bizType,
             BigDecimal amount, String payCardInfo, String payCardNo,
             String applyUser, String applyNote) {
         if (amount.compareTo(BigDecimal.ZERO) == 0) {
@@ -48,12 +48,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setAccountName(account.getRealName());
         data.setType(account.getType());
         data.setCurrency(account.getCurrency());
-        data.setBizType(bizType.getCode());
-        if (StringUtils.isBlank(applyNote)) {
-            data.setBizNote(bizType.getValue());
-        } else {
-            data.setBizNote(applyNote);
-        }
+        data.setBizType(bizType);
+        data.setBizNote(applyNote);
         data.setPayCardInfo(payCardInfo);
         data.setPayCardNo(payCardNo);
 
@@ -136,12 +132,11 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     }
 
     @Override
-    public Charge getCharge(String code, String systemCode) {
+    public Charge getCharge(String code) {
         Charge order = null;
         if (StringUtils.isNotBlank(code)) {
             Charge condition = new Charge();
             condition.setCode(code);
-            condition.setSystemCode(systemCode);
             order = chargeDAO.select(condition);
             if (null == order) {
                 throw new BizException("xn000000", "订单号[" + code + "]不存在");

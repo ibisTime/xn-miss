@@ -30,7 +30,7 @@ public class XN803701 extends AProcessor {
     public synchronized Object doBusiness() throws BizException {
         for (String code : req.getCodeList()) {
             chargeAO.payOrder(code, req.getPayUser(), req.getPayResult(),
-                req.getPayNote(), req.getSystemCode());
+                req.getPayNote());
         }
         return new BooleanRes(true);
     }
@@ -46,6 +46,6 @@ public class XN803701 extends AProcessor {
             throw new BizException("订单列表不能为空");
         }
         StringValidater.validateBlank(req.getPayUser(), req.getPayResult(),
-            req.getPayNote(), req.getSystemCode());
+            req.getPayNote());
     }
 }
