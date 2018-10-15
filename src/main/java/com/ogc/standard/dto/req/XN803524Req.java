@@ -1,10 +1,11 @@
 package com.ogc.standard.dto.req;
 
 public class XN803524Req extends APageReq {
-    /** 
-     * @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
-     */
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = -5630907652486881440L;
+
+    // 流水类型 0余额流水 1冻结流水
+    private String type;
 
     // 流水所属账号(必填)
     private String accountNumber;
@@ -48,6 +49,14 @@ public class XN803524Req extends APageReq {
 
     public void setChannelType(String channelType) {
         this.channelType = channelType;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 }

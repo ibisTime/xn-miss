@@ -27,6 +27,7 @@ public class XN803524 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Jour condition = new Jour();
+        condition.setType(req.getType());
         condition.setAccountNumber(req.getAccountNumber());
         condition.setBizType(req.getBizType());
         condition.setChannelType(req.getChannelType());

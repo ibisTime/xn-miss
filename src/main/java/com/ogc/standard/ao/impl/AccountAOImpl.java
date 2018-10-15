@@ -52,4 +52,12 @@ public class AccountAOImpl implements IAccountAO {
     public List<Account> queryAccountList(Account condition) {
         return accountBO.queryAccountList(condition);
     }
+
+    @Override
+    public List<Account> getAccountAmountSumList(String currency, String status) {
+        Account condition = new Account();
+        condition.setCurrency(currency);
+        condition.setStatus(status);
+        return accountBO.queryAccountAmountSumList(condition);
+    }
 }

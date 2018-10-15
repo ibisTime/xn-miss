@@ -330,4 +330,9 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             bizType, toBizNote, AmountUtil.mul(transAmount, 1));// TODO
     }
 
+    @Override
+    public List<Account> queryAccountAmountSumList(Account condition) {
+        return accountDAO.selectAmountSumList(condition);
+    }
+
 }

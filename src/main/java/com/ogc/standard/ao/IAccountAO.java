@@ -21,4 +21,7 @@ public interface IAccountAO {
     // 列表查询账户
     public List<Account> queryAccountList(Account condition);
 
+    // 查询各个端人民币账户总余额
+    public List<Account> getAccountAmountSumList(String currency, String status);
+
 }

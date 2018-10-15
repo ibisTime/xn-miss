@@ -209,4 +209,15 @@
 		WHERE
 		account_number = #{accountNumber}
     </update>
+    
+   	<select id="select_accountAmountSum" parameterType="account" resultMap="account_DB_Result">
+		SELECT
+		t.currency
+		,t.type
+		,IFNULL(SUM(t.amount), 0) as amount
+		FROM
+		tstd_account t 
+		<include refid="where_condition"/>
+		group by t.currency, t.type
+	</select>
 </mapper>
