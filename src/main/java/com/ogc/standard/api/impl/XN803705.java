@@ -50,8 +50,6 @@ public class XN803705 extends AProcessor {
             true));
 
         condition.setChannelType(req.getChannelType());
-        condition.setSystemCode(req.getSystemCode());
-        condition.setCompanyCode(req.getCompanyCode());
         String orderColumn = req.getOrderColumn();
         if (StringUtils.isBlank(orderColumn)) {
             orderColumn = IChargeAO.DEFAULT_ORDER_COLUMN;
@@ -68,7 +66,5 @@ public class XN803705 extends AProcessor {
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN803705Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater
-            .validateBlank(req.getSystemCode(), req.getCompanyCode());
     }
 }

@@ -52,6 +52,9 @@ public class Charge extends ABaseDO {
     // 申请人
     private String applyUser;
 
+    // 申请人类型(C:C端用户/B:B端用户/P:平台)
+    private String applyUserType;
+
     // 申请时间
     private Date applyDatetime;
 
@@ -88,6 +91,15 @@ public class Charge extends ABaseDO {
 
     // 用户信息
     private User user;
+
+    // 申请人
+    private String applyUserName;
+
+    // 支付人
+    private String payUserName;
+
+    // 户名
+    private String realName;
 
     public String getCode() {
         return code;
@@ -296,4 +308,37 @@ public class Charge extends ABaseDO {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public String getApplyUserType() {
+        return applyUserType;
+    }
+
+    public void setApplyUserType(String applyUserType) {
+        this.applyUserType = applyUserType;
+    }
+
+    public String getApplyUserName() {
+        return applyUserName;
+    }
+
+    public void setApplyUserName(String applyUserName) {
+        this.applyUserName = applyUserName;
+    }
+
+    public String getPayUserName() {
+        return payUserName;
+    }
+
+    public void setPayUserName(String payUserName) {
+        this.payUserName = payUserName;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
 }

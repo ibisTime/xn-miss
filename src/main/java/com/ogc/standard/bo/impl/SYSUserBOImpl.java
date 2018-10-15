@@ -239,4 +239,15 @@ public class SYSUserBOImpl extends PaginableBOImpl<SYSUser> implements
         }
     }
 
+    @Override
+    public SYSUser getSYSUserUnCheck(String userId) {
+        SYSUser data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            SYSUser condition = new SYSUser();
+            condition.setUserId(userId);
+            data = sysUserDAO.select(condition);
+        }
+        return data;
+    }
+
 }

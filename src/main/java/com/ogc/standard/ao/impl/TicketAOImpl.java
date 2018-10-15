@@ -121,8 +121,9 @@ public class TicketAOImpl implements ITicketAO {
         accountBO.transAmountCZB(data.getApplyUser(), ECurrency.CNY.getCode(),
             ESystemAccount.SYS_ACOUNT_CNY.getCode(), ECurrency.CNY.getCode(),
             payAmount, EJourBizTypeUser.TICKET.getCode(),
+            EJourBizTypePlat.AJ_JYFC.getCode(),
             EJourBizTypeUser.TICKET.getValue(),
-            EJourBizTypePlat.AJ_JYFC.getValue(), data.getCode());// TODO
+            EJourBizTypePlat.AJ_JYFC.getValue(), data.getCode());
 
         // 更新业务订单
         ticketBO.payYueSuccess(data);

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IWithdrawBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.Withdraw;
@@ -22,8 +24,11 @@ import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizType;
+import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 import com.ogc.standard.util.CalculationUtil;
 
 @Service
@@ -97,13 +102,19 @@ public class WithdrawAOImpl implements IWithdrawAO {
     @Override
     @Transactional
     public void payOrder(String code, String payUser, String payResult,
-            String payNote, String channelOrder, String systemCode) {
+            String payNote, String channelOrder, BigDecimal payFee,
+            String systemCode) {
         Withdraw data = withdrawBO.getWithdraw(code, systemCode);
         if (!EWithdrawStatus.Approved_YES.getCode().equals(data.getStatus())) {
             throw new BizException("xn000000", "申请记录状态不是待支付状态，无法支付");
         }
         if (EBoolean.YES.getCode().equals(payResult)) {
-            payOrderYES(data, payUser, payNote, channelOrder);
+            if (StringUtils.isBlank(channelOrder) || null == payFee) {
+                throw new BizException("xn000000", "请填写渠道单号和转账费");
+            }
+        }
+        if (EBoolean.YES.getCode().equals(payResult)) {
+            payOrderYES(data, payUser, payNote, channelOrder, payFee);
             // 发送短信
             smsOutBO.sentContent(data.getApplyUser(), "尊敬的用户，您的取现金额"
                     + CalculationUtil.divi(data.getAmount())
@@ -140,7 +151,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
     }
 
     private void payOrderYES(Withdraw data, String payUser, String payNote,
-            String payCode) {
+            String payCode, BigDecimal payFee) {
         withdrawBO.payOrder(data, EWithdrawStatus.Pay_YES, payUser, payNote,
             payCode);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
@@ -154,6 +165,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 null, null, data.getCode(), EJourBizType.BALANCE.getCode(),
                 "线下取现", totalAmount.negate());
         }
+
+        // TODO
     }
 
     @Override
@@ -189,5 +202,26 @@ public class WithdrawAOImpl implements IWithdrawAO {
         User user = userBO.getUser(withdraw.getApplyUser());
         withdraw.setUser(user);
         return withdraw;
+    }
+
+    // 取现回录
+    @Override
+    public void withdrawEnter(String accountNumber, BigDecimal amount,
+            String withDate, String channelOrder, String withNote,
+            String updater) {
+        if (!ESystemAccount.SYS_ACOUNT_OFFLINE.getCode().equals(accountNumber)
+                && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode().equals(
+                    accountNumber)) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "只支持系统托管账户");
+        }
+
+        String bizNote = "平台于" + withDate + "进行取现"
+                + AmountUtil.div(amount, 1000L) + "元";
+        if (StringUtils.isNotBlank(withNote)) {
+            bizNote = bizNote + withNote;
+        }
+        accountBO.changeAmount(accountNumber, EChannelType.Offline,
+            channelOrder, null, channelOrder, EJourBizTypePlat.AJ_QX.getCode(),
+            bizNote, amount.negate());
     }
 }

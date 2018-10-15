@@ -60,8 +60,6 @@ public class XN803755 extends AProcessor {
         condition.setPayUser(req.getPayUser());
         condition.setPayGroup(req.getPayGroup());
         condition.setChannelOrder(req.getChannelOrder());
-        condition.setCompanyCode(req.getCompanyCode());
-        condition.setSystemCode(req.getSystemCode());
 
         condition.setApplyDatetimeStart(DateUtil.getFrontDate(
             req.getApplyDateStart(), false));
@@ -91,8 +89,6 @@ public class XN803755 extends AProcessor {
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN803755Req.class);
         StringValidater.validateNumber(req.getStart(), req.getLimit());
-        StringValidater
-            .validateBlank(req.getSystemCode(), req.getCompanyCode());
 
     }
 

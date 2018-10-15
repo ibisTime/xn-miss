@@ -25,6 +25,9 @@ public class XN803753Req {
     // 支付渠道订单编号（支付渠道代表）(必填)
     private String channelOrder;
 
+    // 转账费
+    private String payFee;
+
     public List<String> getCodeList() {
         return codeList;
     }
@@ -64,4 +67,13 @@ public class XN803753Req {
     public void setChannelOrder(String channelOrder) {
         this.channelOrder = channelOrder;
     }
+
+    public String getPayFee() {
+        return payFee;
+    }
+
+    public void setPayFee(String payFee) {
+        this.payFee = payFee;
+    }
+
 }

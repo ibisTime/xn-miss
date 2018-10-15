@@ -43,12 +43,6 @@ public class XN803755Req extends APageReq {
     // 支付渠道的订单编号（支付渠道代表）
     private String channelOrder;
 
-    // 系统编号
-    private String systemCode;
-
-    // 公司编号
-    private String companyCode;
-
     // ******** db *****
 
     // 申请时间起
@@ -198,22 +192,6 @@ public class XN803755Req extends APageReq {
 
     public void setChannelOrder(String channelOrder) {
         this.channelOrder = channelOrder;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
-    }
-
-    public String getCompanyCode() {
-        return companyCode;
-    }
-
-    public void setCompanyCode(String companyCode) {
-        this.companyCode = companyCode;
     }
 
     public String getUserId() {

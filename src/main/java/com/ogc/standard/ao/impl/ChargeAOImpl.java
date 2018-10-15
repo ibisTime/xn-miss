@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,17 +12,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IChargeAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IChargeBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -34,6 +39,9 @@ public class ChargeAOImpl implements IChargeAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Override
     public String applyOrder(String accountNumber, BigDecimal amount,
@@ -91,8 +99,9 @@ public class ChargeAOImpl implements IChargeAO {
         if (CollectionUtils.isNotEmpty(page.getList())) {
             List<Charge> list = page.getList();
             for (Charge charge : list) {
-                User user = userBO.getUser(charge.getApplyUser());
-                charge.setUser(user);
+                init(charge);
+                // User user = userBO.getUser(charge.getApplyUser());
+                // charge.setUser(user);
             }
         }
         return page;
@@ -116,6 +125,53 @@ public class ChargeAOImpl implements IChargeAO {
         User user = userBO.getUser(charge.getApplyUser());
         charge.setUser(user);
         return charge;
+    }
+
+    private void init(Charge charge) {
+        // 户名
+        String realName = null;
+
+        // 审核人
+        String payUserName = null;
+
+        if (EAccountType.Customer.getCode().equals(charge.getApplyUserType())) {
+
+            // C端用户
+            User user = userBO.getUser(charge.getApplyUser());
+
+            realName = user.getMobile();
+            if (StringUtils.isNotBlank(user.getRealName())) {
+                realName = user.getRealName().concat("-").concat(realName);
+            }
+
+        } else if (EAccountType.Plat.getCode()
+            .equals(charge.getApplyUserType())) {
+
+            // 系统用户
+            realName = EUser.ADMIN.getValue();
+
+            SYSUser sysUser = sysUserBO.getSYSUser(charge.getApplyUser());
+
+            realName = sysUser.getMobile();
+            if (StringUtils.isNotBlank(sysUser.getRealName())) {
+                realName = sysUser.getRealName().concat("-").concat(realName);
+            }
+        }
+
+        SYSUser payUser = sysUserBO.getSYSUserUnCheck(charge.getPayUser());
+        if (null != payUser) {
+            payUserName = payUser.getLoginName();
+            if (StringUtils.isNotBlank(payUser.getMobile())) {
+                payUserName = payUserName.concat("-").concat(
+                    payUser.getMobile());
+            }
+        }
+
+        charge.setRealName(realName);
+
+        charge.setApplyUserName(realName);
+
+        charge.setPayUserName(payUserName);
     }
 
 }

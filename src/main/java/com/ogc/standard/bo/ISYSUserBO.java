@@ -59,7 +59,8 @@ public interface ISYSUserBO extends IPaginableBO<SYSUser> {
     // 判断用户编号是否存在
     public boolean isUserExist(String userId, String systemCode);
 
-    public void refreshStatus(String userId, EUserStatus status, String updater,
-            String remark);
+    public void refreshStatus(String userId, EUserStatus status,
+            String updater, String remark);
 
+    public SYSUser getSYSUserUnCheck(String userId);
 }

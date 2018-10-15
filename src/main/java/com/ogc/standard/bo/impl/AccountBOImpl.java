@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IJourBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
-import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.core.AccountUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAccountDAO;
@@ -309,25 +308,29 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
     @Override
     public void transAmountCZB(String fromUserId, String fromCurrency,
             String toUserId, String toCurrency, BigDecimal transAmount,
-            String bizType, String fromBizNote, String toBizNote, String refNo) {
+            String fromBizType, String toBizType, String fromBizNote,
+            String toBizNote, String refNo) {
+        if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
+            return;
+        }
         Account fromAccount = this.getAccountByUser(fromUserId, fromCurrency);
         Account toAccount = this.getAccountByUser(toUserId, toCurrency);
-        transAmountCZB(fromAccount, toAccount, transAmount, bizType,
-            fromBizNote, toBizNote, refNo);
+        transAmountCZB(fromAccount, toAccount, transAmount, fromBizType,
+            toBizType, fromBizNote, toBizNote, refNo);
     }
 
     private void transAmountCZB(Account fromAccount, Account toAccount,
-            BigDecimal transAmount, String bizType, String fromBizNote,
-            String toBizNote, String refNo) {
+            BigDecimal transAmount, String fromBizType, String toBizType,
+            String fromBizNote, String toBizNote, String refNo) {
         String fromAccountNumber = fromAccount.getAccountNumber();
         String toAccountNumber = toAccount.getAccountNumber();
         if (fromAccountNumber.equals(toAccountNumber)) {
             new BizException("XN0000", "来去双方账号一致，无需内部划转");
         }
         this.changeAmount(fromAccountNumber, EChannelType.NBZ, null, null,
-            refNo, bizType, fromBizNote, transAmount.negate());
+            refNo, fromBizType, fromBizNote, transAmount.negate());
         this.changeAmount(toAccountNumber, EChannelType.NBZ, null, null, refNo,
-            bizType, toBizNote, AmountUtil.mul(transAmount, 1));// TODO
+            toBizType, toBizNote, transAmount);
     }
 
     @Override

@@ -12,7 +12,7 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 public enum EChannelType {
-    NBZ("0", "内部账"), Offline("90", "人工线下"), WeChat_H5("35", "微信公众号支付");
+    NBZ("0", "内部账"), Offline("90", "人工线下"), WeChat_H5("35", "微信H5支付");
 
     public static Map<String, EChannelType> getChannelTypeResultMap() {
         Map<String, EChannelType> map = new HashMap<String, EChannelType>();

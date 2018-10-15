@@ -30,8 +30,11 @@ public class XN803520Req extends APageReq {
     // 真实姓名
     private String realName;
 
-    // 账户类型
+    // 流水类型
     private String type;
+
+    // 类型(B B端账号，C C端账号，P 平台账号)
+    private String accountType;
 
     // 业务类型
     private String bizType;
@@ -180,6 +183,14 @@ public class XN803520Req extends APageReq {
 
     public void setAdjustUser(String adjustUser) {
         this.adjustUser = adjustUser;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
 }

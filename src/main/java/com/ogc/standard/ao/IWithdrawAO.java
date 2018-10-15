@@ -25,7 +25,8 @@ public interface IWithdrawAO {
             String approveResult, String approveNote, String systemCode);
 
     public void payOrder(String code, String payUser, String payResult,
-            String payNote, String channelOrder, String systemCode);
+            String payNote, String channelOrder, BigDecimal payFee,
+            String systemCode);
 
     // 分页查询取现订单
     public Paginable<Withdraw> queryWithdrawPage(int start, int limit,
@@ -35,4 +36,8 @@ public interface IWithdrawAO {
     public List<Withdraw> queryWithdrawList(Withdraw condition);
 
     public Withdraw getWithdraw(String code, String systemCode);
+
+    public void withdrawEnter(String accountNumber, BigDecimal amount,
+            String withDate, String channelOrder, String withNote,
+            String updater);
 }

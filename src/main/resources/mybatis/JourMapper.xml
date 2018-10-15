@@ -14,6 +14,7 @@
 		<result column="user_id" property="userId" />
 		<result column="real_name" property="realName" />
 		<result column="type" property="type" />
+		<result column="account_type" property="accountType" />
 		<result column="currency" property="currency" />
 		
         <result column="biz_type" property="bizType" />
@@ -79,6 +80,9 @@
 					 </if>
 				 </otherwise>
 			</choose>
+			<if test="accountType != null and accountType != '' ">
+				AND t.account_type = #{accountType}
+			</if>
 			<if test="currency != null and currency != '' ">
 				AND t.currency = #{currency}
 			</if>

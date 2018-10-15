@@ -42,8 +42,11 @@ public class Jour extends ABaseDO {
     // 流水所属真实姓名
     private String realName;
 
-    // 类型(B B端账号，C C端账号，P 平台账号)
+    // 流水类型（余额流水、冻结流水）
     private String type;
+
+    // 类型（C C端账号 B B端账号 P平台账号）
+    private String accountType;
 
     // 币种
     private String currency;
@@ -348,4 +351,13 @@ public class Jour extends ABaseDO {
     public void setChannelType(String channelType) {
         this.channelType = channelType;
     }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
 }

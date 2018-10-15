@@ -64,4 +64,21 @@ public class AmountUtil {
         return orgNum.multiply(BigDecimal.TEN.pow(unit));
     }
 
+    public static BigDecimal mul(String amount, Long radix) {
+        BigDecimal a = new BigDecimal(amount);
+        BigDecimal b = new BigDecimal(Double.toString(radix));
+        return a.multiply(b);
+    }
+
+    public static BigDecimal mul(BigDecimal amount, Long radix) {
+        BigDecimal a = amount;
+        BigDecimal b = new BigDecimal(radix);
+        return a.multiply(b);
+    }
+
+    public static BigDecimal div(BigDecimal amount, Long number) {
+        BigDecimal b = new BigDecimal(Double.toString(number));
+        return amount.divide(b, 2, BigDecimal.ROUND_HALF_UP);
+    }
+
 }
