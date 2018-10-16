@@ -18,13 +18,14 @@ import com.ogc.standard.ao.IActionAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IActionBO;
 import com.ogc.standard.bo.IPlayerBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
-import com.ogc.standard.domain.Account;
+import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.domain.Action;
 import com.ogc.standard.domain.Player;
+import com.ogc.standard.domain.SYSConfig;
 import com.ogc.standard.enums.EActionType;
-import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
@@ -53,6 +54,9 @@ public class ActionAOImpl implements IActionAO {
     @Autowired
     private IAccountBO accountBO;
 
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
     @Transactional
     @Override
     public String addAction(String type, String toType, String toCode,
@@ -64,6 +68,7 @@ public class ActionAOImpl implements IActionAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "该选手无法进行此操作");
         }
+        String code = actionBO.saveAction(type, toType, toCode, creater);
         if (EActionType.ATTENTION.getCode().equals(type)) {
             if (actionBO.isActionExist(creater, toCode, type)) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
@@ -72,29 +77,23 @@ public class ActionAOImpl implements IActionAO {
             playerBO.addAttention(player);
         } else if (EActionType.SHARE.getCode().equals(type)) {
             if (!actionBO.isActionExist(creater, toCode, type)) {
-                // 用户账户加钱
-                Account account = accountBO.getAccountByUser(creater,
-                    ECurrency.CNY.getCode());
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, creater,
-                    EJourBizTypeUser.AJ_FX.getCode(),
-                    EJourBizTypeUser.AJ_FX.getValue(), BigDecimal.ONE);
-                // 系统用户减钱
-                account = accountBO.getAccount(ESystemAccount.SYS_ACOUNT_CNY
-                    .getCode());
-                accountBO.changeAmount(account.getAccountNumber(),
-                    EChannelType.NBZ, null, null, creater,
+                SYSConfig money = sysConfigBO
+                    .getConfigValue(SysConstant.RETURN_MONEY);
+                accountBO.transAmountCZB(creater, ECurrency.CNY.getCode(),
+                    ESystemAccount.SYS_ACOUNT_CNY.getCode(),
+                    ECurrency.CNY.getCode(), new BigDecimal(money.getCvalue()),
                     EJourBizTypePlat.AJ_FX.getCode(),
-                    EJourBizTypePlat.AJ_FX.getValue(), BigDecimal.ONE.negate());
+                    EJourBizTypeUser.AJ_FX.getCode(),
+                    EJourBizTypePlat.AJ_FX.getValue(),
+                    EJourBizTypeUser.AJ_FX.getValue(), code);
             }
             playerBO.addShare(player);
-            // TODO
         } else if (EActionType.FOOT.getCode().equals(type)) {
             playerBO.addScan(player);
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持此操作");
         }
-        return actionBO.saveAction(type, toType, toCode, creater);
+        return code;
     }
 
     @Override

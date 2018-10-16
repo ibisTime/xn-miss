@@ -80,6 +80,9 @@ public class SysConstant {
     // 订单加油票价格
     public static String PRICE = "price";
 
+    // 首次分享返现金额
+    public static String RETURN_MONEY = "return_money";
+
     // 订单失效时间（分钟）
     public static String INVALID_TIME = "invalid_time";
 

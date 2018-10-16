@@ -17,7 +17,7 @@ import com.ogc.standard.enums.ECurrency;
  */
 public interface IAccountBO extends IPaginableBO<Account> {
 
-    // 分配账户
+    // 分配B端用户账户
     public String distributeAccount(String userId, String realName,
             EAccountType accountType, String currency, String systemCode,
             String companyCode);

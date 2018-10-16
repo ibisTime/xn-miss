@@ -18,7 +18,7 @@ import com.ogc.standard.domain.Charge;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
-import com.ogc.standard.enums.EJourBizType;
+import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -65,7 +65,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
 
     @Override
     public String applyOrderOnline(Account account, String payGroup,
-            String refNo, EJourBizType bizType, String bizNote,
+            String refNo, EJourType bizType, String bizNote,
             BigDecimal transAmount, EChannelType channelType, String applyUser) {
         if (transAmount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "充值金额不能为0");

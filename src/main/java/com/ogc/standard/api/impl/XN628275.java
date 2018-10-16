@@ -38,6 +38,7 @@ public class XN628275 extends AProcessor {
     public Object doBusiness() throws BizException {
         Comment condition = new Comment();
         condition.setType(req.getType());
+        condition.setToCode(req.getToCode());
         condition.setContent(req.getContent());
         condition.setStatus(req.getStatus());
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(

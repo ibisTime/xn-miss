@@ -23,8 +23,8 @@ import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.EJourBizType;
 import com.ogc.standard.enums.EJourBizTypePlat;
+import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
@@ -162,7 +162,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (ECurrency.CNY.getCode().equals(account.getCurrency())) {
             // 托管账户减钱
             accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
-                null, null, data.getCode(), EJourBizType.BALANCE.getCode(),
+                null, null, data.getCode(), EJourType.BALANCE.getCode(),
                 "线下取现", totalAmount.negate());
         }
 

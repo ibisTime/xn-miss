@@ -37,7 +37,7 @@ import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.EJourBizType;
+import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.http.PostSimulater;
 import com.ogc.standard.util.HttpsUtil;
@@ -90,7 +90,7 @@ public class WeChatAOImpl implements IWeChatAO {
             ECurrency.CNY.getCode());
         // 落地此次付款的订单信息
         String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
-            refNo, EJourBizType.getBizType(bizType), bizNote, transAmount,
+            refNo, EJourType.getJourKind(bizType), bizNote, transAmount,
             EChannelType.WeChat_H5, applyUser);
         // 获取支付宝支付配置参数
         String systemCode = toAccount.getSystemCode();

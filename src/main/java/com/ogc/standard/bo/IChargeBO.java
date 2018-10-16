@@ -7,11 +7,11 @@ import com.ogc.standard.bo.base.IPaginableBO;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.EJourBizType;
+import com.ogc.standard.enums.EJourType;
 
 public interface IChargeBO extends IPaginableBO<Charge> {
     String applyOrderOnline(Account account, String payGroup, String refNo,
-            EJourBizType bizType, String bizNote, BigDecimal transAmount,
+            EJourType bizType, String bizNote, BigDecimal transAmount,
             EChannelType channelType, String applyUser);
 
     void callBackChange(Charge dbCharge, boolean booleanFlag);

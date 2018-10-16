@@ -26,6 +26,7 @@ import com.ogc.standard.domain.Jour;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourStatus;
+import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.exception.BizException;
 
 /** 
@@ -42,12 +43,13 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
     public String addJour(Account dbAccount, EChannelType channelType,
             String channelOrder, String payGroup, String refNo, String bizType,
             String bizNote, BigDecimal transAmount) {
-        if (!EChannelType.Offline.getCode().equals(channelType.getCode())
-                && !EChannelType.NBZ.getCode().equals(channelType.getCode())) {// 线下和内部帐可为空，线上必须有
-            if (StringUtils.isBlank(payGroup)) {// 必须要有的判断。每一次流水新增，必有有对应业务分组
-                throw new BizException("xn000000", "新增流水业务分组不能为空");
-            }
-        }
+        // if (!EChannelType.Offline.getCode().equals(channelType.getCode())
+        // && !EChannelType.NBZ.getCode().equals(channelType.getCode())) {//
+        // 线下和内部帐可为空，线上必须有
+        // if (StringUtils.isBlank(payGroup)) {// 必须要有的判断。每一次流水新增，必有有对应业务分组
+        // throw new BizException("xn000000", "新增流水业务分组不能为空");
+        // }
+        // }
         if (StringUtils.isBlank(refNo)) {// 必须要有的判断。每一次流水新增，必有有对应流水分组
             throw new BizException("xn000000", "新增流水流水分组不能为空");
         }
@@ -68,7 +70,8 @@ public class JourBOImpl extends PaginableBOImpl<Jour> implements IJourBO {
 
         data.setUserId(dbAccount.getUserId());
         data.setRealName(dbAccount.getRealName());
-        data.setType(dbAccount.getType());
+        data.setType(EJourType.BALANCE.getCode());// TODO
+        data.setAccountType(dbAccount.getType());
         data.setCurrency(dbAccount.getCurrency());
         data.setBizType(bizType);
 

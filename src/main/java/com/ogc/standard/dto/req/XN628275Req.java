@@ -8,7 +8,6 @@
  */
 package com.ogc.standard.dto.req;
 
-
 /** 
  * 分页查评论
  * @author: taojian 
@@ -27,6 +26,9 @@ public class XN628275Req extends APageReq {
 
     // 状态
     private String status;
+
+    // 对象编号
+    private String toCode;
 
     // 评论时间起
     private String createDatetimeStart;
@@ -72,6 +74,14 @@ public class XN628275Req extends APageReq {
 
     public void setCreateDatetimeEnd(String createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getToCode() {
+        return toCode;
+    }
+
+    public void setToCode(String toCode) {
+        this.toCode = toCode;
     }
 
 }

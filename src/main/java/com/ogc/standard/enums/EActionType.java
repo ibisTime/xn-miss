@@ -9,7 +9,7 @@ import java.util.Map;
  * @history:
  */
 public enum EActionType {
-    SHARE("1", "分享"), ATTENTION("B", "关注"), FOOT("3", "足迹");
+    SHARE("1", "分享"), ATTENTION("2", "关注"), FOOT("3", "足迹");
 
     public static Map<String, EActionType> getAccountTypeResultMap() {
         Map<String, EActionType> map = new HashMap<String, EActionType>();
