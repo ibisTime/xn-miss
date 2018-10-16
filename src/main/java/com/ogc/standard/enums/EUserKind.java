@@ -6,7 +6,7 @@ package com.ogc.standard.enums;
  * @history:
  */
 public enum EUserKind {
-    Customer("C", "C端用户"), Plat("P", "平台用户");
+    Customer("C", "C端用户"), Business("B", "B端用户"), Plat("P", "平台用户");
 
     EUserKind(String code, String value) {
         this.code = code;

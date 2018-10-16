@@ -144,7 +144,7 @@ public class UserAOImpl implements IUserAO {
             User dbUser = userBO.doGetUserByOpenId(h5OpenId);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
                 result = new XN805170Res(dbUser.getUserId());
-            } else {
+            } else {// user不存在，第一次授权登录
                 String nickname = (String) wxRes.get("nickname");
                 String photo = (String) wxRes.get("headimgurl");
                 String gender = ESex.UNKNOWN.getCode();
@@ -153,14 +153,9 @@ public class UserAOImpl implements IUserAO {
                 } else if (String.valueOf(wxRes.get("sex")).equals("2.0")) {
                     gender = ESex.WOMEN.getCode();
                 }
-                // Step5：判断注册是否传手机号，有则注册，无则反馈
-                if (EBoolean.YES.getCode().equals(req.getIsNeedMobile())) {
-                    result = doWxLoginRegMobile(req, unionId, h5OpenId,
-                        nickname, photo, gender);
-                } else {
-                    result = doWxLoginReg(req, unionId, h5OpenId, nickname,
-                        photo, gender);
-                }
+                // 注册
+                result = doWxLoginReg(req, unionId, h5OpenId, nickname, photo,
+                    gender);
             }
         } catch (Exception e) {
             throw new BizException("xn000000", e.getMessage());
@@ -172,15 +167,13 @@ public class UserAOImpl implements IUserAO {
             String h5OpenId, String nickname, String photo, String gender) {
         XN805170Res result;
         userBO.doCheckOpenId(unionId, h5OpenId);
-
         // 插入用户信息
         String userId = userBO.doRegister(unionId, h5OpenId, null,
             EUserKind.Customer.getCode(), EUserPwd.InitPwd.getCode(), nickname,
             photo, gender);
 
-        String accountNumber = distributeAccount(userId, nickname,
-            EUserKind.Customer.getCode());
-        result = new XN805170Res(userId, accountNumber, EBoolean.NO.getCode());
+        distributeAccount(userId, nickname, EUserKind.Customer.getCode());
+        result = new XN805170Res(userId, EBoolean.NO.getCode());
         return result;
     }
 
@@ -209,42 +202,6 @@ public class UserAOImpl implements IUserAO {
             }
         }
 
-        return result;
-    }
-
-    private XN805170Res doWxLoginRegMobile(XN805170Req req, String unionId,
-            String h5OpenId, String nickname, String photo, String gender) {
-        XN805170Res result = null;
-        if (StringUtils.isNotBlank(req.getMobile())) {
-            // 判断是否需要验证码验证码,登录前一定要验证
-            if (!EBoolean.YES.getCode().equals(req.getIsLoginStatus())) {
-                if (StringUtils.isBlank(req.getSmsCaptcha())) {
-                    throw new BizException("xn702002", "请输入短信验证码");
-                }
-                // 短信验证码是否正确
-                smsOutBO.checkCaptcha(req.getMobile(), req.getSmsCaptcha(),
-                    "805170");
-            }
-            String mobileUserId = userBO.getUserId(req.getMobile());
-            if (StringUtils.isBlank(mobileUserId)) {
-                userBO.doCheckOpenId(unionId, h5OpenId);
-
-                // 插入用户信息
-                String userId = userBO.doRegister(unionId, h5OpenId,
-                    req.getMobile(), EUserKind.Customer.getCode(),
-                    EUserPwd.InitPwd.getCode(), nickname, photo, gender);
-                // 分配账户
-                String accountNumber = distributeAccount(userId,
-                    req.getMobile(), EUserKind.Customer.getCode());
-                result = new XN805170Res(userId, accountNumber);
-            } else {
-                userBO.refreshWxInfo(mobileUserId, unionId, h5OpenId, nickname,
-                    photo, gender);
-                result = new XN805170Res(mobileUserId);
-            }
-        } else {
-            result = new XN805170Res(null, null, EBoolean.YES.getCode());
-        }
         return result;
     }
 

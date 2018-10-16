@@ -53,6 +53,12 @@
 			<if test="kind != null and kind != '' ">
 				AND t.kind = #{kind}
 			</if>
+			<if test="unionId != null and unionId != '' ">
+				AND t.union_id = #{unionId}
+			</if>
+			<if test="h5OpenId != null and h5OpenId != '' ">
+				AND t.h5_open_id = #{h5OpenId}
+			</if>
 			<if test="loginName != null and loginName != '' ">
 				AND t.login_name = #{loginName}
 			</if>

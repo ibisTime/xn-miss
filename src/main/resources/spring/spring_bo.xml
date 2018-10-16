@@ -112,6 +112,10 @@
 		<property name="paginableDAO" ref="jourDAOImpl"/>
 	</bean>
 	
+	<bean id="jourHistoryBO" class="com.ogc.standard.bo.impl.JourHistoryBOImpl">
+		<property name="paginableDAO" ref="jourHistoryDAOImpl"/>
+	</bean>
+	
 	<bean id="chargeBO" class="com.ogc.standard.bo.impl.ChargeBOImpl">
 		<property name="paginableDAO" ref="chargeDAOImpl"/>
 	</bean>

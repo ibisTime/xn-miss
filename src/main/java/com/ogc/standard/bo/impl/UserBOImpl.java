@@ -111,10 +111,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
             if (CollectionUtils.isNotEmpty(list)) {
                 User data = list.get(0);
                 userId = data.getUserId();
-            } else
-                throw new BizException(
-                    EErrorCode_main.user_USERIDUNEXIST.getCode(),
-                    (Object) userId);
+            }
         }
         return userId;
     }
