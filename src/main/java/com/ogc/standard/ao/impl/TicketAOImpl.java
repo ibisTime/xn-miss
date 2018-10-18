@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.ITicketAO;
+import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IPlayerBO;
 import com.ogc.standard.bo.IRankBO;
@@ -21,13 +22,16 @@ import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.Rank;
 import com.ogc.standard.domain.Ticket;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
+import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EPlayerStatus;
 import com.ogc.standard.enums.ERankType;
+import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ETicketStatus;
 import com.ogc.standard.exception.BizException;
@@ -53,6 +57,9 @@ public class TicketAOImpl implements ITicketAO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IWeChatAO weChatAO;
 
     @Override
     public String orderTicket(String playerCode, Long ticket, String applyUser) {
@@ -90,7 +97,7 @@ public class TicketAOImpl implements ITicketAO {
         if (StringUtils.isNotBlank(tradePwd)) {
             userBO.checkTradePwd(data.getApplyUser(), tradePwd);
         }
-        if (ETicketStatus.TO_PAY.getCode().equals(data.getStatus())) {
+        if (!ETicketStatus.TO_PAY.getCode().equals(data.getStatus())) {
             throw new BizException("xn0000", "订单不是待支付状态，不能支付");
         }
 
@@ -156,8 +163,12 @@ public class TicketAOImpl implements ITicketAO {
 
     @Transactional
     private Object toPayTicketWeChat(Ticket data) {
-        return null;
-
+        User user = userBO.getUser(data.getApplyUser());
+        XN002501Res prepayIdH5 = weChatAO.getPrepayIdH5(data.getApplyUser(),
+            user.getH5OpenId(), ESysUser.SYS_USER.getCode(), null,
+            data.getCode(), EJourBizTypeUser.AJ_CZ.getCode(),
+            EJourBizTypeUser.AJ_CZ.getValue(), data.getAmount(), null);
+        return prepayIdH5;
     }
 
     @Override

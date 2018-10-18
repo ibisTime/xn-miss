@@ -151,6 +151,8 @@
 	<bean id="ticketBO" class="com.ogc.standard.bo.impl.TicketBOImpl">
 		<property name="paginableDAO" ref="ticketDAOImpl"/>
 	</bean>
-		
-
+	
+	<bean id="companyChannelBO" class="com.ogc.standard.bo.impl.CompanyChannelBOImpl">
+		<property name="paginableDAO" ref="companyChannelDAOImpl"/>
+	</bean>
 </beans>

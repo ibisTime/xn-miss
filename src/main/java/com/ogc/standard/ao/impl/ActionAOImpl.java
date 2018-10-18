@@ -97,6 +97,13 @@ public class ActionAOImpl implements IActionAO {
     }
 
     @Override
+    public void cancelAction(String creater, String toCode) {
+        Action data = actionBO.getActionByTypeToCodeCreater(
+            EActionType.ATTENTION.getCode(), toCode, creater);
+        actionBO.removeAction(data.getCode());
+    }
+
+    @Override
     public Paginable<Action> queryActionPage(int start, int limit,
             Action condition) {
 

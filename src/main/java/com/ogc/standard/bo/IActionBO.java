@@ -25,4 +25,9 @@ public interface IActionBO extends IPaginableBO<Action> {
 
     public Action getAction(String code);
 
+    public Action getActionByTypeToCodeCreater(String type, String toCode,
+            String creater);
+
+    public void removeAction(String code);
+
 }

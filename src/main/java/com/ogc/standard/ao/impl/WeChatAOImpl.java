@@ -37,7 +37,7 @@ import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.EJourType;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.http.PostSimulater;
 import com.ogc.standard.util.HttpsUtil;
@@ -79,7 +79,7 @@ public class WeChatAOImpl implements IWeChatAO {
     public XN002501Res getPrepayIdH5(String applyUser, String openId,
             String toUser, String payGroup, String refNo, String bizType,
             String bizNote, BigDecimal transAmount, String backUrl) {
-        if (transAmount.longValue() == 0l) {
+        if (transAmount.equals(transAmount.ZERO)) {
             throw new BizException("xn000000", "发生金额为零，不能使用微信支付");
         }
         if (StringUtils.isBlank(openId)) {
@@ -90,13 +90,14 @@ public class WeChatAOImpl implements IWeChatAO {
             ECurrency.CNY.getCode());
         // 落地此次付款的订单信息
         String chargeOrderCode = chargeBO.applyOrderOnline(toAccount, payGroup,
-            refNo, EJourType.getJourKind(bizType), bizNote, transAmount,
-            EChannelType.WeChat_H5, applyUser);
-        // 获取支付宝支付配置参数
-        String systemCode = toAccount.getSystemCode();
-        String companyCode = toAccount.getCompanyCode();
+            refNo, bizType, bizNote, transAmount, EChannelType.WeChat_H5,
+            applyUser);
+        // 获取微信支付配置参数
+        // String systemCode = toAccount.getSystemCode();
+        // String companyCode = toAccount.getCompanyCode();
         CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
-            companyCode, systemCode, EChannelType.WeChat_H5.getCode());
+            ESystemCode.MISS.getCode(), ESystemCode.MISS.getCode(),
+            EChannelType.WeChat_H5.getCode());
 
         // 获取微信公众号支付prepayid
         String prepayId = wechatBO.getPrepayIdH5(companyChannel, openId,

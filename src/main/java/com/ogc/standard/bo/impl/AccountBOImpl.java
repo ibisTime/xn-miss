@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,8 +23,10 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESysUser;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /**
  * @author: xieyj 
@@ -273,10 +276,25 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             Account condition = new Account();
             condition.setUserId(userId);
             condition.setCurrency(currency);
-            data = accountDAO.select(condition);
-            if (data == null) {
-                throw new BizException("xn802000", "用户[" + userId + ";"
-                        + currency + "]无此类型账户");
+            List<Account> accountList = accountDAO.selectList(condition);
+            if (CollectionUtils.isEmpty(accountList)) {
+                throw new BizException(EBizErrorCode.DEFAULT.getCode(), "用户["
+                        + userId + ";" + currency + "]无此类型账户");
+            }
+            if (ESysUser.SYS_USER.getCode().equals(userId)
+                    && ECurrency.CNY.getCode().equals(currency)) {
+                for (Account account : accountList) {
+                    if (ESystemAccount.SYS_ACOUNT_CNY.getCode().equals(
+                        account.getAccountNumber())) {
+                        data = account;
+                    }
+                }
+                if (data == null) {
+                    throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                        "系统账户不存在");
+                }
+            } else {
+                data = accountList.get(0);
             }
         }
         return data;

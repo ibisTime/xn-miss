@@ -80,4 +80,8 @@
 		SELECT count(1) FROM thqxj_action t
 		<include refid="where_condition" />
 	</select>
+	
+	<delete id="delete" parameterType="action">  
+        DELETE FROM thqxj_action WHERE code = #{code}  
+	</delete>
 </mapper>

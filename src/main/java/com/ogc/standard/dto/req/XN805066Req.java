@@ -12,7 +12,7 @@ public class XN805066Req {
     private String tradePwd;
 
     // 手机验证码（必填）
-    @NotBlank
+    // @NotBlank
     private String smsCaptcha;
 
     public String getUserId() {

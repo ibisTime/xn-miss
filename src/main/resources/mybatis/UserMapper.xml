@@ -152,6 +152,8 @@
 	<select id="select_user" parameterType="user" resultMap="user_DB_Result">
 		SELECT 
 		t.user_id
+		,t.union_id
+		,t.h5_open_id
 		,t.login_name
 		,t.mobile
 		,t.email

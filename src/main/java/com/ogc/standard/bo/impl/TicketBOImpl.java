@@ -31,8 +31,9 @@ public class TicketBOImpl extends PaginableBOImpl<Ticket> implements ITicketBO {
             BigDecimal price, int invalidTime) {
         String code = null;
         if (null != player) {
-            code = OrderNoGenerater.generate(EGeneratePrefix.TICKET.getCode());
             Ticket data = new Ticket();
+            code = OrderNoGenerater.generate(EGeneratePrefix.TICKET.getCode());
+            data.setCode(code);
             data.setPlayerCode(player.getCode());
             data.setTicket(ticket);
             data.setAmount(price.multiply(new BigDecimal(ticket)));

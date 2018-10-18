@@ -332,7 +332,7 @@ public class UserAOImpl implements IUserAO {
     public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha) {
         User user = userBO.getUser(userId);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805066");
+        // smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805066");
         // 修改支付密码
         userBO.refreshTradePwd(userId, tradePwd);
         // 发送短信

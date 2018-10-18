@@ -50,6 +50,6 @@
 		<typeAlias alias="player" type="com.ogc.standard.domain.Player"/>
 		<typeAlias alias="rank" type="com.ogc.standard.domain.Rank"/>
 		<typeAlias alias="ticket" type="com.ogc.standard.domain.Ticket"/>
-
+		<typeAlias alias="companyChannel" type="com.ogc.standard.domain.CompanyChannel"/>
 	</typeAliases>
 </configuration>

@@ -2,6 +2,7 @@ package com.ogc.standard.bo.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -61,6 +62,29 @@ public class ActionBOImpl extends PaginableBOImpl<Action> implements IActionBO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该用户行为不存在");
         }
         return data;
+    }
+
+    @Override
+    public Action getActionByTypeToCodeCreater(String type, String toCode,
+            String creater) {
+        Action condition = new Action();
+        condition.setType(type);
+        condition.setToCode(toCode);
+        condition.setCreater(creater);
+        Action data = actionDAO.select(condition);
+        if (null == null) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该用户行为不存在");
+        }
+        return data;
+    }
+
+    @Override
+    public void removeAction(String code) {
+        if (StringUtils.isNotBlank(code)) {
+            Action data = new Action();
+            data.setCode(code);
+            actionDAO.delete(data);
+        }
     }
 
 }

@@ -31,7 +31,7 @@ public class ActionDAOImpl extends AMybatisTemplate implements IActionDAO {
 
     @Override
     public int delete(Action data) {
-        return 0;
+        return super.delete(NAMESPACE.concat("delete"), data);
     }
 
     @Override

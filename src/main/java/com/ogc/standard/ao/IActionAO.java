@@ -26,4 +26,6 @@ public interface IActionAO {
             Action condition);
 
     public Action getAction(String code);
+
+    public void cancelAction(String creater, String toCode);
 }
