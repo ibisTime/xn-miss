@@ -7,6 +7,7 @@
 		<result column="pay_group" property="payGroup" />
 		<result column="ref_no" property="refNo" />
 		<result column="account_number" property="accountNumber" />
+		<result column="collection_account_number" property="collectionAccountNumber" />
 		<result column="amount" property="amount" />
 		
 		<result column="account_name" property="accountName" />
@@ -97,6 +98,7 @@
 		,t.pay_group
 		,t.ref_no
 		,t.account_number
+		,t.collection_account_number
 		,t.amount
 		
 		,t.account_name
@@ -139,6 +141,7 @@
 		,pay_group
 		,ref_no
 		,account_number
+		,collection_account_number
 		,amount
 		
 		,account_name
@@ -162,6 +165,7 @@
 		,#{payGroup}
 		,#{refNo}
 		,#{accountNumber}
+		,#{collectionAccountNumber}
 		,#{amount}
 		
 		,#{accountName}

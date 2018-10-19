@@ -13,7 +13,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IBankCardDAO;
 import com.ogc.standard.domain.Bankcard;
-import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.EBankcardStatus;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
@@ -25,8 +25,8 @@ import com.ogc.standard.exception.BizException;
  * @history:
  */
 @Component
-public class BankcardBOImpl extends PaginableBOImpl<Bankcard>
-        implements IBankcardBO {
+public class BankcardBOImpl extends PaginableBOImpl<Bankcard> implements
+        IBankcardBO {
 
     @Autowired
     private IBankCardDAO bankcardDAO;
@@ -45,14 +45,24 @@ public class BankcardBOImpl extends PaginableBOImpl<Bankcard>
     public String saveBankcard(Bankcard data) {
         String code = null;
         if (data != null) {
-            code = OrderNoGenerater
-                .generate(EGeneratePrefix.BANK_CARD.getCode());
+            code = OrderNoGenerater.generate(EGeneratePrefix.BANK_CARD
+                .getCode());
             data.setCode(code);
-            data.setStatus(EBoolean.YES.getCode());
             data.setCreateDatetime(new Date());
             bankcardDAO.insert(data);
         }
         return code;
+    }
+
+    @Override
+    public void refreshStatusBankcard(String code) {
+        Bankcard data = getBankcard(code);
+        if (EBankcardStatus.USING.getCode().equals(data.getStatus())) {
+            data.setStatus(EBankcardStatus.UNUSED.getCode());
+        } else {
+            data.setStatus(EBankcardStatus.USING.getCode());
+        }
+        bankcardDAO.updateStatus(data);
     }
 
     @Override
@@ -144,4 +154,5 @@ public class BankcardBOImpl extends PaginableBOImpl<Bankcard>
         condition.setBankCode(bankCode);
         return (int) bankcardDAO.selectTotalCount(condition);
     }
+
 }

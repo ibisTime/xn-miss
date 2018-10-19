@@ -111,6 +111,9 @@ public class Player extends ABaseDO {
     // 创建时间止
     private Date createDatetimeEnd;
 
+    // 模糊查询字段
+    private String fuzzyQuery;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -357,6 +360,14 @@ public class Player extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getFuzzyQuery() {
+        return fuzzyQuery;
+    }
+
+    public void setFuzzyQuery(String fuzzyQuery) {
+        this.fuzzyQuery = fuzzyQuery;
     }
 
 }

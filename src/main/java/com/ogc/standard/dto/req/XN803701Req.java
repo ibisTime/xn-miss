@@ -2,6 +2,9 @@ package com.ogc.standard.dto.req;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
 /**
  * 批量审批线下充值订单
  * @author: xieyj 
@@ -11,15 +14,19 @@ import java.util.List;
 public class XN803701Req {
 
     // 充值订单编号(必填)
+    @NotEmpty
     private List<String> codeList;
 
     // 支付回录人(必填)
+    @NotBlank
     private String payUser;
 
     // 审核结果1 通过 0 不通过(必填)
+    @NotBlank
     private String payResult;
 
     // 支付渠道的说明(必填)
+    @NotBlank
     private String payNote;
 
     public List<String> getCodeList() {

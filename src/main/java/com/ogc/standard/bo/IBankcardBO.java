@@ -29,4 +29,6 @@ public interface IBankcardBO extends IPaginableBO<Bankcard> {
 
     public List<Bankcard> queryBankcardList(String userId, String bankCode);
 
+    public void refreshStatusBankcard(String code);
+
 }

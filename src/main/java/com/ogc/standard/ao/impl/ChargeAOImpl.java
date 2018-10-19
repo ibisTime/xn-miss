@@ -18,14 +18,13 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.SYSUser;
-import com.ogc.standard.domain.User;
-import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
 
@@ -46,7 +45,7 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public String applyOrder(String accountNumber, BigDecimal amount,
             String payCardInfo, String payCardNo, String applyUser,
-            String applyNote) {
+            String applyNote, String collectionAccountNumber) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BizException("xn000000", "充值金额需大于零");
         }
@@ -54,7 +53,7 @@ public class ChargeAOImpl implements IChargeAO {
         // 生成充值订单
         String code = chargeBO.applyOrderOffline(account,
             EJourBizTypeUser.AJ_CZ.getCode(), amount, payCardInfo, payCardNo,
-            applyUser, applyNote);
+            applyUser, applyNote, collectionAccountNumber);
         return code;
     }
 
@@ -82,13 +81,15 @@ public class ChargeAOImpl implements IChargeAO {
         // 账户加钱
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
             null, null, data.getCode(), EJourBizTypeUser.AJ_CZ.getCode(),
-            "线下充值", data.getAmount());// TODO
+            "线下充值", data.getAmount());
         Account account = accountBO.getAccount(data.getAccountNumber());
         if (ECurrency.CNY.getCode().equals(account.getCurrency())) {
-            // 托管账户加钱
-            accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
-                null, null, data.getCode(), EJourBizTypePlat.AJ_BJ.getCode(),
-                "线下充值", data.getAmount());// TODO
+            // 线下托管账户加钱
+            Account sysAccountOffLine = accountBO
+                .getAccount(ESystemAccount.SYS_ACOUNT_OFFLINE.getCode());
+            accountBO.changeAmount(sysAccountOffLine.getAccountNumber(),
+                EChannelType.Offline, null, null, data.getCode(),
+                EJourBizTypePlat.AJ_BJ.getCode(), "线下充值", data.getAmount());
         }
     }
 
@@ -112,8 +113,9 @@ public class ChargeAOImpl implements IChargeAO {
         List<Charge> list = chargeBO.queryChargeList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
             for (Charge charge : list) {
-                User user = userBO.getUser(charge.getApplyUser());
-                charge.setUser(user);
+                init(charge);
+                // User user = userBO.getUser(charge.getApplyUser());
+                // charge.setUser(user);
             }
         }
         return list;
@@ -122,8 +124,8 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Charge getCharge(String code) {
         Charge charge = chargeBO.getCharge(code);
-        User user = userBO.getUser(charge.getApplyUser());
-        charge.setUser(user);
+        // User user = userBO.getUser(charge.getApplyUser());
+        // charge.setUser(user);
         return charge;
     }
 
@@ -134,28 +136,28 @@ public class ChargeAOImpl implements IChargeAO {
         // 审核人
         String payUserName = null;
 
-        if (EAccountType.Customer.getCode().equals(charge.getApplyUserType())) {
+        // if
+        // (EAccountType.Customer.getCode().equals(charge.getApplyUserType())) {
+        //
+        // // C端用户
+        // User user = userBO.getUser(charge.getApplyUser());
+        //
+        // realName = user.getMobile();
+        // if (StringUtils.isNotBlank(user.getRealName())) {
+        // realName = user.getRealName().concat("-").concat(realName);
+        // }
+        //
+        // } else if (EAccountType.Plat.getCode()
+        // .equals(charge.getApplyUserType())) {
+        // }
+        // 系统用户
+        realName = EUser.ADMIN.getValue();
 
-            // C端用户
-            User user = userBO.getUser(charge.getApplyUser());
+        SYSUser sysUser = sysUserBO.getSYSUser(charge.getApplyUser());
 
-            realName = user.getMobile();
-            if (StringUtils.isNotBlank(user.getRealName())) {
-                realName = user.getRealName().concat("-").concat(realName);
-            }
-
-        } else if (EAccountType.Plat.getCode()
-            .equals(charge.getApplyUserType())) {
-
-            // 系统用户
-            realName = EUser.ADMIN.getValue();
-
-            SYSUser sysUser = sysUserBO.getSYSUser(charge.getApplyUser());
-
-            realName = sysUser.getMobile();
-            if (StringUtils.isNotBlank(sysUser.getRealName())) {
-                realName = sysUser.getRealName().concat("-").concat(realName);
-            }
+        realName = sysUser.getMobile();
+        if (StringUtils.isNotBlank(sysUser.getRealName())) {
+            realName = sysUser.getRealName().concat("-").concat(realName);
         }
 
         SYSUser payUser = sysUserBO.getSYSUserUnCheck(charge.getPayUser());

@@ -35,4 +35,6 @@ public interface IBankcardAO {
 
     public Bankcard getBankcard(String code);
 
+    public void onOffBankcard(String code);
+
 }

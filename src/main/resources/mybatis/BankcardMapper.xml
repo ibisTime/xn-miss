@@ -160,5 +160,11 @@
 		DELETE FROM tstd_bankcard
 		WHERE code = #{code}
 	</delete>
-
+	
+	<update id="update_status" parameterType="bankcard">
+		UPDATE tstd_bankcard
+		SET
+		status = #{status}
+		WHERE code = #{code}
+	</update>
 </mapper>

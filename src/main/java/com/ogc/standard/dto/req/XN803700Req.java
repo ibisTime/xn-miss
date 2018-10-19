@@ -26,6 +26,9 @@ public class XN803700Req {
     // 申请说明（选填）
     private String applyNote;
 
+    // 收款账号（必填）
+    private String collectionAccountNumber;
+
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -72,6 +75,14 @@ public class XN803700Req {
 
     public void setApplyNote(String applyNote) {
         this.applyNote = applyNote;
+    }
+
+    public String getCollectionAccountNumber() {
+        return collectionAccountNumber;
+    }
+
+    public void setCollectionAccountNumber(String collectionAccountNumber) {
+        this.collectionAccountNumber = collectionAccountNumber;
     }
 
 }

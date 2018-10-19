@@ -34,6 +34,9 @@ public class XN640017Req extends AListReq {
     // 创建时间止
     private String createDatetimeEnd;
 
+    // 模糊查询
+    private String fuzzyQuery;
+
     public String getMatch() {
         return match;
     }
@@ -96,6 +99,14 @@ public class XN640017Req extends AListReq {
 
     public void setCreateDatetimeEnd(String createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getFuzzyQuery() {
+        return fuzzyQuery;
+    }
+
+    public void setFuzzyQuery(String fuzzyQuery) {
+        this.fuzzyQuery = fuzzyQuery;
     }
 
 }

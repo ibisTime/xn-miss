@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -8,14 +9,18 @@ import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IBankcardAO;
 import com.ogc.standard.bo.IBankcardBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Bankcard;
-import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN802020Req;
 import com.ogc.standard.dto.req.XN802022Req;
 import com.ogc.standard.dto.req.XN802023Req;
+import com.ogc.standard.enums.EBankcardStatus;
+import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EErrorCode_main;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -33,6 +38,9 @@ public class BankcardAOImpl implements IBankcardAO {
     @Autowired
     private IUserBO userBO;
 
+    @Autowired
+    private ISYSUserBO sysUserBO;
+
     @Override
     public String addBankcard(XN802020Req req) {
         // 判断卡号是否重复
@@ -43,7 +51,6 @@ public class BankcardAOImpl implements IBankcardAO {
         // }
 
         Bankcard data = new Bankcard();
-        data.setSystemCode(req.getSystemCode());
         data.setBankcardNumber(req.getBankcardNumber());
         data.setBankCode(req.getBankCode());
         data.setBankName(req.getBankName());
@@ -52,9 +59,18 @@ public class BankcardAOImpl implements IBankcardAO {
         data.setUserId(req.getUserId());
         data.setRealName(req.getRealName());
         data.setType(req.getType());
-        data.setCurrency(req.getCurrency());
+        data.setStatus(EBankcardStatus.UNUSED.getCode());
+        data.setCurrency(ECurrency.CNY.getCode());
+        data.setAmount(StringValidater.toBigDecimal(req.getAmount()));
+        data.setFrozenAmount(BigDecimal.ZERO);
         data.setRemark(req.getRemark());
+        data.setSystemCode(ESystemCode.MISS.getCode());
         return bankcardBO.saveBankcard(data);
+    }
+
+    @Override
+    public void onOffBankcard(String code) {
+        bankcardBO.refreshStatusBankcard(code);
     }
 
     @Override
@@ -134,13 +150,14 @@ public class BankcardAOImpl implements IBankcardAO {
         Paginable<Bankcard> page = bankcardBO.getPaginable(start, limit,
             condition);
 
-        if (null != page) {
-            for (Bankcard bankcard : page.getList()) {
-                User user = userBO.getUser(bankcard.getUserId());
-                bankcard.setUserInfo(user);
-            }
-
-        }
+        // if (null != page) {
+        // for (Bankcard bankcard : page.getList()) {
+        // if (!ESysUser.SYS_USER.getCode().equals(bankcard.getUserId())) {
+        // User user = userBO.getUser(bankcard.getUserId());
+        // bankcard.setUserInfo(user);
+        // }
+        // }
+        // }
 
         return page;
     }
@@ -152,11 +169,12 @@ public class BankcardAOImpl implements IBankcardAO {
 
     @Override
     public Bankcard getBankcard(String code) {
-
         Bankcard bankcard = bankcardBO.getBankcard(code);
-        User user = userBO.getUser(bankcard.getUserId());
-        bankcard.setUserInfo(user);
-
+        // if (!ESysUser.SYS_USER.getCode().equals(bankcard.getUserId())) {
+        // User user = userBO.getUser(bankcard.getUserId());
+        // bankcard.setUserInfo(user);
+        // }
         return bankcard;
     }
+
 }

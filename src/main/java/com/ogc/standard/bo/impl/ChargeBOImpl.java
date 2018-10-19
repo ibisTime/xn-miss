@@ -18,6 +18,7 @@ import com.ogc.standard.domain.Charge;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -31,7 +32,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
     @Override
     public String applyOrderOffline(Account account, String bizType,
             BigDecimal amount, String payCardInfo, String payCardNo,
-            String applyUser, String applyNote) {
+            String applyUser, String applyNote, String collectionAccountNumber) {
         if (amount.compareTo(BigDecimal.ZERO) == 0) {
             throw new BizException("xn000000", "充值金额不能为0");
         }
@@ -42,6 +43,7 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setPayGroup(null);
         data.setRefNo(null);
         data.setAccountNumber(account.getAccountNumber());
+        data.setCollectionAccountNumber(collectionAccountNumber);
         data.setAmount(amount);
 
         data.setAccountName(account.getRealName());
@@ -56,8 +58,8 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         data.setApplyUser(applyUser);
         data.setApplyDatetime(new Date());
         data.setChannelType(EChannelType.Offline.getCode());
-        data.setSystemCode(account.getSystemCode());
-        data.setCompanyCode(account.getCompanyCode());
+        data.setSystemCode(ESystemCode.MISS.getCode());
+        data.setCompanyCode(ESystemCode.MISS.getCode());
         chargeDAO.insert(data);
         return code;
     }

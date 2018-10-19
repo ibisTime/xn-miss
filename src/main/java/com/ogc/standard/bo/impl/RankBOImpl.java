@@ -147,11 +147,15 @@ public class RankBOImpl extends PaginableBOImpl<Rank> implements IRankBO {
             code = OrderNoGenerater.generate(EGeneratePrefix.RANK.getCode());
             data.setCode(code);
             data.setType(type);
-            data.setBatch("1");// TODO
+            data.setBatch("1");
             data.setPlayerCode(player.getCode());
             data.setMatch(player.getMatch());
             data.setCreateDatetime(new Date());
             data.setTicketSum(ticket);
+            data.setFakeTicketSum(0L);
+            data.setAttentionSum(0L);
+            data.setShareSum(0L);
+            data.setScanSum(0L);
             rankDAO.insert(data);
         }
         return code;

@@ -13,4 +13,6 @@ public interface IBankCardDAO extends IBaseDAO<Bankcard> {
     String NAMESPACE = IBankCardDAO.class.getName().concat(".");
 
     public int update(Bankcard data);
+
+    public int updateStatus(Bankcard data);
 }

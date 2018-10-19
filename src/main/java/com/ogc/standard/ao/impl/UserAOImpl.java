@@ -332,15 +332,15 @@ public class UserAOImpl implements IUserAO {
     public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha) {
         User user = userBO.getUser(userId);
         // 短信验证码是否正确
-        // smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805066");
+        smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805060");// 805066
         // 修改支付密码
         userBO.refreshTradePwd(userId, tradePwd);
         // 发送短信
-        // String mobile = user.getMobile();
+        String mobile = user.getMobile();
         // smsOutBO.sendInterSmsOut(user.getInterCode(), mobile,
         // "尊敬的" + PhoneUtil.hideMobile(mobile)
         // + "用户，您的资金密码设置成功。请妥善保管您的账户相关信息。",
-        // user.getCompanyCode(), user.getSystemCode());
+        // ESystemCode.MISS.getCode(), ESystemCode.MISS.getCode());
     }
 
     @Override
@@ -514,7 +514,7 @@ public class UserAOImpl implements IUserAO {
         // 验证手机号
         userBO.isMobileExist(mobile);
         // 短信验证码是否正确
-        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805060");
+        smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");// 805060
         userBO.refreshMobile(userId, mobile);
 
         // 发送短信

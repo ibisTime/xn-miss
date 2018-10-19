@@ -22,6 +22,9 @@ public class Charge extends ABaseDO {
     // 针对账号---核心字段4
     private String accountNumber;
 
+    // 收款账号
+    private String collectionAccountNumber;
+
     // 充值金额---核心字段5
     private BigDecimal amount;
 
@@ -339,6 +342,14 @@ public class Charge extends ABaseDO {
 
     public void setRealName(String realName) {
         this.realName = realName;
+    }
+
+    public String getCollectionAccountNumber() {
+        return collectionAccountNumber;
+    }
+
+    public void setCollectionAccountNumber(String collectionAccountNumber) {
+        this.collectionAccountNumber = collectionAccountNumber;
     }
 
 }

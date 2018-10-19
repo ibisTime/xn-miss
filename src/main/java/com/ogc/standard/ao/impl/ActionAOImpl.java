@@ -9,7 +9,9 @@
 package com.ogc.standard.ao.impl;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,13 +108,25 @@ public class ActionAOImpl implements IActionAO {
     @Override
     public Paginable<Action> queryActionPage(int start, int limit,
             Action condition) {
-
-        return actionBO.getPaginable(start, limit, condition);
+        Paginable<Action> paginable = actionBO.getPaginable(start, limit,
+            condition);
+        List<Action> list = paginable.getList();
+        for (Action data : list) {
+            init(data);
+        }
+        return paginable;
     }
 
     @Override
     public Action getAction(String code) {
         return actionBO.getAction(code);
+    }
+
+    public void init(Action data) {
+        if (StringUtils.isNotBlank(data.getToCode())) {
+            Player player = playerBO.getPlayer(data.getToCode());
+            data.setPlayer(player);
+        }
     }
 
 }

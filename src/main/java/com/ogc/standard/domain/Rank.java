@@ -75,6 +75,8 @@ public class Rank extends ABaseDO {
     // 选手英文名
     private String playerEname;
 
+    private Player player;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -225,6 +227,14 @@ public class Rank extends ABaseDO {
 
     public void setPlayerEname(String playerEname) {
         this.playerEname = playerEname;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
 }

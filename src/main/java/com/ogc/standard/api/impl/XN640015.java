@@ -32,6 +32,7 @@ public class XN640015 extends AProcessor {
         condition.setMatchPlayCode(req.getMatchPlayCode());
         condition.setCnameQuery(req.getCname());
         condition.setEnameQuery(req.getEname());
+        condition.setFuzzyQuery(req.getFuzzyQuery());
         condition.setNativePlaceQuery(req.getNativePlace());
         condition.setStatus(req.getStatus());
         condition.setCreateDatetimeStart(DateUtil.strToDate(

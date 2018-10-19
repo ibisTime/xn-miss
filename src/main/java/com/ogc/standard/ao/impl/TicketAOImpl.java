@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.ITicketAO;
 import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IActionBO;
 import com.ogc.standard.bo.IPlayerBO;
 import com.ogc.standard.bo.IRankBO;
 import com.ogc.standard.bo.ISYSConfigBO;
@@ -25,6 +26,8 @@ import com.ogc.standard.domain.Ticket;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
 import com.ogc.standard.dto.res.XN002501Res;
+import com.ogc.standard.enums.EActionToType;
+import com.ogc.standard.enums.EActionType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
@@ -32,7 +35,6 @@ import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.EPlayerStatus;
 import com.ogc.standard.enums.ERankType;
 import com.ogc.standard.enums.ESysUser;
-import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ETicketStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -60,6 +62,9 @@ public class TicketAOImpl implements ITicketAO {
 
     @Autowired
     private IWeChatAO weChatAO;
+
+    @Autowired
+    private IActionBO actionBO;
 
     @Override
     public String orderTicket(String playerCode, Long ticket, String applyUser) {
@@ -126,8 +131,8 @@ public class TicketAOImpl implements ITicketAO {
         BigDecimal payAmount = data.getAmount();
         // 人民币余额划转
         accountBO.transAmountCZB(data.getApplyUser(), ECurrency.CNY.getCode(),
-            ESystemAccount.SYS_ACOUNT_CNY.getCode(), ECurrency.CNY.getCode(),
-            payAmount, EJourBizTypeUser.TICKET.getCode(),
+            ESysUser.SYS_USER.getCode(), ECurrency.CNY.getCode(), payAmount,
+            EJourBizTypeUser.TICKET.getCode(),
             EJourBizTypePlat.AJ_JYFC.getCode(),
             EJourBizTypeUser.TICKET.getValue(),
             EJourBizTypePlat.AJ_JYFC.getValue(), data.getCode());
@@ -158,6 +163,10 @@ public class TicketAOImpl implements ITicketAO {
             rankTotalCode = rankTotal.getCode();
         }
         rankBO.refreshRanking(ERankType.TOTAL.getCode(), rankTotalCode);
+        // 加油后自动关注选手
+        actionBO.saveAction(EActionType.ATTENTION.getCode(),
+            EActionToType.PLAYER.getCode(), data.getPlayerCode(),
+            data.getApplyUser());
         return new BooleanRes(true);
     }
 

@@ -1,5 +1,6 @@
 package com.ogc.standard.bo.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -46,6 +47,7 @@ public class ActionBOImpl extends PaginableBOImpl<Action> implements IActionBO {
         data.setToType(toType);
         data.setToCode(toCode);
         data.setCreater(creater);
+        data.setCreateDatetime(new Date());
         String remark = EActionType.getAccountTypeResultMap().get(type)
             .getValue();
         data.setRemark(remark);

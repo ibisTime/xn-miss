@@ -31,7 +31,7 @@ public class XN803700 extends AProcessor {
         BigDecimal amount = StringValidater.toBigDecimal(req.getAmount());
         String code = chargeAO.applyOrder(req.getAccountNumber(), amount,
             req.getPayCardInfo(), req.getPayCardNo(), req.getApplyUser(),
-            req.getApplyNote());
+            req.getApplyNote(), req.getCollectionAccountNumber());
         return new PKCodeRes(code);
     }
 

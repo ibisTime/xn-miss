@@ -59,6 +59,9 @@
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
 			</if>
+			<if test="fuzzyQuery != null and fuzzyQuery != '' ">
+				AND CONCAT(IFNULL(t.cname,''),IFNULL(t.match,''),IFNULL(t.native_place,'')) LIKE "%"#{fuzzyQuery}"%"
+			</if>
 		</trim>
 	</sql>
 	<select id="select_player" parameterType="player" resultMap="player_DB_Result">

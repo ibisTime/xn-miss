@@ -7,13 +7,11 @@ package com.ogc.standard.dto.req;
  * @history:
  */
 public class XN802020Req {
-    // 系统编号（必填）
-    private String systemCode;
 
     // 银行编号
     private String bankCode;
 
-    // 卡号（必填）
+    // 卡号（银行卡必填）
     private String bankcardNumber;
 
     // 银行名称（必填）
@@ -22,20 +20,20 @@ public class XN802020Req {
     // 支行名称（必填）
     private String subbranch;
 
+    // 初始余额
+    private String amount;
+
     // 绑定手机号（必填）
     private String bindMobile;
 
     // 用户编号（必填）
     private String userId;
 
-    // 用户姓名（必填）
+    // 账户名称（必填）
     private String realName;
 
     // 类型（必填）
     private String type;
-
-    // 币种（必填）
-    private String currency;
 
     // 备注（选填）
     private String remark;
@@ -46,14 +44,6 @@ public class XN802020Req {
 
     public void setBankCode(String bankCode) {
         this.bankCode = bankCode;
-    }
-
-    public String getSystemCode() {
-        return systemCode;
-    }
-
-    public void setSystemCode(String systemCode) {
-        this.systemCode = systemCode;
     }
 
     public String getBankName() {
@@ -104,14 +94,6 @@ public class XN802020Req {
         this.type = type;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
     public String getRemark() {
         return remark;
     }
@@ -126,6 +108,14 @@ public class XN802020Req {
 
     public void setBankcardNumber(String bankcardNumber) {
         this.bankcardNumber = bankcardNumber;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
 }

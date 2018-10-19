@@ -40,7 +40,7 @@ public class Action extends ABaseDO {
     private String creater;
 
     // 操作时间
-    private String createDatetime;
+    private Date createDatetime;
 
     // 备注
     private String remark;
@@ -50,6 +50,8 @@ public class Action extends ABaseDO {
     private Date createDatetimeStart;
 
     private Date createDatetimeEnd;
+
+    private Player player;
 
     public String getCode() {
         return code;
@@ -91,11 +93,11 @@ public class Action extends ABaseDO {
         this.creater = creater;
     }
 
-    public String getCreateDatetime() {
+    public Date getCreateDatetime() {
         return createDatetime;
     }
 
-    public void setCreateDatetime(String createDatetime) {
+    public void setCreateDatetime(Date createDatetime) {
         this.createDatetime = createDatetime;
     }
 
@@ -121,6 +123,14 @@ public class Action extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
 }

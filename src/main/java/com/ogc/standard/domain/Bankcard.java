@@ -1,5 +1,6 @@
 package com.ogc.standard.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.ogc.standard.dao.base.ABaseDO;
@@ -48,10 +49,10 @@ public class Bankcard extends ABaseDO {
     private String currency;
 
     // 余额
-    private Long amount;
+    private BigDecimal amount;
 
     // 冻结金额
-    private Long frozenAmount;
+    private BigDecimal frozenAmount;
 
     // MD5
     private String md5;
@@ -192,19 +193,19 @@ public class Bankcard extends ABaseDO {
         return systemCode;
     }
 
-    public Long getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Long getFrozenAmount() {
+    public BigDecimal getFrozenAmount() {
         return frozenAmount;
     }
 
-    public void setFrozenAmount(Long frozenAmount) {
+    public void setFrozenAmount(BigDecimal frozenAmount) {
         this.frozenAmount = frozenAmount;
     }
 

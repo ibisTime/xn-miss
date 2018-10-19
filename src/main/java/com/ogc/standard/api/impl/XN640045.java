@@ -48,7 +48,7 @@ public class XN640045 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = actionAO.DEFAULT_ORDER_COLUMN;
+            column = IActionAO.DEFAULT_ORDER_COLUMN;
         }
         condition.setOrder(column, req.getOrderDir());
         int start = StringValidater.toInteger(req.getStart());

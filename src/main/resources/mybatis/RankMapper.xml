@@ -31,7 +31,7 @@
 				AND t.batch = #{batch}
 			</if>
 			<if test="playerCode != null and playerCode != '' ">
-				AND t.playerCode = #{playerCode}
+				AND t.player_code = #{playerCode}
 			</if>
 			<if test="rank != null and rank != '' ">
 				AND t.rank = #{rank}
@@ -88,7 +88,7 @@
 		,batch
 		,player_code
 		,rank
-		,match
+		,`match`
 		,create_datetime
 		,updater
 		,update_datetime

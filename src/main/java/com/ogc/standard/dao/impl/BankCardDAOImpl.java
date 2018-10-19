@@ -35,8 +35,8 @@ public class BankCardDAOImpl extends AMybatisTemplate implements IBankCardDAO {
 
     @Override
     public long selectTotalCount(Bankcard condition) {
-        return super.selectTotalCount(NAMESPACE.concat("select_bankcard_count"),
-            condition);
+        return super.selectTotalCount(
+            NAMESPACE.concat("select_bankcard_count"), condition);
     }
 
     @Override
@@ -54,6 +54,11 @@ public class BankCardDAOImpl extends AMybatisTemplate implements IBankCardDAO {
     @Override
     public int update(Bankcard data) {
         return super.update(NAMESPACE.concat("update_bankcard"), data);
+    }
+
+    @Override
+    public int updateStatus(Bankcard data) {
+        return super.update(NAMESPACE.concat("update_status"), data);
     }
 
 }
