@@ -89,7 +89,7 @@ public class ChargeAOImpl implements IChargeAO {
                 .getAccount(ESystemAccount.SYS_ACOUNT_OFFLINE.getCode());
             accountBO.changeAmount(sysAccountOffLine.getAccountNumber(),
                 EChannelType.Offline, null, null, data.getCode(),
-                EJourBizTypePlat.AJ_BJ.getCode(), "线下充值", data.getAmount());
+                EJourBizTypePlat.AJ_CZ.getCode(), "线下充值", data.getAmount());
         }
     }
 

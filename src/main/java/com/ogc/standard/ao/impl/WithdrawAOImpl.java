@@ -22,9 +22,8 @@ import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
-import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypeBusiness;
 import com.ogc.standard.enums.EJourBizTypePlat;
-import com.ogc.standard.enums.EJourType;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EWithdrawStatus;
 import com.ogc.standard.exception.BizException;
@@ -155,18 +154,25 @@ public class WithdrawAOImpl implements IWithdrawAO {
         withdrawBO.payOrder(data, EWithdrawStatus.Pay_YES, payUser, payNote,
             payCode);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
-        // 扣减冻结流水
+        // 解冻
         BigDecimal totalAmount = data.getAmount().add(data.getFee());
         accountBO.cutFrozenAmount(dbAccount, totalAmount);
-        Account account = accountBO.getAccount(data.getAccountNumber());
-        if (ECurrency.CNY.getCode().equals(account.getCurrency())) {
-            // 托管账户减钱
-            accountBO.changeAmount(data.getCompanyCode(), EChannelType.Offline,
-                null, null, data.getCode(), EJourType.BALANCE.getCode(),
-                "线下取现", totalAmount.negate());
+        // 减钱
+        if (ESystemAccount.SYS_ACOUNT_B.getCode().equals(
+            data.getAccountNumber())) {
+            accountBO.changeAmount(data.getAccountNumber(),
+                EChannelType.Offline, payCode, null, data.getCode(),
+                EJourBizTypeBusiness.AJ_QX.getCode(), "线下取现", data.getAmount()
+                    .negate());
+            accountBO.changeAmount(data.getAccountNumber(),
+                EChannelType.Offline, payCode, null, data.getCode(),
+                EJourBizTypePlat.AJ_QXSXF.getCode(), "取现手续费", data.getFee()
+                    .negate());
         }
-
-        // TODO
+        // 系统账户扣除转账费
+        accountBO.changeAmount(ESystemAccount.SYS_ACOUNT_CNY.getCode(),
+            EChannelType.Offline, payCode, null, data.getCode(),
+            EJourBizTypePlat.AJ_ZFTDF.getCode(), "取现转账手续费", payFee.negate());
     }
 
     @Override
@@ -213,6 +219,11 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode().equals(
                     accountNumber)) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "只支持系统托管账户");
+        }
+
+        Account account = accountBO.getAccount(accountNumber);
+        if (account.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "账户余额不足");
         }
 
         String bizNote = "平台于" + withDate + "进行取现"

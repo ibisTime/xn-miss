@@ -22,6 +22,7 @@ import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.Rank;
+import com.ogc.standard.domain.SYSConfig;
 import com.ogc.standard.domain.Ticket;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.res.BooleanRes;
@@ -29,6 +30,7 @@ import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.EActionToType;
 import com.ogc.standard.enums.EActionType;
 import com.ogc.standard.enums.ECurrency;
+import com.ogc.standard.enums.EJourBizTypeBusiness;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPayType;
@@ -133,12 +135,23 @@ public class TicketAOImpl implements ITicketAO {
         accountBO.transAmountCZB(data.getApplyUser(), ECurrency.CNY.getCode(),
             ESysUser.SYS_USER.getCode(), ECurrency.CNY.getCode(), payAmount,
             EJourBizTypeUser.TICKET.getCode(),
-            EJourBizTypePlat.AJ_JYFC.getCode(),
+            EJourBizTypePlat.TICKET.getCode(),
             EJourBizTypeUser.TICKET.getValue(),
-            EJourBizTypePlat.AJ_JYFC.getValue(), data.getCode());
-
-        // 更新业务订单
+            EJourBizTypePlat.TICKET.getValue(), data.getCode());
+        // 更新业务订单（加油订单）
         ticketBO.payYueSuccess(data);
+        // 品牌方加油分成
+        SYSConfig rate = sysConfigBO
+            .getConfigValue(SysConstant.DIVIDEND_RATE_BUSINESS);
+        BigDecimal individed = data.getAmount().multiply(
+            new BigDecimal(rate.getCvalue()));// 产权方分销金额
+        accountBO.transAmountCZB(ESysUser.SYS_USER.getCode(),
+            ECurrency.CNY.getCode(), ESysUser.B_USER.getCode(),
+            ECurrency.CNY.getCode(), individed,
+            EJourBizTypePlat.AJ_JYFC.getCode(),
+            EJourBizTypeBusiness.AJ_JYFC.getCode(),
+            EJourBizTypePlat.AJ_JYFC.getValue(),
+            EJourBizTypeBusiness.AJ_JYFC.getValue(), data.getCode());
         // 更新选手票数
         playerBO.addPlayerTicket(player, data.getTicket());
         // 更新日版榜排名

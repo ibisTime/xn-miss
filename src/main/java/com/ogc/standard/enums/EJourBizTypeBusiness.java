@@ -13,7 +13,7 @@ import com.ogc.standard.exception.BizException;
  */
 public enum EJourBizTypeBusiness {
 
-    AJ_JYFC("+10", "加油分成"), AJ_QX("-11", "取现");
+    AJ_JYFC("dividend", "加油分成+"), AJ_QX("withdraw", "取现-");
 
     public static EJourBizTypeBusiness getBizType(String code) {
         Map<String, EJourBizTypeBusiness> map = getBizTypeMap();

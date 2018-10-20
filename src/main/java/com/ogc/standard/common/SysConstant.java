@@ -86,5 +86,14 @@ public class SysConstant {
     // 订单失效时间（分钟）
     public static String INVALID_TIME = "invalid_time";
 
+    // 品牌方分成比例
+    public static String DIVIDEND_RATE_BUSINESS = "business_rate";
+
+    // 平台分成比例
+    public static String DIVIDEND_RATE_PLAT = "plat_rate";
+
+    // 取现费率
+    public static String WITHDRAW_FEE_RATE = "fee_rate";
+
     /**************************环球小姐**************************/
 }
