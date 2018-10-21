@@ -18,6 +18,9 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
@@ -62,7 +65,6 @@
 		status=#{status}
 		WHERE
 		code=#{code}
-	
 	</update>
 	
 	<update id="update_answer" parameterType="answer">

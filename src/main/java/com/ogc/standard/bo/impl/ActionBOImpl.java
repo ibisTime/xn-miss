@@ -12,7 +12,6 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IActionDAO;
 import com.ogc.standard.domain.Action;
-import com.ogc.standard.enums.EActionType;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -38,7 +37,7 @@ public class ActionBOImpl extends PaginableBOImpl<Action> implements IActionBO {
 
     @Override
     public String saveAction(String type, String toType, String toCode,
-            String creater) {
+            String creater, String remark) {
         Action data = new Action();
         String code = OrderNoGenerater.generate(EGeneratePrefix.ACTION
             .getCode());
@@ -48,8 +47,6 @@ public class ActionBOImpl extends PaginableBOImpl<Action> implements IActionBO {
         data.setToCode(toCode);
         data.setCreater(creater);
         data.setCreateDatetime(new Date());
-        String remark = EActionType.getAccountTypeResultMap().get(type)
-            .getValue();
         data.setRemark(remark);
         actionDAO.insert(data);
         return code;

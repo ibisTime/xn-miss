@@ -179,7 +179,7 @@ public class TicketAOImpl implements ITicketAO {
         // 加油后默认关注选手
         actionBO.saveAction(EActionType.ATTENTION.getCode(),
             EActionToType.PLAYER.getCode(), data.getPlayerCode(),
-            data.getApplyUser());
+            data.getApplyUser(), "");
         return new BooleanRes(true);
     }
 

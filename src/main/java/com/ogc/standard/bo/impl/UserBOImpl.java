@@ -544,4 +544,14 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         }
     }
 
+    @Override
+    public void refreshRemark(String userId, String remark) {
+        if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(remark)) {
+            User data = new User();
+            data.setUserId(userId);
+            data.setMobile(remark);
+            userDAO.updateRemark(data);
+        }
+    }
+
 }

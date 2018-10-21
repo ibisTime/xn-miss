@@ -74,4 +74,7 @@ public interface IUserDAO extends IBaseDAO<User> {
     // 最后一次登陆时间
     public int updateLastLogin(User data);
 
+    // 更新备注
+    public void updateRemark(User data);
+
 }

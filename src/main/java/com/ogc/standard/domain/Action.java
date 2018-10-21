@@ -53,6 +53,8 @@ public class Action extends ABaseDO {
 
     private Player player;
 
+    private User user;
+
     public String getCode() {
         return code;
     }
@@ -131,6 +133,14 @@ public class Action extends ABaseDO {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }
