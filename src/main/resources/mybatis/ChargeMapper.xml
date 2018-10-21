@@ -129,6 +129,45 @@
 			</if>
 		</trim>
 	</select>
+	
+	<select id="select_charge_for_update" parameterType="charge" resultMap="charge_DB_Result">
+		SELECT
+		t.code
+		,t.pay_group
+		,t.ref_no
+		,t.account_number
+		,t.collection_account_number
+		,t.amount
+		
+		,t.account_name
+		,t.type
+		,t.currency
+		,t.biz_type
+		,t.biz_note
+		
+		,t.pay_card_info
+		,t.pay_card_no
+		,t.status
+		,t.apply_user
+		,t.apply_datetime
+		
+		,t.pay_user
+		,t.pay_note
+		,t.pay_datetime
+		,t.channel_type
+		,t.system_code
+		
+		,t.company_code
+		FROM
+		tstd_charge t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+		for update
+	</select>
 
 	<select id="select_charge_count" parameterType="charge" resultType="java.lang.Long">
 		SELECT count(1) FROM tstd_charge t

@@ -34,11 +34,20 @@
 			<if test="status != null and status != '' ">
 				AND t.status = #{status}
 			</if>
+			<if test="statusList != null and statusList != '' ">
+				AND t.status in 
+                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
+	            	#{item}
+                </foreach> 
+			</if>
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime <= #{createDatetimeEnd}]]>
+			</if>
+			<if test="payType != null and payType != '' ">
+				AND t.pay_type = #{payType}
 			</if>
 			<if test="payDatetimeStart != null and payDatetimeStart != '' ">
 				<![CDATA[AND t.pay_datetime >= #{payDatetimeStart}]]>
@@ -46,12 +55,7 @@
 			<if test="payDatetimeEnd != null and payDatetimeEnd != '' ">
 				<![CDATA[AND t.pay_datetime >= #{payDatetimeEnd}]]>
 			</if>
-			<if test="statusList != null and statusList != '' ">
-				AND t.status in 
-                <foreach item="item" index="index" collection="statusList" open="(" separator="," close=")">
-	            	#{item}
-                </foreach> 
-			</if>
+			
 		</trim>
 	</sql>
 	<select id="select_ticket" parameterType="ticket" resultMap="ticket_DB_Result">
@@ -81,7 +85,36 @@
 			</if>
 		</trim>
 	</select>
-
+	
+	<select id="select_ticket_for_update" parameterType="ticket" resultMap="ticket_DB_Result">
+		SELECT
+		t.code
+		,t.player_code
+		,t.ticket
+		,t.amount
+		,t.apply_user
+		,t.status
+		,t.create_datetime
+		,t.invalid_datetime
+		,t.pay_type
+		,t.pay_group
+		,t.pay_code
+		,t.pay_amount
+		,t.pay_datetime
+		,t.canceler
+		,t.cancel_datetime
+		,t.remark
+		FROM
+		thqxj_ticket t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+		for update
+	</select>
+	
 	<select id="select_ticket_count" parameterType="ticket"
 		resultType="java.lang.Long">
 		SELECT count(1) FROM thqxj_ticket t
@@ -99,13 +132,6 @@
 		,status
 		,create_datetime
 		,invalid_datetime
-		,pay_type
-		,pay_group
-		,pay_code
-		,pay_amount
-		,pay_datetime
-		,canceler
-		,cancel_datetime
 		,remark
 		)
 		VALUES(
@@ -117,13 +143,6 @@
 		,#{status}
 		,#{createDatetime}
 		,#{invalidDatetime}
-		,#{payType}
-		,#{payGroup}
-		,#{payCode}
-		,#{payAmount}
-		,#{payDatetime}
-		,#{canceler}
-		,#{cancelDatetime}
 		,#{remark}
 		)
 	</insert>
@@ -159,7 +178,7 @@
 		WHERE code = #{code}
 	</update>
 	
-	<update id="update_pay_yue_success" parameterType="ticket">
+	<update id="update_payYueSuccess" parameterType="ticket">
 		UPDATE thqxj_ticket
 		SET
 		status = #{status}
@@ -169,5 +188,23 @@
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
-
+	
+	<update id="update_payGroup" parameterType="ticket">
+		UPDATE thqxj_ticket
+		SET
+		,pay_type = #{payType}
+		,pay_group = #{payAroup}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="update_paySuccess" parameterType="ticket">
+		UPDATE thqxj_ticket
+		SET
+		status = #{status}
+		,pay_amount = #{payAmount}
+		,pay_datetime = #{payDatetime}
+		,remark = #{remark}
+		WHERE code = #{code}
+	</update>
 </mapper>

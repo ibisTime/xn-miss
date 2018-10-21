@@ -68,11 +68,11 @@ public class Ticket extends ABaseDO {
 
     /***********辅助字段************/
 
-    // 中文名
-    private String cname;
+    // 选手信息
+    private Player playerInfo;
 
-    // 英文名
-    private String ename;
+    // 申请人信息
+    private User applyUserInfo;
 
     // 下单时间起
     private Date createDatetimeStart;
@@ -88,6 +88,22 @@ public class Ticket extends ABaseDO {
 
     // 状态list
     private List<String> statusList;
+
+    public Player getPlayerInfo() {
+        return playerInfo;
+    }
+
+    public void setPlayerInfo(Player playerInfo) {
+        this.playerInfo = playerInfo;
+    }
+
+    public User getApplyUserInfo() {
+        return applyUserInfo;
+    }
+
+    public void setApplyUserInfo(User applyUserInfo) {
+        this.applyUserInfo = applyUserInfo;
+    }
 
     public String getCode() {
         return code;
@@ -247,22 +263,6 @@ public class Ticket extends ABaseDO {
 
     public void setPayDatetimeEnd(Date payDatetimeEnd) {
         this.payDatetimeEnd = payDatetimeEnd;
-    }
-
-    public String getCname() {
-        return cname;
-    }
-
-    public void setCname(String cname) {
-        this.cname = cname;
-    }
-
-    public String getEname() {
-        return ename;
-    }
-
-    public void setEname(String ename) {
-        this.ename = ename;
     }
 
     public List<String> getStatusList() {

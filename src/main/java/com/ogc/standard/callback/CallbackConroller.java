@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ogc.standard.ao.ITicketAO;
 import com.ogc.standard.ao.IWeChatAO;
+import com.ogc.standard.dto.res.ChargeRes;
+import com.ogc.standard.enums.EJourBizTypeUser;
 
 /** 
  * @author: haiqingzheng 
@@ -30,9 +33,12 @@ public class CallbackConroller {
     @Autowired
     IWeChatAO weChatAO;
 
+    @Autowired
+    ITicketAO ticketAO;
+
     // 微信H5支付回调
     @RequestMapping("/wechat/H5/callback")
-    public synchronized void doCallbackWechatH5(HttpServletRequest request,
+    public void doCallbackWechatH5(HttpServletRequest request,
             HttpServletResponse response) {
         try {
             // 获取回调参数
@@ -41,7 +47,15 @@ public class CallbackConroller {
             String result = getReqResult(out, inStream);
             logger.info("**** 公众号支付回调结果 ****：" + result);
             // 解析回调结果并通知业务biz
-            weChatAO.doCallbackH5(result);
+            ChargeRes chargeRes = weChatAO.doCallbackH5(result);
+
+            // 业务特殊处理
+            if (chargeRes.getIsSuccess()
+                    && EJourBizTypeUser.TICKET.getCode().equals(
+                        chargeRes.getBizType())) {
+                ticketAO.upgradeRank(chargeRes.getOrderCode());
+            }
+
             // 通知微信服务器(我已收到请求，不用再继续回调我了)
             String noticeStr = setXML("SUCCESS", "");
             out.print(new ByteArrayInputStream(noticeStr.getBytes(Charset

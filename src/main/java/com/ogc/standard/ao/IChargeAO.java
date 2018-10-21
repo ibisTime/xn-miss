@@ -17,6 +17,10 @@ public interface IChargeAO {
     public void payOrder(String code, String payUser, String payResult,
             String payNote);
 
+    // 线上充值
+    public Object applyOrderOnline(String userId, String payType,
+            BigDecimal transAmount);
+
     public Paginable<Charge> queryChargePage(int start, int limit,
             Charge condition);
 

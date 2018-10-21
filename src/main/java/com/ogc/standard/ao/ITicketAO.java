@@ -17,9 +17,9 @@ public interface ITicketAO {
 
     public Object toPayTicket(String code, String payType, String tradePwd);
 
-    public int dropTicket(String code);
+    public void paySuccess(String payGroup, String payCode);
 
-    public int editTicket(Ticket data);
+    public void upgradeRank(String orderCode);
 
     public Paginable<Ticket> queryTicketPage(int start, int limit,
             Ticket condition);

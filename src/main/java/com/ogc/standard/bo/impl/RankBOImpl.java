@@ -11,12 +11,15 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.IRankBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.dao.IRankDAO;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.Rank;
+import com.ogc.standard.domain.Ticket;
 import com.ogc.standard.enums.EGeneratePrefix;
+import com.ogc.standard.enums.ERankType;
 import com.ogc.standard.exception.BizException;
 
 @Component
@@ -37,8 +40,7 @@ public class RankBOImpl extends PaginableBOImpl<Rank> implements IRankBO {
     }
 
     @Override
-    public void refreshRanking(String type, String code) {
-        Rank rank = getRank(code);
+    public void refreshRanking(String type, Rank rank) {
         Rank condition = new Rank();
         condition.setType(type);
         condition.setBatch(rank.getBatch());
@@ -140,25 +142,29 @@ public class RankBOImpl extends PaginableBOImpl<Rank> implements IRankBO {
     }
 
     @Override
-    public String saveRank(Player player, String type, Long ticket) {
-        String code = null;
+    public Rank saveRank(Player player, String type, Ticket ticket) {
+        Rank data = null;
         if (player != null) {
-            Rank data = new Rank();
-            code = OrderNoGenerater.generate(EGeneratePrefix.RANK.getCode());
+            data = new Rank();
+            String code = OrderNoGenerater.generate(EGeneratePrefix.RANK
+                .getCode());
             data.setCode(code);
             data.setType(type);
-            data.setBatch("1");
+            if (ERankType.DAY.getCode().equals(type)) {
+                data.setBatch(DateUtil.getToday(DateUtil.DB_DATE_FORMAT_STRING));
+            } else {
+                data.setBatch("总榜");
+            }
             data.setPlayerCode(player.getCode());
             data.setMatch(player.getMatch());
             data.setCreateDatetime(new Date());
-            data.setTicketSum(ticket);
+            data.setTicketSum(ticket.getTicket());
             data.setFakeTicketSum(0L);
             data.setAttentionSum(0L);
             data.setShareSum(0L);
             data.setScanSum(0L);
             rankDAO.insert(data);
         }
-        return code;
+        return data;
     }
-
 }

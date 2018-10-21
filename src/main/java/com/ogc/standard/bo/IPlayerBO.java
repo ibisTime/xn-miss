@@ -9,8 +9,6 @@ import com.ogc.standard.dto.req.XN640002Req;
 
 public interface IPlayerBO extends IPaginableBO<Player> {
 
-    public boolean isPlayerExist(String code);
-
     public boolean isPlayerExistByMatchPlayCode(String MatchPlayCode);
 
     public String savePlayer(XN640000Req req);
@@ -36,5 +34,7 @@ public interface IPlayerBO extends IPaginableBO<Player> {
     public List<Player> queryPlayerList(Player condition);
 
     public Player getPlayer(String code);
+
+    public Player getPlayerForUpdate(String code);
 
 }

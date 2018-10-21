@@ -27,16 +27,6 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
     private IPlayerDAO playerDAO;
 
     @Override
-    public boolean isPlayerExist(String code) {
-        Player condition = new Player();
-        condition.setCode(code);
-        if (playerDAO.selectTotalCount(condition) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public boolean isPlayerExistByMatchPlayCode(String code) {
         Player condition = new Player();
         condition.setMatchPlayCode(code);
@@ -78,6 +68,10 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
         data.setUpdater(req.getUpdater());
         data.setUpdateDatetime(new Date());
         data.setRemark(req.getRemark());
+        data.setTicketSum(0L);
+        data.setAttentionSum(0L);
+        data.setShareSum(0L);
+        data.setScanSum(0L);
         playerDAO.insert(data);
         return code;
     }
@@ -166,6 +160,20 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
     }
 
     @Override
+    public Player getPlayerForUpdate(String code) {
+        Player data = null;
+        if (StringUtils.isNotBlank(code)) {
+            Player condition = new Player();
+            condition.setCode(code);
+            data = playerDAO.selectForUpdate(condition);
+            if (data == null) {
+                throw new BizException("xn0000", "选手不存在");
+            }
+        }
+        return data;
+    }
+
+    @Override
     public void addAttention(Player data) {
         if (null == data.getAttentionSum()) {
             data.setAttentionSum(Long.valueOf(1));
@@ -205,5 +213,4 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
             return (Long) obj;
         }
     }
-
 }

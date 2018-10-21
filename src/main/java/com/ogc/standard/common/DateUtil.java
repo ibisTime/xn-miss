@@ -34,8 +34,8 @@ public class DateUtil {
     public static final String TIME_END = " 23:59:59";
 
     public static Date getStartDatetime(String startDate) {
-        Date repayDatetime = DateUtil.strToDate(startDate + DateUtil.TIME_BEGIN,
-            DateUtil.DATA_TIME_PATTERN_1);
+        Date repayDatetime = DateUtil.strToDate(
+            startDate + DateUtil.TIME_BEGIN, DateUtil.DATA_TIME_PATTERN_1);
         return repayDatetime;
     }
 
@@ -218,8 +218,7 @@ public class DateUtil {
      * @param format 时间格式
      * @return
      */
-    public static int daysBetween(String beginStr, String endStr,
-            String format) {
+    public static int daysBetween(String beginStr, String endStr, String format) {
         Date end = strToDate(endStr, format);
         Date begin = strToDate(beginStr, format);
         long times = end.getTime() - begin.getTime();
@@ -289,11 +288,6 @@ public class DateUtil {
         return strToDate(date, formats);
     }
 
-    public static void main(String[] args) {
-        System.out.println(
-            getEndDatetime(dateToStr(new Date(), FRONT_DATE_FORMAT_STRING)));
-    }
-
     /**
      * 得到UTC时间，类型为字符串，格式为"yyyy-MM-dd HH:mm:ss"<br />
      * 如果获取失败，返回null
@@ -311,4 +305,9 @@ public class DateUtil {
         Date utc = new Date(cal.getTimeInMillis());
         return dateToStr(utc, UTC_TIME_FORMAT);
     }
+
+    public static void main(String[] args) {
+        System.out.println(DateUtil.getToday(DateUtil.DB_DATE_FORMAT_STRING));
+    }
+
 }

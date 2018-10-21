@@ -7,6 +7,8 @@ import com.ogc.standard.domain.Player;
 public interface IPlayerDAO extends IBaseDAO<Player> {
     String NAMESPACE = IPlayerDAO.class.getName().concat(".");
 
+    Player selectForUpdate(Player condition);
+
     int update(Player data);
 
     void updateApprove(Player data);

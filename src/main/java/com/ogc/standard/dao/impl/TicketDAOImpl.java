@@ -28,6 +28,12 @@ public class TicketDAOImpl extends AMybatisTemplate implements ITicketDAO {
     }
 
     @Override
+    public Ticket selectForUpdate(Ticket condition) {
+        return super.select(NAMESPACE.concat("select_ticket_for_update"),
+            condition, Ticket.class);
+    }
+
+    @Override
     public long selectTotalCount(Ticket condition) {
         return super.selectTotalCount(NAMESPACE.concat("select_ticket_count"),
             condition);
@@ -46,18 +52,23 @@ public class TicketDAOImpl extends AMybatisTemplate implements ITicketDAO {
     }
 
     @Override
-    public int update(Ticket data) {
-        return 0;
-    }
-
-    @Override
     public void updateCancelTicket(Ticket data) {
         super.update(NAMESPACE.concat("update_cancel_ticket"), data);
     }
 
     @Override
     public void updatePayYueSuccess(Ticket data) {
-        super.update(NAMESPACE.concat("update_pay_yue_success"), data);
+        super.update(NAMESPACE.concat("update_payYueSuccess"), data);
+    }
+
+    @Override
+    public void updatePayGroup(Ticket data) {
+        super.update(NAMESPACE.concat("update_payGroup"), data);
+    }
+
+    @Override
+    public void updatePaySuccess(Ticket data) {
+        super.update(NAMESPACE.concat("update_paySuccess"), data);
     }
 
 }

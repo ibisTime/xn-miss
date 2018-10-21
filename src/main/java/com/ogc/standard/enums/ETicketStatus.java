@@ -7,7 +7,7 @@ package com.ogc.standard.enums;
  */
 public enum ETicketStatus {
 
-    TO_PAY("0", "待支付"), PAYED("1", "已支付"), CANCEL("2", "超时取消");
+    TO_PAY("0", "待支付"), PAYED("1", "已支付"), CANCEL("2", "已取消");
 
     ETicketStatus(String code, String value) {
         this.code = code;

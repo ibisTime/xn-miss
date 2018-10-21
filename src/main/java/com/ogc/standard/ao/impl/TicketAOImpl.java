@@ -73,8 +73,7 @@ public class TicketAOImpl implements ITicketAO {
     public String orderTicket(String playerCode, Long ticket, String applyUser) {
         Player player = playerBO.getPlayer(playerCode);
         if (!EPlayerStatus.UP.getCode().equals(player.getStatus())) {
-            throw new BizException("xn0000", "选手:" + player.getCname() + " 编号:"
-                    + player.getMatchPlayCode() + " 不是可加油状态");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该选手不可以加油");
         }
 
         BigDecimal price = StringValidater.toBigDecimal(sysConfigBO
@@ -100,8 +99,9 @@ public class TicketAOImpl implements ITicketAO {
     }
 
     @Override
+    @Transactional
     public Object toPayTicket(String code, String payType, String tradePwd) {
-        Ticket data = ticketBO.getTicket(code);
+        Ticket data = ticketBO.getTicketForUpdate(code);
         if (StringUtils.isNotBlank(tradePwd)) {
             userBO.checkTradePwd(data.getApplyUser(), tradePwd);
         }
@@ -109,18 +109,14 @@ public class TicketAOImpl implements ITicketAO {
             throw new BizException("xn0000", "订单不是待支付状态，不能支付");
         }
 
-        if (EPayType.RMB_YE.getCode().equals(payType)) {
-            userBO.checkTradePwd(data.getApplyUser(), tradePwd);
-        }
-
         // 支付订单
         Object result = null;
         if (EPayType.RMB_YE.getCode().equals(payType)) {// 余额支付
-            result = toPayTicketYue(data);
+            result = toPayTicketYue(data, tradePwd);
         } else if (EPayType.WEIXIN_H5.getCode().equals(payType)) {// 微信支付
             result = toPayTicketWeChat(data);
         } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "");
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "支付方式不支持");
         }
         return result;
     }
@@ -129,55 +125,42 @@ public class TicketAOImpl implements ITicketAO {
     // 2、更新订单
     // 3、更新选手票数和排名
     @Transactional
-    private Object toPayTicketYue(Ticket data) {
+    private Object toPayTicketYue(Ticket data, String tradePwd) {
+        // 验证交易密码
+        userBO.checkTradePwd(data.getApplyUser(), tradePwd);
+
         User user = userBO.getUser(data.getApplyUser());
         Player player = playerBO.getPlayer(data.getPlayerCode());
-        BigDecimal payAmount = data.getAmount();
+
+        // 更新业务订单（加油订单）
+        ticketBO.payYueSuccess(data);
+
         // 人民币余额划转
+        BigDecimal payAmount = data.getAmount();
         accountBO.transAmountCZB(data.getApplyUser(), ECurrency.CNY.getCode(),
             ESysUser.SYS_USER.getCode(), ECurrency.CNY.getCode(), payAmount,
             EJourBizTypeUser.TICKET.getCode(),
             EJourBizTypePlat.TICKET.getCode(),
             EJourBizTypeUser.TICKET.getValue(),
             EJourBizTypePlat.TICKET.getValue(), data.getCode());
-        // 更新业务订单（加油订单）
-        ticketBO.payYueSuccess(data);
+
         // 给品牌方加油分成
         SYSConfig rate = sysConfigBO
             .getConfigValue(SysConstant.DIVIDEND_RATE_BUSINESS);
-        BigDecimal individed = data.getAmount().multiply(
-            new BigDecimal(rate.getCvalue()));
+        BigDecimal individeAmount = data.getAmount()
+            .multiply(new BigDecimal(rate.getCvalue()))
+            .setScale(0, BigDecimal.ROUND_DOWN);
         accountBO.transAmountCZB(ESysUser.SYS_USER.getCode(),
             ECurrency.CNY.getCode(), ESysUser.B_USER.getCode(),
-            ECurrency.CNY.getCode(), individed,
+            ECurrency.CNY.getCode(), individeAmount,
             EJourBizTypePlat.AJ_JYFC.getCode(),
             EJourBizTypeBusiness.AJ_JYFC.getCode(),
             EJourBizTypePlat.AJ_JYFC.getValue(),
             EJourBizTypeBusiness.AJ_JYFC.getValue(), data.getCode());
+
         // 更新选手票数
         playerBO.addPlayerTicket(player, data.getTicket());
-        // 更新日版榜排名
-        String rankDayCode = null;
-        Rank rankDay = rankBO.getRankByPlayerCodeAndType(player.getCode(),
-            ERankType.DAY.getCode());
-        if (null == rankDay) {
-            rankDayCode = rankBO.saveRank(player, ERankType.DAY.getCode(),
-                data.getTicket());
-        } else {
-            rankDayCode = rankDay.getCode();
-        }
-        rankBO.refreshRanking(ERankType.DAY.getCode(), rankDayCode);
-        // 更新总版榜排名
-        Rank rankTotal = rankBO.getRankByPlayerCodeAndType(player.getCode(),
-            ERankType.TOTAL.getCode());
-        String rankTotalCode = null;
-        if (null == rankTotal) {
-            rankTotalCode = rankBO.saveRank(player, ERankType.TOTAL.getCode(),
-                data.getTicket());
-        } else {
-            rankTotalCode = rankTotal.getCode();
-        }
-        rankBO.refreshRanking(ERankType.TOTAL.getCode(), rankTotalCode);
+
         // 加油后默认关注选手
         actionBO.saveAction(
             EActionType.ATTENTION.getCode(),
@@ -190,30 +173,77 @@ public class TicketAOImpl implements ITicketAO {
         return new BooleanRes(true);
     }
 
+    // 更新榜单
+    @Override
     @Transactional
+    public void upgradeRank(String orderCode) {
+        Ticket ticket = ticketBO.getTicket(orderCode);
+        Player player = playerBO.getPlayer(ticket.getPlayerCode());
+        // 更新日版榜排名
+        Rank rankDay = rankBO.getRankByPlayerCodeAndType(player.getCode(),
+            ERankType.DAY.getCode());
+        if (null == rankDay) {
+            rankDay = rankBO.saveRank(player, ERankType.DAY.getCode(), ticket);
+        }
+        rankBO.refreshRanking(ERankType.DAY.getCode(), rankDay);
+
+        // 更新总版榜排名
+        Rank rankTotal = rankBO.getRankByPlayerCodeAndType(player.getCode(),
+            ERankType.TOTAL.getCode());
+        if (null == rankTotal) {
+            rankTotal = rankBO.saveRank(player, ERankType.TOTAL.getCode(),
+                ticket);
+        }
+        rankBO.refreshRanking(ERankType.TOTAL.getCode(), rankTotal);
+    }
+
     private Object toPayTicketWeChat(Ticket data) {
         User user = userBO.getUser(data.getApplyUser());
+        String payGroup = ticketBO.addPayGroup(data,
+            EPayType.WEIXIN_H5.getCode());
         XN002501Res prepayIdH5 = weChatAO.getPrepayIdH5(data.getApplyUser(),
-            user.getH5OpenId(), ESysUser.SYS_USER.getCode(), null,
+            user.getH5OpenId(), ESysUser.SYS_USER.getCode(), payGroup,
             data.getCode(), EJourBizTypeUser.AJ_CZ.getCode(),
-            EJourBizTypeUser.AJ_CZ.getValue(), data.getAmount(), null);
+            EJourBizTypeUser.AJ_CZ.getValue(), data.getAmount());
         return prepayIdH5;
     }
 
     @Override
-    public int editTicket(Ticket data) {
-        if (!ticketBO.isTicketExist(data.getCode())) {
-            throw new BizException("xn0000", "记录编号不存在");
+    @Transactional
+    public void paySuccess(String payGroup, String payCode) {
+        Ticket data = ticketBO.getTicketForUpdate(payGroup);// payGroup==code
+        User user = userBO.getUser(data.getApplyUser());
+        if (!ETicketStatus.TO_PAY.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该订单不是待支付");
         }
-        return ticketBO.refreshTicket(data);
-    }
 
-    @Override
-    public int dropTicket(String code) {
-        if (!ticketBO.isTicketExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return ticketBO.removeTicket(code);
+        // 给品牌方加油分成
+        SYSConfig rate = sysConfigBO
+            .getConfigValue(SysConstant.DIVIDEND_RATE_BUSINESS);
+        BigDecimal individeAmount = data.getAmount()
+            .multiply(new BigDecimal(rate.getCvalue()))
+            .setScale(0, BigDecimal.ROUND_DOWN);
+        accountBO.transAmountCZB(ESysUser.SYS_USER.getCode(),
+            ECurrency.CNY.getCode(), ESysUser.B_USER.getCode(),
+            ECurrency.CNY.getCode(), individeAmount,
+            EJourBizTypePlat.AJ_JYFC.getCode(),
+            EJourBizTypeBusiness.AJ_JYFC.getCode(),
+            EJourBizTypePlat.AJ_JYFC.getValue(),
+            EJourBizTypeBusiness.AJ_JYFC.getValue(), data.getCode());
+
+        // 更新选手票数
+        Player player = playerBO.getPlayerForUpdate(data.getPlayerCode());
+        playerBO.addPlayerTicket(player, data.getTicket());
+
+        // 加油后默认关注选手
+        actionBO.saveAction(
+            EActionType.ATTENTION.getCode(),
+            EActionToType.PLAYER.getCode(),
+            data.getPlayerCode(),
+            data.getApplyUser(),
+            user.getNickname() + "于"
+                    + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7) + "关注了选手"
+                    + player.getCname());
     }
 
     @Override
@@ -245,13 +275,12 @@ public class TicketAOImpl implements ITicketAO {
     public void init(Ticket data) {
         if (StringUtils.isNotBlank(data.getPlayerCode())) {
             Player player = playerBO.getPlayer(data.getPlayerCode());
-            data.setCname(player.getCname());
-            data.setEname(player.getEname());
+            data.setPlayerInfo(player);
         }
         if (StringUtils.isNotBlank(data.getApplyUser())) {
-            // User user = userBO.getUser(data.getApplyUser());
+            User applyUserInfo = userBO.getUser(data.getApplyUser());
+            data.setApplyUserInfo(applyUserInfo);
 
         }
     }
-
 }
