@@ -112,12 +112,13 @@ public class ActionAOImpl implements IActionAO {
     }
 
     @Override
+    @Transactional
     public void cancelAttation(String creater, String toCode) {
+        Player player = playerBO.getPlayer(toCode);
+        playerBO.subAttention(player);
         Action data = actionBO.getActionByTypeToCodeCreater(
             EActionType.ATTENTION.getCode(), toCode, creater);
         actionBO.removeAction(data.getCode());
-        Player player = playerBO.getPlayer(toCode);
-        playerBO.subAttention(player);
     }
 
     @Override
