@@ -323,7 +323,7 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_secret_key','0cb61ce758017e9a41547fb0ad710b37','admin','2018-10-20 14:29:38',NULL);
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','REGISTRATION_AGREEMENT','注册协议','admin','2018-10-20 14:29:38','注册协议');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','invite_url','邀请好友链接','admin','2018-10-20 14:29:38','邀请好友链接');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ticket','price','1','admin','2018-10-20 14:29:38','订单加油票价格(元)');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ticket','price','0.01','admin','2018-10-20 14:29:38','订单加油票价格(元)');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ticket','invalid_time','30','admin','2018-10-20 14:29:38','订单失效时长（分钟）');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ticket','return_money','1','admin','2018-10-20 14:29:38','首次分享返现金额(元)');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('dividend','plat_rate','0.2','admin','2018-10-20 14:29:38','平台加油分成比例');

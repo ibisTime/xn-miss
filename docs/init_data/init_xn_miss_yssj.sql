@@ -46,6 +46,6 @@ LIMIT 0, 1000
 
 -- Date: 2018-10-22 00:46
 */
-INSERT INTO `tsys_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`parent_code`,`remark`) VALUES ('DH201810211945216783706','中国美大使','2','','lhXGWhfN7mFgWwfDb5GeeoAV95JW','2','index_banner',1,'0','');
+INSERT INTO `tsys_cnavigate` (`code`,`name`,`type`,`url`,`pic`,`status`,`location`,`order_no`,`parent_code`,`remark`) VALUES ('DH201810211945216783706','中国美大使','2','','lhXGWhfN7mFgWwfDb5GeeoAV95JW','1','index_banner',1,'0','');
 
 
