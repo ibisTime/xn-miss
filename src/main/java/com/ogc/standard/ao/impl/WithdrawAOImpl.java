@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ogc.standard.ao.IWithdrawAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISmsOutBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.IWithdrawBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.Withdraw;
 import com.ogc.standard.enums.EBoolean;
@@ -40,6 +42,9 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
@@ -182,9 +187,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             condition);
         if (CollectionUtils.isNotEmpty(page.getList())) {
             List<Withdraw> list = page.getList();
-            for (Withdraw withdraw : list) {
-                User user = userBO.getUser(withdraw.getApplyUser());
-                withdraw.setUser(user);
+            for (Withdraw data : list) {
+                initWithdraw(data);
             }
         }
         return page;
@@ -194,9 +198,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
     public List<Withdraw> queryWithdrawList(Withdraw condition) {
         List<Withdraw> list = withdrawBO.queryWithdrawList(condition);
         if (CollectionUtils.isNotEmpty(list)) {
-            for (Withdraw withdraw : list) {
-                User user = userBO.getUser(withdraw.getApplyUser());
-                withdraw.setUser(user);
+            for (Withdraw data : list) {
+                initWithdraw(data);
             }
         }
         return list;
@@ -204,10 +207,17 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     @Override
     public Withdraw getWithdraw(String code, String systemCode) {
-        Withdraw withdraw = withdrawBO.getWithdraw(code, systemCode);
-        User user = userBO.getUser(withdraw.getApplyUser());
-        withdraw.setUser(user);
-        return withdraw;
+        Withdraw data = withdrawBO.getWithdraw(code, systemCode);
+        initWithdraw(data);
+        return data;
+    }
+
+    private void initWithdraw(Withdraw data) {
+        SYSUser sysUser = sysUserBO.getSYSUser(data.getApplyUser());
+        User user = new User();
+        user.setMobile(sysUser.getMobile());
+        user.setLoginName(sysUser.getLoginName());
+        data.setUser(user);
     }
 
     // 取现回录
