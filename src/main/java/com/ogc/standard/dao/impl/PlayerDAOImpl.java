@@ -33,6 +33,12 @@ public class PlayerDAOImpl extends AMybatisTemplate implements IPlayerDAO {
     }
 
     @Override
+    public Player selectForUpdate(Player condition) {
+        return super.select(NAMESPACE.concat("select_player_for_update"),
+            condition, Player.class);
+    }
+
+    @Override
     public long selectTotalCount(Player condition) {
         return super.selectTotalCount(NAMESPACE.concat("select_player_count"),
             condition);

@@ -21,8 +21,7 @@ import com.ogc.standard.dto.res.XN002501Res;
 public interface IWechatBO {
 
     public String getPrepayIdH5(CompanyChannel companyChannel, String openId,
-            String bizNote, String code, BigDecimal transAmount, String ip,
-            String bizBackUrl);
+            String bizNote, String code, BigDecimal transAmount, String ip);
 
     public XN002501Res getPayInfoH5(CompanyChannel companyChannel,
             String payCode, String prepayId);

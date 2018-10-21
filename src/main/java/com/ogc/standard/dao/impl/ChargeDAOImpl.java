@@ -18,7 +18,6 @@ public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
 
     @Override
     public int delete(Charge data) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
@@ -26,6 +25,12 @@ public class ChargeDAOImpl extends AMybatisTemplate implements IChargeDAO {
     public Charge select(Charge condition) {
         return super.select(NAMESPACE.concat("select_charge"), condition,
             Charge.class);
+    }
+
+    @Override
+    public Charge selectForUpdate(Charge condition) {
+        return super.select(NAMESPACE.concat("select_charge_for_update"),
+            condition, Charge.class);
     }
 
     @Override

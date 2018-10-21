@@ -101,6 +101,44 @@
 			</if>
 		</trim>
 	</select>
+	
+	<select id="select_player_for_update" parameterType="player" resultMap="player_DB_Result">
+		SELECT
+		t.code
+		,t.`match`
+		,t.match_play_code
+		,t.cname
+		,t.ename
+		,t.native_place
+		,t.height
+		,t.weight
+		,t.xwei
+		,t.ywei
+		,t.twei
+		,t.description
+		,t.list_pic
+		,t.banner_pics
+		,t.pics
+		,t.location
+		,t.order_no
+		,t.status
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		,t.ticket_sum
+		,t.attention_sum
+		,t.share_sum
+		,t.scan_sum
+		FROM
+		thqxj_player t
+		<include refid="where_condition" />
+		<trim prefix="ORDER BY ">
+			<if test="order != null and order != '' ">
+				t.${order}
+			</if>
+		</trim>
+	</select>
 
 	<select id="select_player_count" parameterType="player"
 		resultType="java.lang.Long">
@@ -192,10 +230,6 @@
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
 		,remark = #{remark}
-		,ticket_sum = #{ticketSum}
-		,attention_sum = #{attentionSum}
-		,share_sum = #{shareSum}
-		,scan_sum = #{scanSum}
 		WHERE code = #{code}
 	</update>
 	

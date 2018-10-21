@@ -9,4 +9,6 @@ public interface IChargeDAO extends IBaseDAO<Charge> {
     void payOrder(Charge data);
 
     long selectTotalAmount(Charge condition);
+
+    Charge selectForUpdate(Charge condition);
 }

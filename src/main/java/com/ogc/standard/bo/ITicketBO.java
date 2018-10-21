@@ -12,18 +12,15 @@ public interface ITicketBO extends IPaginableBO<Ticket> {
     public String saveTicket(Player player, Long ticket, String applyUser,
             BigDecimal price, int invalidTime);
 
-    public boolean isTicketExist(String code);
-
-    public int removeTicket(String code);
-
-    public int refreshTicket(Ticket data);
-
     public List<Ticket> queryTicketList(Ticket condition);
 
     public Ticket getTicket(String code);
+
+    public Ticket getTicketForUpdate(String code);
 
     public void refreshCancelTicket(Ticket data, String remark);
 
     public void payYueSuccess(Ticket data);
 
+    public String addPayGroup(Ticket data, String payType);
 }

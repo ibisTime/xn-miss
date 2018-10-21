@@ -146,4 +146,18 @@ public class ChargeBOImpl extends PaginableBOImpl<Charge> implements IChargeBO {
         return order;
     }
 
+    @Override
+    public Charge getChargeForUpdate(String code) {
+        Charge order = null;
+        if (StringUtils.isNotBlank(code)) {
+            Charge condition = new Charge();
+            condition.setCode(code);
+            order = chargeDAO.selectForUpdate(condition);
+            if (null == order) {
+                throw new BizException("xn000000", "订单号[" + code + "]不存在");
+            }
+        }
+        return order;
+    }
+
 }

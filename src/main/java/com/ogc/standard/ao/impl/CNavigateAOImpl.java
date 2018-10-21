@@ -36,8 +36,9 @@ public class CNavigateAOImpl implements ICNavigateAO {
     @Override
     public void editCNavigate(CNavigate data) {
         CNavigate navigate = cNavigateBO.getCNavigate(data.getCode());
-        if (!ECnavigateStauts.DRAFT.equals(navigate.getStatus())) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "处于无法修改的状态");
+        if (ECnavigateStauts.ON.equals(navigate.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(),
+                "当前记录已上架，请先下架");
         }
         navigate.setName(data.getName());
         navigate.setParentCode(data.getParentCode());

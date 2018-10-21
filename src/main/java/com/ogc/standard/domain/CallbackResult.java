@@ -41,17 +41,13 @@ public class CallbackResult {
     private String url;
 
     public CallbackResult(boolean isSuccess, String bizType, String jourCode,
-            String payGroup, BigDecimal transAmount, String systemCode,
-            String companyCode, String url) {
+            String payGroup, BigDecimal transAmount) {
         super();
         this.isSuccess = isSuccess;
         this.bizType = bizType;
         this.jourCode = jourCode;
         this.payGroup = payGroup;
         this.transAmount = transAmount;
-        this.systemCode = systemCode;
-        this.companyCode = companyCode;
-        this.url = url;
     }
 
     public boolean isSuccess() {

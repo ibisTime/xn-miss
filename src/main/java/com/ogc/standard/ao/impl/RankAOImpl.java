@@ -14,7 +14,6 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.Rank;
 import com.ogc.standard.enums.ERankType;
-import com.ogc.standard.exception.BizException;
 
 @Service
 public class RankAOImpl implements IRankAO {
@@ -33,30 +32,9 @@ public class RankAOImpl implements IRankAO {
         // 增加虚拟加油数
         rankBO.refreshManualAdjustment(data, fakeTicket, updater, remark);
         // 更新日榜排名
-        rankBO.refreshRanking(ERankType.DAY.getCode(), data.getCode());
+        rankBO.refreshRanking(ERankType.DAY.getCode(), data);
         // 更新总榜排名
-        rankBO.refreshRanking(ERankType.TOTAL.getCode(), data.getCode());
-    }
-
-    @Override
-    public String addRank(Rank data) {
-        return rankBO.saveRank(data);
-    }
-
-    @Override
-    public int editRank(Rank data) {
-        if (!rankBO.isRankExist(data.getCode())) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return rankBO.refreshRank(data);
-    }
-
-    @Override
-    public int dropRank(String code) {
-        if (!rankBO.isRankExist(code)) {
-            throw new BizException("xn0000", "记录编号不存在");
-        }
-        return rankBO.removeRank(code);
+        rankBO.refreshRanking(ERankType.TOTAL.getCode(), data);
     }
 
     @Override

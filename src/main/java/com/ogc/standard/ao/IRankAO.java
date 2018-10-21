@@ -11,12 +11,6 @@ import com.ogc.standard.domain.Rank;
 public interface IRankAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
-    public String addRank(Rank data);
-
-    public int dropRank(String code);
-
-    public int editRank(Rank data);
-
     public Paginable<Rank> queryRankPage(int start, int limit, Rank condition);
 
     public List<Rank> queryRankList(Rank condition);

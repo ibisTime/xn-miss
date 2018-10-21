@@ -11,6 +11,7 @@ package com.ogc.standard.ao;
 import java.math.BigDecimal;
 
 import com.ogc.standard.domain.CallbackResult;
+import com.ogc.standard.dto.res.ChargeRes;
 import com.ogc.standard.dto.res.XN002501Res;
 
 /** 
@@ -22,9 +23,9 @@ public interface IWeChatAO {
 
     public XN002501Res getPrepayIdH5(String applyUser, String openId,
             String toUser, String payGroup, String refNo, String bizType,
-            String bizNote, BigDecimal transAmount, String backUrl);
+            String bizNote, BigDecimal transAmount);
 
-    public void doCallbackH5(String result);
+    public ChargeRes doCallbackH5(String result);
 
     public String getAccessToken(String appId, String appSecret);
 

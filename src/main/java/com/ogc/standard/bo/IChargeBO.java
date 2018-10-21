@@ -26,4 +26,6 @@ public interface IChargeBO extends IPaginableBO<Charge> {
 
     Charge getCharge(String code);
 
+    Charge getChargeForUpdate(String code);
+
 }

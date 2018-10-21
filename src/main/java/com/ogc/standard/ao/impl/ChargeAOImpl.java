@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IChargeAO;
+import com.ogc.standard.ao.IWeChatAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IChargeBO;
 import com.ogc.standard.bo.ISYSUserBO;
@@ -18,15 +19,18 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.SYSUser;
+import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
+import com.ogc.standard.enums.EPayType;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 @Service
 public class ChargeAOImpl implements IChargeAO {
@@ -41,6 +45,9 @@ public class ChargeAOImpl implements IChargeAO {
 
     @Autowired
     private ISYSUserBO sysUserBO;
+
+    @Autowired
+    private IWeChatAO weChatAO;
 
     @Override
     public String applyOrder(String accountNumber, BigDecimal amount,
@@ -85,12 +92,29 @@ public class ChargeAOImpl implements IChargeAO {
         Account account = accountBO.getAccount(data.getAccountNumber());
         if (ECurrency.CNY.getCode().equals(account.getCurrency())) {
             // 线下托管账户加钱
-            Account sysAccountOffLine = accountBO
-                .getAccount(ESystemAccount.SYS_ACOUNT_OFFLINE.getCode());
-            accountBO.changeAmount(sysAccountOffLine.getAccountNumber(),
+            accountBO.changeAmount(ESystemAccount.SYS_ACOUNT_OFFLINE.getCode(),
                 EChannelType.Offline, null, null, data.getCode(),
                 EJourBizTypePlat.AJ_CZ.getCode(), "线下充值", data.getAmount());
         }
+    }
+
+    @Override
+    public Object applyOrderOnline(String userId, String payType,
+            BigDecimal transAmount) {
+        Object result = null;
+
+        User user = userBO.getNormalUser(userId);
+        if (EPayType.WEIXIN_H5.getCode().equals(payType)) {
+            result = weChatAO.getPrepayIdH5(user.getUserId(),
+                user.getH5OpenId(), user.getUserId(),
+                EJourBizTypeUser.AJ_CZ.getCode(),
+                EJourBizTypeUser.AJ_CZ.getCode(),
+                EJourBizTypeUser.AJ_CZ.getCode(),
+                EJourBizTypeUser.AJ_CZ.getValue(), transAmount);
+        } else {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持支付方式");
+        }
+        return result;
     }
 
     @Override
