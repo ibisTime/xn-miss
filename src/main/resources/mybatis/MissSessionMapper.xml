@@ -42,7 +42,7 @@
 		)
 		VALUES(
 		#{code}
-		,#{Type}
+		,#{type}
 		,#{user1}
 		,#{user2}
 		,#{createDatetime}
