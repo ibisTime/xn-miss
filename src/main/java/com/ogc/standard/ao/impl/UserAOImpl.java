@@ -143,7 +143,12 @@ public class UserAOImpl implements IUserAO {
             // Step4：根据openId，unionId从数据库中查询用户信息
             User dbUser = userBO.doGetUserByOpenId(h5OpenId);
             if (null != dbUser) {// 如果user存在，说明用户授权登录过，直接登录
-                result = new XN805170Res(dbUser.getUserId());
+                // 1是需要手机号 0不需要
+                String isNeedMobile = EBoolean.YES.getCode();
+                if (StringUtils.isNotBlank(dbUser.getMobile())) {
+                    isNeedMobile = EBoolean.NO.getCode();
+                }
+                result = new XN805170Res(dbUser.getUserId(), isNeedMobile);
             } else {// user不存在，第一次授权登录
                 String nickname = (String) wxRes.get("nickname");
                 String photo = (String) wxRes.get("headimgurl");
@@ -172,7 +177,7 @@ public class UserAOImpl implements IUserAO {
             photo, gender);
 
         distributeAccount(userId, nickname, EUserKind.Customer.getCode());
-        result = new XN805170Res(userId, EBoolean.NO.getCode());
+        result = new XN805170Res(userId, EBoolean.YES.getCode());
         return result;
     }
 

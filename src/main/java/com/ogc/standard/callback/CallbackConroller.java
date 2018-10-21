@@ -38,14 +38,17 @@ public class CallbackConroller {
 
     // 微信H5支付回调
     @RequestMapping("/wechat/H5/callback")
-    public void doCallbackWechatH5(HttpServletRequest request,
+    public synchronized void doCallbackWechatH5(HttpServletRequest request,
             HttpServletResponse response) {
         try {
+            logger.info("******************微信公众号回调开始******************");
+
             // 获取回调参数
             PrintWriter out = response.getWriter();
             InputStream inStream = request.getInputStream();
             String result = getReqResult(out, inStream);
             logger.info("**** 公众号支付回调结果 ****：" + result);
+
             // 解析回调结果并通知业务biz
             ChargeRes chargeRes = weChatAO.doCallbackH5(result);
 
@@ -60,8 +63,9 @@ public class CallbackConroller {
             String noticeStr = setXML("SUCCESS", "");
             out.print(new ByteArrayInputStream(noticeStr.getBytes(Charset
                 .forName("UTF-8"))));
+            logger.info("******************微信公众号回调结束******************");
         } catch (Exception e) {
-            logger.info("公众号支付回调异常,原因：" + e.getMessage());
+            logger.info("******************公众号支付回调异常,原因：" + e.getMessage());
         }
     }
 

@@ -79,19 +79,19 @@ public class TicketBOImpl extends PaginableBOImpl<Ticket> implements ITicketBO {
         return data;
     }
 
-    @Override
-    public Ticket getTicketForUpdate(String code) {
-        Ticket data = null;
-        if (StringUtils.isNotBlank(code)) {
-            Ticket condition = new Ticket();
-            condition.setCode(code);
-            data = ticketDAO.selectForUpdate(condition);
-            if (data == null) {
-                throw new BizException("xn0000", "订单不存在");
-            }
-        }
-        return data;
-    }
+    // @Override
+    // public Ticket getTicketForUpdate(String code) {
+    // Ticket data = null;
+    // if (StringUtils.isNotBlank(code)) {
+    // Ticket condition = new Ticket();
+    // condition.setCode(code);
+    // data = ticketDAO.selectForUpdate(condition);
+    // if (data == null) {
+    // throw new BizException("xn0000", "订单不存在");
+    // }
+    // }
+    // return data;
+    // }
 
     public static Date addDate(Date date, int minute) {
         Calendar cal = Calendar.getInstance();
@@ -122,8 +122,20 @@ public class TicketBOImpl extends PaginableBOImpl<Ticket> implements ITicketBO {
             data.setPayGroup(data.getCode());
             data.setRemark("发起支付请求");
             ticketDAO.updatePayGroup(data);
+            payGroup = data.getCode();
         }
         return payGroup;
     }
 
+    @Override
+    public void paySuccess(Ticket data, String payCode) {
+        if (null != data && StringUtils.isNotBlank(payCode)) {
+            data.setStatus(ETicketStatus.PAYED.getCode());
+            data.setPayAmount(data.getAmount());
+            data.setPayCode(payCode);
+            data.setPayDatetime(new Date());
+            data.setRemark("支付成功");
+            ticketDAO.updatePaySuccess(data);
+        }
+    }
 }

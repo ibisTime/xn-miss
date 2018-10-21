@@ -13,8 +13,8 @@ import com.ogc.standard.exception.BizException;
  */
 public enum EJourBizTypeUser {
 
-    AJ_FX("first_share", "首次分享送钱+"), TICKET("ticket", "加油订单-"), AJ_CZ("charge",
-            "充值+"), AJ_QX("withdraw", "取现-");
+    AJ_FX("first_share", "首次分享送钱"), TICKET("ticket", "加油订单"), AJ_CZ("charge",
+            "充值"), AJ_QX("withdraw", "取现");
 
     public static EJourBizTypeUser getBizType(String code) {
         Map<String, EJourBizTypeUser> map = getBizTypeMap();

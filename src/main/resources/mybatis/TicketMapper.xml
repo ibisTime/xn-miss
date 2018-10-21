@@ -192,8 +192,8 @@
 	<update id="update_payGroup" parameterType="ticket">
 		UPDATE thqxj_ticket
 		SET
-		,pay_type = #{payType}
-		,pay_group = #{payAroup}
+		pay_type = #{payType}
+		,pay_group = #{payGroup}
 		,remark = #{remark}
 		WHERE code = #{code}
 	</update>
@@ -202,6 +202,7 @@
 		UPDATE thqxj_ticket
 		SET
 		status = #{status}
+		,pay_code = #{payCode}
 		,pay_amount = #{payAmount}
 		,pay_datetime = #{payDatetime}
 		,remark = #{remark}

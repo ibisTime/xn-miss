@@ -103,7 +103,7 @@ public class TicketAOImpl implements ITicketAO {
     @Override
     @Transactional
     public Object toPayTicket(String code, String payType, String tradePwd) {
-        Ticket data = ticketBO.getTicketForUpdate(code);
+        Ticket data = ticketBO.getTicket(code);
         if (StringUtils.isNotBlank(tradePwd)) {
             userBO.checkTradePwd(data.getApplyUser(), tradePwd);
         }
@@ -209,19 +209,21 @@ public class TicketAOImpl implements ITicketAO {
             EPayType.WEIXIN_H5.getCode());
         XN002501Res prepayIdH5 = weChatAO.getPrepayIdH5(data.getApplyUser(),
             user.getH5OpenId(), ESysUser.SYS_USER.getCode(), payGroup,
-            data.getCode(), EJourBizTypeUser.AJ_CZ.getCode(),
-            EJourBizTypeUser.AJ_CZ.getValue(), data.getAmount());
+            data.getCode(), EJourBizTypeUser.TICKET.getCode(),
+            EJourBizTypeUser.TICKET.getValue(), data.getAmount());
         return prepayIdH5;
     }
 
     @Override
     @Transactional
     public void paySuccess(String payGroup, String payCode) {
-        Ticket data = ticketBO.getTicketForUpdate(payGroup);// payGroup==code
+        Ticket data = ticketBO.getTicket(payGroup);// payGroup==code
         User user = userBO.getUser(data.getApplyUser());
         if (!ETicketStatus.TO_PAY.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该订单不是待支付");
         }
+
+        ticketBO.paySuccess(data, payCode);
 
         // 给品牌方加油分成
         SYSConfig rate = sysConfigBO

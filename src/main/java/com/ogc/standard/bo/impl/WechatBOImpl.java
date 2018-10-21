@@ -22,6 +22,7 @@ import com.ogc.standard.bo.IWechatBO;
 import com.ogc.standard.common.PropertiesUtil;
 import com.ogc.standard.domain.CompanyChannel;
 import com.ogc.standard.dto.res.XN002501Res;
+import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.enums.EWeChatType;
 import com.ogc.standard.util.wechat.MD5;
 import com.ogc.standard.util.wechat.MD5Util;
@@ -44,16 +45,16 @@ public class WechatBOImpl implements IWechatBO {
         prePay.setMch_id(companyChannel.getChannelCompany()); // 商户号
         prePay.setBody(companyChannel.getCompanyName() + "-" + bizNote); // 商品描述
         prePay.setOut_trade_no(code); // 订单号
-        BigDecimal divide = transAmount.divide(BigDecimal.TEN);
-        BigDecimal setScale = divide.setScale(0);
-        prePay.setTotal_fee(setScale.toString()); // 订单总金额，厘转化成分
+        BigDecimal divide = transAmount.divide(BigDecimal.TEN).setScale(0,
+            BigDecimal.ROUND_DOWN);
+        prePay.setTotal_fee(divide.toString()); // 订单总金额，厘转化成分
 
         prePay.setSpbill_create_ip(ip); // 用户IP
         prePay.setTrade_type(EWeChatType.JSAPI.getCode()); // 交易类型
         prePay.setNotify_url(PropertiesUtil.Config.WECHAT_H5_BACKURL);// 回调地址
         prePay.setPartnerKey(companyChannel.getPrivateKey1()); // 商户秘钥
         prePay.setOpenid(openId); // 支付者openid
-        // prePay.setAttach(""); // 附加字段，回调时返回
+        prePay.setAttach(ESystemCode.MISS.getCode()); // 附加字段，回调时返回
         return prePay.submitXmlGetPrepayId();
     }
 

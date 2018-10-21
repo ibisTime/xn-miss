@@ -16,11 +16,14 @@ public interface ITicketBO extends IPaginableBO<Ticket> {
 
     public Ticket getTicket(String code);
 
-    public Ticket getTicketForUpdate(String code);
+    // public Ticket getTicketForUpdate(String code);
 
     public void refreshCancelTicket(Ticket data, String remark);
 
     public void payYueSuccess(Ticket data);
 
     public String addPayGroup(Ticket data, String payType);
+
+    public void paySuccess(Ticket data, String payCode);
+
 }
