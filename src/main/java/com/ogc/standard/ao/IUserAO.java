@@ -20,8 +20,8 @@ public interface IUserAO {
     public void doCheckMobile(String mobile);
 
     // 绑定手机号
-    public void doBindMobile(String isSendSms, String mobile,
-            String smsCaptcha, String userId, String language);
+    public void doBindMobile(String mobile, String smsCaptcha, String userId,
+            String language);
 
     // 用户登录
     public String doLogin(String loginName, String loginPwd, String client,

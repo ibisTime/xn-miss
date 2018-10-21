@@ -166,7 +166,6 @@ public class UserAOImpl implements IUserAO {
     private XN805170Res doWxLoginReg(XN805170Req req, String unionId,
             String h5OpenId, String nickname, String photo, String gender) {
         XN805170Res result;
-        userBO.doCheckOpenId(unionId, h5OpenId);
         // 插入用户信息
         String userId = userBO.doRegister(unionId, h5OpenId, null,
             EUserKind.Customer.getCode(), EUserPwd.InitPwd.getCode(), nickname,
@@ -503,10 +502,10 @@ public class UserAOImpl implements IUserAO {
     }
 
     @Override
-    public void doBindMobile(String isSendSms, String mobile,
-            String smsCaptcha, String userId, String language) {
+    @Transactional
+    public void doBindMobile(String mobile, String smsCaptcha, String userId,
+            String language) {
         User user = userBO.getUser(userId);
-
         if (user.getMobile() != null) {
             throw new BizException(
                 EErrorCode_main.user_HAVEBOUNDMOBILE.getCode());
@@ -518,12 +517,11 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshMobile(userId, mobile);
 
         // 发送短信
-        if (isSendSms.equals(EBoolean.YES.getCode())) {
-            smsOutBO.sendSmsOut(mobile, String.format(
-                SysConstants.DO_BIND_MOBILE_CN, PhoneUtil.hideMobile(mobile),
-                DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-                mobile), ECaptchaType.MOBILE_CHANGE.getCode());
-        }
+        smsOutBO.sendSmsOut(mobile, String.format(
+            SysConstants.DO_BIND_MOBILE_CN, PhoneUtil.hideMobile(mobile),
+            DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
+            mobile), ECaptchaType.MOBILE_CHANGE.getCode());
+
     }
 
     @Override

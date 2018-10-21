@@ -20,10 +20,6 @@ public class XN805060Req extends BaseReq {
 
     private static final long serialVersionUID = 2145444698552677333L;
 
-    // 是否发送密码短息(1=是，0=否)
-    @NotBlank
-    private String isSendSms;
-
     // 手机号
     @NotBlank
     private String mobile;
@@ -35,14 +31,6 @@ public class XN805060Req extends BaseReq {
     // 验证码
     @NotBlank
     private String smsCaptcha;
-
-    public String getIsSendSms() {
-        return isSendSms;
-    }
-
-    public void setIsSendSms(String isSendSms) {
-        this.isSendSms = isSendSms;
-    }
 
     public String getMobile() {
         return mobile;
