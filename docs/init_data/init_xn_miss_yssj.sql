@@ -4,9 +4,9 @@ LIMIT 0, 1000
 
 -- Date: 2018-10-22 00:33
 */
-INSERT INTO `thqxj_answer` (`code`,`question`,`answer`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('AN201810211958503324015','如何充值','打开系统，点击“我的----账户管理”打开界面，点击“充值”，按步骤完成微信充值。','4','2018-10-21 16:33:09','admin','2018-10-21 16:33:09','上架回复模版');
-INSERT INTO `thqxj_answer` (`code`,`question`,`answer`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('AN201810212000552262875','为什么要绑定手机号','用户绑定手机号，可以让平台更快更精准的了解用户，提高服务质量。','4','2018-10-21 16:33:09','admin','2018-10-21 16:33:09','上架回复模版');
-INSERT INTO `thqxj_answer` (`code`,`question`,`answer`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('AN201810212002055296316','什么是交易密码','交易密码，是在动用平台用户账户余额时，必须输入的密码。它是保障用户资金安全的重要环节。请牢记且勿告知他人。','4','2018-10-21 16:33:09','admin','2018-10-21 16:33:09','上架回复模版');
+INSERT INTO `thqxj_answer` (`code`,`question`,`answer`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('AN201810211958503324015','如何充值','打开系统，点击“我的----账户管理”打开界面，点击“充值”，按步骤完成微信充值。','1','2018-10-21 16:33:09','admin','2018-10-21 16:33:09','上架回复模版');
+INSERT INTO `thqxj_answer` (`code`,`question`,`answer`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('AN201810212000552262875','为什么要绑定手机号','用户绑定手机号，可以让平台更快更精准的了解用户，提高服务质量。','1','2018-10-21 16:33:09','admin','2018-10-21 16:33:09','上架回复模版');
+INSERT INTO `thqxj_answer` (`code`,`question`,`answer`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('AN201810212002055296316','什么是交易密码','交易密码，是在动用平台用户账户余额时，必须输入的密码。它是保障用户资金安全的重要环节。请牢记且勿告知他人。','1','2018-10-21 16:33:09','admin','2018-10-21 16:33:09','上架回复模版');
 
 /*
 -- Query: SELECT `code`,`title`,`content`,`status`, now() as `create_datetime`,`updater`, now() as `update_datetime`,`remark` FROM thqxj_event
