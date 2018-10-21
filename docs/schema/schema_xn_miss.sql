@@ -528,6 +528,8 @@ CREATE TABLE `tstd_withdraw` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='取现';
 
+
+
 -- ----------------------------
 -- Table structure for tsys_channel_bank
 -- ----------------------------
