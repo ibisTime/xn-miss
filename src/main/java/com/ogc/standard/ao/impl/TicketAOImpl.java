@@ -18,6 +18,7 @@ import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ITicketBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.core.StringValidater;
@@ -76,14 +77,14 @@ public class TicketAOImpl implements ITicketAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该选手不可以加油");
         }
 
-        BigDecimal price = StringValidater.toBigDecimal(
-            sysConfigBO.getConfigValue(SysConstant.PRICE).getCvalue())
-            .multiply(new BigDecimal("1000"));
+        BigDecimal price = StringValidater.toBigDecimal(sysConfigBO
+            .getConfigValue(SysConstant.PRICE).getCvalue());
+        BigDecimal mulPrice = AmountUtil.mul(price, 1000L);
 
         Integer invalidTime = StringValidater.toInteger(sysConfigBO
             .getConfigValue(SysConstant.INVALID_TIME).getCvalue());
 
-        return ticketBO.saveTicket(player, ticket, applyUser, price,
+        return ticketBO.saveTicket(player, ticket, applyUser, mulPrice,
             invalidTime);
     }
 

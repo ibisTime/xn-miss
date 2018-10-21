@@ -23,8 +23,10 @@ import com.ogc.standard.bo.IPlayerBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstant;
+import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Action;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.SYSConfig;
@@ -88,12 +90,14 @@ public class ActionAOImpl implements IActionAO {
             if (!actionBO.isActionExist(creater, toCode, type)) {
                 SYSConfig money = sysConfigBO
                     .getConfigValue(SysConstant.RETURN_MONEY);
+                BigDecimal mulMoney = AmountUtil.mul(
+                    StringValidater.toBigDecimal(money.getCvalue()), 1000L);
                 accountBO.transAmountCZB(creater, ECurrency.CNY.getCode(),
-                    ESystemAccount.SYS_ACOUNT_CNY.getCode(), ECurrency.CNY
-                        .getCode(), new BigDecimal(money.getCvalue())
-                        .multiply(new BigDecimal("1000")),
-                    EJourBizTypePlat.AJ_FX.getCode(), EJourBizTypeUser.AJ_FX
-                        .getCode(), EJourBizTypePlat.AJ_FX.getValue(),
+                    ESystemAccount.SYS_ACOUNT_CNY.getCode(),
+                    ECurrency.CNY.getCode(), mulMoney,
+                    EJourBizTypePlat.AJ_FX.getCode(),
+                    EJourBizTypeUser.AJ_FX.getCode(),
+                    EJourBizTypePlat.AJ_FX.getValue(),
                     EJourBizTypeUser.AJ_FX.getValue(), code);
             }
             playerBO.addShare(player);
