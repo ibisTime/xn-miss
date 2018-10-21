@@ -18,21 +18,9 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class XN640100Req {
 
-    // 类型
-    @NotBlank
-    private String type;
-
     // 说话人1
     @NotBlank
     private String user1;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getUser1() {
         return user1;

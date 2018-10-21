@@ -81,10 +81,8 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
     }
 
     @Override
-    public void refreshApproveComment(String code, String status,
+    public void refreshApproveComment(Comment data, String status,
             String approver, String approveNote) {
-        Comment data = new Comment();
-        data.setCode(code);
         data.setStatus(status);
         data.setApprover(approver);
         data.setApproveDatetime(new Date());
@@ -98,21 +96,22 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
     }
 
     @Override
-    public List<Comment> queryCommentListByObjectCode(String objectCode,
-            String userId) {
-        Comment condition = new Comment();
-        List<String> statusList = new ArrayList<String>();
+    public List<Comment> queryCommentListByObjectCode(String objectCode) {
+        List<Comment> list = null;
+        if (StringUtils.isNotBlank(objectCode)) {
+            Comment condition = new Comment();
+            List<String> statusList = new ArrayList<String>();
+            statusList.add(ECommentStatus.APPROVED_YES.getCode());
+            statusList.add(ECommentStatus.RELEASED.getCode());
+            condition.setStatusList(statusList);
+            condition.setToCode(objectCode);
+            condition.setOrder("create_datetime", "asc");
+            list = queryCommentList(condition);
 
-        statusList.add(ECommentStatus.APPROVED_YES.getCode());
-        statusList.add(ECommentStatus.RELEASED.getCode());
-        condition.setStatusList(statusList);
-        condition.setToCode(objectCode);
-
-        List<Comment> list = queryCommentList(condition);
-
-        if (CollectionUtils.isNotEmpty(list)) {
-            for (Comment comment : list) {
-                initComment(userId, comment);
+            if (CollectionUtils.isNotEmpty(list)) {
+                for (Comment comment : list) {
+                    initComment(comment);
+                }
             }
         }
         return list;
@@ -151,14 +150,14 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
     }
 
     @Override
-    public void initComment(String userId, Comment comment) {
+    public void initComment(Comment comment) {
         User user = userBO.getUser(comment.getCreater());
         comment.setNickname(user.getNickname());
         comment.setPhoto(user.getPhoto());
     }
 
     @Override
-    public void orderCommentList(List<Comment> commentList, String userId) {
+    public void orderCommentList(List<Comment> commentList) {
         for (int i = 0; i < commentList.size(); i++) {
             for (int j = i + 1; j < commentList.size(); j++) {
                 if (commentList.get(i).getCreateDatetime()
@@ -172,7 +171,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
         }
         // 初始化参数
         for (Comment comment : commentList) {
-            initComment(userId, comment);
+            initComment(comment);
         }
     }
 

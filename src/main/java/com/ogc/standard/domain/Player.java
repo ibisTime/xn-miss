@@ -1,6 +1,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -113,6 +114,17 @@ public class Player extends ABaseDO {
 
     // 模糊查询字段
     private String fuzzyQuery;
+
+    // 评论列表
+    private List<Comment> commentList;
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
+    }
 
     public void setCode(String code) {
         this.code = code;

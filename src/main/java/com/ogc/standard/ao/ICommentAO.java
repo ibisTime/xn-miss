@@ -13,8 +13,8 @@ public interface ICommentAO {
     static final String DEFAULT_ORDER_COLUMN = "code";
 
     // 评论评论
-    public XN628271Res commentPlayer(String playerCode, String content,
-            String creater);
+    public XN628271Res commentPlayer(String userId, String playerCode,
+            String content);
 
     // 删除评论
     public void dropOssComment(String code, String updater);

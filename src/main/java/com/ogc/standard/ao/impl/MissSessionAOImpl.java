@@ -19,7 +19,8 @@ import com.ogc.standard.bo.IQuestionBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.MissSession;
-import com.ogc.standard.domain.Question;
+import com.ogc.standard.domain.User;
+import com.ogc.standard.enums.EMissSessionType;
 
 /** 
  * @author: taojian 
@@ -39,9 +40,10 @@ public class MissSessionAOImpl implements IMissSessionAO {
     private IUserBO userBO;
 
     @Override
-    public String addMissSession(String type, String user1) {
+    public String addMissSession(String user1) {
         userBO.getUser(user1);
-        return missSessionBO.saveSession(type, user1);
+        return missSessionBO.saveSession(
+            EMissSessionType.COMMIT_QUESTION.getCode(), user1);
     }
 
     @Override
@@ -50,12 +52,7 @@ public class MissSessionAOImpl implements IMissSessionAO {
         Paginable<MissSession> page = missSessionBO.getPaginable(start, limit,
             condition);
         for (MissSession missSession : page.getList()) {
-            missSession.setDataList(questionBO
-                .querySessionQuestions(missSession.getCode()));
-            missSession.setUser1Nickname(userBO.getUser(missSession.getUser1())
-                .getNickname());
-            missSession.setMobile(userBO.getUser(missSession.getUser1())
-                .getMobile());
+            initSession(missSession);
         }
         return page;
     }
@@ -63,10 +60,7 @@ public class MissSessionAOImpl implements IMissSessionAO {
     @Override
     public MissSession getSession(String code) {
         MissSession data = missSessionBO.getSession(code);
-        List<Question> dataList = questionBO.querySessionQuestions(code);
-        data.setDataList(dataList);
-        data.setUser1Nickname(userBO.getUser(data.getUser1()).getNickname());
-        data.setMobile(userBO.getUser(data.getUser1()).getMobile());
+        initSession(data);
         return data;
     }
 
@@ -75,14 +69,18 @@ public class MissSessionAOImpl implements IMissSessionAO {
         List<MissSession> missSessionList = missSessionBO
             .querySessionList(condition);
         for (MissSession missSession : missSessionList) {
-            missSession.setDataList(questionBO
-                .querySessionQuestions(missSession.getCode()));
-            missSession.setUser1Nickname(userBO.getUser(missSession.getUser1())
-                .getNickname());
-            missSession.setMobile(userBO.getUser(missSession.getUser1())
-                .getMobile());
+            initSession(missSession);
         }
         return missSessionList;
+    }
+
+    private void initSession(MissSession missSession) {
+        missSession.setQuestionsList(questionBO
+            .querySessionQuestions(missSession.getCode()));
+
+        User user = userBO.getUser(missSession.getUser1());
+        missSession.setUser1Nickname(user.getNickname());
+        missSession.setMobile(user.getMobile());
     }
 
 }

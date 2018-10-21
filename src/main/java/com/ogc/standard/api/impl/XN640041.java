@@ -24,7 +24,7 @@ public class XN640041 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        actionAO.cancelAction(req.getCreater(), req.getToCode());
+        actionAO.cancelAttation(req.getCreater(), req.getToCode());
         return new BooleanRes(true);
     }
 

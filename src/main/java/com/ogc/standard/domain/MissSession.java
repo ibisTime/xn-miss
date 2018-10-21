@@ -54,14 +54,14 @@ public class MissSession extends ABaseDO {
     // 用户手机
     private String mobile;
 
-    private List<Question> dataList;
+    private List<Question> questionsList;
 
-    public List<Question> getDataList() {
-        return dataList;
+    public List<Question> getQuestionsList() {
+        return questionsList;
     }
 
-    public void setDataList(List<Question> dataList) {
-        this.dataList = dataList;
+    public void setQuestionsList(List<Question> questionsList) {
+        this.questionsList = questionsList;
     }
 
     public Date getCreateDatetimeStart() {

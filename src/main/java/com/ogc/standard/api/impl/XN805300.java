@@ -18,10 +18,10 @@ import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
-/** 
- * 保存消息（草稿）
- * @author: dl 
- * @since: 2018年8月22日 下午3:07:39 
+/**
+ * 发布赛事
+ * @author: xieyj 
+ * @since: 2018年10月21日 下午5:28:21 
  * @history:
  */
 public class XN805300 extends AProcessor {

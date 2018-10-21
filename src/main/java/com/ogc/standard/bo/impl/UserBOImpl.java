@@ -23,7 +23,6 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.common.MD5Util;
 import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.PwdUtil;
-import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IUserDAO;
 import com.ogc.standard.domain.User;
@@ -102,21 +101,6 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     }
 
     @Override
-    public String getUserId(String mobile) {
-        String userId = null;
-        if (StringUtils.isNotBlank(mobile)) {
-            User condition = new User();
-            condition.setMobile(mobile);
-            List<User> list = userDAO.selectList(condition);
-            if (CollectionUtils.isNotEmpty(list)) {
-                User data = list.get(0);
-                userId = data.getUserId();
-            }
-        }
-        return userId;
-    }
-
-    @Override
     public String doAddUser(User data) {
         String userId = OrderNoGenerater.generate("U");
         data.setUserId(userId);
@@ -169,8 +153,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         user.setArea(area);
         Date date = new Date();
         user.setCreateDatetime(date);
-        user.setTradeRate(sysConfigBO
-            .getDoubleValue(SysConstants.TRADE_FEE_RATE));
+        user.setTradeRate(0.0D);
         userDAO.insert(user);
         return userId;
     }
@@ -286,6 +269,26 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
         if (data == null) {
             throw new BizException(
                 EErrorCode_main.user_USERIDUNEXIST.getCode(), (Object) userId);
+        }
+        return data;
+    }
+
+    @Override
+    public User getNormalUser(String userId) {
+        User data = null;
+        if (StringUtils.isNotBlank(userId)) {
+            User condition = new User();
+            condition.setUserId(userId);
+            data = userDAO.select(condition);
+        }
+        if (data == null) {
+            throw new BizException(
+                EErrorCode_main.user_USERIDUNEXIST.getCode(), (Object) userId);
+        }
+        if (!EUserStatus.NORMAL.getCode().equals(data.getStatus())) {
+            throw new BizException(
+                EErrorCode_main.USER_STATUS_NOT_NORMAL.getCode(),
+                (Object) userId);
         }
         return data;
     }

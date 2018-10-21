@@ -37,7 +37,7 @@ public interface IUserBO extends IPaginableBO<User> {
     // 判断昵称是否存在
     public void isNicknameExist(String nickname);
 
-    public String getUserId(String mobile);
+    public User getNormalUser(String userId);
 
     public User getUserUnCheck(String userId);
 

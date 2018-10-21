@@ -12,15 +12,18 @@ import com.ogc.standard.ao.ICommentAO;
 import com.ogc.standard.bo.ICommentBO;
 import com.ogc.standard.bo.IKeywordBO;
 import com.ogc.standard.bo.IPlayerBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Comment;
 import com.ogc.standard.domain.Keyword;
+import com.ogc.standard.domain.Player;
 import com.ogc.standard.dto.res.XN628271Res;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.ECommentStatus;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EFilterFlag;
 import com.ogc.standard.enums.EKeyWordReaction;
+import com.ogc.standard.enums.EPlayerStatus;
 import com.ogc.standard.exception.BizException;
 
 /**
@@ -40,11 +43,20 @@ public class CommentAOImpl implements ICommentAO {
     @Autowired
     private IPlayerBO playerBO;
 
+    @Autowired
+    private IUserBO userBO;
+
     @Override
-    public XN628271Res commentPlayer(String playerCode, String content,
-            String creater) {
+    public XN628271Res commentPlayer(String userId, String playerCode,
+            String content) {
         // 检验playerCode是否存在
-        playerBO.getPlayer(playerCode);
+        Player player = playerBO.getPlayer(playerCode);
+        if (!EPlayerStatus.UP.getCode().equals(player.getStatus())) {
+            throw new BizException(EErrorCode_main.comm_KEYWORD.getCode(),
+                "当前选手还未审核通过，暂不能评论");
+        }
+        userBO.getNormalUser(userId);
+
         // 关键字过滤
         List<Keyword> keywordList = keywordBO.checkContent(content);
         String status = ECommentStatus.RELEASED.getCode();
@@ -84,8 +96,8 @@ public class CommentAOImpl implements ICommentAO {
             filterFlag = EFilterFlag.TO_APPROVE.getCode();
         }
 
-        String code = commentBO.saveComment(creater, content, playerCode,
-            status);
+        String code = commentBO
+            .saveComment(userId, content, playerCode, status);
 
         return new XN628271Res(code, filterFlag);
     }
@@ -107,7 +119,7 @@ public class CommentAOImpl implements ICommentAO {
             status = ECommentStatus.APPROVED_NO.getCode();
         }
 
-        commentBO.refreshApproveComment(code, status, approver, approveNote);
+        commentBO.refreshApproveComment(comment, status, approver, approveNote);
     }
 
     @Override
@@ -145,7 +157,7 @@ public class CommentAOImpl implements ICommentAO {
         List<Comment> resultList = page.getList();
         if (CollectionUtils.isNotEmpty(resultList)) {
             for (Comment comment : resultList) {
-                commentBO.initComment(null, comment);
+                commentBO.initComment(comment);
             }
         }
         return page;
@@ -160,11 +172,11 @@ public class CommentAOImpl implements ICommentAO {
         if (CollectionUtils.isNotEmpty(resultList)) {
             for (Comment comment : resultList) {
 
-                commentBO.initComment(null, comment);
+                commentBO.initComment(comment);
 
                 List<Comment> commentList = new ArrayList<Comment>();
                 commentBO.searchCycleComment(comment.getCode(), commentList);
-                commentBO.orderCommentList(commentList, userId);
+                commentBO.orderCommentList(commentList);
                 comment.setNextCommentList(commentList);
             }
         }

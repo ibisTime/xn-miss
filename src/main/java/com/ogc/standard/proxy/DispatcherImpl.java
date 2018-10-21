@@ -5,9 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.ogc.standard.api.IProcessor;
 import com.ogc.standard.common.JsonUtil;
-import com.ogc.standard.enums.EErrorCode_en_US;
 import com.ogc.standard.enums.EErrorCode_main;
-import com.ogc.standard.enums.ELanguage;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.http.BizConnecter;
@@ -60,36 +58,19 @@ public class DispatcherImpl implements IDispatcher {
                 String errorCode = ((BizException) e).getErrorCode();
 
                 String errorInfo = "";
-                if (ELanguage.en_US.getCode().equalsIgnoreCase(language)) {
+                EErrorCode_main eErrorCode_main = EErrorCode_main.getMap().get(
+                    errorCode);
 
-                    EErrorCode_en_US eErrorCode_en_US = EErrorCode_en_US
-                        .getMap().get(errorCode);
-
-                    if (null == eErrorCode_en_US) {
-                        errorInfo = ((BizException) e).getErrorMessage();
-                    } else {
-                        errorInfo = String.format(eErrorCode_en_US.getValue(),
-                            ((BizException) e).getErrorParams());
-                    }
-
+                if (null == eErrorCode_main) {
+                    errorInfo = ((BizException) e).getErrorMessage();
                 } else {
-
-                    EErrorCode_main eErrorCode_main = EErrorCode_main.getMap()
-                        .get(errorCode);
-
-                    if (null == eErrorCode_main) {
-                        errorInfo = ((BizException) e).getErrorMessage();
-                    } else {
-                        errorInfo = String.format(eErrorCode_main.getValue(),
-                            ((BizException) e).getErrorParams());
-                    }
-
+                    errorInfo = String.format(eErrorCode_main.getValue(),
+                        ((BizException) e).getErrorParams());
                 }
 
                 rm.setErrorCode(errorCode);
                 rm.setErrorInfo(errorInfo);
                 rm.setData("");
-
             } else if (e instanceof ParaException) {
                 rm.setErrorCode(EErrorCode.PARA_ERR.getCode());
                 rm.setErrorInfo(((ParaException) e).getErrorMessage());

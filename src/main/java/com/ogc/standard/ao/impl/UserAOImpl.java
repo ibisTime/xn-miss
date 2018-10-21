@@ -317,8 +317,10 @@ public class UserAOImpl implements IUserAO {
         smsOutBO.checkCaptcha(newMobile, smsCaptcha, "805061");
         userBO.refreshMobile(userId, newMobile);
 
-        // 发送短信
+        // 更新户名
+        accountBO.refreshAccountName(userId, newMobile);
 
+        // 发送短信
         smsOutBO.sendSmsOut(oldMobile, String.format(
             SysConstants.DO_CHANGE_MOBILE_CN, PhoneUtil.hideMobile(oldMobile),
             DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
@@ -506,22 +508,26 @@ public class UserAOImpl implements IUserAO {
     public void doBindMobile(String mobile, String smsCaptcha, String userId,
             String language) {
         User user = userBO.getUser(userId);
-        if (user.getMobile() != null) {
+        if (StringUtils.isNotBlank(user.getMobile())) {
             throw new BizException(
                 EErrorCode_main.user_HAVEBOUNDMOBILE.getCode());
         }
         // 验证手机号
         userBO.isMobileExist(mobile);
+
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805041");// 805060
         userBO.refreshMobile(userId, mobile);
 
-        // 发送短信
-        smsOutBO.sendSmsOut(mobile, String.format(
-            SysConstants.DO_BIND_MOBILE_CN, PhoneUtil.hideMobile(mobile),
-            DateUtil.dateToStr(new Date(), DateUtil.DATA_TIME_PATTERN_1),
-            mobile), ECaptchaType.MOBILE_CHANGE.getCode());
+        // 更改户名
+        accountBO.refreshAccountName(userId, mobile);
 
+        // 发送短信
+        smsOutBO.sendSmsOut(
+            mobile,
+            String.format(SysConstants.DO_BIND_MOBILE_CN,
+                PhoneUtil.hideMobile(mobile), mobile),
+            ECaptchaType.MOBILE_CHANGE.getCode());
     }
 
     @Override

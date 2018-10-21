@@ -587,7 +587,7 @@ CREATE TABLE `tsys_dict` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `parent_key` varchar(32) DEFAULT NULL COMMENT '父亲key',
-  `dkey` varchar(32) DEFAULT NULL COMMENT 'key',
+  `dkey` varchar(255) DEFAULT NULL COMMENT 'key',
   `dvalue` varchar(255) DEFAULT NULL COMMENT 'value',
   `updater` varchar(32) DEFAULT NULL COMMENT '最近修改人',
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',

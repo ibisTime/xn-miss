@@ -32,8 +32,8 @@ public class XN640005 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return commentAO.commentPlayer(req.getCode(), req.getContent(),
-            req.getUserId());
+        return commentAO.commentPlayer(req.getUserId(), req.getCode(),
+            req.getContent());
     }
 
     @Override

@@ -63,21 +63,23 @@ public class ActionAOImpl implements IActionAO {
     @Override
     public String addAction(String type, String toType, String toCode,
             String creater) {
-
         userBO.getUser(creater);
         Player player = playerBO.getPlayer(toCode);
+
         if (!EPlayerStatus.UP.getCode().equals(player.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                 "该选手无法进行此操作");
         }
-        String code = actionBO.saveAction(type, toType, toCode, creater);
+        String code = null;
         if (EActionType.ATTENTION.getCode().equals(type)) {
             if (actionBO.isActionExist(creater, toCode, type)) {
                 throw new BizException(EBizErrorCode.DEFAULT.getCode(),
                     "已关注无需重复关注");
             }
             playerBO.addAttention(player);
+            code = actionBO.saveAction(type, toType, toCode, creater);
         } else if (EActionType.SHARE.getCode().equals(type)) {
+            actionBO.saveAction(type, toType, toCode, creater);
             if (!actionBO.isActionExist(creater, toCode, type)) {
                 SYSConfig money = sysConfigBO
                     .getConfigValue(SysConstant.RETURN_MONEY);
@@ -91,6 +93,7 @@ public class ActionAOImpl implements IActionAO {
             }
             playerBO.addShare(player);
         } else if (EActionType.FOOT.getCode().equals(type)) {
+            code = actionBO.saveAction(type, toType, toCode, creater);
             playerBO.addScan(player);
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "暂不支持此操作");
@@ -99,7 +102,7 @@ public class ActionAOImpl implements IActionAO {
     }
 
     @Override
-    public void cancelAction(String creater, String toCode) {
+    public void cancelAttation(String creater, String toCode) {
         Action data = actionBO.getActionByTypeToCodeCreater(
             EActionType.ATTENTION.getCode(), toCode, creater);
         actionBO.removeAction(data.getCode());

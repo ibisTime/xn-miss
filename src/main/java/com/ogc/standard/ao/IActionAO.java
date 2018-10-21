@@ -27,5 +27,5 @@ public interface IActionAO {
 
     public Action getAction(String code);
 
-    public void cancelAction(String creater, String toCode);
+    public void cancelAttation(String creater, String toCode);
 }

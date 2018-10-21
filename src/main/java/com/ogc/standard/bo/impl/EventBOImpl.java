@@ -105,7 +105,7 @@ public class EventBOImpl extends PaginableBOImpl<Event> implements IEventBO {
             condition.setCode(code);
             data = eventDAO.select(condition);
             if (data == null) {
-                throw new BizException(EErrorCode_main.sms_NOTEXIST.getCode());
+                throw new BizException(EErrorCode_main.code_NOTEXIST.getCode());
             }
         }
         return data;

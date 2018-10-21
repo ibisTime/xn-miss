@@ -33,8 +33,7 @@ public class XN640100 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return new PKCodeRes(missSessionAO.addMissSession(req.getType(),
-            req.getUser1()));
+        return new PKCodeRes(missSessionAO.addMissSession(req.getUser1()));
     }
 
     @Override

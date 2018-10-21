@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +23,6 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IReadDAO;
 import com.ogc.standard.domain.Read;
 import com.ogc.standard.domain.User;
-import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.EReadStatus;
 import com.ogc.standard.enums.ESmsType;
 import com.ogc.standard.exception.BizException;
@@ -64,12 +65,8 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
     }
 
     @Override
-    public void refreshStatus(long id, String status) {
-        if (!isReadExit(id)) {
-            throw new BizException(EErrorCode_main.id_NOTEXIST.getCode());
-        }
-        Read data = getRead(id);
-        data.setStatus(status);
+    public void refreshRead(Read data) {
+        data.setStatus(EReadStatus.READ.getCode());
         readDAO.updateStatusRead(data);
     }
 
@@ -86,27 +83,18 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
     }
 
     @Override
-    public boolean isReadExit(long id) {
-        Read read = new Read();
-        read.setId(id);
-        if (readDAO.selectTotalCount(read) >= 1) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public void refereshDelete(String toCode) {
-        Read condition = new Read();
-        condition.setToCode(toCode);
-        List<Read> dataList = queryReadList(condition);
-        if (dataList.isEmpty()) {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "无信息可删除");
+        if (StringUtils.isNotBlank(toCode)) {
+            Read condition = new Read();
+            condition.setToCode(toCode);
+            List<Read> dataList = queryReadList(condition);
+            if (CollectionUtils.isNotEmpty(dataList)) {
+                for (Read read : dataList) {
+                    read.setStatus(EReadStatus.DROPED.getCode());
+                }
+                readDAO.updateBatch(dataList);
+            }
         }
-        for (Read read : dataList) {
-            read.setStatus(EReadStatus.DROPED.getCode());
-        }
-        readDAO.updateBatch(dataList);
     }
 
 }

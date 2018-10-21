@@ -86,8 +86,8 @@ public class EventAOImpl implements IEventAO {
         }
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void releaseEvent(String code, String updater, String remark) {
         String status = eventBO.getEvent(code).getStatus();
         if (!EEventStauts.PASS.getCode().equals(status)) {
@@ -95,24 +95,22 @@ public class EventAOImpl implements IEventAO {
         }
 
         eventBO.refreshStatus(code, EEventStauts.ON.getCode(), updater, remark);
-        // // 批量添加read数据
-        // readBO.saveToRead(code);
-
+        // 批量添加read数据
+        readBO.saveToRead(code);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void obtainEvent(String code, String updater, String remark) {
         String status = eventBO.getEvent(code).getStatus();
         if (!EEventStauts.ON.getCode().equals(status)) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该赛事信息不能下架");
         }
-
         eventBO
             .refreshStatus(code, EEventStauts.OFF.getCode(), updater, remark);
 
-        // // 批量删除read数据
-        // readBO.refereshDelete(code);
+        // 批量删除read数据
+        readBO.refereshDelete(code);
     }
 
     @Override

@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ogc.standard.ao.IPlayerAO;
+import com.ogc.standard.bo.ICommentBO;
 import com.ogc.standard.bo.IPlayerBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.domain.Comment;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.dto.req.XN640000Req;
 import com.ogc.standard.dto.req.XN640002Req;
@@ -19,6 +21,9 @@ public class PlayerAOImpl implements IPlayerAO {
 
     @Autowired
     private IPlayerBO playerBO;
+
+    @Autowired
+    private ICommentBO commentBO;
 
     @Override
     public String addPlayer(XN640000Req req) {
@@ -78,7 +83,10 @@ public class PlayerAOImpl implements IPlayerAO {
 
     @Override
     public Player getPlayer(String code) {
-        return playerBO.getPlayer(code);
+        Player player = playerBO.getPlayer(code);
+        List<Comment> commentList = commentBO
+            .queryCommentListByObjectCode(player.getCode());
+        player.setCommentList(commentList);
+        return player;
     }
-
 }

@@ -19,6 +19,8 @@ import com.ogc.standard.bo.IReadBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Read;
 import com.ogc.standard.enums.EReadStatus;
+import com.ogc.standard.exception.BizException;
+import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: dl 
@@ -36,12 +38,15 @@ public class ReadAOImpl implements IReadAO {
 
     @Override
     public void readEvent(long id) {
-        readBO.refreshStatus(id, EReadStatus.READ.getCode());
+        Read data = readBO.getRead(id);
+        if (EReadStatus.TOREAD.getCode().equals(data.getStatus())) {
+            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前消息不是待阅读");
+        }
+        readBO.refreshRead(data);
     }
 
     @Override
     public Paginable<Read> queryReadPage(int start, int limit, Read condition) {
-
         Paginable<Read> page = readBO.getPaginable(start, limit, condition);
         List<Read> readList = page.getList();
         for (Read read : readList) {
