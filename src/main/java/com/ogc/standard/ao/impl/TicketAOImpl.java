@@ -18,6 +18,7 @@ import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ITicketBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Player;
@@ -129,6 +130,7 @@ public class TicketAOImpl implements ITicketAO {
     // 3、更新选手票数和排名
     @Transactional
     private Object toPayTicketYue(Ticket data) {
+        User user = userBO.getUser(data.getApplyUser());
         Player player = playerBO.getPlayer(data.getPlayerCode());
         BigDecimal payAmount = data.getAmount();
         // 人民币余额划转
@@ -177,9 +179,14 @@ public class TicketAOImpl implements ITicketAO {
         }
         rankBO.refreshRanking(ERankType.TOTAL.getCode(), rankTotalCode);
         // 加油后默认关注选手
-        actionBO.saveAction(EActionType.ATTENTION.getCode(),
-            EActionToType.PLAYER.getCode(), data.getPlayerCode(),
-            data.getApplyUser(), "");
+        actionBO.saveAction(
+            EActionType.ATTENTION.getCode(),
+            EActionToType.PLAYER.getCode(),
+            data.getPlayerCode(),
+            data.getApplyUser(),
+            user.getNickname() + "于"
+                    + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7) + "关注了选手"
+                    + player.getCname());
         return new BooleanRes(true);
     }
 
