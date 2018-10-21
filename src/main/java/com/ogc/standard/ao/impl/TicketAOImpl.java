@@ -140,11 +140,11 @@ public class TicketAOImpl implements ITicketAO {
             EJourBizTypePlat.TICKET.getValue(), data.getCode());
         // 更新业务订单（加油订单）
         ticketBO.payYueSuccess(data);
-        // 品牌方加油分成
+        // 给品牌方加油分成
         SYSConfig rate = sysConfigBO
             .getConfigValue(SysConstant.DIVIDEND_RATE_BUSINESS);
         BigDecimal individed = data.getAmount().multiply(
-            new BigDecimal(rate.getCvalue()));// 产权方分销金额
+            new BigDecimal(rate.getCvalue()));
         accountBO.transAmountCZB(ESysUser.SYS_USER.getCode(),
             ECurrency.CNY.getCode(), ESysUser.B_USER.getCode(),
             ECurrency.CNY.getCode(), individed,
@@ -176,7 +176,7 @@ public class TicketAOImpl implements ITicketAO {
             rankTotalCode = rankTotal.getCode();
         }
         rankBO.refreshRanking(ERankType.TOTAL.getCode(), rankTotalCode);
-        // 加油后自动关注选手
+        // 加油后默认关注选手
         actionBO.saveAction(EActionType.ATTENTION.getCode(),
             EActionToType.PLAYER.getCode(), data.getPlayerCode(),
             data.getApplyUser());

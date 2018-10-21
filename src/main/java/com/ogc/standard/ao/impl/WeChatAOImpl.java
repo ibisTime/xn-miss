@@ -93,12 +93,9 @@ public class WeChatAOImpl implements IWeChatAO {
             refNo, bizType, bizNote, transAmount, EChannelType.WeChat_H5,
             applyUser);
         // 获取微信支付配置参数
-        // String systemCode = toAccount.getSystemCode();
-        // String companyCode = toAccount.getCompanyCode();
         CompanyChannel companyChannel = companyChannelBO.getCompanyChannel(
             ESystemCode.MISS.getCode(), ESystemCode.MISS.getCode(),
             EChannelType.WeChat_H5.getCode());
-
         // 获取微信公众号支付prepayid
         String prepayId = wechatBO.getPrepayIdH5(companyChannel, openId,
             bizNote, chargeOrderCode, transAmount, SysConstant.IP, backUrl);
