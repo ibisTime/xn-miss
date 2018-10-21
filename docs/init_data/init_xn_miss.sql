@@ -309,8 +309,6 @@ INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','CD201810121926156378556','UCOIN201700000000000001','2018-10-21 16:57:41',NULL,'CD-MISS000030');
 INSERT INTO `tsys_menu_role` (`role_code`,`menu_code`,`updater`,`update_datetime`,`remark`,`system_code`) VALUES ('COINSR201700000000000000','CD201810212309012784091','UCOIN201700000000000001','2018-10-21 16:57:41',NULL,'CD-MISS000030');
 
-
-
 /*
 -- Query: SELECT `type`,`ckey`,`cvalue`,`updater`,now() as `update_datetime`,`remark`FROM tsys_config
 LIMIT 0, 1000
@@ -321,13 +319,13 @@ INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`r
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_secret_key','3NP-tpZP9-5fH-R-FhvKTfYpPPVFNvjFF3JXmrcq','admin','2018-10-20 14:29:38','七牛云key1');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_bucket','test','admin','2018-10-20 14:29:38','存储空间');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('qiniu','qiniu_domain','ounm8iw2d.bkt.clouddn.com','admin','2018-10-20 14:29:38','访问域名');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_access_key','wx9c709bf30e60c07b\n','admin','2018-10-20 14:29:38',NULL);
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_secret_key','r2jdDFSdiikklwlllejlwjio3232451n','admin','2018-10-20 14:29:38',NULL);
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_access_key','wx9c709bf30e60c07b','admin','2018-10-20 14:29:38',NULL);
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('wx_h5','wx_h5_secret_key','0cb61ce758017e9a41547fb0ad710b37','admin','2018-10-20 14:29:38',NULL);
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','REGISTRATION_AGREEMENT','注册协议','admin','2018-10-20 14:29:38','注册协议');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('sys_txt','invite_url','邀请好友链接','admin','2018-10-20 14:29:38','邀请好友链接');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ticket','price','1','admin','2018-10-20 14:29:38','订单加油票价格(一分钱一票)');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ticket','price','1','admin','2018-10-20 14:29:38','订单加油票价格(元)');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ticket','invalid_time','30','admin','2018-10-20 14:29:38','订单失效时长（分钟）');
-INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ticket','return_money','1','admin','2018-10-20 14:29:38','首次分享返现金额');
+INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('ticket','return_money','1','admin','2018-10-20 14:29:38','首次分享返现金额(元)');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('dividend','plat_rate','0.2','admin','2018-10-20 14:29:38','平台加油分成比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('dividend','business_rate','0.8','admin','2018-10-20 14:29:38','品牌方加油分成比例');
 INSERT INTO `tsys_config` (`type`,`ckey`,`cvalue`,`updater`,`update_datetime`,`remark`) VALUES ('withdraw','fee_rate','0.01','admin','2018-10-20 14:29:38','取现费率');
