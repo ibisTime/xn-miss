@@ -29,12 +29,6 @@ public class BizConnecter {
 
     public static final String CERTI_URL = PropertiesUtil.Config.CERTI_URL;
 
-    public static final String BC_WALLET_URL = PropertiesUtil.Config.BC_WALLET_URL;
-
-    public static final String BLOCKCHAIN_DATA_URL = PropertiesUtil.Config.BLOCKCHAIN_DATA_URL;
-
-    public static final String CTQ_URL = PropertiesUtil.Config.CTQ_URL;
-
     public static final String POST_URL = "...";
 
     public static <T> T getBizData(String code, String json, Class<T> clazz) {
@@ -83,16 +77,8 @@ public class BizConnecter {
             postUrl = CERTI_URL;
         } else if (code.startsWith("804")) {
             postUrl = SMS_URL;
-        } else if (code.startsWith("802")) {
-            postUrl = BC_WALLET_URL;
         } else if (code.startsWith("660")) {
             postUrl = CORE_URL;
-        } else if (code.equals("626206") || code.equals("626026")) {
-            postUrl = BLOCKCHAIN_DATA_URL;
-        } else if (code.equals("626020") || code.equals("626100")
-                || code.equals("626080") || code.equals("626000")
-                || code.equals("626140") || code.equals("626120")) {
-            postUrl = CTQ_URL;
         }
         return postUrl;
     }

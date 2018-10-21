@@ -31,35 +31,12 @@ public class PropertiesUtil {
 
         public static String CERTI_URL = props.getProperty("CERTI_URL");
 
-        public static String BC_WALLET_URL = props.getProperty("BC_WALLET_URL");// 云钱包
-
         public static String CORE_URL = props.getProperty("CORE_URL");// 基础数据
 
-        public static String BLOCKCHAIN_DATA_URL = props
-            .getProperty("BLOCKCHAIN_DATA_URL");// 区块链全流水查询
-
-        public static String CTQ_URL = props.getProperty("CTQ_URL");
-
-        public static String ETH_URL = props.getProperty("ETH_URL");
-
-        public static String BTC_ENV = props.getProperty("BTC_ENV");
-
-        public static String BTC_URL = props.getProperty("BTC_URL");
-
-        public static String BTC_FEE = props.getProperty("BTC_FEE");
-
-        public static String BTC_CORE_USER = props.getProperty("BTC_CORE_USER");
-
-        public static String BTC_CORE_PWD = props.getProperty("BTC_CORE_PWD");
-
-        public static String BTC_CORE_HOST = props.getProperty("BTC_CORE_HOST");
-
-        public static String BTC_CORE_PORT = props.getProperty("BTC_CORE_PORT");
-
         public static String TOKEN_URL = props.getProperty("TOKEN_URL");
-        
-        public static String KEY_STORE_PATH = props.getProperty("KEY_STORE_PATH");
-        
+
+        public static String KEY_STORE_PATH = props
+            .getProperty("KEY_STORE_PATH");
 
         public static String USER_URL = props.getProperty("USER_URL");
 
@@ -80,6 +57,6 @@ public class PropertiesUtil {
 
         public static String SELF_PAY_BACKURL = props
             .getProperty("SELF_PAY_BACKURL");
-    
+
     }
 }
