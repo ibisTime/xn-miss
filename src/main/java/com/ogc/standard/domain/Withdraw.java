@@ -115,6 +115,17 @@ public class Withdraw extends ABaseDO {
     // 申请用户
     private User user;
 
+    // 申请用户
+    private SYSUser sysUser;
+
+    public SYSUser getSysUser() {
+        return sysUser;
+    }
+
+    public void setSysUser(SYSUser sysUser) {
+        this.sysUser = sysUser;
+    }
+
     public User getUser() {
         return user;
     }
