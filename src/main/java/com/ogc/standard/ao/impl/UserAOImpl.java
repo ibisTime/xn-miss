@@ -536,4 +536,10 @@ public class UserAOImpl implements IUserAO {
         userBO.refreshReferee(userId, userReferee, updater);
     }
 
+    @Override
+    public void addRemark(String userId, String remark) {
+        userBO.getUser(userId);
+        userBO.refreshRemark(userId, remark);
+    }
+
 }

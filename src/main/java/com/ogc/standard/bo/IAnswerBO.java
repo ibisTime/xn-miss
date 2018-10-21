@@ -21,13 +21,12 @@ import com.ogc.standard.domain.Answer;
 public interface IAnswerBO extends IPaginableBO<Answer> {
 
     public String saveAnswer(String question, String answer, String updater,
-            String remark, String status);
+            String remark);
 
     public void refreshAnswer(Answer data, String question, String answer,
-            String updater, String remark, String status);
+            String updater, String remark);
 
-    public void refreshStatus(String code, String updater, String remark,
-            String status);
+    public void deleteAnswer(String code);
 
     public List<Answer> queryAnswerList(Answer condition);
 

@@ -118,4 +118,7 @@ public interface IUserBO extends IPaginableBO<User> {
     // 修改推荐人
     public void refreshReferee(String userId, String userReferee, String updater);
 
+    // 更新备注
+    public void refreshRemark(String userId, String remark);
+
 }

@@ -1,11 +1,3 @@
-/**
- * @Title XN640110.java 
- * @Package com.ogc.standard.api.impl 
- * @Description 
- * @author taojian  
- * @date 2018年10月11日 下午2:49:34 
- * @version V1.0   
- */
 package com.ogc.standard.api.impl;
 
 import com.ogc.standard.ao.IAnswerAO;
@@ -18,10 +10,10 @@ import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
 
-/** 
- * 审核回复模版
- * @author: taojian 
- * @since: 2018年10月11日 下午2:49:34 
+/**
+ * 删除模版
+ * @author: jiafr 
+ * @since: 2018年10月21日 下午8:55:02 
  * @history:
  */
 public class XN640111 extends AProcessor {
@@ -32,8 +24,7 @@ public class XN640111 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        answerAO.approveAnswer(req.getCode(), req.getApproveResult(),
-            req.getUpdater(), req.getRemark());
+        answerAO.dorpAnswer(req.getCode());
         return new BooleanRes(true);
     }
 

@@ -17,6 +17,7 @@ import com.ogc.standard.common.JsonUtil;
 import com.ogc.standard.core.ObjValidater;
 import com.ogc.standard.domain.Answer;
 import com.ogc.standard.dto.req.XN640125Req;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.ParaException;
 import com.ogc.standard.spring.SpringContextHolder;
@@ -37,7 +38,7 @@ public class XN640125 extends AProcessor {
     public Object doBusiness() throws BizException {
         Answer condition = new Answer();
         condition.setQuestion(req.getQuestion());
-        condition.setStatus(req.getStatus());
+        condition.setStatus(EBoolean.YES.getCode());
         condition.setUpdater(req.getUpdater());
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(
             req.getCreateDatetimeStart(), false));

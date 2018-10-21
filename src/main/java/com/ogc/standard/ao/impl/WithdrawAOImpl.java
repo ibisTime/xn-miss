@@ -217,7 +217,8 @@ public class WithdrawAOImpl implements IWithdrawAO {
             String updater) {
         if (!ESystemAccount.SYS_ACOUNT_OFFLINE.getCode().equals(accountNumber)
                 && !ESystemAccount.SYS_ACOUNT_WEIXIN.getCode().equals(
-                    accountNumber)) {
+                    accountNumber)
+                && !ESystemAccount.SYS_ACOUNT_B.getCode().equals(accountNumber)) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "只支持系统托管账户");
         }
 
@@ -225,14 +226,25 @@ public class WithdrawAOImpl implements IWithdrawAO {
         if (account.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "账户余额不足");
         }
+        String bizNote = null;
+        String jourBizType = null;
+        if (ESystemAccount.SYS_ACOUNT_OFFLINE.getCode().equals(accountNumber)
+                || ESystemAccount.SYS_ACOUNT_WEIXIN.getCode().equals(
+                    accountNumber)) {
+            bizNote = "平台于" + withDate + "进行取现" + AmountUtil.div(amount, 1000L)
+                    + "元";
+            jourBizType = EJourBizTypePlat.AJ_QX.getCode();
+        } else {
+            bizNote = "品牌方于" + withDate + "进行取现"
+                    + AmountUtil.div(amount, 1000L) + "元";
+            jourBizType = EJourBizTypeBusiness.AJ_QX.getCode();
+        }
 
-        String bizNote = "平台于" + withDate + "进行取现"
-                + AmountUtil.div(amount, 1000L) + "元";
         if (StringUtils.isNotBlank(withNote)) {
             bizNote = bizNote + withNote;
         }
         accountBO.changeAmount(accountNumber, EChannelType.Offline,
-            channelOrder, null, channelOrder, EJourBizTypePlat.AJ_QX.getCode(),
-            bizNote, amount.negate());
+            channelOrder, null, channelOrder, jourBizType, bizNote,
+            amount.negate());
     }
 }

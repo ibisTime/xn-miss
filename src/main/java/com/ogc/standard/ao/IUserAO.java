@@ -72,4 +72,7 @@ public interface IUserAO {
     // 更新最后一次登录时间
     public void lastLogin(String userId);
 
+    // 管理端为用户添加备注
+    public void addRemark(String userId, String remark);
+
 }

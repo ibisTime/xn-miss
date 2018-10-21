@@ -33,10 +33,6 @@ public class XN640110Req {
     // 备注
     private String remark;
 
-    // 发布类型
-    @NotBlank
-    private String bizType;
-
     public String getQuestion() {
         return question;
     }
@@ -67,14 +63,6 @@ public class XN640110Req {
 
     public void setRemark(String remark) {
         this.remark = remark;
-    }
-
-    public String getBiztype() {
-        return bizType;
-    }
-
-    public void setBiztype(String biztype) {
-        this.bizType = biztype;
     }
 
 }

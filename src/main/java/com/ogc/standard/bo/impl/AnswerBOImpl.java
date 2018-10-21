@@ -11,6 +11,7 @@ import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.IAnswerDAO;
 import com.ogc.standard.domain.Answer;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EGeneratePrefix;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -23,18 +24,17 @@ public class AnswerBOImpl extends PaginableBOImpl<Answer> implements IAnswerBO {
 
     @Override
     public String saveAnswer(String question, String answer, String updater,
-            String remark, String status) {
+            String remark) {
         String code = OrderNoGenerater.generate(EGeneratePrefix.answer
             .getCode());
         Answer data = new Answer();
         data.setCode(code);
         data.setQuestion(question);
         data.setAnswer(answer);
-        data.setStatus(status);
-        Date now = new Date();
-        data.setCreateDatetime(now);
+        data.setStatus(EBoolean.YES.getCode());
+        data.setCreateDatetime(new Date());
         data.setUpdater(updater);
-        data.setUpdateDatetime(now);
+        data.setUpdateDatetime(new Date());
         data.setRemark(remark);
         answerDAO.insert(data);
         return code;
@@ -42,10 +42,9 @@ public class AnswerBOImpl extends PaginableBOImpl<Answer> implements IAnswerBO {
 
     @Override
     public void refreshAnswer(Answer data, String question, String answer,
-            String updater, String remark, String status) {
+            String updater, String remark) {
         data.setQuestion(question);
         data.setAnswer(answer);
-        data.setStatus(status);
         data.setUpdater(updater);
         data.setUpdateDatetime(new Date());
         data.setRemark(remark);
@@ -53,13 +52,9 @@ public class AnswerBOImpl extends PaginableBOImpl<Answer> implements IAnswerBO {
     }
 
     @Override
-    public void refreshStatus(String code, String updater, String remark,
-            String status) {
+    public void deleteAnswer(String code) {
         Answer data = getAnswer(code);
-        data.setStatus(status);
-        data.setUpdater(updater);
-        data.setUpdateDatetime(new Date());
-        data.setRemark(remark);
+        data.setStatus(EBoolean.NO.getCode());
         answerDAO.updateStatus(data);
     }
 
