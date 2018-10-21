@@ -76,8 +76,9 @@ public class TicketAOImpl implements ITicketAO {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该选手不可以加油");
         }
 
-        BigDecimal price = StringValidater.toBigDecimal(sysConfigBO
-            .getConfigValue(SysConstant.PRICE).getCvalue());
+        BigDecimal price = StringValidater.toBigDecimal(
+            sysConfigBO.getConfigValue(SysConstant.PRICE).getCvalue())
+            .multiply(new BigDecimal("1000"));
 
         Integer invalidTime = StringValidater.toInteger(sysConfigBO
             .getConfigValue(SysConstant.INVALID_TIME).getCvalue());

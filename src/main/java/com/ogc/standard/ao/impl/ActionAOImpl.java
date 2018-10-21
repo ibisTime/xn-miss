@@ -89,11 +89,11 @@ public class ActionAOImpl implements IActionAO {
                 SYSConfig money = sysConfigBO
                     .getConfigValue(SysConstant.RETURN_MONEY);
                 accountBO.transAmountCZB(creater, ECurrency.CNY.getCode(),
-                    ESystemAccount.SYS_ACOUNT_CNY.getCode(),
-                    ECurrency.CNY.getCode(), new BigDecimal(money.getCvalue()),
-                    EJourBizTypePlat.AJ_FX.getCode(),
-                    EJourBizTypeUser.AJ_FX.getCode(),
-                    EJourBizTypePlat.AJ_FX.getValue(),
+                    ESystemAccount.SYS_ACOUNT_CNY.getCode(), ECurrency.CNY
+                        .getCode(), new BigDecimal(money.getCvalue())
+                        .multiply(new BigDecimal("1000")),
+                    EJourBizTypePlat.AJ_FX.getCode(), EJourBizTypeUser.AJ_FX
+                        .getCode(), EJourBizTypePlat.AJ_FX.getValue(),
                     EJourBizTypeUser.AJ_FX.getValue(), code);
             }
             playerBO.addShare(player);
