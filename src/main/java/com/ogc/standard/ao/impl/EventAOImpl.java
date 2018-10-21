@@ -115,7 +115,13 @@ public class EventAOImpl implements IEventAO {
 
     @Override
     public Paginable<Event> queryEventPage(int start, int limit, Event condition) {
-        return eventBO.getPaginable(start, limit, condition);
+        Paginable<Event> paginable = eventBO.getPaginable(start, limit,
+            condition);
+        List<Event> list = paginable.getList();
+        for (Event event : list) {
+            event.setOrderNumber(event.getOrder());
+        }
+        return paginable;
     }
 
     @Override

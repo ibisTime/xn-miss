@@ -33,8 +33,7 @@ public class XN640110 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         return new PKCodeRes(answerAO.addAnswer(req.getQuestion(),
-            req.getAnswer(), req.getUpdater(), req.getRemark(),
-            req.getBiztype()));
+            req.getAnswer(), req.getUpdater(), req.getRemark()));
     }
 
     @Override

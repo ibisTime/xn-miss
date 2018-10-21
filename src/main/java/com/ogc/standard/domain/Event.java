@@ -49,6 +49,8 @@ public class Event extends ABaseDO {
 
     // ***********db properties***********
 
+    private String orderNumber;
+
     public String getCode() {
         return code;
     }
@@ -111,6 +113,14 @@ public class Event extends ABaseDO {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
 }

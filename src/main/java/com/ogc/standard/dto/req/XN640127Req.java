@@ -21,9 +21,6 @@ public class XN640127Req extends AListReq {
     // 问题描述
     private String question;
 
-    // 状态
-    private String status;
-
     // 更新人
     private String updater;
 
@@ -47,14 +44,6 @@ public class XN640127Req extends AListReq {
 
     public void setQuestion(String question) {
         this.question = question;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getCreateDatetimeStart() {

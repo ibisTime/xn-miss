@@ -21,9 +21,6 @@ public class XN640125Req extends APageReq {
     // 问题描述
     private String question;
 
-    // 状态
-    private String status;
-
     // 更新人
     private String updater;
 
@@ -47,14 +44,6 @@ public class XN640125Req extends APageReq {
 
     public void setQuestion(String question) {
         this.question = question;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getCreateDatetimeStart() {

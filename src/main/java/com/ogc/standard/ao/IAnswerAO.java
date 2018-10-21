@@ -21,17 +21,12 @@ import com.ogc.standard.domain.Answer;
 public interface IAnswerAO {
 
     public String addAnswer(String question, String answer, String updater,
-            String remark, String bizType);
+            String remark);
 
     public void editAnswer(String code, String question, String answer,
             String updater, String remark, String bizType);
 
-    public void approveAnswer(String code, String approveResult,
-            String updater, String remark);
-
-    public void releaseAnswer(String code, String updater);
-
-    public void obtainAnswer(String code, String updater);
+    public void dorpAnswer(String code);
 
     public Paginable<Answer> queryAnswerPage(int start, int limit,
             Answer condition);

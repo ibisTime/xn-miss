@@ -18,9 +18,6 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
 			<if test="updater != null and updater != '' ">
 				AND t.updater = #{updater}
 			</if>
@@ -63,11 +60,6 @@
 		UPDATE thqxj_answer
 		SET
 		status=#{status}
-		,updater=#{updater}
-		,update_datetime=#{updateDatetime}
-		<if test="remark != null and remark != '' ">
-		,remark=#{remark}
-		</if>
 		WHERE
 		code=#{code}
 	
@@ -78,7 +70,6 @@
 		SET
 		question=#{question}
 		,answer=#{answer}
-		,status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
 		<if test="remark != null and remark != '' ">
