@@ -577,7 +577,7 @@ CREATE TABLE `tsys_config` (
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tsys_dict
@@ -593,7 +593,7 @@ CREATE TABLE `tsys_dict` (
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tsys_menu
@@ -626,7 +626,7 @@ CREATE TABLE `tsys_menu_role` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1046 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tsys_role
