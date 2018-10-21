@@ -22,13 +22,14 @@ public class XN640016 extends AProcessor {
 
     @Override
     public Object doBusiness() throws BizException {
-        return playerAO.getPlayer(req.getCode());
+        return playerAO.getPlayer(req.getCode(), req.getUserId());
     }
 
     @Override
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN640016Req.class);
+        req.setUserId(operator);
         ObjValidater.validateReq(req);
     }
 

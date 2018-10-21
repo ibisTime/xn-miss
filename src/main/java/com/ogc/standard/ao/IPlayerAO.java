@@ -16,8 +16,8 @@ public interface IPlayerAO {
 
     public String addPlayer(XN640000Req req);
 
-    public void approvePlayer(String code, String approveResult, String approver,
-            String remark);
+    public void approvePlayer(String code, String approveResult,
+            String approver, String remark);
 
     public int editPlayer(XN640002Req data);
 
@@ -31,5 +31,5 @@ public interface IPlayerAO {
 
     public List<Player> queryPlayerList(Player condition);
 
-    public Player getPlayer(String code);
+    public Player getPlayer(String code, String userId);
 }
