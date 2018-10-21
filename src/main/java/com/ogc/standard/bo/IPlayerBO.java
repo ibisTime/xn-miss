@@ -37,4 +37,6 @@ public interface IPlayerBO extends IPaginableBO<Player> {
 
     public Player getPlayerForUpdate(String code);
 
+    public void subAttention(Player data);
+
 }

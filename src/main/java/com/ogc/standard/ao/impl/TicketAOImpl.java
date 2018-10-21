@@ -164,14 +164,18 @@ public class TicketAOImpl implements ITicketAO {
         playerBO.addPlayerTicket(player, data.getTicket());
 
         // 加油后默认关注选手
-        actionBO.saveAction(
-            EActionType.ATTENTION.getCode(),
-            EActionToType.PLAYER.getCode(),
-            data.getPlayerCode(),
-            data.getApplyUser(),
-            user.getNickname() + "于"
-                    + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7) + "关注了选手"
-                    + player.getCname());
+        if (!actionBO.isActionExist(data.getApplyUser(), data.getPlayerCode(),
+            EActionType.ATTENTION.getCode())) {
+            playerBO.addAttention(player);
+            actionBO.saveAction(
+                EActionType.ATTENTION.getCode(),
+                EActionToType.PLAYER.getCode(),
+                data.getPlayerCode(),
+                data.getApplyUser(),
+                user.getNickname() + "于"
+                        + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7)
+                        + "关注了选手" + player.getCname());
+        }
         return new BooleanRes(true);
     }
 
@@ -238,14 +242,18 @@ public class TicketAOImpl implements ITicketAO {
         playerBO.addPlayerTicket(player, data.getTicket());
 
         // 加油后默认关注选手
-        actionBO.saveAction(
-            EActionType.ATTENTION.getCode(),
-            EActionToType.PLAYER.getCode(),
-            data.getPlayerCode(),
-            data.getApplyUser(),
-            user.getNickname() + "于"
-                    + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7) + "关注了选手"
-                    + player.getCname());
+        if (!actionBO.isActionExist(data.getApplyUser(), data.getPlayerCode(),
+            EActionType.ATTENTION.getCode())) {
+            playerBO.addAttention(player);
+            actionBO.saveAction(
+                EActionType.ATTENTION.getCode(),
+                EActionToType.PLAYER.getCode(),
+                data.getPlayerCode(),
+                data.getApplyUser(),
+                user.getNickname() + "于"
+                        + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7)
+                        + "关注了选手" + player.getCname());
+        }
     }
 
     @Override

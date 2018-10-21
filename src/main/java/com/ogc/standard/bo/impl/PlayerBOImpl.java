@@ -180,6 +180,7 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
         } else {
             data.setAttentionSum(data.getAttentionSum() + 1);
         }
+        playerDAO.updateAttention(data);
     }
 
     @Override
@@ -189,6 +190,7 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
         } else {
             data.setShareSum(data.getShareSum() + 1);
         }
+        playerDAO.updateShare(data);
     }
 
     @Override
@@ -198,6 +200,15 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
         } else {
             data.setScanSum(data.getScanSum() + 1);
         }
+        playerDAO.updateScan(data);
+    }
+
+    @Override
+    public void subAttention(Player data) {
+        if (null != data.getScanSum()) {
+            data.setScanSum(data.getScanSum() - 1);
+        }
+        playerDAO.updateAttention(data);
     }
 
     @Override
@@ -213,4 +224,5 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
             return (Long) obj;
         }
     }
+
 }
