@@ -147,7 +147,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
     private void payOrderNO(Withdraw data, String payUser, String payNote,
             String payCode) {
         withdrawBO.payOrder(data, EWithdrawStatus.Pay_NO, payUser, payNote,
-            payCode);
+            payCode, null);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         BigDecimal totalAmount = data.getAmount().add(data.getFee());
         // 释放冻结流水
@@ -157,23 +157,19 @@ public class WithdrawAOImpl implements IWithdrawAO {
     private void payOrderYES(Withdraw data, String payUser, String payNote,
             String payCode, BigDecimal payFee) {
         withdrawBO.payOrder(data, EWithdrawStatus.Pay_YES, payUser, payNote,
-            payCode);
+            payCode, payFee);
         Account dbAccount = accountBO.getAccount(data.getAccountNumber());
         // 解冻
         BigDecimal totalAmount = data.getAmount().add(data.getFee());
         accountBO.cutFrozenAmount(dbAccount, totalAmount);
         // 减钱
-        if (ESystemAccount.SYS_ACOUNT_B.getCode().equals(
-            data.getAccountNumber())) {
-            accountBO.changeAmount(data.getAccountNumber(),
-                EChannelType.Offline, payCode, null, data.getCode(),
-                EJourBizTypeBusiness.AJ_QX.getCode(), "线下取现", data.getAmount()
-                    .negate());
-            accountBO.changeAmount(data.getAccountNumber(),
-                EChannelType.Offline, payCode, null, data.getCode(),
-                EJourBizTypePlat.AJ_QXSXF.getCode(), "取现手续费", data.getFee()
-                    .negate());
-        }
+        accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
+            payCode, null, data.getCode(),
+            EJourBizTypeBusiness.AJ_QX.getCode(), "线下取现", data.getAmount()
+                .negate());
+        accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
+            payCode, null, data.getCode(), EJourBizTypePlat.AJ_QXSXF.getCode(),
+            "取现手续费", data.getFee().negate());
         // 系统账户扣除转账费
         accountBO.changeAmount(ESystemAccount.SYS_ACOUNT_CNY.getCode(),
             EChannelType.Offline, payCode, null, data.getCode(),

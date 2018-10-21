@@ -102,7 +102,8 @@ public class WithdrawBOImpl extends PaginableBOImpl<Withdraw> implements
 
     @Override
     public void payOrder(Withdraw data, EWithdrawStatus status, String payUser,
-            String payNote, String channelOrder) {
+            String payNote, String channelOrder, BigDecimal payFee) {
+        data.setPayFee(payFee);
         data.setStatus(status.getCode());
         data.setPayUser(payUser);
         data.setPayNote(payNote);

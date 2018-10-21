@@ -18,6 +18,8 @@ import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ITicketBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.AmountUtil;
+import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Player;
@@ -77,11 +79,12 @@ public class TicketAOImpl implements ITicketAO {
 
         BigDecimal price = StringValidater.toBigDecimal(sysConfigBO
             .getConfigValue(SysConstant.PRICE).getCvalue());
+        BigDecimal mulPrice = AmountUtil.mul(price, 1000L);
 
         Integer invalidTime = StringValidater.toInteger(sysConfigBO
             .getConfigValue(SysConstant.INVALID_TIME).getCvalue());
 
-        return ticketBO.saveTicket(player, ticket, applyUser, price,
+        return ticketBO.saveTicket(player, ticket, applyUser, mulPrice,
             invalidTime);
     }
 
@@ -123,10 +126,12 @@ public class TicketAOImpl implements ITicketAO {
     // 1、C端账户转账给平台账户
     // 2、更新订单
     // 3、更新选手票数和排名
+    @Transactional
     private Object toPayTicketYue(Ticket data, String tradePwd) {
         // 验证交易密码
         userBO.checkTradePwd(data.getApplyUser(), tradePwd);
 
+        User user = userBO.getUser(data.getApplyUser());
         Player player = playerBO.getPlayer(data.getPlayerCode());
 
         // 更新业务订单（加油订单）
@@ -159,9 +164,14 @@ public class TicketAOImpl implements ITicketAO {
         playerBO.addPlayerTicket(player, data.getTicket());
 
         // 加油后默认关注选手
-        actionBO.saveAction(EActionType.ATTENTION.getCode(),
-            EActionToType.PLAYER.getCode(), data.getPlayerCode(),
-            data.getApplyUser(), "");
+        actionBO.saveAction(
+            EActionType.ATTENTION.getCode(),
+            EActionToType.PLAYER.getCode(),
+            data.getPlayerCode(),
+            data.getApplyUser(),
+            user.getNickname() + "于"
+                    + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7) + "关注了选手"
+                    + player.getCname());
         return new BooleanRes(true);
     }
 
@@ -204,6 +214,7 @@ public class TicketAOImpl implements ITicketAO {
     @Transactional
     public void paySuccess(String payGroup, String payCode) {
         Ticket data = ticketBO.getTicketForUpdate(payGroup);// payGroup==code
+        User user = userBO.getUser(data.getApplyUser());
         if (!ETicketStatus.TO_PAY.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该订单不是待支付");
         }
@@ -227,9 +238,14 @@ public class TicketAOImpl implements ITicketAO {
         playerBO.addPlayerTicket(player, data.getTicket());
 
         // 加油后默认关注选手
-        actionBO.saveAction(EActionType.ATTENTION.getCode(),
-            EActionToType.PLAYER.getCode(), data.getPlayerCode(),
-            data.getApplyUser(), "");
+        actionBO.saveAction(
+            EActionType.ATTENTION.getCode(),
+            EActionToType.PLAYER.getCode(),
+            data.getPlayerCode(),
+            data.getApplyUser(),
+            user.getNickname() + "于"
+                    + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7) + "关注了选手"
+                    + player.getCname());
     }
 
     @Override
