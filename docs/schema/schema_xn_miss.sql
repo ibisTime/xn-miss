@@ -505,6 +505,7 @@ CREATE TABLE `tstd_withdraw` (
   `amount` decimal(64,0) DEFAULT NULL COMMENT '取现金额',
   `currency` varchar(8) DEFAULT NULL COMMENT ' 取现币种',
   `fee` decimal(64,0) DEFAULT NULL COMMENT '取现手续费',
+  `pay_fee` decimal(64,0) DEFAULT NULL COMMENT '取现转账费',
   `channel_type` varchar(32) DEFAULT NULL COMMENT '支付渠道',
   `channel_bank` varchar(32) DEFAULT NULL COMMENT '渠道银行代号',
   `pay_card_info` varchar(255) DEFAULT NULL COMMENT '支付渠道账号信息',
