@@ -71,7 +71,7 @@ public class ActionBOImpl extends PaginableBOImpl<Action> implements IActionBO {
         condition.setToCode(toCode);
         condition.setCreater(creater);
         Action data = actionDAO.select(condition);
-        if (null == null) {
+        if (null == data) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "该用户行为不存在");
         }
         return data;
