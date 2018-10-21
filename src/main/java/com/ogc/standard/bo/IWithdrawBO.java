@@ -20,7 +20,7 @@ public interface IWithdrawBO extends IPaginableBO<Withdraw> {
             String approveUser, String approveNote);
 
     void payOrder(Withdraw data, EWithdrawStatus status, String payUser,
-            String payNote, String channelOrder);
+            String payNote, String channelOrder, BigDecimal amount);
 
     List<Withdraw> queryWithdrawList(Withdraw condition);
 

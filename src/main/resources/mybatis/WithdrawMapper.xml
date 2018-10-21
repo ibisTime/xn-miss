@@ -10,6 +10,7 @@
 		<result column="amount" property="amount" />
 		<result column="currency" property="currency" />
 		<result column="fee" property="fee" />
+		<result column="pay_fee" property="payFee" />
 		
 		<result column="channel_type" property="channelType" />
 		<result column="channel_bank" property="channelBank" />
@@ -123,6 +124,7 @@
 		,t.amount
 		,t.currency
 		,t.fee
+		,t.pay_fee
 		
 		,t.channel_type
 		,t.channel_bank
@@ -223,7 +225,8 @@
 	<update id="pay_order" parameterType="withdraw">
 		UPDATE tstd_withdraw
 		SET
-		status = #{status}
+		pay_fee = #{payFee}
+		,status = #{status}
 		,pay_user = #{payUser}
 		,pay_note = #{payNote}
 		,pay_group = #{payGroup}

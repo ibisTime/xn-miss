@@ -33,6 +33,9 @@ public class Withdraw extends ABaseDO {
     // 取现手续费
     private BigDecimal fee;
 
+    // 取现转账费
+    private BigDecimal payFee;
+
     // 支付渠道
     private String channelType;
 
@@ -214,6 +217,14 @@ public class Withdraw extends ABaseDO {
 
     public void setFee(BigDecimal fee) {
         this.fee = fee;
+    }
+
+    public BigDecimal getPayFee() {
+        return payFee;
+    }
+
+    public void setPayFee(BigDecimal payFee) {
+        this.payFee = payFee;
     }
 
     public String getChannelType() {
