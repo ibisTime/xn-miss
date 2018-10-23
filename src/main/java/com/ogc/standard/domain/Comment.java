@@ -21,7 +21,7 @@ public class Comment extends ABaseDO {
     // 父级编号（帖子/评论编号）
     private String parentCode;
 
-    // 类型（1=帖子 2=帖子评论）
+    // 类型
     private String type;
 
     // 评论人
@@ -84,6 +84,9 @@ public class Comment extends ABaseDO {
 
     // 子集评论
     private List<Comment> nextCommentList;
+
+    // 选手
+    private Player player;
 
     public String getCode() {
         return code;
@@ -267,6 +270,14 @@ public class Comment extends ABaseDO {
 
     public void setNextCommentList(List<Comment> nextCommentList) {
         this.nextCommentList = nextCommentList;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
 }

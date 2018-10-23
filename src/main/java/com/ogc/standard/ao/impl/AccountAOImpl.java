@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 import com.ogc.standard.ao.IAccountAO;
 import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IJourBO;
+import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Account;
+import com.ogc.standard.domain.User;
+import com.ogc.standard.enums.EAccountType;
+import com.ogc.standard.enums.EUser;
+import com.ogc.standard.exception.BizException;
 
 @Service
 public class AccountAOImpl implements IAccountAO {
@@ -22,10 +27,19 @@ public class AccountAOImpl implements IAccountAO {
     @Autowired
     private IJourBO jourBO;
 
+    @Autowired
+    private IUserBO userBO;
+
     @Override
     public Paginable<Account> queryAccountPage(int start, int limit,
             Account condition) {
-        return accountBO.getPaginable(start, limit, condition);
+        Paginable<Account> paginable = accountBO.getPaginable(start, limit,
+            condition);
+        List<Account> list = paginable.getList();
+        for (Account data : list) {
+            init(data);
+        }
+        return paginable;
     }
 
     @Override
@@ -59,5 +73,44 @@ public class AccountAOImpl implements IAccountAO {
         condition.setCurrency(currency);
         condition.setStatus(status);
         return accountBO.queryAccountAmountSumList(condition);
+    }
+
+    public void init(Account data) {
+        // 户名
+        String realName = null;
+
+        // 账户
+        Account account = accountBO.getAccount(data.getAccountNumber());
+
+        if (EAccountType.Customer.getCode().equals(data.getType())) {
+            // C端用户
+            User user = userBO.getUser(account.getUserId());
+            if (StringUtils.isBlank(user.getRealName())) {
+                if (StringUtils.isNotBlank(user.getNickname())
+                        && StringUtils.isNotBlank(user.getMobile())) {
+                    realName = user.getNickname().concat("-")
+                        .concat(user.getMobile());
+                } else if (StringUtils.isNotBlank(user.getMobile())) {
+                    realName = user.getMobile();
+                } else if (StringUtils.isNotBlank(user.getNickname())) {
+                    realName = user.getNickname();
+                } else {
+                    throw new BizException("xn0000", "用户未注册");
+                }
+            } else {
+                if (StringUtils.isNotBlank(user.getNickname())) {
+                    realName = user.getNickname().concat(user.getRealName());
+                }
+            }
+
+        } else if (EAccountType.Business.getCode().equals(data.getType())) {
+            realName = "品牌方";
+        } else {
+            // 系统用户
+            realName = EUser.ADMIN.getValue();
+        }
+
+        data.setRealName(realName);
+
     }
 }

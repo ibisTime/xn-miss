@@ -67,8 +67,6 @@ public class RankAOImpl implements IRankAO {
     public void init(Rank data) {
         if (StringUtils.isNotBlank(data.getPlayerCode())) {
             Player player = playerBO.getPlayer(data.getPlayerCode());
-            data.setPlayerCname(player.getCname());
-            data.setPlayerEname(player.getEname());
             data.setPlayer(player);
         }
     }

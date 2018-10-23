@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ITicketBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
+import com.ogc.standard.common.AmountUtil;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ITicketDAO;
 import com.ogc.standard.domain.Player;
@@ -36,7 +37,8 @@ public class TicketBOImpl extends PaginableBOImpl<Ticket> implements ITicketBO {
             data.setCode(code);
             data.setPlayerCode(player.getCode());
             data.setTicket(ticket);
-            data.setAmount(price.multiply(new BigDecimal(ticket)));
+            BigDecimal amount = AmountUtil.mul(price, ticket);
+            data.setAmount(amount);
             data.setApplyUser(applyUser);
             data.setStatus(ETicketStatus.TO_PAY.getCode());
             data.setCreateDatetime(new Date());

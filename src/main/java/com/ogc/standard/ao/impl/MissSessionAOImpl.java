@@ -21,6 +21,7 @@ import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.MissSession;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EMissSessionType;
+import com.ogc.standard.enums.ESysUser;
 
 /** 
  * @author: taojian 
@@ -42,8 +43,12 @@ public class MissSessionAOImpl implements IMissSessionAO {
     @Override
     public String addMissSession(String user1) {
         userBO.getUser(user1);
-        return missSessionBO.saveSession(
+        String code = missSessionBO.saveSession(
             EMissSessionType.COMMIT_QUESTION.getCode(), user1);
+        // 新增第一条消息
+        questionBO
+            .saveSms(code, ESysUser.SYS_USER.getCode(), "欢迎使用客服,有什么可以帮到您");
+        return code;
     }
 
     @Override

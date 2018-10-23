@@ -69,12 +69,7 @@ public class Rank extends ABaseDO {
     // 创建时间止
     private Date createDatetimeEnd;
 
-    // 选手中文名
-    private String playerCname;
-
-    // 选手英文名
-    private String playerEname;
-
+    // 选手
     private Player player;
 
     public void setCode(String code) {
@@ -211,22 +206,6 @@ public class Rank extends ABaseDO {
 
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
-    }
-
-    public String getPlayerCname() {
-        return playerCname;
-    }
-
-    public void setPlayerCname(String playerCname) {
-        this.playerCname = playerCname;
-    }
-
-    public String getPlayerEname() {
-        return playerEname;
-    }
-
-    public void setPlayerEname(String playerEname) {
-        this.playerEname = playerEname;
     }
 
     public Player getPlayer() {

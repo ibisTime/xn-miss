@@ -172,8 +172,6 @@ public class CommentAOImpl implements ICommentAO {
         if (CollectionUtils.isNotEmpty(resultList)) {
             for (Comment comment : resultList) {
 
-                commentBO.initComment(comment);
-
                 List<Comment> commentList = new ArrayList<Comment>();
                 commentBO.searchCycleComment(comment.getCode(), commentList);
                 commentBO.orderCommentList(commentList);
@@ -185,7 +183,9 @@ public class CommentAOImpl implements ICommentAO {
 
     @Override
     public Comment getComment(String code) {
-        return commentBO.getComment(code);
+        Comment comment = commentBO.getComment(code);
+        commentBO.initComment(comment);
+        return comment;
     }
 
 }

@@ -126,8 +126,6 @@ public class ChargeAOImpl implements IChargeAO {
             List<Charge> list = page.getList();
             for (Charge charge : list) {
                 init(charge);
-                User user = userBO.getUser(charge.getApplyUser());
-                charge.setUser(user);
             }
         }
         return page;
@@ -139,8 +137,6 @@ public class ChargeAOImpl implements IChargeAO {
         if (CollectionUtils.isNotEmpty(list)) {
             for (Charge charge : list) {
                 init(charge);
-                // User user = userBO.getUser(charge.getApplyUser());
-                // charge.setUser(user);
             }
         }
         return list;
@@ -149,8 +145,7 @@ public class ChargeAOImpl implements IChargeAO {
     @Override
     public Charge getCharge(String code) {
         Charge charge = chargeBO.getCharge(code);
-        // User user = userBO.getUser(charge.getApplyUser());
-        // charge.setUser(user);
+        init(charge);
         return charge;
     }
 
@@ -161,27 +156,23 @@ public class ChargeAOImpl implements IChargeAO {
         // 审核人
         String payUserName = null;
 
-        if (EAccountType.Customer.getCode().equals(charge.getApplyUserType())) {
+        // 账户
+        Account account = accountBO.getAccount(charge.getAccountNumber());
+
+        if (EAccountType.Customer.getCode().equals(charge.getType())) {
 
             // C端用户
-            User user = userBO.getUser(charge.getApplyUser());
+            User user = userBO.getUser(account.getUserId());
 
             realName = user.getMobile();
             if (StringUtils.isNotBlank(user.getRealName())) {
                 realName = user.getRealName().concat("-").concat(realName);
             }
 
-        } else if (EAccountType.Plat.getCode()
-            .equals(charge.getApplyUserType())) {
-        }
-        // 系统用户
-        realName = EUser.ADMIN.getValue();
+        } else {
 
-        SYSUser sysUser = sysUserBO.getSYSUser(charge.getApplyUser());
-
-        realName = sysUser.getMobile();
-        if (StringUtils.isNotBlank(sysUser.getRealName())) {
-            realName = sysUser.getRealName().concat("-").concat(realName);
+            // 系统用户
+            realName = EUser.ADMIN.getValue();
         }
 
         SYSUser payUser = sysUserBO.getSYSUserUnCheck(charge.getPayUser());

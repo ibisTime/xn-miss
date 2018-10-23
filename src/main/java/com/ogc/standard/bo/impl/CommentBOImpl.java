@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ogc.standard.bo.ICommentBO;
+import com.ogc.standard.bo.IPlayerBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.core.OrderNoGenerater;
 import com.ogc.standard.dao.ICommentDAO;
 import com.ogc.standard.domain.Comment;
+import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.ECommentStatus;
 import com.ogc.standard.enums.ECommentType;
@@ -37,6 +39,9 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private IPlayerBO playerBO;
 
     @Override
     public boolean isCommentExist(String code) {
@@ -154,6 +159,8 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
         User user = userBO.getUser(comment.getCreater());
         comment.setNickname(user.getNickname());
         comment.setPhoto(user.getPhoto());
+        Player player = playerBO.getPlayer(comment.getToCode());
+        comment.setPlayer(player);
     }
 
     @Override
