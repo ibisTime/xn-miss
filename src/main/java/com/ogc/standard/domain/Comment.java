@@ -85,8 +85,8 @@ public class Comment extends ABaseDO {
     // 子集评论
     private List<Comment> nextCommentList;
 
-    // 选手
-    private Player player;
+    // 选手中文名
+    private String cName;
 
     public String getCode() {
         return code;
@@ -272,12 +272,12 @@ public class Comment extends ABaseDO {
         this.nextCommentList = nextCommentList;
     }
 
-    public Player getPlayer() {
-        return player;
+    public String getcName() {
+        return cName;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setcName(String cName) {
+        this.cName = cName;
     }
 
 }

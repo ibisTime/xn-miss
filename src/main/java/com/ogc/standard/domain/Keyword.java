@@ -35,6 +35,10 @@ public class Keyword extends ABaseDO {
     // 备注
     private String remark;
 
+    /**********DB properties******/
+
+    private SYSUser sysUser;
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -89,6 +93,14 @@ public class Keyword extends ABaseDO {
 
     public String getRemark() {
         return remark;
+    }
+
+    public SYSUser getSysUser() {
+        return sysUser;
+    }
+
+    public void setSysUser(SYSUser sysUser) {
+        this.sysUser = sysUser;
     }
 
 }

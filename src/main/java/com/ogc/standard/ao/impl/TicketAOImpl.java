@@ -281,7 +281,9 @@ public class TicketAOImpl implements ITicketAO {
 
     @Override
     public Ticket getTicket(String code) {
-        return ticketBO.getTicket(code);
+        Ticket ticket = ticketBO.getTicket(code);
+        init(ticket);
+        return ticket;
     }
 
     public void init(Ticket data) {

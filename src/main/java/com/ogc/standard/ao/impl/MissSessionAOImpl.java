@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.ogc.standard.ao.IMissSessionAO;
 import com.ogc.standard.bo.IMissSessionBO;
 import com.ogc.standard.bo.IQuestionBO;
+import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.MissSession;
@@ -40,14 +41,19 @@ public class MissSessionAOImpl implements IMissSessionAO {
     @Autowired
     private IUserBO userBO;
 
+    @Autowired
+    private ISYSConfigBO sysConfigBO;
+
     @Override
     public String addMissSession(String user1) {
         userBO.getUser(user1);
         String code = missSessionBO.saveSession(
             EMissSessionType.COMMIT_QUESTION.getCode(), user1);
+
+        // sysConfigBO.get
         // 新增第一条消息
-        questionBO
-            .saveSms(code, ESysUser.SYS_USER.getCode(), "欢迎使用客服,有什么可以帮到您");
+        questionBO.saveSms(code, ESysUser.SYS_USER.getCode(),
+            "欢迎使用客服,有什么可以帮助到您");
         return code;
     }
 

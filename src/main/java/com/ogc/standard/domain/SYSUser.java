@@ -1,4 +1,3 @@
-
 package com.ogc.standard.domain;
 
 import java.util.Date;
@@ -15,6 +14,7 @@ import com.ogc.standard.dao.base.ABaseDO;
 public class SYSUser extends ABaseDO {
 
     private static final long serialVersionUID = -332310384678966884L;
+
     // ***********db properties***********
 
     // 管理人员id

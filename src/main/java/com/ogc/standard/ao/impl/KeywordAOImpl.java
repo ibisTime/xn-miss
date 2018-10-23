@@ -2,14 +2,17 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IKeywordAO;
 import com.ogc.standard.bo.IKeywordBO;
+import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.domain.Keyword;
+import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.dto.req.XN628000Req;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.exception.BizException;
@@ -24,6 +27,9 @@ public class KeywordAOImpl implements IKeywordAO {
 
     @Autowired
     private IKeywordBO keywordBO;
+
+    @Autowired
+    private ISYSUserBO sysUserBO;
 
     @Override
     @Transactional
@@ -61,11 +67,26 @@ public class KeywordAOImpl implements IKeywordAO {
     @Override
     public Paginable<Keyword> queryKeywordPage(int start, int limit,
             Keyword condition) {
-        return keywordBO.getPaginable(start, limit, condition);
+        Paginable<Keyword> paginable = keywordBO.getPaginable(start, limit,
+            condition);
+        List<Keyword> list = paginable.getList();
+        for (Keyword data : list) {
+            init(data);
+        }
+        return paginable;
     }
 
     @Override
     public Keyword getKeyword(Integer id) {
-        return keywordBO.getKeyword(id);
+        Keyword data = keywordBO.getKeyword(id);
+        init(data);
+        return data;
+    }
+
+    public void init(Keyword data) {
+        if (StringUtils.isNotBlank(data.getUpdater())) {
+            SYSUser sysUser = sysUserBO.getSYSUserUnCheck(data.getUpdater());
+            data.setSysUser(sysUser);
+        }
     }
 }

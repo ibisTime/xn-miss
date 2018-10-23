@@ -160,7 +160,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
         comment.setNickname(user.getNickname());
         comment.setPhoto(user.getPhoto());
         Player player = playerBO.getPlayer(comment.getToCode());
-        comment.setPlayer(player);
+        comment.setcName(player.getCname());
     }
 
     @Override

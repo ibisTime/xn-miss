@@ -73,6 +73,7 @@
 		FROM
 		thqxj_action t
 		<include refid="where_condition" />
+		order by t.create_datetime desc
 	</select>
 
 	<select id="select_action_count" parameterType="action"

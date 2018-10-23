@@ -94,6 +94,7 @@
 		FROM
 		thqxj_event t 
 		<include refid="where_condition" />
+		order by t.update_datetime desc
 	</select>
 
 	<select id="select_event_count" parameterType="event"
