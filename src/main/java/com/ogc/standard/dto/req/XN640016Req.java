@@ -13,6 +13,7 @@ public class XN640016Req {
     @NotBlank
     private String code;
 
+    // C端用户编号
     private String userId;
 
     public String getCode() {

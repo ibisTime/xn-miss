@@ -169,7 +169,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
                 .negate());
         accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
             payCode, null, data.getCode(), EJourBizTypePlat.AJ_QXSXF.getCode(),
-            "取现手续费", data.getFee().negate());
+            EJourBizTypePlat.AJ_QXSXF.getValue(), data.getFee().negate());
         // 系统账户扣除转账费
         accountBO.changeAmount(ESystemAccount.SYS_ACOUNT_CNY.getCode(),
             EChannelType.Offline, payCode, null, data.getCode(),

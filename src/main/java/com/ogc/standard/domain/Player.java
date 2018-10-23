@@ -118,6 +118,12 @@ public class Player extends ABaseDO {
     // 评论列表
     private List<Comment> commentList;
 
+    // 查询选手详情的C端用户的userId
+    private String userId;
+
+    // 是否已关注
+    private String isAttention;
+
     public List<Comment> getCommentList() {
         return commentList;
     }
@@ -370,6 +376,14 @@ public class Player extends ABaseDO {
         return createDatetimeEnd;
     }
 
+    public String getIsAttention() {
+        return isAttention;
+    }
+
+    public void setIsAttention(String isAttention) {
+        this.isAttention = isAttention;
+    }
+
     public void setCreateDatetimeEnd(Date createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
     }
@@ -380,6 +394,14 @@ public class Player extends ABaseDO {
 
     public void setFuzzyQuery(String fuzzyQuery) {
         this.fuzzyQuery = fuzzyQuery;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 }

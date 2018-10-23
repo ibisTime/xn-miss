@@ -29,7 +29,6 @@ public class XN640016 extends AProcessor {
     public void doCheck(String inputparams, String operator)
             throws ParaException {
         req = JsonUtil.json2Bean(inputparams, XN640016Req.class);
-        req.setUserId(operator);
         ObjValidater.validateReq(req);
     }
 

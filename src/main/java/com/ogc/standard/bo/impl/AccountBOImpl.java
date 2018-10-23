@@ -178,9 +178,9 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             throw new BizException("xn000000", "账户余额不足");
         }
         // 记录流水
-        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            null, null, withdrawCode, EJourBizTypeUser.AJ_QX.getCode(), "线下取现",
-            freezeAmount.negate());
+        String lastOrder = jourBO.addJour(dbAccount, EChannelType.NBZ, null,
+            null, withdrawCode, EJourBizTypeUser.WITHDRAW_FROZEN.getCode(),
+            EJourBizTypeUser.WITHDRAW_FROZEN.getValue(), freezeAmount.negate());
         BigDecimal nowFrozenAmount = dbAccount.getFrozenAmount().add(
             freezeAmount);
         Account data = new Account();
@@ -206,8 +206,8 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
         }
 
         // 记录流水
-        String lastOrder = jourBO.addJour(dbAccount, EChannelType.Offline,
-            null, null, withdrawCode, EJourBizTypeUser.AJ_QX.getCode(),
+        String lastOrder = jourBO.addJour(dbAccount, EChannelType.NBZ, null,
+            null, withdrawCode, EJourBizTypeUser.WITHDRAW_UNFROZEN.getCode(),
             "线下取现失败退回", freezeAmount);
         Account data = new Account();
         data.setAccountNumber(dbAccount.getAccountNumber());

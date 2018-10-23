@@ -33,7 +33,7 @@ public class XN640112 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         answerAO.editAnswer(req.getCode(), req.getQuestion(), req.getAnswer(),
-            req.getUpdater(), req.getRemark(), req.getBiztype());
+            req.getUpdater(), req.getRemark());
         return new BooleanRes(true);
     }
 

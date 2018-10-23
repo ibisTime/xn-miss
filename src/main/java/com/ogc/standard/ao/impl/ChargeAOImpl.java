@@ -20,6 +20,7 @@ import com.ogc.standard.domain.Account;
 import com.ogc.standard.domain.Charge;
 import com.ogc.standard.domain.SYSUser;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.enums.EAccountType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
@@ -125,8 +126,8 @@ public class ChargeAOImpl implements IChargeAO {
             List<Charge> list = page.getList();
             for (Charge charge : list) {
                 init(charge);
-                // User user = userBO.getUser(charge.getApplyUser());
-                // charge.setUser(user);
+                User user = userBO.getUser(charge.getApplyUser());
+                charge.setUser(user);
             }
         }
         return page;
@@ -160,20 +161,19 @@ public class ChargeAOImpl implements IChargeAO {
         // 审核人
         String payUserName = null;
 
-        // if
-        // (EAccountType.Customer.getCode().equals(charge.getApplyUserType())) {
-        //
-        // // C端用户
-        // User user = userBO.getUser(charge.getApplyUser());
-        //
-        // realName = user.getMobile();
-        // if (StringUtils.isNotBlank(user.getRealName())) {
-        // realName = user.getRealName().concat("-").concat(realName);
-        // }
-        //
-        // } else if (EAccountType.Plat.getCode()
-        // .equals(charge.getApplyUserType())) {
-        // }
+        if (EAccountType.Customer.getCode().equals(charge.getApplyUserType())) {
+
+            // C端用户
+            User user = userBO.getUser(charge.getApplyUser());
+
+            realName = user.getMobile();
+            if (StringUtils.isNotBlank(user.getRealName())) {
+                realName = user.getRealName().concat("-").concat(realName);
+            }
+
+        } else if (EAccountType.Plat.getCode()
+            .equals(charge.getApplyUserType())) {
+        }
         // 系统用户
         realName = EUser.ADMIN.getValue();
 

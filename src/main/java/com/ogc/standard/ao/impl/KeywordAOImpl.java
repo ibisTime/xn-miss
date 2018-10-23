@@ -29,6 +29,9 @@ public class KeywordAOImpl implements IKeywordAO {
     @Transactional
     public void addKeywords(List<XN628000Req> reqList, String updater) {
         for (XN628000Req req : reqList) {
+            if (keywordBO.isKeywordExist(req.getWord())) {
+                throw new BizException(EErrorCode_main.keyword_EXIST.getCode());
+            }
             keywordBO.saveKeyword(req.getWord(), req.getLevel(),
                 req.getReaction(), req.getRemark(), updater);
         }
@@ -52,10 +55,6 @@ public class KeywordAOImpl implements IKeywordAO {
     @Override
     public void editKeyword(Integer id, String word, String level,
             String reaction, String remark, String updater) {
-        if (keywordBO.isKeywordExist(word)) {
-            throw new BizException(EErrorCode_main.keyword_EXIST.getCode());
-        }
-
         keywordBO.refreshKeyword(id, word, level, reaction, remark, updater);
     }
 

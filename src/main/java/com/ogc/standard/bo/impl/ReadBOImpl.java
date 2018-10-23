@@ -51,6 +51,7 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
         if (userList.isEmpty()) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "无用户可阅读");
         }
+
         for (User user : userList) {
             Read read = new Read();
             read.setUserId(user.getUserId());

@@ -17,8 +17,8 @@ import com.ogc.standard.enums.EKeyWordReaction;
 import com.ogc.standard.exception.BizException;
 
 @Component
-public class KeywordBOImpl extends PaginableBOImpl<Keyword>
-        implements IKeywordBO {
+public class KeywordBOImpl extends PaginableBOImpl<Keyword> implements
+        IKeywordBO {
 
     @Autowired
     private IKeywordDAO keywordDAO;
@@ -67,8 +67,7 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
     @Override
     public void refreshKeyword(Integer id, String word, String level,
             String reaction, String remark, String updater) {
-        Keyword data = new Keyword();
-        data.setId(id);
+        Keyword data = getKeyword(id);
         data.setWord(word);
         data.setLevel(level);
         data.setReaction(reaction);
@@ -90,10 +89,10 @@ public class KeywordBOImpl extends PaginableBOImpl<Keyword>
                 if (content.indexOf(keyWord.getWord()) >= 0) {
                     keywordList.add(keyWord);
 
-                    if (EKeyWordReaction.REFUSE.getCode()
-                        .equals(keyWord.getReaction())
-                            || EKeyWordReaction.APPROVE.getCode()
-                                .equals(keyWord.getReaction())) {
+                    if (EKeyWordReaction.REFUSE.getCode().equals(
+                        keyWord.getReaction())
+                            || EKeyWordReaction.APPROVE.getCode().equals(
+                                keyWord.getReaction())) {
                         keywordList.clear();
                         keywordList.add(keyWord);
                         break;

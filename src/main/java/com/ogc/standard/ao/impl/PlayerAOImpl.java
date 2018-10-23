@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IPlayerAO;
 import com.ogc.standard.bo.IActionBO;
@@ -19,6 +20,7 @@ import com.ogc.standard.dto.req.XN640000Req;
 import com.ogc.standard.dto.req.XN640002Req;
 import com.ogc.standard.enums.EActionToType;
 import com.ogc.standard.enums.EActionType;
+import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EPlayerStatus;
 import com.ogc.standard.exception.BizException;
 
@@ -94,14 +96,30 @@ public class PlayerAOImpl implements IPlayerAO {
     }
 
     @Override
+    @Transactional
     public Player getPlayer(String code, String userId) {
         Player player = playerBO.getPlayer(code);
-        User user = userBO.getUser(userId);
-        actionBO.saveAction(EActionType.FOOT.getCode(),
-            EActionToType.PLAYER.getCode(), code, userId, user.getNickname()
-                    + "于" + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7)
-                    + "查看了选手" + player.getCname());
-        playerBO.addScan(player);
+        if (null != userId) {
+            User user = userBO.getUser(userId);
+            actionBO.saveAction(
+                EActionType.FOOT.getCode(),
+                EActionToType.PLAYER.getCode(),
+                code,
+                userId,
+                user.getNickname() + "于"
+                        + DateUtil.getToday(DateUtil.DATA_TIME_PATTERN_7)
+                        + "查看了选手" + player.getCname());
+            playerBO.addScan(player);
+            String isAttention = null;
+            if (actionBO.isActionExist(userId, player.getCode(),
+                EActionType.ATTENTION.getCode())) {
+                isAttention = EBoolean.YES.getCode();
+            } else {
+                isAttention = EBoolean.NO.getCode();
+            }
+            player.setIsAttention(isAttention);
+            player.setUserId(userId);
+        }
         List<Comment> commentList = commentBO
             .queryCommentListByObjectCode(player.getCode());
         player.setCommentList(commentList);

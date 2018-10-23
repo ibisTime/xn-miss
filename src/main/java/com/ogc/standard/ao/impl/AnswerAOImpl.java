@@ -45,7 +45,7 @@ public class AnswerAOImpl implements IAnswerAO {
 
     @Override
     public void editAnswer(String code, String question, String answer,
-            String updater, String remark, String bizType) {
+            String updater, String remark) {
         Answer data = answerBO.getAnswer(code);
         // 状态判断
         if (!EBoolean.YES.getCode().equals(data.getStatus())) {

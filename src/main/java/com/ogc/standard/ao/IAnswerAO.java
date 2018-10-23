@@ -24,7 +24,7 @@ public interface IAnswerAO {
             String remark);
 
     public void editAnswer(String code, String question, String answer,
-            String updater, String remark, String bizType);
+            String updater, String remark);
 
     public void dorpAnswer(String code);
 
