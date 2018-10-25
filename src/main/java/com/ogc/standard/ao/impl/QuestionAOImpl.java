@@ -54,17 +54,16 @@ public class QuestionAOImpl implements IQuestionAO {
                 int size = questionList.size();
                 questionBO.ListSort(questionList);
                 // 如果上一个消息不是sys_user的，for循环改状态为已读直到sys_user为止
-                if (!ESysUser.SYS_USER.getCode().equals(
-                    questionList.get(i).getUserId())) {
-                    for (i = 0; i < questionList.size(); i++) {
-                        if (!questionList.get(i).getUserId()
-                            .equals(ESysUser.SYS_USER.getCode())) {
-                            questionBO.refreshStatus(questionList.get(i)
-                                .getId());
-                            size -= 1;
-                        }
+                for (Question question : questionList) {
+                    if (!ESysUser.SYS_USER.getCode().equals(
+                        question.getUserId())
+                            && EQuestionStatus.TO_READ.getCode().equals(
+                                question.getStatus())) {
+                        questionBO.refreshStatus(question.getId());
+                        size -= 1;
                     }
                 }
+
                 count = (long) size;
             }
             // 落地数据
