@@ -22,6 +22,7 @@ import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.domain.MissSession;
+import com.ogc.standard.domain.Question;
 import com.ogc.standard.domain.SYSConfig;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EMissSessionType;
@@ -90,8 +91,9 @@ public class MissSessionAOImpl implements IMissSessionAO {
     }
 
     private void initSession(MissSession missSession) {
-        missSession.setQuestionsList(questionBO
-            .querySessionQuestions(missSession.getCode()));
+        List<Question> querySessionQuestions = questionBO
+            .querySessionQuestions(missSession.getCode());
+        missSession.setQuestionsList(querySessionQuestions);
 
         User user = userBO.getUser(missSession.getUser1());
         missSession.setUser1Nickname(user.getNickname());

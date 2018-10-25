@@ -9,6 +9,7 @@
 package com.ogc.standard.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import com.ogc.standard.dao.base.ABaseDO;
 
@@ -44,6 +45,9 @@ public class Read extends ABaseDO {
     // ***********db properties***********
 
     private Event eventInfo;
+
+    // 状态列表
+    private List<String> statusList;
 
     public Event getEventInfo() {
         return eventInfo;
@@ -99,6 +103,14 @@ public class Read extends ABaseDO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

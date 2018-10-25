@@ -22,12 +22,20 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
-			<if test="status != null and status != '' ">
-				AND t.status = #{status}
-			</if>
 			<if test="toType != null and toType != '' ">
 				AND t.to_type = #{toType}
 			</if>
+			<choose>
+				<when test="status != null and status != '' ">
+					AND t.status = #{status}
+				</when>
+				<when test="statusList != null and statusList.size() > 0 ">
+					AND t.status IN
+					<foreach collection="statusList" item="item" index="index" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</when>
+			</choose>
 		</trim>
 	</sql>
 	

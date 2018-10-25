@@ -39,6 +39,7 @@ public class XN805315 extends AProcessor {
         condition.setUserId(req.getUserId());
         condition.setToType(req.getToType());
         condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
             column = IReadAO.DEFAULT_ORDER_COLUMN;

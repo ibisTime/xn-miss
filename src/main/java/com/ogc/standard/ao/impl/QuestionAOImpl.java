@@ -43,28 +43,37 @@ public class QuestionAOImpl implements IQuestionAO {
     @Transactional
     public void reply(String sessionCode, String content) {
         MissSession missSession = missSessionBO.getSession(sessionCode);
+        long count = 0L;
         // 会话不为空
         if (!questionBO.isSessionEmpty(missSession.getCode())) {
             int i = 0;
             // 拉取会话并按时间排序
             List<Question> questionList = questionBO
                 .querySessionQuestions(sessionCode);
-            questionBO.ListSort(questionList);
-            // 如果上一个消息不是sys_user的，for循环改状态为已读直到sys_user为止
-            if (!ESysUser.SYS_USER.getCode().equals(
-                questionList.get(i).getUserId())) {
-                for (i = 0; i < questionList.size(); i++) {
-                    if (!questionList.get(i).getUserId()
-                        .equals(ESysUser.SYS_USER.getCode())) {
-                        questionBO.refreshStatus(questionList.get(i).getId());
+            if (CollectionUtils.isNotEmpty(questionList)) {
+                int size = questionList.size();
+                questionBO.ListSort(questionList);
+                // 如果上一个消息不是sys_user的，for循环改状态为已读直到sys_user为止
+                if (!ESysUser.SYS_USER.getCode().equals(
+                    questionList.get(i).getUserId())) {
+                    for (i = 0; i < questionList.size(); i++) {
+                        if (!questionList.get(i).getUserId()
+                            .equals(ESysUser.SYS_USER.getCode())) {
+                            questionBO.refreshStatus(questionList.get(i)
+                                .getId());
+                            size -= 1;
+                        }
                     }
                 }
+                count = (long) size;
             }
             // 落地数据
             questionBO.saveSms(sessionCode, ESysUser.SYS_USER.getCode(),
                 content);
-            // 未读数量归零
-            missSessionBO.resetUnreadSum(missSession);
+            // // 未读数量归零
+            // missSessionBO.resetUnreadSum(missSession);
+            // 未读数量加一
+            missSessionBO.addUnreadSum(missSession, count);
         } else {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "没有问题可以回复");
         }

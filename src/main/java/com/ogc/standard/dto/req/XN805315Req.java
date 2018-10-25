@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /** 
@@ -28,6 +30,9 @@ public class XN805315Req extends APageReq {
 
     // 状态
     private String status;
+
+    // 状态列表
+    private List<String> statusList;
 
     public String getUserId() {
         return userId;
@@ -52,4 +57,13 @@ public class XN805315Req extends APageReq {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
+    }
+
 }

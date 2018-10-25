@@ -78,8 +78,8 @@
 	</select>
 
 	<select id="select_rank_count" parameterType="rank"
-		resultType="java.lang.Long">thqxj_rank t
-		SELECT count(1) FROM (SELECT DISTINCT code FROM thqxj_rank t LEFT JOIN thqxj_player tp ON t.player_code = tp.code
+		resultType="java.lang.Long">
+		SELECT count(1) FROM (SELECT distinct t.code FROM thqxj_rank t LEFT JOIN thqxj_player tp ON t.player_code = tp.code
 		<include refid="where_condition" />) tb
 	</select>
 
