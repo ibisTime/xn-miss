@@ -68,8 +68,8 @@ public class MissSessionBOImpl extends PaginableBOImpl<MissSession> implements
     }
 
     @Override
-    public void addUnreadSum(MissSession data) {
-        data.setUnreadSum(data.getUnreadSum() + 1);
+    public void addUnreadSum(MissSession data, long count) {
+        data.setUnreadSum(count + 1);
         missSessionDAO.updateUnreadSum(data);
     }
 

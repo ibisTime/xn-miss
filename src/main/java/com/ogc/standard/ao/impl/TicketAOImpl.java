@@ -190,6 +190,9 @@ public class TicketAOImpl implements ITicketAO {
             ERankType.DAY.getCode());
         if (null == rankDay) {
             rankDay = rankBO.saveRank(player, ERankType.DAY.getCode(), ticket);
+        } else {
+            // 更新日榜加油总数
+            rankBO.refreshRankTicketSum(rankDay, ticket.getTicket());
         }
         rankBO.refreshRanking(ERankType.DAY.getCode(), rankDay);
 
@@ -199,6 +202,9 @@ public class TicketAOImpl implements ITicketAO {
         if (null == rankTotal) {
             rankTotal = rankBO.saveRank(player, ERankType.TOTAL.getCode(),
                 ticket);
+        } else {
+            // 更新总榜加油总数
+            rankBO.refreshRankTicketSum(rankTotal, ticket.getTicket());
         }
         rankBO.refreshRanking(ERankType.TOTAL.getCode(), rankTotal);
     }

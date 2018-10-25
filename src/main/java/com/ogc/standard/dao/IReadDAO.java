@@ -26,6 +26,4 @@ public interface IReadDAO extends IBaseDAO<Read> {
 
     public void insert(List<Read> dataList);
 
-    public void updateBatch(List<Read> dataList);
-
 }

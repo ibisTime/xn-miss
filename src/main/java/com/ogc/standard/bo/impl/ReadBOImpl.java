@@ -92,8 +92,8 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
             if (CollectionUtils.isNotEmpty(dataList)) {
                 for (Read read : dataList) {
                     read.setStatus(EReadStatus.DROPED.getCode());
+                    readDAO.updateStatusRead(read);
                 }
-                readDAO.updateBatch(dataList);
             }
         }
     }

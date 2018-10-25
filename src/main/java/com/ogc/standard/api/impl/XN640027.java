@@ -41,9 +41,13 @@ public class XN640027 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IRankAO.DEFAULT_ORDER_COLUMN;
+            column = "rank";
         }
-        condition.setOrder(column, req.getOrderDir());
+        String dir = req.getOrderDir();
+        if (StringUtils.isBlank(req.getOrderDir())) {
+            dir = "asc";
+        }
+        condition.setOrder(column, dir);
         return rankAO.queryRankList(condition);
     }
 

@@ -40,27 +40,26 @@ public class QuestionBOImpl extends PaginableBOImpl<Question> implements
         data.setSessionCode(sessionCode);
         data.setUserId(userId);
         data.setContent(content);
-        data.setStatus(EQuestionStatus.toread.getCode());
+        data.setStatus(EQuestionStatus.TO_READ.getCode());
         data.setCreateDatetime(new Date());
         questionDAO.insert(data);
     }
 
     @Override
-    public int refreshStatus(long id) {
-        int count = 0;
-        Question condition = new Question();
-        condition.setId(id);
-        Question data = questionDAO.select(condition);
-        data.setStatus(EQuestionStatus.read.getCode());
-        questionDAO.updateStatus(data);
-        return count;
+    public void refreshStatus(long id) {
+        if (id != 0) {
+            Question condition = new Question();
+            condition.setId(id);
+            Question data = questionDAO.select(condition);
+            data.setStatus(EQuestionStatus.READ.getCode());
+            questionDAO.updateStatus(data);
+        }
     }
 
     @Override
     public List<Question> querySessionQuestions(String sessionCode) {
         Question condition = new Question();
         condition.setSessionCode(sessionCode);
-
         return questionDAO.selectList(condition);
     }
 

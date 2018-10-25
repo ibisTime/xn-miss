@@ -23,7 +23,7 @@ public interface IQuestionBO extends IPaginableBO<Question> {
     public void saveSms(String sessionCode, String userId, String content);
 
     // 状态改为已读
-    public int refreshStatus(long id);
+    public void refreshStatus(long id);
 
     public List<Question> querySessionQuestions(String sessionCode);
 

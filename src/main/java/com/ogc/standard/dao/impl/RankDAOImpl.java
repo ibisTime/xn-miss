@@ -60,4 +60,9 @@ public class RankDAOImpl extends AMybatisTemplate implements IRankDAO {
         super.update(NAMESPACE.concat("update_ranking"), data);
     }
 
+    @Override
+    public void updateRankTicketSum(Rank data) {
+        super.update(NAMESPACE.concat("update_rank_ticketSum"), data);
+    }
+
 }

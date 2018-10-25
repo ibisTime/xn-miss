@@ -35,7 +35,7 @@ public class Read extends ABaseDO {
     // 对象编号
     private String toCode;
 
-    // 状态 0-未阅读 1-已阅读
+    // 状态 0-未阅读 1-已阅读 2-已删除
     private String status;
 
     // 推送时间

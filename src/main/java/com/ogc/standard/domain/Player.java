@@ -124,6 +124,12 @@ public class Player extends ABaseDO {
     // 是否已关注
     private String isAttention;
 
+    // 我为他加油次数
+    private Long myTicketSum;
+
+    // 评论总数
+    private Long commentSum;
+
     public List<Comment> getCommentList() {
         return commentList;
     }
@@ -402,6 +408,22 @@ public class Player extends ABaseDO {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Long getMyTicketSum() {
+        return myTicketSum;
+    }
+
+    public void setMyTicketSum(Long myTicketSum) {
+        this.myTicketSum = myTicketSum;
+    }
+
+    public Long getCommentSum() {
+        return commentSum;
+    }
+
+    public void setCommentSum(Long commentSum) {
+        this.commentSum = commentSum;
     }
 
 }

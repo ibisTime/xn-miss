@@ -41,6 +41,7 @@ public class XN628275 extends AProcessor {
         condition.setToCode(req.getToCode());
         condition.setContent(req.getContent());
         condition.setStatus(req.getStatus());
+        condition.setStatusList(req.getStatusList());
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(
             req.getCreateDatetimeStart(), false));
         condition.setCreateDatetimeEnd(DateUtil.getFrontDate(

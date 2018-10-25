@@ -55,6 +55,8 @@ public class Action extends ABaseDO {
 
     private User user;
 
+    private Long myTicketSum;
+
     public String getCode() {
         return code;
     }
@@ -141,6 +143,14 @@ public class Action extends ABaseDO {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getMyTicketSum() {
+        return myTicketSum;
+    }
+
+    public void setMyTicketSum(Long myTicketSum) {
+        this.myTicketSum = myTicketSum;
     }
 
 }

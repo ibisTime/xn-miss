@@ -88,6 +88,9 @@ public class Comment extends ABaseDO {
     // 选手中文名
     private String cName;
 
+    // 非评论人
+    private String unCreater;
+
     public String getCode() {
         return code;
     }
@@ -278,6 +281,14 @@ public class Comment extends ABaseDO {
 
     public void setcName(String cName) {
         this.cName = cName;
+    }
+
+    public String getUnCreater() {
+        return unCreater;
+    }
+
+    public void setUnCreater(String unCreater) {
+        this.unCreater = unCreater;
     }
 
 }

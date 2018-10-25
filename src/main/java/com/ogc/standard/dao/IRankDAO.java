@@ -12,4 +12,6 @@ public interface IRankDAO extends IBaseDAO<Rank> {
     void updateManualAdjustment(Rank data);
 
     void updateRanking(Rank data);
+
+    void updateRankTicketSum(Rank rankDay);
 }

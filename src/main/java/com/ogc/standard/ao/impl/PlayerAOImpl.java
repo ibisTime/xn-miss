@@ -2,6 +2,8 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,11 +12,13 @@ import com.ogc.standard.ao.IPlayerAO;
 import com.ogc.standard.bo.IActionBO;
 import com.ogc.standard.bo.ICommentBO;
 import com.ogc.standard.bo.IPlayerBO;
+import com.ogc.standard.bo.ITicketBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.DateUtil;
 import com.ogc.standard.domain.Comment;
 import com.ogc.standard.domain.Player;
+import com.ogc.standard.domain.Ticket;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.dto.req.XN640000Req;
 import com.ogc.standard.dto.req.XN640002Req;
@@ -22,6 +26,7 @@ import com.ogc.standard.enums.EActionToType;
 import com.ogc.standard.enums.EActionType;
 import com.ogc.standard.enums.EBoolean;
 import com.ogc.standard.enums.EPlayerStatus;
+import com.ogc.standard.enums.ETicketStatus;
 import com.ogc.standard.exception.BizException;
 
 @Service
@@ -38,6 +43,9 @@ public class PlayerAOImpl implements IPlayerAO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private ITicketBO ticketBO;
 
     @Override
     public String addPlayer(XN640000Req req) {
@@ -87,12 +95,26 @@ public class PlayerAOImpl implements IPlayerAO {
     @Override
     public Paginable<Player> queryPlayerPage(int start, int limit,
             Player condition) {
-        return playerBO.getPaginable(start, limit, condition);
+        Paginable<Player> paginable = playerBO.getPaginable(start, limit,
+            condition);
+        List<Player> list = paginable.getList();
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (Player data : list) {
+                init(data);
+            }
+        }
+        return paginable;
     }
 
     @Override
     public List<Player> queryPlayerList(Player condition) {
-        return playerBO.queryPlayerList(condition);
+        List<Player> queryPlayerList = playerBO.queryPlayerList(condition);
+        if (CollectionUtils.isNotEmpty(queryPlayerList)) {
+            for (Player player : queryPlayerList) {
+                init(player);
+            }
+        }
+        return queryPlayerList;
     }
 
     @Override
@@ -119,10 +141,31 @@ public class PlayerAOImpl implements IPlayerAO {
             }
             player.setIsAttention(isAttention);
             player.setUserId(userId);
+            Ticket condition = new Ticket();
+            condition.setPlayerCode(code);
+            condition.setApplyUser(userId);
+            condition.setStatus(ETicketStatus.PAYED.getCode());
+            long totalCount = ticketBO.getTotalCount(condition);
+            player.setMyTicketSum(totalCount);
         }
-        List<Comment> commentList = commentBO
-            .queryCommentListByObjectCode(player.getCode());
+        List<Comment> commentList = commentBO.queryCommentListByObjectCode(
+            player.getCode(), userId);
         player.setCommentList(commentList);
+        init(player);
         return player;
+    }
+
+    public void init(Player data) {
+        if (StringUtils.isNotBlank(data.getCode())) {
+            Comment condition = new Comment();
+            condition.setToCode(data.getCode());
+            List<Comment> queryCommentList = commentBO
+                .queryCommentList(condition);
+            long commentSum = 0L;
+            if (CollectionUtils.isNotEmpty(queryCommentList)) {
+                commentSum = (long) queryCommentList.size();
+            }
+            data.setCommentSum(commentSum);
+        }
     }
 }

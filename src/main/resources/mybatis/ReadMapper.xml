@@ -48,17 +48,7 @@
 		)
 	</insert>
 	
-	<update id="updateBatch" parameterType="java.util.List">
-        UPDATE thqxj_read
-        set status=
-                <foreach collection="list" item="read" separator=",">
-                	#{read.status}
-                </foreach>
-        WHERE id=
-				<foreach collection="list" item="read" separator=",">
-                	#{read.id}
-                </foreach>
-    </update>
+
 
 	
 	<update id="update_status_read" parameterType="read">

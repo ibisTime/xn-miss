@@ -153,7 +153,9 @@ public class RankBOImpl extends PaginableBOImpl<Rank> implements IRankBO {
             if (ERankType.DAY.getCode().equals(type)) {
                 data.setBatch(DateUtil.getToday(DateUtil.DB_DATE_FORMAT_STRING));
             } else {
-                data.setBatch("总榜");
+                System.out.println(DateUtil.dateToStr(
+                    DateUtil.getCurrentMonthFirstDay(),
+                    DateUtil.DB_DATE_FORMAT_STRING));
             }
             data.setPlayerCode(player.getCode());
             data.setMatch(player.getMatch());
@@ -166,5 +168,13 @@ public class RankBOImpl extends PaginableBOImpl<Rank> implements IRankBO {
             rankDAO.insert(data);
         }
         return data;
+    }
+
+    @Override
+    public void refreshRankTicketSum(Rank rankDay, Long ticket) {
+        if (null != rankDay && null != ticket) {
+            rankDay.setTicketSum(rankDay.getTicketSum() + ticket);
+            rankDAO.updateRankTicketSum(rankDay);
+        }
     }
 }

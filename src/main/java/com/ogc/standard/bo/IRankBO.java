@@ -30,4 +30,6 @@ public interface IRankBO extends IPaginableBO<Rank> {
 
     public Rank saveRank(Player player, String type, Ticket ticket);
 
+    public void refreshRankTicketSum(Rank rankDay, Long ticket);
+
 }

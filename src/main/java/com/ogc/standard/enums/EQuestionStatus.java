@@ -14,7 +14,7 @@ package com.ogc.standard.enums;
  * @history:
  */
 public enum EQuestionStatus {
-    toread("0", "未读"), read("1", "已读");
+    TO_READ("0", "未读"), READ("1", "已读");
 
     EQuestionStatus(String code, String value) {
         this.code = code;

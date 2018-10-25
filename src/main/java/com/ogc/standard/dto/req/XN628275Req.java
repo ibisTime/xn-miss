@@ -8,6 +8,8 @@
  */
 package com.ogc.standard.dto.req;
 
+import java.util.List;
+
 /** 
  * 分页查评论
  * @author: taojian 
@@ -35,6 +37,8 @@ public class XN628275Req extends APageReq {
 
     // 评论时间止
     private String createDatetimeEnd;
+
+    private List<String> statusList;
 
     public String getType() {
         return type;
@@ -82,6 +86,14 @@ public class XN628275Req extends APageReq {
 
     public void setToCode(String toCode) {
         this.toCode = toCode;
+    }
+
+    public List<String> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<String> statusList) {
+        this.statusList = statusList;
     }
 
 }

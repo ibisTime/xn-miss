@@ -23,10 +23,6 @@ public interface IUserAO {
     public void doBindMobile(String mobile, String smsCaptcha, String userId,
             String language);
 
-    // 用户登录
-    public String doLogin(String loginName, String loginPwd, String client,
-            String location, String language);
-
     // 更换手机号（修改手机号方式一）
     public void doChangeMoblie(String userId, String newMobile,
             String smsCaptcha, String language);

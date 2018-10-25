@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IMissSessionAO;
 import com.ogc.standard.bo.IMissSessionBO;
@@ -19,7 +20,9 @@ import com.ogc.standard.bo.IQuestionBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
+import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.domain.MissSession;
+import com.ogc.standard.domain.SYSConfig;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EMissSessionType;
 import com.ogc.standard.enums.ESysUser;
@@ -45,15 +48,16 @@ public class MissSessionAOImpl implements IMissSessionAO {
     private ISYSConfigBO sysConfigBO;
 
     @Override
+    @Transactional
     public String addMissSession(String user1) {
         userBO.getUser(user1);
         String code = missSessionBO.saveSession(
             EMissSessionType.COMMIT_QUESTION.getCode(), user1);
 
-        // sysConfigBO.get
+        SYSConfig value = sysConfigBO.getConfigValue(SysConstant.FIRST_CHAT);
         // 新增第一条消息
-        questionBO.saveSms(code, ESysUser.SYS_USER.getCode(),
-            "欢迎使用客服,有什么可以帮助到您");
+        questionBO
+            .saveSms(code, ESysUser.SYS_USER.getCode(), value.getCvalue());
         return code;
     }
 

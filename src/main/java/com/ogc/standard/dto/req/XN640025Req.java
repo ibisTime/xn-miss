@@ -16,8 +16,11 @@ public class XN640025Req extends APageReq {
     // 批次
     private String batch;
 
-    // 选手编号
+    // 选手表编号
     private String playerCode;
+
+    // 选手编号
+    private String matchPlayCode;
 
     // 排名
     private String rank;
@@ -85,6 +88,14 @@ public class XN640025Req extends APageReq {
 
     public void setCreateDatetimeEnd(String createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getMatchPlayCode() {
+        return matchPlayCode;
+    }
+
+    public void setMatchPlayCode(String matchPlayCode) {
+        this.matchPlayCode = matchPlayCode;
     }
 
 }

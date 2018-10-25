@@ -21,6 +21,7 @@ import com.ogc.standard.bo.IAccountBO;
 import com.ogc.standard.bo.IActionBO;
 import com.ogc.standard.bo.IPlayerBO;
 import com.ogc.standard.bo.ISYSConfigBO;
+import com.ogc.standard.bo.ITicketBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.Paginable;
 import com.ogc.standard.common.AmountUtil;
@@ -30,6 +31,7 @@ import com.ogc.standard.core.StringValidater;
 import com.ogc.standard.domain.Action;
 import com.ogc.standard.domain.Player;
 import com.ogc.standard.domain.SYSConfig;
+import com.ogc.standard.domain.Ticket;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.enums.EActionType;
 import com.ogc.standard.enums.ECurrency;
@@ -37,6 +39,7 @@ import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPlayerStatus;
 import com.ogc.standard.enums.ESystemAccount;
+import com.ogc.standard.enums.ETicketStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
 
@@ -62,6 +65,9 @@ public class ActionAOImpl implements IActionAO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private ITicketBO ticketBO;
 
     @Transactional
     @Override
@@ -147,6 +153,14 @@ public class ActionAOImpl implements IActionAO {
             User user = userBO.getUser(data.getCreater());
             data.setUser(user);
         }
+        if (StringUtils.isNotBlank(data.getToCode())
+                && StringUtils.isNotBlank(data.getCreater())) {
+            Ticket condition = new Ticket();
+            condition.setPlayerCode(data.getToCode());
+            condition.setApplyUser(data.getCreater());
+            condition.setStatus(ETicketStatus.PAYED.getCode());
+            long totalCount = ticketBO.getTotalCount(condition);
+            data.setMyTicketSum(totalCount);
+        }
     }
-
 }

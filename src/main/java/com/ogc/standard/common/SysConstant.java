@@ -56,5 +56,8 @@ public class SysConstant {
     // 取现费率
     public static String WITHDRAW_FEE_RATE = "fee_rate";
 
+    // 创建会话第一条消息
+    public static String FIRST_CHAT = "first_chat";
+
     /**************************环球小姐**************************/
 }

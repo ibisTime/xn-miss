@@ -162,14 +162,6 @@ public class WithdrawAOImpl implements IWithdrawAO {
         // 解冻
         BigDecimal totalAmount = data.getAmount().add(data.getFee());
         accountBO.cutFrozenAmount(dbAccount, totalAmount);
-        // 减钱
-        accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
-            payCode, null, data.getCode(),
-            EJourBizTypeBusiness.AJ_QX.getCode(), "线下取现", data.getAmount()
-                .negate());
-        accountBO.changeAmount(data.getAccountNumber(), EChannelType.Offline,
-            payCode, null, data.getCode(), EJourBizTypePlat.AJ_QXSXF.getCode(),
-            EJourBizTypePlat.AJ_QXSXF.getValue(), data.getFee().negate());
         // 系统账户扣除转账费
         accountBO.changeAmount(ESystemAccount.SYS_ACOUNT_CNY.getCode(),
             EChannelType.Offline, payCode, null, data.getCode(),

@@ -28,7 +28,8 @@ public interface ICommentBO extends IPaginableBO<Comment> {
 
     public List<Comment> queryCommentList(Comment condition);
 
-    public List<Comment> queryCommentListByObjectCode(String objectCode);
+    public List<Comment> queryCommentListByObjectCode(String objectCode,
+            String creater);
 
     public Comment getComment(String code);
 

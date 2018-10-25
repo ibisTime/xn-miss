@@ -32,6 +32,7 @@ public class XN640025 extends AProcessor {
         condition.setType(req.getType());
         condition.setBatch(req.getBatch());
         condition.setPlayerCode(req.getPlayerCode());
+        condition.setMatchPlayCode(req.getMatchPlayCode());
         condition.setRank(StringValidater.toInteger(req.getRank()));
         condition.setMatch(req.getMatch());
         condition.setCreateDatetimeStart(DateUtil.strToDate(
@@ -41,9 +42,13 @@ public class XN640025 extends AProcessor {
 
         String column = req.getOrderColumn();
         if (StringUtils.isBlank(column)) {
-            column = IRankAO.DEFAULT_ORDER_COLUMN;
+            column = "rank";
         }
-        condition.setOrder(column, req.getOrderDir());
+        String dir = req.getOrderDir();
+        if (StringUtils.isBlank(req.getOrderDir())) {
+            dir = "asc";
+        }
+        condition.setOrder(column, dir);
         int start = StringValidater.toInteger(req.getStart());
         int limit = StringValidater.toInteger(req.getLimit());
 

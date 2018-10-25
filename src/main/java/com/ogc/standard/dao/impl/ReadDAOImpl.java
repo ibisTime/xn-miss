@@ -70,10 +70,4 @@ public class ReadDAOImpl extends AMybatisTemplate implements IReadDAO {
             .insertBatch(NAMESPACE.concat("insert_read_list"), (List) dataList);
     }
 
-    @Override
-    public void updateBatch(List<Read> dataList) {
-        super.updateBatch(NAMESPACE.concat("updateBatch"), (List) dataList);
-
-    }
-
 }

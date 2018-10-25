@@ -72,6 +72,9 @@ public class Rank extends ABaseDO {
     // 选手
     private Player player;
 
+    // 选手编号
+    private String matchPlayCode;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -214,6 +217,14 @@ public class Rank extends ABaseDO {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public String getMatchPlayCode() {
+        return matchPlayCode;
+    }
+
+    public void setMatchPlayCode(String matchPlayCode) {
+        this.matchPlayCode = matchPlayCode;
     }
 
 }

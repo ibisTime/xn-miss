@@ -101,7 +101,8 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
     }
 
     @Override
-    public List<Comment> queryCommentListByObjectCode(String objectCode) {
+    public List<Comment> queryCommentListByObjectCode(String objectCode,
+            String creater) {
         List<Comment> list = null;
         if (StringUtils.isNotBlank(objectCode)) {
             Comment condition = new Comment();
@@ -110,6 +111,7 @@ public class CommentBOImpl extends PaginableBOImpl<Comment> implements
             statusList.add(ECommentStatus.RELEASED.getCode());
             condition.setStatusList(statusList);
             condition.setToCode(objectCode);
+            condition.setUnCreater(creater);
             condition.setOrder("create_datetime", "asc");
             list = queryCommentList(condition);
 

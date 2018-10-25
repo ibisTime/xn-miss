@@ -10,6 +10,7 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ import com.ogc.standard.bo.IMissSessionBO;
 import com.ogc.standard.bo.IQuestionBO;
 import com.ogc.standard.domain.MissSession;
 import com.ogc.standard.domain.Question;
+import com.ogc.standard.enums.EQuestionStatus;
 import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -73,22 +75,24 @@ public class QuestionAOImpl implements IQuestionAO {
     @Transactional
     public void send(String sessionCode, String user1, String content) {
         MissSession missSession = missSessionBO.getSession(sessionCode);
-        if (!questionBO.isSessionEmpty(missSession.getCode())) {
-            int i = 0;
-            List<Question> questionList = questionBO
-                .querySessionQuestions(sessionCode);
-            questionBO.ListSort(questionList);
-            if (!questionList.get(i).getUserId().equals(user1)) {
-                for (i = 0; !questionList.get(i).getUserId().equals(user1); i++) {
-                    questionBO.refreshStatus(questionList.get(i).getId());
+        long count = 0L;
+        List<Question> questionList = questionBO
+            .querySessionQuestions(sessionCode);
+        if (CollectionUtils.isNotEmpty(questionList)) {
+            int size = questionList.size();
+            for (Question question : questionList) {
+                if (question.getUserId() != user1
+                        && EQuestionStatus.TO_READ.getCode().equals(
+                            question.getStatus())) {
+                    questionBO.refreshStatus(question.getId());
+                    size -= 1;
                 }
             }
-
+            count = (long) size;
         }
         questionBO.saveSms(sessionCode, user1, content);
         // 未读数量加一
-        missSessionBO.addUnreadSum(missSession);
-
+        missSessionBO.addUnreadSum(missSession, count);
     }
 
 }

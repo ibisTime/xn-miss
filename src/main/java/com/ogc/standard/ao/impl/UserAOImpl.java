@@ -30,7 +30,6 @@ import com.ogc.standard.common.PhoneUtil;
 import com.ogc.standard.common.SysConstant;
 import com.ogc.standard.common.SysConstants;
 import com.ogc.standard.common.WechatConstant;
-import com.ogc.standard.domain.SignLog;
 import com.ogc.standard.domain.User;
 import com.ogc.standard.domain.UserExt;
 import com.ogc.standard.dto.req.XN805170Req;
@@ -42,7 +41,6 @@ import com.ogc.standard.enums.EConfigType;
 import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EErrorCode_main;
 import com.ogc.standard.enums.ESex;
-import com.ogc.standard.enums.ESignLogType;
 import com.ogc.standard.enums.EUser;
 import com.ogc.standard.enums.EUserKind;
 import com.ogc.standard.enums.EUserPwd;
@@ -228,82 +226,6 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void lastLogin(String userId) {
         userBO.refreshLastLogin(userId);
-    }
-
-    @Override
-    @Transactional
-    public String doLogin(String loginName, String loginPwd, String client,
-            String location, String language) {
-        User condition = new User();
-        condition.setMobile(loginName);
-        List<User> userList = userBO.queryUserList(condition);
-
-        User condition1 = new User();
-        condition1.setEmail(loginName);
-        userList.addAll(userBO.queryUserList(condition1));
-
-        if (CollectionUtils.isEmpty(userList)) {
-            throw new BizException(EErrorCode_main.user_LOGINNAME.getCode());
-        }
-
-        User con = new User();
-        con.setLoginPwd(MD5Util.md5(loginPwd));
-        List<User> listUser = userBO.queryUserList(con);
-
-        String userId = null;
-        for (User user : listUser) {
-            if (loginName.equals(user.getMobile())
-                    || loginName.equals(user.getEmail())) {
-                userId = user.getUserId();
-                break;
-            }
-        }
-        if (userId == null) {
-            throw new BizException(EErrorCode_main.user_LOGINPWD.getCode());
-        }
-        User user = userBO.getUser(userId);
-        if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-            throw new BizException(EErrorCode_main.user_ACCABNOMAL.getCode());
-        }
-        // 增加登陆日志
-        SignLog data = new SignLog();
-        data.setUserId(user.getUserId());
-        data.setType(ESignLogType.LOGIN.getCode());
-        data.setClient(client);
-        data.setLocation(location);
-        signLogBO.saveSignLog(data);
-
-        userBO.refreshLastLogin(userId);
-
-        return userId;
-        // User condition = new User();
-        //
-        // condition.setLoginName(loginName);
-        //
-        // List<User> userList1 = userBO.queryUserList(condition);
-        // if (CollectionUtils.isEmpty(userList1)) {
-        // throw new BizException("xn805050", "登录名不存在");
-        // }
-        // condition.setLoginPwd(MD5Util.md5(loginPwd));
-        // List<User> userList2 = userBO.queryUserList(condition);
-        // if (CollectionUtils.isEmpty(userList2)) {
-        // throw new BizException("xn805050", "登录密码错误");
-        // }
-        // User user = userList2.get(0);
-        // if (!EUserStatus.NORMAL.getCode().equals(user.getStatus())) {
-        // throw new BizException("xn805050",
-        // "该账号" + EUserStatus.getMap().get(user.getStatus()).getValue()
-        // + "，请联系工作人员");
-        // }
-        // // 增加登陆日志
-        // SignLog data = new SignLog();
-        // data.setUserId(user.getUserId());
-        // data.setType(ESignLogType.LOGIN.getCode());
-        // data.setClient(client);
-        // data.setLocation(location);
-        // signLogBO.saveSignLog(data);
-        //
-        // return user.getUserId();
     }
 
     @Override

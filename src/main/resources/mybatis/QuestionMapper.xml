@@ -19,6 +19,12 @@
 			<if test="userId != null and userId != '' ">
 				AND t.user_id = #{userId}
 			</if>
+			<if test="sessionCode != null and sessionCode != '' ">
+				AND t.session_code = #{sessionCode}
+			</if>
+			<if test="status != null and status != '' ">
+				AND t.status = #{status}
+			</if>
 		</trim>
 	</sql>
 	

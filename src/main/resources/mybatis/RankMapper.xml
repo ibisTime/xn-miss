@@ -45,6 +45,9 @@
 			<if test="createDatetimeEnd != null and createDatetimeEnd != '' ">
 				<![CDATA[AND t.create_datetime > #{createDatetimeEnd}]]>
 			</if>
+			<if test="matchPlayCode != null and matchPlayCode != '' ">
+				AND tp.match_play_code = #{matchPlayCode}
+			</if>
 		</trim>
 	</sql>
 	<select id="select_rank" parameterType="rank" resultMap="rank_DB_Result">
@@ -65,7 +68,7 @@
 		,t.share_sum
 		,t.scan_sum
 		FROM
-		thqxj_rank t
+		thqxj_rank t LEFT JOIN thqxj_player tp ON t.player_code = tp.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -75,9 +78,9 @@
 	</select>
 
 	<select id="select_rank_count" parameterType="rank"
-		resultType="java.lang.Long">
-		SELECT count(1) FROM thqxj_rank t
-		<include refid="where_condition" />
+		resultType="java.lang.Long">thqxj_rank t
+		SELECT count(1) FROM (SELECT DISTINCT code FROM thqxj_rank t LEFT JOIN thqxj_player tp ON t.player_code = tp.code
+		<include refid="where_condition" />) tb
 	</select>
 
 	<insert id="insert_rank" parameterType="rank">
@@ -152,6 +155,14 @@
 		UPDATE thqxj_rank
 		SET
 		rank = #{rank}
+		WHERE code = #{code}
+	</update>
+	
+	
+	<update id="update_rank_ticketSum" parameterType="rank">
+		UPDATE thqxj_rank
+		SET
+		ticket_sum = #{ticketSum}
 		WHERE code = #{code}
 	</update>
 
