@@ -7,4 +7,5 @@ public interface IMissSessionDAO extends IBaseDAO<MissSession> {
     String NAMESPACE = IMissSessionDAO.class.getName().concat(".");
 
     public int updateUnreadSum(MissSession data);
+
 }

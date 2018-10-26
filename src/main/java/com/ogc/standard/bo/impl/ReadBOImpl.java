@@ -17,12 +17,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ogc.standard.bo.IEventBO;
 import com.ogc.standard.bo.IReadBO;
 import com.ogc.standard.bo.IUserBO;
 import com.ogc.standard.bo.base.PaginableBOImpl;
 import com.ogc.standard.dao.IReadDAO;
+import com.ogc.standard.domain.Event;
 import com.ogc.standard.domain.Read;
 import com.ogc.standard.domain.User;
+import com.ogc.standard.enums.EEventStauts;
 import com.ogc.standard.enums.EReadStatus;
 import com.ogc.standard.enums.ESmsType;
 import com.ogc.standard.exception.BizException;
@@ -41,6 +44,9 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
 
     @Autowired
     private IUserBO userBO;
+
+    @Autowired
+    private IEventBO eventBO;
 
     @Override
     public void saveToRead(String toCode) {
@@ -95,6 +101,26 @@ public class ReadBOImpl extends PaginableBOImpl<Read> implements IReadBO {
                     readDAO.updateStatusRead(read);
                 }
             }
+        }
+    }
+
+    @Override
+    public void saveReadForNewUser(String userId) {
+        Event condition = new Event();
+        condition.setStatus(EEventStauts.ON.getCode());
+        List<Event> queryEventList = eventBO.queryEventList(condition);
+        if (CollectionUtils.isNotEmpty(queryEventList)) {
+            List<Read> readList = new ArrayList<Read>();
+            for (Event event : queryEventList) {
+                Read read = new Read();
+                read.setUserId(userId);
+                read.setToType(ESmsType.EVENT.getCode());
+                read.setToCode(event.getCode());
+                read.setStatus(EReadStatus.TOREAD.getCode());
+                read.setCreateDatetime(new Date());
+                readList.add(read);
+            }
+            readDAO.insert(readList);
         }
     }
 

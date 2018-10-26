@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ogc.standard.ao.IUserAO;
 import com.ogc.standard.bo.IAccountBO;
+import com.ogc.standard.bo.IReadBO;
 import com.ogc.standard.bo.ISYSConfigBO;
 import com.ogc.standard.bo.ISYSUserBO;
 import com.ogc.standard.bo.ISignLogBO;
@@ -78,6 +79,9 @@ public class UserAOImpl implements IUserAO {
 
     @Autowired
     private ISYSConfigBO sysConfigBO;
+
+    @Autowired
+    private IReadBO readBO;
 
     @Override
     @Transactional
@@ -173,8 +177,10 @@ public class UserAOImpl implements IUserAO {
         String userId = userBO.doRegister(unionId, h5OpenId, null,
             EUserKind.Customer.getCode(), EUserPwd.InitPwd.getCode(), nickname,
             photo, gender);
-
+        // 分配账户
         distributeAccount(userId, nickname, EUserKind.Customer.getCode());
+        // 发送消息赛事信息
+        readBO.saveReadForNewUser(userId);
         result = new XN805170Res(userId, EBoolean.YES.getCode());
         return result;
     }

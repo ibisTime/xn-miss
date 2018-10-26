@@ -39,8 +39,11 @@ public class MissSession extends ABaseDO {
     // 创建时间
     private Date createDatetime;
 
-    // 未读消息数
-    private Long unreadSum;
+    // 说话人1未读消息数
+    private Long user1UnreadSum;
+
+    // 说话人2未读消息数
+    private Long user2UnreadSum;
 
     // ***********db properties***********
 
@@ -120,14 +123,6 @@ public class MissSession extends ABaseDO {
         this.createDatetime = createDatetime;
     }
 
-    public Long getUnreadSum() {
-        return unreadSum;
-    }
-
-    public void setUnreadSum(Long unreadSum) {
-        this.unreadSum = unreadSum;
-    }
-
     public String getUser1Nickname() {
         return user1Nickname;
     }
@@ -142,6 +137,22 @@ public class MissSession extends ABaseDO {
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public Long getUser1UnreadSum() {
+        return user1UnreadSum;
+    }
+
+    public void setUser1UnreadSum(Long user1UnreadSum) {
+        this.user1UnreadSum = user1UnreadSum;
+    }
+
+    public Long getUser2UnreadSum() {
+        return user2UnreadSum;
+    }
+
+    public void setUser2UnreadSum(Long user2UnreadSum) {
+        this.user2UnreadSum = user2UnreadSum;
     }
 
 }

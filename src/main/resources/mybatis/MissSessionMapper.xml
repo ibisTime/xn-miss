@@ -8,7 +8,8 @@
 		<result column="user1" property="user1" />
 		<result column="user2" property="user2" />
 		<result column="create_datetime" property="createDatetime" />
-		<result column="unread_sum" property="unreadSum" />
+		<result column="user1_unread_sum" property="user1UnreadSum" />
+		<result column="user2_unread_sum" property="user2UnreadSum" />
 	</resultMap>
 	
 	<sql id="where_condition">
@@ -41,7 +42,8 @@
 		,user1
 		,user2
 		,create_datetime
-		,unread_sum
+		,user1_unread_sum
+		,user2_unread_sum
 		)
 		VALUES(
 		#{code}
@@ -49,7 +51,8 @@
 		,#{user1}
 		,#{user2}
 		,#{createDatetime}
-		,#{unreadSum}
+		,#{user1UnreadSum}
+		,#{user2UnreadSum}
 		)
 	</insert>
 	
@@ -58,10 +61,10 @@
 	<update id="update_unread_sum" parameterType="missSession">
 		UPDATE thqxj_session
 		SET
-		unread_sum=#{unreadSum}
+		user1_unread_sum=#{user1UnreadSum}
+		,user2_unread_sum=#{user2UnreadSum}
 		WHERE
 		code=#{code}
-	
 	</update>
 	
 	
@@ -72,7 +75,8 @@
 		,t.user1
 		,t.user2
 		,t.create_datetime
-		,t.unread_sum
+		,t.user1_unread_sum
+		,t.user2_unread_sum
 		FROM
 		thqxj_session t 
 		<include refid="where_condition" />

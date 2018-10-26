@@ -25,9 +25,8 @@ public interface IQuestionBO extends IPaginableBO<Question> {
     // 状态改为已读
     public void refreshStatus(long id);
 
-    public List<Question> querySessionQuestions(String sessionCode);
-
-    public boolean isSessionEmpty(String sessionCode);
+    public List<Question> querySessionQuestions(String sessionCode,
+            String userId);
 
     // 将List按照日期排序
 

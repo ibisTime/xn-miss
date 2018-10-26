@@ -20,10 +20,7 @@ import com.ogc.standard.bo.IMissSessionBO;
 import com.ogc.standard.bo.IQuestionBO;
 import com.ogc.standard.domain.MissSession;
 import com.ogc.standard.domain.Question;
-import com.ogc.standard.enums.EQuestionStatus;
 import com.ogc.standard.enums.ESysUser;
-import com.ogc.standard.exception.BizException;
-import com.ogc.standard.exception.EBizErrorCode;
 
 /** 
  * @author: taojian 
@@ -43,54 +40,32 @@ public class QuestionAOImpl implements IQuestionAO {
     @Transactional
     public void send(String sessionCode, String user1, String content) {
         MissSession missSession = missSessionBO.getSession(sessionCode);
-        long count = 0L;
-        List<Question> questionList = questionBO
-            .querySessionQuestions(sessionCode);
+        List<Question> questionList = questionBO.querySessionQuestions(
+            sessionCode, missSession.getUser2());
         if (CollectionUtils.isNotEmpty(questionList)) {
-            int size = questionList.size();
             for (Question question : questionList) {
-                if (question.getUserId() != user1
-                        && EQuestionStatus.TO_READ.getCode().equals(
-                            question.getStatus())) {
-                    questionBO.refreshStatus(question.getId());
-                    size -= 1;
-                }
+                questionBO.refreshStatus(question.getId());
             }
-            count = (long) size;
         }
         questionBO.saveSms(sessionCode, user1, content);
-        // 未读数量加一
-        missSessionBO.addUnreadSum(missSession, count);
+        missSessionBO.updateUnreadSum(missSession, 1);
     }
 
     @Override
     @Transactional
     public void reply(String sessionCode, String content) {
         MissSession missSession = missSessionBO.getSession(sessionCode);
-        long count = 0L;
-        // 会话不为空
-        List<Question> questionList = questionBO
-            .querySessionQuestions(sessionCode);
+        List<Question> questionList = questionBO.querySessionQuestions(
+            sessionCode, missSession.getUser1());
         if (CollectionUtils.isNotEmpty(questionList)) {
             // 拉取会话并按时间排序
-            int size = questionList.size();
             questionBO.ListSort(questionList);
             for (Question question : questionList) {
-                if (!ESysUser.SYS_USER.getCode().equals(question.getUserId())
-                        && EQuestionStatus.TO_READ.getCode().equals(
-                            question.getStatus())) {
-                    questionBO.refreshStatus(question.getId());
-                    size -= 1;
-                }
+                questionBO.refreshStatus(question.getId());
             }
-            count = (long) size;
-            // 落地数据
             questionBO.saveSms(sessionCode, ESysUser.SYS_USER.getCode(),
                 content);
-            // 未读数量加一
-            missSessionBO.addUnreadSum(missSession, count);
-        } else {
-            throw new BizException(EBizErrorCode.DEFAULT.getCode(), "没有问题可以回复");
+            missSessionBO.updateUnreadSum(missSession, 2);
         }
 
     }

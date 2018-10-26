@@ -13,7 +13,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ogc.standard.ao.IMissSessionAO;
 import com.ogc.standard.bo.IMissSessionBO;
@@ -49,7 +48,6 @@ public class MissSessionAOImpl implements IMissSessionAO {
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
-    @Transactional
     public String addMissSession(String user1) {
         String code = missSessionBO.saveSession(
             EMissSessionType.COMMIT_QUESTION.getCode(), user1);
@@ -97,18 +95,13 @@ public class MissSessionAOImpl implements IMissSessionAO {
 
     private void initSession(MissSession missSession) {
         List<Question> querySessionQuestions = questionBO
-            .querySessionQuestions(missSession.getCode());
-        // if (CollectionUtils.isNotEmpty(querySessionQuestions)) {
-        // for (Question question : querySessionQuestions) {
-        //
-        // }
-        // }
-
+            .querySessionQuestions(missSession.getCode(), null);
         missSession.setQuestionsList(querySessionQuestions);
-
-        User user = userBO.getUser(missSession.getUser1());
-        missSession.setUser1Nickname(user.getNickname());
-        missSession.setMobile(user.getMobile());
+        if (!"UCOIN201700000000000001".equals(missSession.getUser1())) {
+            User user = userBO.getUser(missSession.getUser1());
+            missSession.setUser1Nickname(user.getNickname());
+            missSession.setMobile(user.getMobile());
+        }
     }
 
 }

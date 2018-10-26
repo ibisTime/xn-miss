@@ -63,20 +63,22 @@ public class MissSessionBOImpl extends PaginableBOImpl<MissSession> implements
         session.setUser1(user1);
         session.setUser2(ESysUser.SYS_USER.getCode());
         session.setCreateDatetime(new Date());
-        session.setUnreadSum(Long.valueOf(1));
+        session.setUser1UnreadSum(Long.valueOf(1));
+        session.setUser2UnreadSum(0L);
         missSessionDAO.insert(session);
         return code;
     }
 
     @Override
-    public void addUnreadSum(MissSession data, long count) {
-        data.setUnreadSum(count + 1);
-        missSessionDAO.updateUnreadSum(data);
-    }
-
-    @Override
-    public void resetUnreadSum(MissSession data) {
-        data.setUnreadSum(Long.valueOf(0));
+    public void updateUnreadSum(MissSession data, int i) {
+        if (1 == i) {
+            data.setUser1UnreadSum(0L);
+            data.setUser2UnreadSum(getLong(data.getUser2UnreadSum()) + 1);
+        }
+        if (2 == i) {
+            data.setUser1UnreadSum(getLong(data.getUser1UnreadSum()) + 1);
+            data.setUser2UnreadSum(0L);
+        }
         missSessionDAO.updateUnreadSum(data);
     }
 
@@ -89,6 +91,14 @@ public class MissSessionBOImpl extends PaginableBOImpl<MissSession> implements
             data = missSessionDAO.select(condition);
         }
         return data;
+    }
+
+    private Long getLong(Object obj) {
+        if (null == obj) {
+            return 0L;
+        } else {
+            return (Long) obj;
+        }
     }
 
 }

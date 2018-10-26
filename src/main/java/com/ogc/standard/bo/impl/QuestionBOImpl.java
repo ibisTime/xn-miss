@@ -57,18 +57,12 @@ public class QuestionBOImpl extends PaginableBOImpl<Question> implements
     }
 
     @Override
-    public List<Question> querySessionQuestions(String sessionCode) {
+    public List<Question> querySessionQuestions(String sessionCode,
+            String userId) {
         Question condition = new Question();
         condition.setSessionCode(sessionCode);
+        condition.setUserId(userId);
         return questionDAO.selectList(condition);
-    }
-
-    @Override
-    public boolean isSessionEmpty(String sessionCode) {
-        if (querySessionQuestions(sessionCode).isEmpty()) {
-            return true;
-        }
-        return false;
     }
 
     // 将List按照日期排序

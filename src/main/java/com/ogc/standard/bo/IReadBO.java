@@ -32,4 +32,7 @@ public interface IReadBO extends IPaginableBO<Read> {
     public List<Read> queryReadList(Read condition);
 
     public Read getRead(long id);
+
+    // 为新用户产生未阅读消息
+    public void saveReadForNewUser(String userId);
 }
