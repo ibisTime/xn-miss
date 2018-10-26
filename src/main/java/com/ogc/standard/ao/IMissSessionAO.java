@@ -20,8 +20,6 @@ import com.ogc.standard.domain.MissSession;
  */
 public interface IMissSessionAO {
 
-    public String addMissSession(String user1);
-
     public Paginable<MissSession> querySessionPage(int start, int limit,
             MissSession condition);
 

@@ -205,8 +205,8 @@ public class PlayerBOImpl extends PaginableBOImpl<Player> implements IPlayerBO {
 
     @Override
     public void subAttention(Player data) {
-        if (null != data.getScanSum()) {
-            data.setScanSum(data.getScanSum() - 1);
+        if (null != data.getAttentionSum()) {
+            data.setAttentionSum(data.getAttentionSum() - 1);
         }
         playerDAO.updateAttention(data);
     }

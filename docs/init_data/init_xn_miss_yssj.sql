@@ -8,14 +8,6 @@ INSERT INTO `thqxj_answer` (`code`,`question`,`answer`,`status`,`create_datetime
 INSERT INTO `thqxj_answer` (`code`,`question`,`answer`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('AN201810212000552262875','为什么要绑定手机号','用户绑定手机号，可以让平台更快更精准的了解用户，提高服务质量。','1','2018-10-21 16:33:09','admin','2018-10-21 16:33:09','上架回复模版');
 INSERT INTO `thqxj_answer` (`code`,`question`,`answer`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('AN201810212002055296316','什么是交易密码','交易密码，是在动用平台用户账户余额时，必须输入的密码。它是保障用户资金安全的重要环节。请牢记且勿告知他人。','1','2018-10-21 16:33:09','admin','2018-10-21 16:33:09','上架回复模版');
 
-/*
--- Query: SELECT `code`,`title`,`content`,`status`, now() as `create_datetime`,`updater`, now() as `update_datetime`,`remark` FROM thqxj_event
-LIMIT 0, 1000
-
--- Date: 2018-10-22 00:36
-*/
-INSERT INTO `thqxj_event` (`code`,`title`,`content`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('EV201810211948322402724','环球小姐投票系统隆重上线','<p>金秋十月，环球小姐投票系统隆重上线。欢迎第一批用户试用。</p>','4','2018-10-21 16:36:26','admin','2018-10-21 16:36:26','初始化数据');
-INSERT INTO `thqxj_event` (`code`,`title`,`content`,`status`,`create_datetime`,`updater`,`update_datetime`,`remark`) VALUES ('EV201810211951323342776','赛事信息测试数据','<p>我是<span style=\"font-family: &quot;Chinese Quote&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, &quot;PingFang SC&quot;, &quot;Hiragino Sans GB&quot;, &quot;Microsoft YaHei&quot;, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;\">赛事信息测试数据，快来点击我</span></p>','4','2018-10-21 16:36:26','admin','2018-10-21 16:36:26','初始化数据');
 
 
 /*

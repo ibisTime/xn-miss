@@ -10,6 +10,7 @@ package com.ogc.standard.ao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,13 +49,10 @@ public class MissSessionAOImpl implements IMissSessionAO {
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
-    @Override
     @Transactional
     public String addMissSession(String user1) {
-        userBO.getUser(user1);
         String code = missSessionBO.saveSession(
             EMissSessionType.COMMIT_QUESTION.getCode(), user1);
-
         SYSConfig value = sysConfigBO.getConfigValue(SysConstant.FIRST_CHAT);
         // 新增第一条消息
         questionBO
@@ -65,6 +63,13 @@ public class MissSessionAOImpl implements IMissSessionAO {
     @Override
     public Paginable<MissSession> querySessionPage(int start, int limit,
             MissSession condition) {
+        if (StringUtils.isNotBlank(condition.getUser1())) {
+            MissSession sessionByUser1 = missSessionBO
+                .getSessionByUser1(condition.getUser1());
+            if (null == sessionByUser1) {
+                addMissSession(condition.getUser1());
+            }
+        }
         Paginable<MissSession> page = missSessionBO.getPaginable(start, limit,
             condition);
         for (MissSession missSession : page.getList()) {
@@ -93,6 +98,12 @@ public class MissSessionAOImpl implements IMissSessionAO {
     private void initSession(MissSession missSession) {
         List<Question> querySessionQuestions = questionBO
             .querySessionQuestions(missSession.getCode());
+        // if (CollectionUtils.isNotEmpty(querySessionQuestions)) {
+        // for (Question question : querySessionQuestions) {
+        //
+        // }
+        // }
+
         missSession.setQuestionsList(querySessionQuestions);
 
         User user = userBO.getUser(missSession.getUser1());

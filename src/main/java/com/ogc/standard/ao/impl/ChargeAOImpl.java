@@ -164,9 +164,18 @@ public class ChargeAOImpl implements IChargeAO {
             // C端用户
             User user = userBO.getUser(account.getUserId());
 
-            realName = user.getMobile();
+            if (StringUtils.isNotBlank(realName = user.getMobile())
+                    && StringUtils.isNotBlank(user.getNickname())) {
+                realName = user.getNickname().concat("-")
+                    .concat(realName = user.getMobile());
+            }
+
+            if (StringUtils.isNotBlank(realName = user.getMobile())) {
+                realName = user.getMobile();
+            }
+
             if (StringUtils.isNotBlank(user.getNickname())) {
-                realName = user.getNickname().concat("-").concat(realName);
+                realName = user.getNickname();
             }
 
         } else {

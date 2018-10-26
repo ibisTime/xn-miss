@@ -39,7 +39,7 @@ public class ReadAOImpl implements IReadAO {
     @Override
     public void readEvent(long id) {
         Read data = readBO.getRead(id);
-        if (EReadStatus.TOREAD.getCode().equals(data.getStatus())) {
+        if (!EReadStatus.TOREAD.getCode().equals(data.getStatus())) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "当前消息不是待阅读");
         }
         readBO.refreshRead(data);

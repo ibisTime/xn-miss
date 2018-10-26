@@ -29,4 +29,6 @@ public interface IMissSessionBO extends IPaginableBO<MissSession> {
     public void addUnreadSum(MissSession data, long count);
 
     public void resetUnreadSum(MissSession data);
+
+    public MissSession getSessionByUser1(String user1);
 }

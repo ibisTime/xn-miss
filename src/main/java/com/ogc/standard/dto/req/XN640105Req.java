@@ -22,6 +22,9 @@ public class XN640105Req extends APageReq {
     // 说话人1
     private String user1;
 
+    // 说话人2
+    private String user2;
+
     // 创建时间起
     private String createDatetimeStart;
 
@@ -58,6 +61,14 @@ public class XN640105Req extends APageReq {
 
     public void setCreateDatetimeEnd(String createDatetimeEnd) {
         this.createDatetimeEnd = createDatetimeEnd;
+    }
+
+    public String getUser2() {
+        return user2;
+    }
+
+    public void setUser2(String user2) {
+        this.user2 = user2;
     }
 
 }

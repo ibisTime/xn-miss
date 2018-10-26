@@ -39,6 +39,7 @@ public class XN640105 extends AProcessor {
         MissSession condition = new MissSession();
         condition.setType(req.getType());
         condition.setUser1(req.getUser1());
+        condition.setUser2(req.getUser2());
         condition.setCreateDatetimeStart(DateUtil.getFrontDate(
             req.getCreateDatetimeStart(), false));
         condition.setCreateDatetimeEnd(DateUtil.getFrontDate(

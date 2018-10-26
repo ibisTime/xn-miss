@@ -11,6 +11,7 @@ package com.ogc.standard.ao.impl;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -120,11 +121,11 @@ public class ActionAOImpl implements IActionAO {
     @Override
     @Transactional
     public void cancelAttation(String creater, String toCode) {
-        Player player = playerBO.getPlayer(toCode);
-        playerBO.subAttention(player);
         Action data = actionBO.getActionByTypeToCodeCreater(
             EActionType.ATTENTION.getCode(), toCode, creater);
         actionBO.removeAction(data.getCode());
+        Player player = playerBO.getPlayer(toCode);
+        playerBO.subAttention(player);
     }
 
     @Override
@@ -159,8 +160,14 @@ public class ActionAOImpl implements IActionAO {
             condition.setPlayerCode(data.getToCode());
             condition.setApplyUser(data.getCreater());
             condition.setStatus(ETicketStatus.PAYED.getCode());
-            long totalCount = ticketBO.getTotalCount(condition);
-            data.setMyTicketSum(totalCount);
+            List<Ticket> queryTicketList = ticketBO.queryTicketList(condition);
+            long myTicketSum = 0L;
+            if (CollectionUtils.isNotEmpty(queryTicketList)) {
+                for (Ticket ticket : queryTicketList) {
+                    myTicketSum += ticket.getTicket();
+                }
+            }
+            data.setMyTicketSum(myTicketSum);
         }
     }
 }

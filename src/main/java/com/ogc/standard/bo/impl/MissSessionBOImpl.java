@@ -11,6 +11,7 @@ package com.ogc.standard.bo.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -62,7 +63,7 @@ public class MissSessionBOImpl extends PaginableBOImpl<MissSession> implements
         session.setUser1(user1);
         session.setUser2(ESysUser.SYS_USER.getCode());
         session.setCreateDatetime(new Date());
-        session.setUnreadSum(Long.valueOf(0));
+        session.setUnreadSum(Long.valueOf(1));
         missSessionDAO.insert(session);
         return code;
     }
@@ -77,6 +78,17 @@ public class MissSessionBOImpl extends PaginableBOImpl<MissSession> implements
     public void resetUnreadSum(MissSession data) {
         data.setUnreadSum(Long.valueOf(0));
         missSessionDAO.updateUnreadSum(data);
+    }
+
+    @Override
+    public MissSession getSessionByUser1(String user1) {
+        MissSession data = null;
+        if (StringUtils.isNotBlank(user1)) {
+            MissSession condition = new MissSession();
+            condition.setUser1(user1);
+            data = missSessionDAO.select(condition);
+        }
+        return data;
     }
 
 }

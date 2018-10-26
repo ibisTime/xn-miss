@@ -22,6 +22,9 @@
 			<if test="user1 != null and user1 != '' ">
 				AND t.user1 = #{user1}
 			</if>
+			<if test="user2 != null and user2 != '' ">
+				AND t.user2 = #{user2}
+			</if>
 			<if test="createDatetimeStart != null and createDatetimeStart != '' ">
 				<![CDATA[AND t.create_datetime >= #{createDatetimeStart}]]>
 			</if>

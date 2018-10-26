@@ -1,5 +1,6 @@
 package com.ogc.standard.ao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -25,6 +26,7 @@ import com.ogc.standard.dto.req.XN640002Req;
 import com.ogc.standard.enums.EActionToType;
 import com.ogc.standard.enums.EActionType;
 import com.ogc.standard.enums.EBoolean;
+import com.ogc.standard.enums.ECommentStatus;
 import com.ogc.standard.enums.EPlayerStatus;
 import com.ogc.standard.enums.ETicketStatus;
 import com.ogc.standard.exception.BizException;
@@ -159,6 +161,10 @@ public class PlayerAOImpl implements IPlayerAO {
         if (StringUtils.isNotBlank(data.getCode())) {
             Comment condition = new Comment();
             condition.setToCode(data.getCode());
+            ArrayList<String> arrayList = new ArrayList<String>();
+            arrayList.add(ECommentStatus.APPROVED_YES.getCode());
+            arrayList.add(ECommentStatus.RELEASED.getCode());
+            condition.setStatusList(arrayList);
             List<Comment> queryCommentList = commentBO
                 .queryCommentList(condition);
             long commentSum = 0L;

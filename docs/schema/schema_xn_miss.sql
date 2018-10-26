@@ -1,17 +1,17 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : 183
+ Source Server         : 31客户服务器
  Source Server Type    : MySQL
- Source Server Version : 50633
- Source Host           : 47.96.161.183:3307
- Source Schema         : dev_xn_miss
+ Source Server Version : 50616
+ Source Host           : rm-bp17qpn5d4bpo2155.mysql.rds.aliyuncs.com:3306
+ Source Schema         : xn_miss
 
  Target Server Type    : MySQL
- Target Server Version : 50633
+ Target Server Version : 50616
  File Encoding         : 65001
 
- Date: 19/10/2018 21:06:50
+ Date: 26/10/2018 17:51:09
 */
 
 SET NAMES utf8mb4;
@@ -144,7 +144,7 @@ CREATE TABLE `thqxj_question` (
   `status` varchar(4) NOT NULL COMMENT '状态（0 未读，1 已读）',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='会话消息';
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COMMENT='会话消息';
 
 -- ----------------------------
 -- Table structure for thqxj_rank
@@ -174,14 +174,15 @@ CREATE TABLE `thqxj_rank` (
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_read`;
 CREATE TABLE `thqxj_read` (
-  `code` varchar(32) NOT NULL COMMENT '编号',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `user_id` varchar(32) NOT NULL COMMENT '用户编号',
   `to_type` varchar(4) NOT NULL COMMENT '对象类型',
   `to_code` varchar(32) NOT NULL COMMENT '对象编号',
   `status` varchar(4) NOT NULL COMMENT '状态（0 未读，1 已读）',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='阅读';
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='阅读';
 
 -- ----------------------------
 -- Table structure for thqxj_session
@@ -228,7 +229,7 @@ DROP TABLE IF EXISTS `tstd_account`;
 CREATE TABLE `tstd_account` (
   `account_number` varchar(32) NOT NULL COMMENT '账户编号',
   `user_id` varchar(32) DEFAULT NULL COMMENT '用户编号',
-  `real_name` varchar(64) DEFAULT NULL COMMENT '户名',
+  `real_name` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '户名',
   `type` varchar(4) DEFAULT NULL COMMENT '类别（B端账号，C端账号，平台账号）',
   `status` varchar(2) DEFAULT NULL COMMENT '状态（正常/程序冻结/人工冻结）',
   `currency` varchar(8) DEFAULT NULL COMMENT '币种',
@@ -442,7 +443,7 @@ CREATE TABLE `tstd_user` (
   `email` varchar(32) DEFAULT NULL COMMENT '邮箱',
   `kind` char(1) DEFAULT NULL COMMENT '用户类型（C 普通用户，M 机器人，D 渠道商）',
   `photo` varchar(255) DEFAULT NULL COMMENT '头像',
-  `nickname` varchar(64) DEFAULT NULL COMMENT '昵称',
+  `nickname` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '昵称',
   `login_pwd` varchar(32) DEFAULT NULL COMMENT '登陆密码',
   `login_pwd_strength` char(1) DEFAULT NULL COMMENT '登陆密码强度',
   `level` varchar(4) DEFAULT NULL COMMENT '用户等级',
@@ -528,8 +529,6 @@ CREATE TABLE `tstd_withdraw` (
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='取现';
 
-
-
 -- ----------------------------
 -- Table structure for tsys_channel_bank
 -- ----------------------------
@@ -547,7 +546,7 @@ CREATE TABLE `tsys_channel_bank` (
   `month_amount` bigint(32) DEFAULT NULL COMMENT '每月限额',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tsys_cnavigate
@@ -580,7 +579,7 @@ CREATE TABLE `tsys_config` (
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tsys_dict
@@ -596,7 +595,7 @@ CREATE TABLE `tsys_dict` (
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=221 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tsys_menu
@@ -629,7 +628,7 @@ CREATE TABLE `tsys_menu_role` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=509 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tsys_role

@@ -43,8 +43,9 @@ public class RankBOImpl extends PaginableBOImpl<Rank> implements IRankBO {
     public void refreshRanking(String type, Rank rank) {
         Rank condition = new Rank();
         condition.setType(type);
-        condition.setBatch(rank.getBatch());
-        condition.setMatch(rank.getMatch());
+        if (ERankType.DAY.getCode().equals(type)) {
+            condition.setBatch(rank.getBatch());
+        }
         List<Rank> list = rankDAO.selectList(condition);
         sort(list);
         for (Rank r1 : list) {
