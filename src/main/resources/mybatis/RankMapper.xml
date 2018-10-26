@@ -46,7 +46,7 @@
 				<![CDATA[AND t.create_datetime > #{createDatetimeEnd}]]>
 			</if>
 			<if test="matchPlayCode != null and matchPlayCode != '' ">
-				AND tp.match_play_code = #{matchPlayCode}
+				AND tp.match_play_code like "%"#{matchPlayCode}"%"
 			</if>
 		</trim>
 	</sql>

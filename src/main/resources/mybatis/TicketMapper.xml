@@ -55,7 +55,9 @@
 			<if test="payDatetimeEnd != null and payDatetimeEnd != '' ">
 				<![CDATA[AND t.pay_datetime >= #{payDatetimeEnd}]]>
 			</if>
-			
+			<if test="matchPlayCode != null and matchPlayCode != '' ">
+				AND tp.match_play_code like "%"#{matchPlayCode}"%"
+			</if>
 		</trim>
 	</sql>
 	<select id="select_ticket" parameterType="ticket" resultMap="ticket_DB_Result">
@@ -77,7 +79,7 @@
 		,t.cancel_datetime
 		,t.remark
 		FROM
-		thqxj_ticket t
+		thqxj_ticket t LEFT JOIN thqxj_player tp ON t.player_code = tp.code
 		<include refid="where_condition" />
 		<trim prefix="ORDER BY ">
 			<if test="order != null and order != '' ">
@@ -117,8 +119,8 @@
 	
 	<select id="select_ticket_count" parameterType="ticket"
 		resultType="java.lang.Long">
-		SELECT count(1) FROM thqxj_ticket t
-		<include refid="where_condition" />
+		SELECT count(1) FROM (SELECT distinct t.code FROM thqxj_ticket t LEFT JOIN thqxj_player tp ON t.player_code = tp.code
+		<include refid="where_condition" />) tb
 	</select>
 
 	<insert id="insert_ticket" parameterType="ticket">

@@ -13,6 +13,9 @@ public class XN640035Req extends APageReq {
     // 选手表编号
     private String playerCode;
 
+    // 选手编号
+    private String matchPlayCode;
+
     // 下单人
     private String applyUser;
 
@@ -85,6 +88,14 @@ public class XN640035Req extends APageReq {
 
     public void setPayDatetimeEnd(String payDatetimeEnd) {
         this.payDatetimeEnd = payDatetimeEnd;
+    }
+
+    public String getMatchPlayCode() {
+        return matchPlayCode;
+    }
+
+    public void setMatchPlayCode(String matchPlayCode) {
+        this.matchPlayCode = matchPlayCode;
     }
 
 }

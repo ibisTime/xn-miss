@@ -30,6 +30,7 @@ public class XN640035 extends AProcessor {
     public Object doBusiness() throws BizException {
         Ticket condition = new Ticket();
         condition.setPlayerCode(req.getPlayerCode());
+        condition.setMatchPlayCode(req.getMatchPlayCode());
         condition.setApplyUser(req.getApplyUser());
         condition.setStatus(req.getStatus());
         condition.setCreateDatetimeStart(DateUtil.strToDate(

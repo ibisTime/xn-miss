@@ -89,6 +89,9 @@ public class Ticket extends ABaseDO {
     // 状态list
     private List<String> statusList;
 
+    // 选手编号
+    private String matchPlayCode;
+
     public Player getPlayerInfo() {
         return playerInfo;
     }
@@ -271,6 +274,14 @@ public class Ticket extends ABaseDO {
 
     public void setStatusList(List<String> statusList) {
         this.statusList = statusList;
+    }
+
+    public String getMatchPlayCode() {
+        return matchPlayCode;
+    }
+
+    public void setMatchPlayCode(String matchPlayCode) {
+        this.matchPlayCode = matchPlayCode;
     }
 
 }
