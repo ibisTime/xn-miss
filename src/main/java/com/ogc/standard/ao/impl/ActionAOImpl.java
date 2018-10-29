@@ -94,9 +94,8 @@ public class ActionAOImpl implements IActionAO {
             code = actionBO.saveAction(type, toType, toCode, creater, remark);
         } else if (EActionType.SHARE.getCode().equals(type)) {
             remark = remark + "分享了选手" + player.getCname();
+            code = actionBO.saveAction(type, toType, toCode, creater, remark);
             if (!actionBO.isActionExist(creater, type)) {
-                code = actionBO.saveAction(type, toType, toCode, creater,
-                    remark);
                 SYSConfig money = sysConfigBO
                     .getConfigValue(SysConstant.RETURN_MONEY);
                 BigDecimal mulMoney = AmountUtil.mul(
