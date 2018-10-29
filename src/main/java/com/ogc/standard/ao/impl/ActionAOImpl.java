@@ -39,7 +39,7 @@ import com.ogc.standard.enums.ECurrency;
 import com.ogc.standard.enums.EJourBizTypePlat;
 import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.EPlayerStatus;
-import com.ogc.standard.enums.ESystemAccount;
+import com.ogc.standard.enums.ESysUser;
 import com.ogc.standard.enums.ETicketStatus;
 import com.ogc.standard.exception.BizException;
 import com.ogc.standard.exception.EBizErrorCode;
@@ -74,7 +74,7 @@ public class ActionAOImpl implements IActionAO {
     @Override
     public String addAction(String type, String toType, String toCode,
             String creater) {
-        User user = userBO.getUser(creater);
+        User user = userBO.getNormalUser(creater);
         Player player = playerBO.getPlayer(toCode);
 
         if (!EPlayerStatus.UP.getCode().equals(player.getStatus())) {
@@ -94,15 +94,16 @@ public class ActionAOImpl implements IActionAO {
             code = actionBO.saveAction(type, toType, toCode, creater, remark);
         } else if (EActionType.SHARE.getCode().equals(type)) {
             remark = remark + "分享了选手" + player.getCname();
-            if (!actionBO.isActionExist(creater, toCode, type)) {
+            if (!actionBO.isActionExist(creater, type)) {
+                code = actionBO.saveAction(type, toType, toCode, creater,
+                    remark);
                 SYSConfig money = sysConfigBO
                     .getConfigValue(SysConstant.RETURN_MONEY);
                 BigDecimal mulMoney = AmountUtil.mul(
                     StringValidater.toBigDecimal(money.getCvalue()), 1000L);
-                accountBO.transAmountCZB(creater, ECurrency.CNY.getCode(),
-                    ESystemAccount.SYS_ACOUNT_CNY.getCode(),
-                    ECurrency.CNY.getCode(), mulMoney,
-                    EJourBizTypePlat.AJ_FX.getCode(),
+                accountBO.transAmountCZB(ESysUser.SYS_USER.getCode(),
+                    ECurrency.CNY.getCode(), creater, ECurrency.CNY.getCode(),
+                    mulMoney, EJourBizTypePlat.AJ_FX.getCode(),
                     EJourBizTypeUser.AJ_FX.getCode(),
                     EJourBizTypePlat.AJ_FX.getValue(),
                     EJourBizTypeUser.AJ_FX.getValue(), code);

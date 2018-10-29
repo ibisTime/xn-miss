@@ -210,6 +210,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
 
     // 取现回录
     @Override
+    @Transactional
     public void withdrawEnter(String accountNumber, BigDecimal amount,
             String withDate, String channelOrder, String withNote,
             String updater) {
@@ -221,7 +222,7 @@ public class WithdrawAOImpl implements IWithdrawAO {
         }
 
         Account account = accountBO.getAccount(accountNumber);
-        if (account.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+        if (account.getAmount().subtract(amount).compareTo(BigDecimal.ZERO) < 0) {
             throw new BizException(EBizErrorCode.DEFAULT.getCode(), "账户余额不足");
         }
         String bizNote = null;

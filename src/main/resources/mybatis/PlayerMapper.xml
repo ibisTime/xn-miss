@@ -239,9 +239,7 @@
 		status = #{status}
 		,updater = #{updater}
 		,update_datetime = #{updateDatetime}
-		<if test="remark != null and remark != ''">
 		,remark = #{remark}
-		</if>
 		WHERE code = #{code}
 	</update>
 

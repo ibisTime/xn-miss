@@ -238,7 +238,7 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public void doChangeMoblie(String userId, String newMobile,
             String smsCaptcha, String language) {
-        User user = userBO.getUser(userId);
+        User user = userBO.getNormalUser(userId);
 
         String oldMobile = user.getMobile();
         if (newMobile.equals(oldMobile)) {
@@ -264,7 +264,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     @Transactional
     public void doSetTradePwd(String userId, String tradePwd, String smsCaptcha) {
-        User user = userBO.getUser(userId);
+        User user = userBO.getNormalUser(userId);
         // 短信验证码是否正确
         smsOutBO.checkCaptcha(user.getMobile(), smsCaptcha, "805060");// 805066
         // 修改支付密码
@@ -280,7 +280,7 @@ public class UserAOImpl implements IUserAO {
     @Override
     public void doResetTradePwd(String userId, String newTradePwd,
             String smsCaptcha) {
-        User user = userBO.getUser(userId);
+        User user = userBO.getNormalUser(userId);
         // 短信验证码是否正确
         String mobile = user.getMobile();
         smsOutBO.checkCaptcha(mobile, smsCaptcha, "805067");
@@ -381,7 +381,7 @@ public class UserAOImpl implements IUserAO {
 
     @Override
     public User doGetUser(String userId) {
-        User user = userBO.getUser(userId);
+        User user = userBO.getNormalUser(userId);
 
         if (StringUtils.isNotBlank(user.getUserReferee())) {
             // 拉取推荐人信息
@@ -440,7 +440,7 @@ public class UserAOImpl implements IUserAO {
     @Transactional
     public void doBindMobile(String mobile, String smsCaptcha, String userId,
             String language) {
-        User user = userBO.getUser(userId);
+        User user = userBO.getNormalUser(userId);
         if (StringUtils.isNotBlank(user.getMobile())) {
             throw new BizException(
                 EErrorCode_main.user_HAVEBOUNDMOBILE.getCode());

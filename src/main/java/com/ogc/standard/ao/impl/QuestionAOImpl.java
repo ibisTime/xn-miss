@@ -53,6 +53,28 @@ public class QuestionAOImpl implements IQuestionAO {
 
     @Override
     @Transactional
+    public void read(String sessionCode, String userId) {
+        MissSession missSession = missSessionBO.getSession(sessionCode);
+        String toUserId = "";
+        if (missSession.getUser1().equals(userId)) {
+            toUserId = missSession.getUser2();
+            missSessionBO.updateUnreadSum(missSession, 3);
+        } else {
+            toUserId = missSession.getUser1();
+            missSessionBO.updateUnreadSum(missSession, 4);
+        }
+        List<Question> questionList = questionBO.querySessionQuestions(
+            sessionCode, toUserId);
+
+        if (CollectionUtils.isNotEmpty(questionList)) {
+            for (Question question : questionList) {
+                questionBO.refreshStatus(question.getId());
+            }
+        }
+    }
+
+    @Override
+    @Transactional
     public void reply(String sessionCode, String content) {
         MissSession missSession = missSessionBO.getSession(sessionCode);
         List<Question> questionList = questionBO.querySessionQuestions(

@@ -13,7 +13,7 @@ import com.ogc.standard.exception.BizException;
  */
 public enum EJourBizTypeUser {
 
-    AJ_FX("first_share", "首次分享送钱"), TICKET("ticket", "加油订单"), AJ_CZ("charge",
+    AJ_FX("first_share", "首次分享送钱"), TICKET("ticket", "投票订单"), AJ_CZ("charge",
             "充值"), AJ_QX("withdraw", "取现"), WITHDRAW_FROZEN("withdraw_frozen",
             "取现冻结"), WITHDRAW_UNFROZEN("withdraw_unfrozen", "取现解冻");
 

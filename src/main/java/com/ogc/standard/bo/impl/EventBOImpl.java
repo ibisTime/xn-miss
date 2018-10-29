@@ -86,8 +86,8 @@ public class EventBOImpl extends PaginableBOImpl<Event> implements IEventBO {
         Event data = getEvent(code);
         data.setStatus(status);
         data.setUpdater(updater);
-        data.setRemark(remark);
         data.setUpdateDatetime(new Date());
+        data.setRemark(remark);
         count = eventDAO.updateStatus(data);
         return count;
     }

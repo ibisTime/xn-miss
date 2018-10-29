@@ -26,6 +26,7 @@ public class XN640032 extends AProcessor {
         Object result = ticketAO.toPayTicket(req.getCode(), req.getPayType(),
             req.getTradePwd());
         if (EPayType.RMB_YE.getCode().equals(req.getPayType())) {
+            ticketAO.indivdePP(req.getCode());
             ticketAO.upgradeRank(req.getCode());
         }
 

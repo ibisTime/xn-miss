@@ -17,6 +17,8 @@ public interface ITicketAO {
 
     public Object toPayTicket(String code, String payType, String tradePwd);
 
+    public void indivdePP(String orderCode);
+
     public void paySuccess(String payGroup, String payCode);
 
     public void upgradeRank(String orderCode);

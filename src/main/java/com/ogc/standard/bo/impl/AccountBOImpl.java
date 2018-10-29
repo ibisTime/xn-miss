@@ -99,7 +99,7 @@ public class AccountBOImpl extends PaginableBOImpl<Account> implements
             data.setInAmount(BigDecimal.ZERO);
             data.setOutAmount(BigDecimal.ZERO);
             data.setCreateDatetime(new Date());
-
+            data.setCompanyCode(ESystemCode.MISS.getCode());
             data.setSystemCode(ESystemCode.MISS.getCode());
             accountDAO.insert(data);
         }

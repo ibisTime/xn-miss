@@ -36,6 +36,7 @@ public class XN803755 extends AProcessor {
     @Override
     public Object doBusiness() throws BizException {
         Withdraw condition = new Withdraw();
+        condition.setQueryCode(req.getCode());
         if (StringUtils.isNotBlank(req.getUserId())) {
             try {
                 List<Account> accounts = accountAO.getAccountByUserId(

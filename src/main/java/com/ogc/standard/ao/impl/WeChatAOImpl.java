@@ -40,7 +40,6 @@ import com.ogc.standard.dto.res.XN002501Res;
 import com.ogc.standard.enums.EChannelType;
 import com.ogc.standard.enums.EChargeStatus;
 import com.ogc.standard.enums.ECurrency;
-import com.ogc.standard.enums.EJourBizTypeUser;
 import com.ogc.standard.enums.ESystemAccount;
 import com.ogc.standard.enums.ESystemCode;
 import com.ogc.standard.exception.BizException;
@@ -109,7 +108,7 @@ public class WeChatAOImpl implements IWeChatAO {
         // 获取微信公众号支付prepayid
         String prepayId = wechatBO.getPrepayIdH5(companyChannel, openId,
             bizNote, chargeOrderCode, transAmount, SysConstant.IP);
-        // 返回微信APP支付所需信息
+        // 返回微信h5支付所需信息
         return wechatBO.getPayInfoH5(companyChannel, chargeOrderCode, prepayId);
     }
 
@@ -152,28 +151,10 @@ public class WeChatAOImpl implements IWeChatAO {
                 chargeBO.callBackChange(order, false);
             }
 
-            // 回调业务biz
-            doBizCallbackBiz(isSucc, order.getBizType(), order.getPayGroup(),
-                wechatOrderNo);
-
-            return new ChargeRes(isSucc, order.getPayGroup(),
+            return new ChargeRes(isSucc, order.getPayGroup(), wechatOrderNo,
                 order.getBizType());
         } catch (JDOMException | IOException e) {
             throw new BizException("xn000000", "回调结果XML解析失败");
-        }
-    }
-
-    private void doBizCallbackBiz(boolean result, String bizType,
-            String payGroup, String payCode) {
-        // 不成功和充值订单不处理
-        if (!result) {
-            return;
-        }
-
-        if (EJourBizTypeUser.AJ_CZ.getCode().equals(bizType)) {
-            return;
-        } else if (EJourBizTypeUser.TICKET.getCode().equals(bizType)) {
-            ticketAO.paySuccess(payGroup, payCode);
         }
     }
 

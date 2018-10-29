@@ -359,7 +359,7 @@ public class UserBOImpl extends PaginableBOImpl<User> implements IUserBO {
     @Override
     public void checkTradePwd(String userId, String tradePwd) {
         if (StringUtils.isNotBlank(userId) && StringUtils.isNotBlank(tradePwd)) {
-            User user = this.getUser(userId);
+            User user = this.getNormalUser(userId);
             if (StringUtils.isBlank(user.getTradePwdStrength())) {
                 throw new BizException(
                     EErrorCode_main.user_TRADEPWDFIRST.getCode());

@@ -118,6 +118,17 @@ public class Withdraw extends ABaseDO {
     // 申请用户
     private SYSUser sysUser;
 
+    // 订单编号
+    private String queryCode;
+
+    public String getQueryCode() {
+        return queryCode;
+    }
+
+    public void setQueryCode(String queryCode) {
+        this.queryCode = queryCode;
+    }
+
     public SYSUser getSysUser() {
         return sysUser;
     }

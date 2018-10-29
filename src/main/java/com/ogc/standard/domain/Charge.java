@@ -104,6 +104,16 @@ public class Charge extends ABaseDO {
     // 户名
     private String realName;
 
+    private String queryCode;
+
+    public String getQueryCode() {
+        return queryCode;
+    }
+
+    public void setQueryCode(String queryCode) {
+        this.queryCode = queryCode;
+    }
+
     public String getCode() {
         return code;
     }

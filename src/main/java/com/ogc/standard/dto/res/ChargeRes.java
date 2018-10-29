@@ -6,14 +6,26 @@ public class ChargeRes {
 
     private String orderCode;
 
+    private String wechatOrderNo;
+
     private String bizType;
 
     public ChargeRes() {
     }
 
-    public ChargeRes(boolean isSuccess, String orderCode, String bizType) {
+    public String getWechatOrderNo() {
+        return wechatOrderNo;
+    }
+
+    public void setWechatOrderNo(String wechatOrderNo) {
+        this.wechatOrderNo = wechatOrderNo;
+    }
+
+    public ChargeRes(boolean isSuccess, String orderCode, String wechatOrderNo,
+            String bizType) {
         this.isSuccess = isSuccess;
         this.orderCode = orderCode;
+        this.wechatOrderNo = wechatOrderNo;
         this.bizType = bizType;
     }
 
@@ -44,4 +56,5 @@ public class ChargeRes {
     public void setBizType(String bizType) {
         this.bizType = bizType;
     }
+
 }

@@ -79,6 +79,13 @@ public class MissSessionBOImpl extends PaginableBOImpl<MissSession> implements
             data.setUser1UnreadSum(getLong(data.getUser1UnreadSum()) + 1);
             data.setUser2UnreadSum(0L);
         }
+
+        if (3 == i) {
+            data.setUser1UnreadSum(0L);
+        }
+        if (4 == i) {
+            data.setUser2UnreadSum(0L);
+        }
         missSessionDAO.updateUnreadSum(data);
     }
 

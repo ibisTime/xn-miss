@@ -34,7 +34,7 @@ public class APIServlet extends HttpServlet {
         logger.info("Successful Deployment");
         PrintWriter writer = response.getWriter();
         writer.append("Version:1.0.0 \n");
-        writer.append("Description:homney-biz HMONEY 1st_online3 \n");
+        writer.append("Description:homney-biz HMONEY 1st_online \n");
         writer.flush();
     }
 

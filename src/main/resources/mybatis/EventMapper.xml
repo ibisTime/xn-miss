@@ -30,6 +30,28 @@
 		</trim>
 	</sql>
 	
+	<select id="select_event" parameterType="event" resultMap="event_DB_Result">
+		SELECT
+		t.code
+		,t.title
+		,t.content
+		,t.status
+		,t.create_datetime
+		,t.updater
+		,t.update_datetime
+		,t.remark
+		FROM
+		thqxj_event t 
+		<include refid="where_condition" />
+		order by t.update_datetime desc
+	</select>
+
+	<select id="select_event_count" parameterType="event"
+		resultType="java.lang.Long">
+		SELECT count(1) FROM thqxj_event t
+		<include refid="where_condition" />
+	</select>
+	
 	<insert id="insert_event" parameterType="event">
 		INSERT INTO thqxj_event(
 		code
@@ -59,11 +81,8 @@
 		status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
-		<if test="remark != null and remark != '' ">
 		,remark=#{remark}
-		</if>
-		WHERE
-		code=#{code}
+		WHERE code=#{code}
 	</update>
 	
 	<update id="update_event" parameterType="event">
@@ -74,32 +93,7 @@
 		,status=#{status}
 		,updater=#{updater}
 		,update_datetime=#{updateDatetime}
-		<if test="remark != null and remark != '' ">
 		,remark=#{remark}
-		</if>
-		WHERE
-		code=#{code}
+		WHERE code=#{code}
 	</update>
-	
-	<select id="select_event" parameterType="event" resultMap="event_DB_Result">
-		SELECT
-		t.code
-		,t.title
-		,t.content
-		,t.status
-		,t.create_datetime
-		,t.updater
-		,t.update_datetime
-		,t.remark
-		FROM
-		thqxj_event t 
-		<include refid="where_condition" />
-		order by t.update_datetime desc
-	</select>
-
-	<select id="select_event_count" parameterType="event"
-		resultType="java.lang.Long">
-		SELECT count(1) FROM thqxj_event t
-		<include refid="where_condition" />
-	</select>
 </mapper>

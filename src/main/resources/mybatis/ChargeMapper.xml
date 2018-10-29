@@ -36,6 +36,9 @@
 			<if test="code != null and code != '' ">
 				AND t.code = #{code}
 			</if>
+			<if test="queryCode != null and queryCode != '' ">
+				AND t.code like "%"#{queryCode}"%"
+			</if>
 			<if test="payGroup != null and payGroup != '' ">
 				AND t.pay_group = #{payGroup}
 			</if>

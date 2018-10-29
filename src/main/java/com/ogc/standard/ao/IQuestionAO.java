@@ -17,5 +17,7 @@ public interface IQuestionAO {
 
     public void reply(String sessionCode, String content);
 
+    public void read(String sessionCode, String user1);
+
     public void send(String sessionCode, String user1, String content);
 }

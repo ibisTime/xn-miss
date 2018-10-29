@@ -146,20 +146,6 @@ public class TicketAOImpl implements ITicketAO {
             EJourBizTypeUser.TICKET.getValue(),
             EJourBizTypePlat.TICKET.getValue(), data.getCode());
 
-        // 给品牌方加油分成
-        SYSConfig rate = sysConfigBO
-            .getConfigValue(SysConstant.DIVIDEND_RATE_BUSINESS);
-        BigDecimal individeAmount = data.getAmount()
-            .multiply(new BigDecimal(rate.getCvalue()))
-            .setScale(0, BigDecimal.ROUND_DOWN);
-        accountBO.transAmountCZB(ESysUser.SYS_USER.getCode(),
-            ECurrency.CNY.getCode(), ESysUser.B_USER.getCode(),
-            ECurrency.CNY.getCode(), individeAmount,
-            EJourBizTypePlat.AJ_JYFC.getCode(),
-            EJourBizTypeBusiness.AJ_JYFC.getCode(),
-            EJourBizTypePlat.AJ_JYFC.getValue(),
-            EJourBizTypeBusiness.AJ_JYFC.getValue(), data.getCode());
-
         // 更新选手票数
         playerBO.addPlayerTicket(player, data.getTicket());
 
@@ -177,6 +163,24 @@ public class TicketAOImpl implements ITicketAO {
                         + "关注了选手" + player.getCname());
         }
         return new BooleanRes(true);
+    }
+
+    @Override
+    public void indivdePP(String orderCode) {
+        Ticket data = ticketBO.getTicket(orderCode);
+        // 给品牌方加油分成
+        SYSConfig rate = sysConfigBO
+            .getConfigValue(SysConstant.DIVIDEND_RATE_BUSINESS);
+        BigDecimal individeAmount = data.getAmount()
+            .multiply(new BigDecimal(rate.getCvalue()))
+            .setScale(0, BigDecimal.ROUND_DOWN);
+        accountBO.transAmountCZB(ESysUser.SYS_USER.getCode(),
+            ECurrency.CNY.getCode(), ESysUser.B_USER.getCode(),
+            ECurrency.CNY.getCode(), individeAmount,
+            EJourBizTypePlat.AJ_JYFC.getCode(),
+            EJourBizTypeBusiness.AJ_JYFC.getCode(),
+            EJourBizTypePlat.AJ_JYFC.getValue(),
+            EJourBizTypeBusiness.AJ_JYFC.getValue(), data.getCode());
     }
 
     // 更新榜单
@@ -237,6 +241,7 @@ public class TicketAOImpl implements ITicketAO {
         BigDecimal individeAmount = data.getAmount()
             .multiply(new BigDecimal(rate.getCvalue()))
             .setScale(0, BigDecimal.ROUND_DOWN);
+
         accountBO.transAmountCZB(ESysUser.SYS_USER.getCode(),
             ECurrency.CNY.getCode(), ESysUser.B_USER.getCode(),
             ECurrency.CNY.getCode(), individeAmount,

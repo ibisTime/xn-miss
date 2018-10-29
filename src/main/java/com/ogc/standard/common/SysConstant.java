@@ -50,9 +50,6 @@ public class SysConstant {
     // 品牌方分成比例
     public static String DIVIDEND_RATE_BUSINESS = "business_rate";
 
-    // 平台分成比例
-    public static String DIVIDEND_RATE_PLAT = "plat_rate";
-
     // 取现费率
     public static String WITHDRAW_FEE_RATE = "fee_rate";
 

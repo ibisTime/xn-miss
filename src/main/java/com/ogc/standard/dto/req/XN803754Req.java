@@ -1,5 +1,7 @@
 package com.ogc.standard.dto.req;
 
+import javax.validation.constraints.Min;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -14,6 +16,7 @@ public class XN803754Req {
     private String accountNumber;
 
     @NotBlank
+    @Min(0)
     private String amount;
 
     @NotBlank

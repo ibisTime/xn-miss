@@ -48,9 +48,10 @@ public class MissSessionAOImpl implements IMissSessionAO {
     @Autowired
     private ISYSConfigBO sysConfigBO;
 
-    public String addMissSession(String user1) {
+    public String addMissSession(String userId) {
+        User user = userBO.getNormalUser(userId);
         String code = missSessionBO.saveSession(
-            EMissSessionType.COMMIT_QUESTION.getCode(), user1);
+            EMissSessionType.COMMIT_QUESTION.getCode(), user.getUserId());
         SYSConfig value = sysConfigBO.getConfigValue(SysConstant.FIRST_CHAT);
         // 新增第一条消息
         questionBO

@@ -1,24 +1,22 @@
 /*
  Navicat MySQL Data Transfer
 
- Source Server         : 31客户服务器
- Source Server Type    : MySQL
+ Source Server         : miss
  Source Server Version : 50616
- Source Host           : rm-bp17qpn5d4bpo2155.mysql.rds.aliyuncs.com:3306
- Source Schema         : xn_miss
+ Source Host           : rm-bp17qpn5d4bpo2155.mysql.rds.aliyuncs.com
+ Source Database       : xn_miss
 
- Target Server Type    : MySQL
  Target Server Version : 50616
- File Encoding         : 65001
+ File Encoding         : utf-8
 
- Date: 26/10/2018 17:51:09
+ Date: 10/29/2018 23:18:43 PM
 */
 
-SET NAMES utf8mb4;
+SET NAMES utf8;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for thqxj_action
+--  Table structure for `thqxj_action`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_action`;
 CREATE TABLE `thqxj_action` (
@@ -33,7 +31,7 @@ CREATE TABLE `thqxj_action` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户行为';
 
 -- ----------------------------
--- Table structure for thqxj_answer
+--  Table structure for `thqxj_answer`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_answer`;
 CREATE TABLE `thqxj_answer` (
@@ -49,7 +47,7 @@ CREATE TABLE `thqxj_answer` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='回复模版';
 
 -- ----------------------------
--- Table structure for thqxj_comment
+--  Table structure for `thqxj_comment`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_comment`;
 CREATE TABLE `thqxj_comment` (
@@ -68,7 +66,7 @@ CREATE TABLE `thqxj_comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='评论';
 
 -- ----------------------------
--- Table structure for thqxj_event
+--  Table structure for `thqxj_event`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_event`;
 CREATE TABLE `thqxj_event` (
@@ -84,7 +82,7 @@ CREATE TABLE `thqxj_event` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='赛事信息';
 
 -- ----------------------------
--- Table structure for thqxj_keyword
+--  Table structure for `thqxj_keyword`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_keyword`;
 CREATE TABLE `thqxj_keyword` (
@@ -96,10 +94,10 @@ CREATE TABLE `thqxj_keyword` (
   `update_datetime` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) COMMENT '关键字'
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COMMENT='关键字';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='关键字';
 
 -- ----------------------------
--- Table structure for thqxj_player
+--  Table structure for `thqxj_player`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_player`;
 CREATE TABLE `thqxj_player` (
@@ -133,7 +131,7 @@ CREATE TABLE `thqxj_player` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='选手';
 
 -- ----------------------------
--- Table structure for thqxj_question
+--  Table structure for `thqxj_question`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_question`;
 CREATE TABLE `thqxj_question` (
@@ -144,10 +142,10 @@ CREATE TABLE `thqxj_question` (
   `status` varchar(4) NOT NULL COMMENT '状态（0 未读，1 已读）',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COMMENT='会话消息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会话消息';
 
 -- ----------------------------
--- Table structure for thqxj_rank
+--  Table structure for `thqxj_rank`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_rank`;
 CREATE TABLE `thqxj_rank` (
@@ -170,7 +168,7 @@ CREATE TABLE `thqxj_rank` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='榜单';
 
 -- ----------------------------
--- Table structure for thqxj_read
+--  Table structure for `thqxj_read`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_read`;
 CREATE TABLE `thqxj_read` (
@@ -182,10 +180,10 @@ CREATE TABLE `thqxj_read` (
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='阅读';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='阅读';
 
 -- ----------------------------
--- Table structure for thqxj_session
+--  Table structure for `thqxj_session`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_session`;
 CREATE TABLE `thqxj_session` (
@@ -193,13 +191,14 @@ CREATE TABLE `thqxj_session` (
   `type` varchar(4) NOT NULL COMMENT '类型（帮助）',
   `user1` varchar(32) DEFAULT NULL COMMENT '说话人1',
   `user2` varchar(32) DEFAULT NULL COMMENT '说话人2',
-  `unread_sum` bigint(20) NOT NULL COMMENT '未读消息数量',
   `create_datetime` datetime NOT NULL COMMENT '创建时间',
+  `user1_unread_sum` bigint(20) NOT NULL COMMENT 'user1未读消息数量',
+  `user2_unread_sum` bigint(20) NOT NULL COMMENT 'User2未读消息',
   PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会话';
 
 -- ----------------------------
--- Table structure for thqxj_ticket
+--  Table structure for `thqxj_ticket`
 -- ----------------------------
 DROP TABLE IF EXISTS `thqxj_ticket`;
 CREATE TABLE `thqxj_ticket` (
@@ -223,7 +222,7 @@ CREATE TABLE `thqxj_ticket` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='加油订单';
 
 -- ----------------------------
--- Table structure for tstd_account
+--  Table structure for `tstd_account`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_account`;
 CREATE TABLE `tstd_account` (
@@ -247,7 +246,7 @@ CREATE TABLE `tstd_account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='账户';
 
 -- ----------------------------
--- Table structure for tstd_bankcard
+--  Table structure for `tstd_bankcard`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_bankcard`;
 CREATE TABLE `tstd_bankcard` (
@@ -273,7 +272,7 @@ CREATE TABLE `tstd_bankcard` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Table structure for tstd_charge
+--  Table structure for `tstd_charge`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_charge`;
 CREATE TABLE `tstd_charge` (
@@ -303,7 +302,7 @@ CREATE TABLE `tstd_charge` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='充值';
 
 -- ----------------------------
--- Table structure for tstd_company_channel
+--  Table structure for `tstd_company_channel`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_company_channel`;
 CREATE TABLE `tstd_company_channel` (
@@ -325,10 +324,10 @@ CREATE TABLE `tstd_company_channel` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) NOT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
--- Table structure for tstd_exchange_currency
+--  Table structure for `tstd_exchange_currency`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_exchange_currency`;
 CREATE TABLE `tstd_exchange_currency` (
@@ -355,7 +354,7 @@ CREATE TABLE `tstd_exchange_currency` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tstd_hlorder
+--  Table structure for `tstd_hlorder`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_hlorder`;
 CREATE TABLE `tstd_hlorder` (
@@ -380,7 +379,7 @@ CREATE TABLE `tstd_hlorder` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='红蓝订单';
 
 -- ----------------------------
--- Table structure for tstd_jour
+--  Table structure for `tstd_jour`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_jour`;
 CREATE TABLE `tstd_jour` (
@@ -416,7 +415,7 @@ CREATE TABLE `tstd_jour` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='流水';
 
 -- ----------------------------
--- Table structure for tstd_sign_log
+--  Table structure for `tstd_sign_log`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_sign_log`;
 CREATE TABLE `tstd_sign_log` (
@@ -431,7 +430,7 @@ CREATE TABLE `tstd_sign_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tstd_user
+--  Table structure for `tstd_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_user`;
 CREATE TABLE `tstd_user` (
@@ -475,7 +474,7 @@ CREATE TABLE `tstd_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tstd_user_ext
+--  Table structure for `tstd_user_ext`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_user_ext`;
 CREATE TABLE `tstd_user_ext` (
@@ -495,7 +494,7 @@ CREATE TABLE `tstd_user_ext` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tstd_withdraw
+--  Table structure for `tstd_withdraw`
 -- ----------------------------
 DROP TABLE IF EXISTS `tstd_withdraw`;
 CREATE TABLE `tstd_withdraw` (
@@ -530,7 +529,7 @@ CREATE TABLE `tstd_withdraw` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='取现';
 
 -- ----------------------------
--- Table structure for tsys_channel_bank
+--  Table structure for `tsys_channel_bank`
 -- ----------------------------
 DROP TABLE IF EXISTS `tsys_channel_bank`;
 CREATE TABLE `tsys_channel_bank` (
@@ -546,10 +545,10 @@ CREATE TABLE `tsys_channel_bank` (
   `month_amount` bigint(32) DEFAULT NULL COMMENT '每月限额',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tsys_cnavigate
+--  Table structure for `tsys_cnavigate`
 -- ----------------------------
 DROP TABLE IF EXISTS `tsys_cnavigate`;
 CREATE TABLE `tsys_cnavigate` (
@@ -567,7 +566,7 @@ CREATE TABLE `tsys_cnavigate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tsys_config
+--  Table structure for `tsys_config`
 -- ----------------------------
 DROP TABLE IF EXISTS `tsys_config`;
 CREATE TABLE `tsys_config` (
@@ -579,10 +578,10 @@ CREATE TABLE `tsys_config` (
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tsys_dict
+--  Table structure for `tsys_dict`
 -- ----------------------------
 DROP TABLE IF EXISTS `tsys_dict`;
 CREATE TABLE `tsys_dict` (
@@ -595,10 +594,10 @@ CREATE TABLE `tsys_dict` (
   `update_datetime` datetime DEFAULT NULL COMMENT '最近修改人',
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=221 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tsys_menu
+--  Table structure for `tsys_menu`
 -- ----------------------------
 DROP TABLE IF EXISTS `tsys_menu`;
 CREATE TABLE `tsys_menu` (
@@ -616,7 +615,7 @@ CREATE TABLE `tsys_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tsys_menu_role
+--  Table structure for `tsys_menu_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `tsys_menu_role`;
 CREATE TABLE `tsys_menu_role` (
@@ -628,10 +627,10 @@ CREATE TABLE `tsys_menu_role` (
   `remark` varchar(255) DEFAULT NULL COMMENT '备注',
   `system_code` varchar(32) DEFAULT NULL COMMENT '系统编号',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=509 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tsys_role
+--  Table structure for `tsys_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `tsys_role`;
 CREATE TABLE `tsys_role` (
@@ -645,7 +644,7 @@ CREATE TABLE `tsys_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for tsys_user
+--  Table structure for `tsys_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `tsys_user`;
 CREATE TABLE `tsys_user` (

@@ -47,6 +47,7 @@ public class CallbackConroller {
             PrintWriter out = response.getWriter();
             InputStream inStream = request.getInputStream();
             String result = getReqResult(out, inStream);
+
             logger.info("**** 公众号支付回调结果 ****：" + result);
 
             // 解析回调结果并通知业务biz
@@ -56,6 +57,10 @@ public class CallbackConroller {
             if (chargeRes.getIsSuccess()
                     && EJourBizTypeUser.TICKET.getCode().equals(
                         chargeRes.getBizType())) {
+                logger.info("orderCode:" + chargeRes.getOrderCode()
+                        + ",payCode:" + chargeRes.getWechatOrderNo());
+                ticketAO.paySuccess(chargeRes.getOrderCode(),
+                    chargeRes.getWechatOrderNo());
                 ticketAO.upgradeRank(chargeRes.getOrderCode());
             }
 
